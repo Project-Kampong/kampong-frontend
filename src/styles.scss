@@ -1,1 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+
+$primary-yellow: #fed45f;
+
+body {
+  font-family: "Open Sans", sans-serif;
+}
+
+.block-content {
+  padding-top: 5rem;
+}
+
+h2 {
+  font-size: 1.5625rem;
+  font-weight: bold;
+  position: relative;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100px;
+    background: #e80f0f;
+  }
+}
