@@ -34,6 +34,11 @@
       font-weight: 400;
       max-width: 45%;
       text-transform: capitalize;
+
+      @media (max-width: 991px) {
+        font-size: 1.3rem;
+        max-width: 100%;
+      }
     }
   }
 }

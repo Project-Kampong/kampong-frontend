@@ -26,3 +26,90 @@ h2 {
     background: #e80f0f;
   }
 }
+
+.category-list {
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    padding: 1rem 0;
+    li {
+      font-weight: 600;
+      font-size: 1rem;
+      text-transform: uppercase;
+      border: 1px solid black;
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      margin-right: 1rem;
+      margin-bottom: 0.75rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .active {
+      color: white;
+      background-color: #f1cb4a;
+      border-color: #f1cb4a;
+    }
+  }
+}
+
+// Slick
+.slick-belt {
+  .banner {
+    &:focus {
+      outline: none;
+    }
+  }
+  .slick-dots {
+    bottom: 0 !important;
+    li {
+      button {
+        position: relative;
+        &:before {
+          content: "";
+          width: 20px;
+          height: 5px;
+          background-color: $primary-yellow;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      }
+    }
+  }
+  .slick-arrow {
+    z-index: 100;
+  }
+  .slick-prev {
+    left: 25px !important;
+    &::before {
+      font-size: 2rem;
+    }
+  }
+  .slick-next {
+    right: 25px !important;
+    &::before {
+      font-size: 2rem;
+    }
+  }
+}
+
+.carousel-nav {
+  .slick-arrow {
+    z-index: 100;
+  }
+  .slick-prev {
+    left: 0px !important;
+    &::before {
+      font-size: 1.5rem;
+      color: rgb(100, 100, 100);
+    }
+  }
+  .slick-next {
+    right: 0px !important;
+    &::before {
+      font-size: 1.5rem;
+      color: rgb(100, 100, 100);
+    }
+  }
+}

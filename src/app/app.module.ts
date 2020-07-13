@@ -6,13 +6,17 @@ import { AppComponent } from './app.component';
 import { ListingHomeComponent } from './listing-home/listing-home.component';
 import { BannerComponent } from './components/banner/banner.component';
 import { ListingCardsComponent } from './components/listing-cards/listing-cards.component';
+import { ListingIndividualComponent } from './listing-individual/listing-individual.component';
+import { ImageCarouselComponent } from './components/image-carousel/image-carousel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListingHomeComponent,
     BannerComponent,
-    ListingCardsComponent
+    ListingCardsComponent,
+    ListingIndividualComponent,
+    ImageCarouselComponent
   ],
   imports: [
     BrowserModule,

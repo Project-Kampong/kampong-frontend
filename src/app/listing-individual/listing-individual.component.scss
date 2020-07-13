@@ -1,0 +1,122 @@
+.info-container {
+  @media (min-width: 1024px) {
+    padding-left: 2rem;
+  }
+  .category {
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 1rem;
+    font-weight: bold;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    padding: 0.25rem 0.75rem;
+    border-radius: 5px;
+    display: inline-block;
+  }
+  .title {
+    color: rgb(0, 0, 0);
+    font-size: 1.7rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  .tagline {
+    color: rgb(0, 0, 0);
+    font-size: 1.4rem;
+    font-weight: 400;
+    text-transform: capitalize;
+    letter-spacing: 0.05rem;
+  }
+  .username {
+    padding: 1rem 0;
+  }
+
+  .category-list {
+    ul {
+      padding: 0;
+    }
+    li {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.mission {
+  display: flex;
+  padding-top: 4rem;
+  p {
+    padding-left: 5rem;
+    font-size: 2rem;
+    font-weight: 900;
+    color: #6b6b6b;
+    text-transform: capitalize;
+    @media (max-width: 1024px) {
+      padding-left: 2rem;
+      font-size: 1.8rem;
+    }
+  }
+  svg {
+    min-width: 50px;
+  }
+}
+
+.listing-stats {
+  display: flex;
+  .stats {
+    padding: 0 1.5rem;
+    text-align: center;
+    border-left: 1px solid black;
+    p {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: bold;
+      line-height: 1.5rem;
+    }
+    span {
+      text-transform: capitalize;
+    }
+  }
+  .stats:first-child {
+    border: none;
+    padding-left: 0;
+  }
+}
+
+.like-btn {
+  cursor: pointer;
+  display: inline-block;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  border: 1px solid black;
+}
+
+.navigation-tabs {
+  list-style-type: none;
+  margin: 0;
+  margin-bottom: 3rem;
+  padding: 0;
+  li {
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 0.25rem 1rem;
+    cursor: pointer;
+  }
+  .active {
+    font-weight: bold;
+    border-bottom: 3px solid black;
+  }
+}
+
+.tabs-content {
+  padding-bottom: 5rem;
+  display: none;
+  p {
+    font-size: 1.3rem;
+  }
+  label {
+    font-size: 1.5rem;
+    background-color: #f1cb4a;
+    padding: 0.25rem 1.5rem;
+    color: white;
+    font-weight: 600;
+    margin: 4rem 0 2rem 0;
+    border-left: 0.5rem solid #bdbdbd;
+  }
+}

@@ -1,0 +1,40 @@
+.image-container {
+  &:focus {
+    outline: none;
+  }
+  img {
+    width: 100%;
+  }
+}
+// Slick
+.carousel-slider {
+  .image-container {
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    height: 350px;
+    background-color: black;
+  }
+}
+.carousel-nav {
+  margin-top: 2rem;
+  padding: 0 2rem;
+  @media (max-width: 1024px) {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+  .image-container {
+    padding: 0 0.5rem;
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+  }
+}
+
+video {
+  height: 100%;
+  width: 100%;
+  &:focus {
+    outline: none;
+  }
+}
