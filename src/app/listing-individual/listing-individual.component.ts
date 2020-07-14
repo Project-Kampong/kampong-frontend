@@ -39,11 +39,10 @@ export class ListingIndividualComponent implements OnInit {
   }
 
   liked_clicked() {
-    console.log("liked");
+    // console.log("liked");
   }
 
   tabs_selected(selected) {
-    console.log(selected);
     $(".tabs-content").hide();
     $("#" + selected).show();
     if (selected == "updates") {

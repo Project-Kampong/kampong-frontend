@@ -155,3 +155,19 @@
     }
   }
 }
+
+// FAQ
+.faq-container {
+  .faq-item {
+    margin-bottom: 4rem;
+    b {
+      display: block;
+      font-size: 1.3rem;
+      padding-bottom: 1rem;
+      font-weight: 600;
+    }
+    p {
+      color: #6b6b6b;
+    }
+  }
+}
