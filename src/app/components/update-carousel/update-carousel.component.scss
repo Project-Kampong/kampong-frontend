@@ -1,0 +1,12 @@
+.update-image-slider {
+  margin: 2rem 0;
+  .image-container {
+    &:focus {
+      outline: none;
+    }
+    img {
+      width: 100% !important;
+      padding: 0 1rem;
+    }
+  }
+}

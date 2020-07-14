@@ -8,6 +8,7 @@ import { BannerComponent } from './components/banner/banner.component';
 import { ListingCardsComponent } from './components/listing-cards/listing-cards.component';
 import { ListingIndividualComponent } from './listing-individual/listing-individual.component';
 import { ImageCarouselComponent } from './components/image-carousel/image-carousel.component';
+import { UpdateCarouselComponent } from './components/update-carousel/update-carousel.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ImageCarouselComponent } from './components/image-carousel/image-carous
     BannerComponent,
     ListingCardsComponent,
     ListingIndividualComponent,
-    ImageCarouselComponent
+    ImageCarouselComponent,
+    UpdateCarouselComponent
   ],
   imports: [
     BrowserModule,

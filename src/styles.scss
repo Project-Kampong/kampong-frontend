@@ -113,3 +113,40 @@ h2 {
     }
   }
 }
+
+.update-image-slider {
+  .slick-dots {
+    bottom: -40px !important;
+    li {
+      button {
+        position: relative;
+        &:before {
+          content: "";
+          width: 20px;
+          height: 5px;
+          background-color: $primary-yellow;
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      }
+    }
+  }
+  .slick-arrow {
+    z-index: 100;
+  }
+  .slick-prev {
+    left: -1.5rem !important;
+    &::before {
+      font-size: 1.5rem;
+      color: rgb(100, 100, 100);
+    }
+  }
+  .slick-next {
+    right: -1.5rem !important;
+    &::before {
+      font-size: 1.5rem;
+      color: rgb(100, 100, 100);
+    }
+  }
+}

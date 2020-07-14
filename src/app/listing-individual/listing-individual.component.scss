@@ -95,12 +95,16 @@
   li {
     text-transform: uppercase;
     display: inline-block;
-    padding: 0.25rem 1rem;
+    padding: 0.25rem 0;
+    margin: 0 1rem;
     cursor: pointer;
   }
   .active {
     font-weight: bold;
     border-bottom: 3px solid black;
+  }
+  li:first-child {
+    margin-left: 0;
   }
 }
 
@@ -108,15 +112,46 @@
   padding-bottom: 5rem;
   display: none;
   p {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
   label {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     background-color: #f1cb4a;
     padding: 0.25rem 1.5rem;
     color: white;
     font-weight: 600;
     margin: 4rem 0 2rem 0;
     border-left: 0.5rem solid #bdbdbd;
+  }
+}
+
+// Updates Card
+.update-card {
+  padding: 1rem;
+  margin-bottom: 5rem;
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid #d9d9d9;
+    padding: 0 1rem;
+    padding-bottom: 1.5rem;
+    p {
+      margin: 0;
+    }
+    .user {
+      font-size: 1rem;
+      padding-bottom: 0.25rem;
+    }
+    .datetime {
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      color: rgba(0, 0, 0, 0.8);
+    }
+  }
+  .card-content {
+    .text-content {
+      margin: 4rem 1rem 3rem 1rem;
+    }
   }
 }
