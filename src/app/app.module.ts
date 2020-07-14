@@ -9,6 +9,7 @@ import { ListingCardsComponent } from './components/listing-cards/listing-cards.
 import { ListingIndividualComponent } from './listing-individual/listing-individual.component';
 import { ImageCarouselComponent } from './components/image-carousel/image-carousel.component';
 import { UpdateCarouselComponent } from './components/update-carousel/update-carousel.component';
+import { MilestonesComponent } from './components/milestones/milestones.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { UpdateCarouselComponent } from './components/update-carousel/update-car
     ListingCardsComponent,
     ListingIndividualComponent,
     ImageCarouselComponent,
-    UpdateCarouselComponent
+    UpdateCarouselComponent,
+    MilestonesComponent
   ],
   imports: [
     BrowserModule,
