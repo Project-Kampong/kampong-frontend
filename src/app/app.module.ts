@@ -11,6 +11,9 @@ import { ImageCarouselComponent } from './components/image-carousel/image-carous
 import { UpdateCarouselComponent } from './components/update-carousel/update-carousel.component';
 import { MilestonesComponent } from './components/milestones/milestones.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { LoginComponent } from './login/login.component';
+import { ContentWrapperComponent } from './layout/content-wrapper/content-wrapper.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     ImageCarouselComponent,
     UpdateCarouselComponent,
     MilestonesComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    LoginComponent,
+    ContentWrapperComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

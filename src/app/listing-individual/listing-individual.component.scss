@@ -59,6 +59,7 @@
 
 .listing-stats {
   display: flex;
+  align-items: center;
   .stats {
     padding: 0 1.5rem;
     text-align: center;
@@ -85,6 +86,7 @@
   border-radius: 5px;
   padding: 0.5rem 1rem;
   border: 1px solid black;
+  margin: 0;
 }
 
 .navigation-tabs {
