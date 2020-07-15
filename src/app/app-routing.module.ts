@@ -22,9 +22,9 @@ const routes: Routes = [
       { path: "home", component: ListingHomeComponent },
       { path: "listing", component: ListingIndividualComponent },
       { path: "profile", component: UserProfileComponent },
+      { path: "", redirectTo: "home", pathMatch: "full" },
     ],
   },
-  { path: "", redirectTo: "home", pathMatch: "full" },
 ];
 
 @NgModule({
