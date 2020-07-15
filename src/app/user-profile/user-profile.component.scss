@@ -1,0 +1,57 @@
+.user-details {
+  padding-left: 1.5rem;
+  p {
+    margin: 0;
+  }
+  .name {
+    font-size: 1.7rem;
+    font-weight: 600;
+  }
+  .position {
+    font-size: 1.2rem;
+  }
+}
+
+.profile-stats {
+  display: flex;
+  align-items: flex-end;
+
+  @media (max-width: 991px) {
+    padding-top: 1rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stats {
+    padding: 0 1.5rem;
+    text-align: center;
+    border-left: 1px solid black;
+    p {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: bold;
+      line-height: 1.5rem;
+    }
+    span {
+      text-transform: capitalize;
+    }
+  }
+  .stats:first-child {
+    border: none;
+    padding-left: 0;
+  }
+}
+
+.border-top-card {
+  margin: 3rem 0;
+  padding: 2rem 1.5rem;
+  border: 1px solid #b3b3b38a;
+  border-top: 5px solid #f1cb4a;
+  border-radius: 5px;
+
+  label {
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: rgba(0, 0, 0, 0.7);
+  }
+}
