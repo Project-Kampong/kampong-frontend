@@ -57,7 +57,11 @@ header {
     justify-content: center;
   }
   .banner-content {
-    margin-top: 150px;
+    @media (min-width: 1024px) {
+      position: relative;
+      top: 40vh;
+      transform: translateY(-50%);
+    }
     @media (max-width: 1024px) {
       display: none;
     }
