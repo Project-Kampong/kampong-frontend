@@ -11,6 +11,7 @@ import { UserProfileComponent } from "./user-profile/user-profile.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { EditProfileComponent } from "./edit-profile/edit-profile.component";
+import { CreateListingComponent } from "./create-listing/create-listing.component";
 
 //ContentWrapperComponent
 const routes: Routes = [
@@ -22,6 +23,7 @@ const routes: Routes = [
     children: [
       { path: "home", component: ListingHomeComponent },
       { path: "listing", component: ListingIndividualComponent },
+      { path: "create", component: CreateListingComponent },
       { path: "profile", component: UserProfileComponent },
       { path: "edit-profile", component: EditProfileComponent },
       { path: "", redirectTo: "home", pathMatch: "full" },

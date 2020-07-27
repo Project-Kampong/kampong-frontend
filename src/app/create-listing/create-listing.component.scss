@@ -1,0 +1,48 @@
+.form-group {
+  max-width: 100%;
+  margin: 2rem 0;
+  mat-form-field {
+    margin-bottom: 1rem;
+  }
+  .full-width {
+    width: 100%;
+  }
+  .half-width {
+    width: 50%;
+  }
+
+  .upload-input {
+    padding-bottom: 2rem;
+  }
+  label {
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.54);
+  }
+
+  .custom-input {
+    padding-bottom: 2rem;
+    .custom-file-upload-container {
+      margin-top: 1rem;
+      .custom-file-upload {
+        border: 1px dashed rgba(0, 0, 0, 0.5);
+        width: 150px;
+        height: 150px;
+        border-radius: 25px;
+        position: relative;
+        cursor: pointer;
+        &:after {
+          content: "\f067";
+          font-family: "Font Awesome\ 5 Free";
+          font-size: 2rem;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+      input {
+        display: none;
+      }
+    }
+  }
+}

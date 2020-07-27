@@ -1,0 +1,100 @@
+<section class="container block-content">
+  <div class="d-flex flex-wrap">
+    <div class="col-lg-8">
+      <h3>Create Listing</h3>
+
+      <form class="form-group">
+        <div class="custom-input">
+          <label>Media (Images/ videos)</label>
+          <div class="custom-file-upload-container">
+            <label for="file-upload" class="custom-file-upload"> </label>
+            <input type="file" id="file-upload" (change)="uploadFile($event)" />
+          </div>
+        </div>
+        <mat-form-field class="full-width">
+          <mat-label>Name of Initiative</mat-label>
+          <input matInput required />
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Slogan</mat-label>
+          <input matInput required />
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Mission Statement</mat-label>
+          <input matInput required />
+        </mat-form-field>
+
+        <div class="custom-input">
+          <label>Looking For</label>
+          <div class="category-list">
+            <ul>
+              <li class="active">web developer</li>
+              <li class="active">app developer</li>
+              <li class="active">Marketing Coordinator</li>
+              <li>Business planner</li>
+              <li>Designer</li>
+            </ul>
+          </div>
+        </div>
+
+        <mat-form-field class="full-width">
+          <mat-chip-list #chipList aria-label="Fruit selection">
+            <mat-chip
+              *ngFor="let hashtags of hashtags"
+              [selectable]="selectable"
+              [removable]="removable"
+              (removed)="remove(hashtags)"
+            >
+              {{ hashtags }}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+              placeholder="Hashtags (Maximum Of 3)"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event)"
+            />
+          </mat-chip-list>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Summary of Project</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="1"
+          ></textarea>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Current Problem</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="1"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Solution</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="1"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Ideal Outcome</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="1"
+          ></textarea>
+        </mat-form-field>
+
+        <a class="btn yellow-btn" (click)="createListing()">Submit</a>
+      </form>
+    </div>
+  </div>
+</section>
