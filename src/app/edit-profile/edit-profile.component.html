@@ -1,0 +1,50 @@
+<section class="container block-content">
+  <div class="d-flex flex-wrap">
+    <div class="col-lg-4 order-lg-2 text-right">
+      <a class="btn outline-btn">Change Password</a>
+    </div>
+    <div class="col-lg-8 order-lg-1">
+      <h3>Edit Profile</h3>
+      <form [formGroup]="EditProfileForm" class="form-group">
+        <mat-form-field class="full-width">
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="FirstName" required />
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="LastName" required />
+        </mat-form-field>
+
+        <mat-form-field class="half-width">
+          <mat-label>Date of Birth</mat-label>
+          <input
+            matInput
+            [matDatepicker]="DateOfBirthPicker"
+            formControlName="DateOfBirth"
+            required
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="DateOfBirthPicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #DateOfBirthPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Occupation</mat-label>
+          <input matInput formControlName="Occupation" />
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>About Me</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="3"
+            formControlName="AboutMe"
+          ></textarea>
+        </mat-form-field>
+        <a class="btn yellow-btn" (click)="saveProfile()">SAVE</a>
+      </form>
+    </div>
+  </div>
+</section>

@@ -10,6 +10,7 @@ import { ListingIndividualComponent } from "./listing-individual/listing-individ
 import { UserProfileComponent } from "./user-profile/user-profile.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
+import { EditProfileComponent } from "./edit-profile/edit-profile.component";
 
 //ContentWrapperComponent
 const routes: Routes = [
@@ -22,6 +23,7 @@ const routes: Routes = [
       { path: "home", component: ListingHomeComponent },
       { path: "listing", component: ListingIndividualComponent },
       { path: "profile", component: UserProfileComponent },
+      { path: "edit-profile", component: EditProfileComponent },
       { path: "", redirectTo: "home", pathMatch: "full" },
     ],
   },

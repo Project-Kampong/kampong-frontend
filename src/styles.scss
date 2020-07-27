@@ -27,6 +27,39 @@ h2 {
   }
 }
 
+h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+// Buttons
+.yellow-btn {
+  display: block;
+  border: 2px solid #fed45f;
+  background-color: #fed45f;
+  color: white !important;
+  font-weight: bold;
+  font-size: 0.9rem;
+  &:hover {
+    background-color: white;
+    color: #fed45f !important;
+  }
+}
+.outline-btn {
+  display: inline-block;
+  border: 1px solid black;
+  border-radius: 0;
+  color: black;
+  font-weight: 500;
+  font-size: 1rem;
+  &:hover {
+    background-color: #fed45f;
+    border-color: #fed45f;
+    color: white !important;
+  }
+}
+
+// Components
 .category-list {
   ul {
     list-style-type: none;
@@ -149,4 +182,13 @@ h2 {
       color: rgb(100, 100, 100);
     }
   }
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }

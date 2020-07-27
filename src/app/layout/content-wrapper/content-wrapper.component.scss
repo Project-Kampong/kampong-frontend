@@ -1,7 +1,7 @@
 header {
   padding: 1rem 2rem;
   border-bottom: 1px solid #d9d9d9;
-
+  position: relative;
   @media (max-width: 991px) {
     padding: 1rem 0rem;
   }
@@ -36,6 +36,15 @@ header {
   }
   .user-info {
     padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
     .username {
       margin: 0;
       padding: 0 1rem 0 0.5rem;
@@ -43,6 +52,12 @@ header {
       font-family: "Open Sans", sans-serif;
       font-weight: 600;
       font-size: 1rem;
+    }
+    &:hover {
+      .username,
+      svg {
+        color: #fed45f;
+      }
     }
     @media (max-width: 991px) {
       display: none !important;
@@ -54,4 +69,41 @@ header {
       max-width: 150px;
     }
   }
+}
+
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 10;
+  background-color: white;
+  padding: 1rem 2rem;
+  width: 200px;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.2);
+  ul {
+    display: block;
+
+    li {
+      display: block;
+      padding: 0.5rem 0;
+      text-align: left;
+      a {
+        font-weight: 400;
+        &:hover {
+          color: #fed45f;
+        }
+      }
+    }
+  }
+}
+.active {
+  @media (min-width: 991px) {
+    display: block;
+  }
+}
+
+.user-info-container {
+  display: flex;
 }

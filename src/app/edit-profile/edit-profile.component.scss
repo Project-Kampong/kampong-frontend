@@ -1,0 +1,13 @@
+.form-group {
+  max-width: 100%;
+  margin: 2rem 0;
+  mat-form-field {
+    margin-bottom: 1rem;
+  }
+  .full-width {
+    width: 100%;
+  }
+  .half-width {
+    width: 50%;
+  }
+}
