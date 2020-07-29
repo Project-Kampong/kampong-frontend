@@ -1,14 +1,17 @@
-<section class="container block-content">
+<section class="container block-content" *ngIf="ListingData != null">
   <div class="d-flex flex-wrap">
     <div class="col-lg-6 pr-lg-0">
-      <app-image-carousel></app-image-carousel>
+      <app-image-carousel
+        *ngIf="SliderImageArr != []"
+        [SliderImages]="SliderImageArr"
+      ></app-image-carousel>
     </div>
     <div class="col-lg-6">
       <div class="info-container">
-        <p class="category">No poverty</p>
-        <p class="title">Project Kampong</p>
+        <p class="category">{{ ListingData.category }}</p>
+        <p class="title">{{ ListingData.title }}</p>
         <p class="tagline">
-          Connecting like-minded individuals for Social Good
+          {{ ListingData.tagline }}
         </p>
         <div class="category-list">
           <ul>
@@ -87,7 +90,7 @@
           />
         </svg>
 
-        <p>To create and promote great-tasting, healthy, organic beverages.</p>
+        <p>{{ ListingData.mission }}</p>
       </div>
     </div>
   </div>

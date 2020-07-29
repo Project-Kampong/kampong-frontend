@@ -22,7 +22,7 @@ const routes: Routes = [
     component: ContentWrapperComponent,
     children: [
       { path: "home", component: ListingHomeComponent },
-      { path: "listing", component: ListingIndividualComponent },
+      { path: "listing/:id", component: ListingIndividualComponent },
       { path: "create", component: CreateListingComponent },
       { path: "profile", component: UserProfileComponent },
       { path: "edit-profile", component: EditProfileComponent },
