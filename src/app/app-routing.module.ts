@@ -8,6 +8,7 @@ import { ContentWrapperComponent } from "./layout/content-wrapper/content-wrappe
 import { ListingHomeComponent } from "./listing-home/listing-home.component";
 import { ListingIndividualComponent } from "./listing-individual/listing-individual.component";
 import { UserProfileComponent } from "./user-profile/user-profile.component";
+import { PublicProfileComponent } from "./public-profile/public-profile.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { EditProfileComponent } from "./edit-profile/edit-profile.component";
@@ -15,6 +16,7 @@ import { CreateListingComponent } from "./create-listing/create-listing.componen
 
 //ContentWrapperComponent
 const routes: Routes = [
+  { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "login", component: LoginComponent },
   { path: "register", component: RegisterComponent },
   {
@@ -26,7 +28,7 @@ const routes: Routes = [
       { path: "create", component: CreateListingComponent },
       { path: "profile", component: UserProfileComponent },
       { path: "edit-profile", component: EditProfileComponent },
-      { path: "", redirectTo: "home", pathMatch: "full" },
+      { path: "profile/:id", component: PublicProfileComponent },
     ],
   },
 ];

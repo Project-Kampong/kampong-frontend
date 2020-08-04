@@ -92,11 +92,15 @@
           </defs>
         </svg>
       </div>
-      <form id="login-details">
-        <input placeholder="Username" type="email" />
-        <input placeholder="Password" type="Password" />
+      <form id="login-details" [formGroup]="loginCredentials">
+        <input placeholder="Email" formControlName="email" type="email" />
+        <input
+          placeholder="Password"
+          formControlName="password"
+          type="Password"
+        />
         <div class="btn-container">
-          <button routerLink="/home" type="submit" class="btn login-btn">
+          <button (click)="loginCheck()" type="submit" class="btn login-btn">
             Login
           </button>
           <button routerLink="/register" class="btn register-btn">

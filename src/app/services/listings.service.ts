@@ -3,14 +3,19 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 
 import { Listing, DefaultListing } from "../interfaces/listing";
 
+// Services Import
+import { AuthService } from "../services/auth.service";
 @Injectable({
   providedIn: "root",
 })
 export class ListingsService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+    private AuthService: AuthService
+  ) {}
 
   // URL
-  url = "http://165.22.103.155/";
+  url = this.AuthService.URL;
 
   httpHeaders = new HttpHeaders({
     "Content-Type": "application/json",
@@ -21,12 +26,15 @@ export class ListingsService {
 
   // Variables
   ListingData: Listing[];
+  FeaturedListingData: Listing[];
 
   getListings() {
     return this.httpClient
       .get(this.url + "api/listings", this.options)
       .subscribe((data) => {
         this.ListingData = data["data"];
+        console.log(this.ListingData);
+        this.FeaturedListingData = data["data"];
       });
   }
 
@@ -37,9 +45,26 @@ export class ListingsService {
     );
   }
 
-  getUserProfile(userId) {
+  // Listing FAQ
+  getSelectedListingFAQ(listingId) {
     return this.httpClient.get(
-      this.url + "api/profiles/" + userId,
+      this.url + "api/listings/" + listingId + "/faqs",
+      this.options
+    );
+  }
+
+  // Listing Skills
+  getSelectedListingSkills(listingId) {
+    return this.httpClient.get(
+      this.url + "api/listings/" + listingId + "/skills",
+      this.options
+    );
+  }
+
+  // Liked Listing - by User
+  getLikedListing() {
+    return this.httpClient.get(
+      this.url + "api/profiles/" + this.AuthService.LoggedInUserID + "/likes",
       this.options
     );
   }

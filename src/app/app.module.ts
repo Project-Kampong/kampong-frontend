@@ -5,6 +5,10 @@ import { AppRoutingModule } from "./app-routing.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 
+import { HashLocationStrategy, LocationStrategy } from "@angular/common";
+
+import { CookieService } from "ngx-cookie-service";
+
 // Material Components
 import { MatInputModule } from "@angular/material/input";
 import { MatDatepickerModule } from "@angular/material/datepicker";
@@ -28,6 +32,7 @@ import { RegisterComponent } from "./register/register.component";
 import { EditProfileComponent } from "./edit-profile/edit-profile.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CreateListingComponent } from "./create-listing/create-listing.component";
+import { PublicProfileComponent } from './public-profile/public-profile.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +50,7 @@ import { CreateListingComponent } from "./create-listing/create-listing.componen
     RegisterComponent,
     EditProfileComponent,
     CreateListingComponent,
+    PublicProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,7 +65,11 @@ import { CreateListingComponent } from "./create-listing/create-listing.componen
     MatChipsModule,
     MatIconModule,
   ],
-  providers: [{ provide: MAT_DATE_LOCALE, useValue: "en-GB" }],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: "en-GB" },
+    // { provide: LocationStrategy, useClass: HashLocationStrategy },
+    CookieService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -2,20 +2,63 @@ import { Component, OnInit } from "@angular/core";
 
 declare var $: any;
 
+import { AuthService } from "../../services/auth.service";
+import { ProfileService } from "../../services/profile.service";
+
+// Interface
+import { Profile } from "../../interfaces/profile";
 @Component({
   selector: "app-content-wrapper",
   templateUrl: "./content-wrapper.component.html",
   styleUrls: ["./content-wrapper.component.scss"],
 })
 export class ContentWrapperComponent implements OnInit {
-  constructor() {}
+  constructor(
+    public AuthService: AuthService,
+    public ProfileService: ProfileService
+  ) {}
+
+  ProfileDetails: Profile;
+  dropDownInitiated = false;
 
   ngOnInit() {
-    $(".user-info").on("click", function () {
-      $(".profile-dropdown").toggleClass("active");
+    if (this.AuthService.isLoggedIn) {
+      this.getInitData();
+    }
+    this.AuthService.LoginResponse.subscribe(() => {
+      this.getInitData();
     });
-    $(".user-info .profile-dropdown li").on("click", function () {
-      $(".profile-dropdown").hide();
+  }
+
+  getInitData() {
+    this.ProfileService.getUserProfile(
+      this.AuthService.LoggedInUserID
+    ).subscribe((data) => {
+      this.ProfileDetails = data["data"];
+      if (this.dropDownInitiated) {
+        return;
+      } else {
+        $(".user-info").hover(
+          function () {
+            $(".profile-dropdown").addClass("active");
+          },
+          function () {}
+        );
+
+        $(".profile-dropdown").hover(
+          function () {
+            console.log("hover");
+          },
+          function () {
+            $(this).removeClass("active");
+          }
+        );
+        this.dropDownInitiated = true;
+      }
     });
+  }
+
+  logout() {
+    this.AuthService.logout();
   }
 }

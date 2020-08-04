@@ -1,10 +1,10 @@
-<app-banner></app-banner>
+<app-banner *ngIf="ListingsService.ListingData != null"></app-banner>
 
 <section class="container block-content">
-  <div class="col-12">
+  <div *ngIf="LikedArr.length != 0" class="col-12">
     <h2>Your Favourites</h2>
   </div>
-  <!-- <app-listing-cards></app-listing-cards> -->
+  <app-listing-cards [ListingData]="LikedArr"></app-listing-cards>
 </section>
 
 <section class="container block-content">
@@ -32,8 +32,10 @@
   ></app-listing-cards>
 </section>
 
-<section class="container block-content mb-5">
+<!-- Loading GIF -->
+<!-- 
+  <section class="container block-content mb-5">
   <div class="col-12 text-center">
     <img src="../../assets/images/loading.gif" />
   </div>
-</section>
+</section> -->

@@ -38,8 +38,13 @@
       </li>
     </ul>
     <div class="user-info-container">
-      <a href="/create" class="btn yellow-btn">Start an Initiative</a>
-      <div class="user-info">
+      <a
+        *ngIf="AuthService.isLoggedIn"
+        routerLink="/create"
+        class="btn yellow-btn"
+        >Start an Initiative</a
+      >
+      <div class="user-info" *ngIf="AuthService.isLoggedIn">
         <svg
           width="30"
           height="30"
@@ -53,7 +58,9 @@
             fill-opacity="0.3"
           />
         </svg>
-        <p class="username">Bruce</p>
+        <p *ngIf="ProfileDetails != null" class="username">
+          {{ ProfileDetails["nickname"] }}
+        </p>
         <svg
           width="15"
           height="12"
@@ -68,20 +75,26 @@
           />
         </svg>
       </div>
+      <a
+        *ngIf="!AuthService.isLoggedIn"
+        href="/login"
+        class="btn yellow-btn ml-3"
+        >LOGIN</a
+      >
       <div class="profile-dropdown">
         <ul>
           <li>
-            <a href="#">
+            <a routerLink="/profile">
               My Initiatives
             </a>
           </li>
           <li>
-            <a href="/profile">
+            <a routerLink="/profile">
               Profile
             </a>
           </li>
           <li>
-            <a href="/login">
+            <a (click)="logout()">
               Log Out
             </a>
           </li>

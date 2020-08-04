@@ -16,4 +16,13 @@ $(document).ready(function () {
   //       },
   //     ],
   //   });
+
+  $(".user-info .profile-dropdown").hover(
+    function () {
+      console.log("hover");
+    },
+    function () {
+      $(this).removeClass("active");
+    }
+  );
 });

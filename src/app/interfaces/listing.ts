@@ -15,6 +15,19 @@ export interface Listing {
   pic5: String;
 }
 
+export interface ListingFAQ {
+  faq_id: String;
+  listing_id: String;
+  question: String;
+  answer: String;
+}
+
+export interface ListingSkills {
+  skill_id: String;
+  listing_id: String;
+  skill: String;
+}
+
 export const DefaultListing = {
   UserID: "UserID",
   FirstName: "Bruce",

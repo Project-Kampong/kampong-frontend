@@ -8,10 +8,10 @@
     </div>
     <div class="col-lg-6">
       <div class="info-container">
-        <p class="category">{{ ListingData.category }}</p>
-        <p class="title">{{ ListingData.title }}</p>
+        <p class="category">{{ ListingData["category"] }}</p>
+        <p class="title">{{ ListingData["title"] }}</p>
         <p class="tagline">
-          {{ ListingData.tagline }}
+          {{ ListingData["tagline"] }}
         </p>
         <div class="category-list">
           <ul>
@@ -26,7 +26,11 @@
             </li>
           </ul>
         </div>
-        <p class="username">
+        <p
+          *ngIf="ProfileInfo != null"
+          (click)="selectedProfile(ProfileInfo['user_id'])"
+          class="username"
+        >
           <svg
             width="25"
             height="25"
@@ -40,7 +44,7 @@
               fill-opacity="0.3"
             />
           </svg>
-          Bruce Wayne
+          {{ ProfileInfo["nickname"] }}
         </p>
 
         <div class="d-flex justify-content-between align-items-center">
@@ -90,7 +94,7 @@
           />
         </svg>
 
-        <p>{{ ListingData.mission }}</p>
+        <p>{{ ListingData["mission"] }}</p>
       </div>
     </div>
   </div>
@@ -99,15 +103,11 @@
 <hr />
 <section class="container block-content">
   <div class="col-12">
-    <h2>Looking for</h2>
+    <h2>Looking For</h2>
   </div>
-  <div class="category-list col-12">
-    <ul>
-      <li>Web Developer</li>
-      <li>App Developer</li>
-      <li>Marketing Coordinator</li>
-      <li>Sports</li>
-      <li>Education</li>
+  <div class="category-list anti-select-category-list col-12">
+    <ul *ngIf="SkillsList != null">
+      <li *ngFor="let skills of SkillsList">{{ skills.skill }}</li>
     </ul>
   </div>
 </section>
@@ -178,59 +178,13 @@
     </div>
     <!-- FAQ -->
     <div class="tabs-content" id="FAQ">
-      <div class="faq-container">
-        <div class="faq-item">
+      <div *ngIf="FAQList != []" class="faq-container">
+        <div *ngFor="let faq of FAQList" class="faq-item">
           <b>
-            How do you ensure UV exposure safety in UV-C self-sterilisation
-            variant ?
+            {{ faq.question }}
           </b>
           <p>
-            The Leaf UV and PRO deploy active UV-C sterilization to destroy
-            pathogens that get stuck in the filters and start infecting it. To
-            ensure user safety first the entire UV enclosure is coated with UV
-            blocking materials. Secondly the UV feature only activates when the
-            mask is taken off and rested for 10 seconds. This duration is also
-            adjustable in Leaf PRO. In no scenario does any of the LEAF variant
-            active the UV-C disinfecting lamps when the mask is being worn.
-          </p>
-        </div>
-
-        <div class="faq-item">
-          <b>
-            At what stage is the Leaf mask in terms of production ?
-          </b>
-          <p>
-            In terms of the design all Leaf Masks have passed the design, rapid
-            prototyping and testing phase. All the variants HEPA,UV and PRO have
-            entered mass production and considering the large B2B & B2G orders
-            that Leaf has gathered we have invested in a production capacity of
-            1/2 Million masks per day. Coming to the electronic components for
-            Leaf UV and Leaf PRO, the complete PCB design, testing is complete
-            and the PCBs are already in production.
-          </p>
-        </div>
-
-        <div class="faq-item">
-          <b>
-            Lorem ipsum dolor sit amet?
-          </b>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </p>
-        </div>
-
-        <div class="faq-item">
-          <b>
-            Lorem ipsum dolor sit amet?
-          </b>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            {{ faq.answer }}
           </p>
         </div>
       </div>

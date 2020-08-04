@@ -25,7 +25,9 @@
     letter-spacing: 0.05rem;
   }
   .username {
+    display: inline-block;
     padding: 1rem 0;
+    cursor: pointer;
   }
 
   .category-list {

@@ -7,12 +7,8 @@
       <h3>Edit Profile</h3>
       <form [formGroup]="EditProfileForm" class="form-group">
         <mat-form-field class="full-width">
-          <mat-label>First Name</mat-label>
-          <input matInput formControlName="FirstName" required />
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <mat-label>Last Name</mat-label>
-          <input matInput formControlName="LastName" required />
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="nickname" required />
         </mat-form-field>
 
         <mat-form-field class="half-width">
@@ -20,7 +16,7 @@
           <input
             matInput
             [matDatepicker]="DateOfBirthPicker"
-            formControlName="DateOfBirth"
+            formControlName="dob"
             required
           />
           <mat-datepicker-toggle
@@ -31,16 +27,16 @@
         </mat-form-field>
 
         <mat-form-field class="full-width">
-          <mat-label>Occupation</mat-label>
-          <input matInput formControlName="Occupation" />
+          <mat-label>Interest</mat-label>
+          <input matInput formControlName="interest" />
         </mat-form-field>
-        <mat-form-field class="full-width">
+        <mat-form-field class="full-width text-field">
           <mat-label>About Me</mat-label>
           <textarea
             matInput
             cdkTextareaAutosize
             cdkAutosizeMinRows="3"
-            formControlName="AboutMe"
+            formControlName="about"
           ></textarea>
         </mat-form-field>
         <a class="btn yellow-btn" (click)="saveProfile()">SAVE</a>

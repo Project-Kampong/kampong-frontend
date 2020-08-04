@@ -1,11 +1,11 @@
 <div class="carousel-container">
   <div class="carousel-slider">
     <div
-      *ngFor="let data of SliderImages; last as isLast"
+      *ngFor="let data of SliderImages; last as islast"
       class="image-container"
     >
       <img src="{{ data }}" />
-      <span *ngIf="isLast">{{ sliderSlickInit() }}</span>
+      <span *ngIf="islast">{{ sliderSlickInit() }}</span>
     </div>
   </div>
   <!--  carousel-nav -->
@@ -15,7 +15,7 @@
       class="image-container"
     >
       <img src="{{ data }}" />
-      <span *ngIf="last">{{ navSlickInit(last) }}</span>
+      <span *ngIf="last">{{ navSlickInit() }}</span>
     </div>
   </div>
 </div>

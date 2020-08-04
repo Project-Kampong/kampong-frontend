@@ -1,16 +1,16 @@
-<div class="slick-belt">
-  <div class="banner">
-    <img
-      src="https://images.pexels.com/photos/821668/pexels-photo-821668.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-    />
+<div class="slick-belt" *ngIf="featuredData != []">
+  <div *ngFor="let listing of featuredData; let i = index" class="banner">
+    <span *ngIf="i == featuredData.length - 1">{{ sliderSlickInit() }}</span>
+
+    <img src="{{ listing.pic1 }}" />
     <div class="banner-overlay">
       <div class="container">
-        <p class="category">No poverty</p>
-        <p class="title">Project Kampong</p>
+        <p class="category">{{ listing.category }}</p>
+        <p class="title">{{ listing.title }}</p>
         <p class="tagline">
-          Connecting like-minded individuals for social good
+          {{ listing.tagline }}
         </p>
-        <a routerLink="/listing" class="view-btn"
+        <a routerLink="/listing/{{ listing.listing_id }}" class="view-btn"
           >View
           <svg
             width="20"
@@ -28,7 +28,7 @@
       </div>
     </div>
   </div>
-  <div class="banner">
+  <!-- <div class="banner">
     <img
       src="https://images.pexels.com/photos/441963/pexels-photo-441963.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
     />
@@ -83,5 +83,5 @@
         </a>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
