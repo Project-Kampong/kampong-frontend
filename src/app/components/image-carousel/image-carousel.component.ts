@@ -15,9 +15,11 @@ export class ImageCarouselComponent implements OnInit {
   @Input() SliderImages = [];
 
   ngOnInit() {
-    for (var i = 0; i < this.SliderImages.length; i++) {
+    const sliderLength = this.SliderImages.length;
+    for (var i = 0; i < sliderLength; i++) {
       if (this.SliderImages[i] == null) {
-        this.SliderImages.splice(i, 1);
+        this.SliderImages.splice(i, sliderLength - i);
+        return;
       }
     }
   }

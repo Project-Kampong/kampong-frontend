@@ -14,15 +14,9 @@
           {{ ListingData["tagline"] }}
         </p>
         <div class="category-list">
-          <ul>
-            <li class="active">
-              #Hashtag1
-            </li>
-            <li class="active">
-              #Hashtag1
-            </li>
-            <li class="active">
-              #Hashtag1
+          <ul *ngIf="Hashtags != []">
+            <li *ngFor="let data of Hashtags" class="active">
+              {{ data.tag }}
             </li>
           </ul>
         </div>

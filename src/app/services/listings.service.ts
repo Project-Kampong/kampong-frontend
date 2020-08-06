@@ -84,6 +84,14 @@ export class ListingsService {
     );
   }
 
+  // Listing Hashtags
+  getSelectedListingHashtags(listingId) {
+    return this.httpClient.get(
+      this.url + "api/listings/" + listingId + "/hashtags",
+      this.options
+    );
+  }
+
   // Liked Listing - by User
   getLikedListing() {
     return this.httpClient.get(
@@ -95,6 +103,22 @@ export class ListingsService {
   // Write
   uploadFile(fd) {
     return this.httpClient.post(this.url + "test/file-upload", fd);
+  }
+
+  createListing(data) {
+    return this.httpClient.post(
+      this.url + "api/listings",
+      data,
+      this.AuthService.AuthOptions
+    );
+  }
+
+  UpdateListingStory(listingId, data) {
+    return this.httpClient.put(
+      this.url + "api/listings/stories/" + listingId,
+      data,
+      this.AuthService.AuthOptions
+    );
   }
 
   // Like A Listing

@@ -38,7 +38,7 @@ export class ListingIndividualComponent implements OnInit {
   listingLikes;
   MilestoneArr = [];
   Stories: ListingStories[];
-
+  Hashtags = [];
   userLikedID = "";
   ngOnInit() {
     this.listingId = this.route.snapshot.params["id"];
@@ -49,7 +49,6 @@ export class ListingIndividualComponent implements OnInit {
     this.ListingsService.getSelectedListing(this.listingId).subscribe(
       (data) => {
         this.ListingData = data["data"];
-        // console.log(this.ListingData);
 
         this.SliderImageArr.push(
           this.ListingData["pic1"],
@@ -99,10 +98,16 @@ export class ListingIndividualComponent implements OnInit {
       }
     );
 
+    // Get Hashtags
+    this.ListingsService.getSelectedListingHashtags(this.listingId).subscribe(
+      (data) => {
+        this.Hashtags = data["data"];
+      }
+    );
+
     // Get Stories
     this.ListingsService.getSelectedListingStories(this.listingId).subscribe(
       (data) => {
-        console.log(data);
         this.Stories = data["data"];
       }
     );
@@ -110,7 +115,6 @@ export class ListingIndividualComponent implements OnInit {
     // Get Milestones
     this.ListingsService.getSelectedListingMilestones(this.listingId).subscribe(
       (data) => {
-        console.log(data);
         this.MilestoneArr = data["data"];
         this.MilestoneArr.sort((a, b) => {
           return <any>new Date(a.date) - <any>new Date(b.date);

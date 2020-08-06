@@ -46,15 +46,27 @@ export class CreateListingComponent implements OnInit {
 
   uploadFile(event) {
     this.selectedFile = <File>event.target.files[0];
-    this.fileArr.push(this.selectedFile);
+    // this.fileArr.push(this.selectedFile);
 
-    // Display Image
-    var reader: FileReader = new FileReader();
-    reader.onload = (e) => {
-      this.fileDisplayArr.push(reader.result.toString());
-    };
-    reader.readAsDataURL(event.target.files[0]);
-    this.fileLimitChecker(true);
+    // Upload to S3
+    const fd = new FormData();
+    fd.append("file", this.selectedFile);
+    this.ListingsService.uploadFile(fd).subscribe(
+      (res) => {
+        // Display Image
+        var reader: FileReader = new FileReader();
+        reader.onload = (e) => {
+          this.fileDisplayArr.push(reader.result.toString());
+        };
+        reader.readAsDataURL(event.target.files[0]);
+        this.fileLimitChecker(true);
+        this.fileArr.push(res["data"].location);
+      },
+      (err) => {
+        console.log(err);
+        return;
+      }
+    );
   }
 
   removeFile(i) {
@@ -79,16 +91,53 @@ export class CreateListingComponent implements OnInit {
   }
 
   createListing() {
+    console.log(this.fileArr);
     // Gather Files
-    const fd = new FormData();
-    for (let i = 0; i < this.fileArr.length; i++) {
-      fd.append("file", this.fileArr[i]);
-    }
+    // const fd = new FormData();
+    // for (let i = 0; i < this.fileArr.length; i++) {
+    //   fd.append("file", this.fileArr[i]);
+    // }
     // fd.append("file", this.selectedFile);
     // To be Replaced
-    this.ListingsService.uploadFile(fd).subscribe((data) => {
-      console.log(data);
-    });
+    // this.ListingsService.uploadFile(fd).subscribe((data) => {
+    //   console.log(data);
+    // });
+    // Image Loop
+    var uploadImage = this.fileArr;
+    var fileLength = uploadImage.length;
+    if (fileLength != 5) {
+      const nullToAdd = 5 - fileLength;
+      console.log(nullToAdd);
+      for (var i = 0; i < nullToAdd; i++) {
+        uploadImage.push(null);
+      }
+    }
+    console.log(this.ListingForm.value);
+    const listingData = this.ListingForm.value;
+    this.ListingsService.createListing({
+      title: listingData.title,
+      category: listingData.category,
+      about: listingData.about,
+      tagline: listingData.tagline,
+      mission: listingData.mission,
+      listing_url: "www.test.com",
+      pic1: this.fileArr[0],
+      pic2: this.fileArr[1],
+      pic3: this.fileArr[2],
+      pic4: this.fileArr[3],
+      pic5: this.fileArr[4],
+    }).subscribe(
+      (res) => {
+        console.log(res);
+        // Handle Stories
+        // Handle Milestones
+        // Handle Hashtags
+      },
+      (err) => {
+        console.log(err);
+        return;
+      }
+    );
   }
 
   // Chips UI and Data
