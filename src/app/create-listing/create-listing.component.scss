@@ -22,11 +22,10 @@
   .custom-input {
     padding-bottom: 2rem;
     .custom-file-upload-container {
-      margin-top: 1rem;
       .custom-file-upload {
         border: 1px dashed rgba(0, 0, 0, 0.5);
-        width: 150px;
-        height: 150px;
+        height: 180px;
+        width: 180px;
         border-radius: 25px;
         position: relative;
         cursor: pointer;
@@ -42,6 +41,44 @@
       }
       input {
         display: none;
+      }
+    }
+  }
+}
+
+.image-output {
+  .image-container {
+    height: 180px;
+    width: 180px;
+    border-radius: 25px;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    position: relative;
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    &:hover {
+      &:after {
+        cursor: pointer;
+        content: "\f068";
+        font-family: "Font Awesome\ 5 Free";
+        font-weight: 900;
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(0, 0, 0, 0.54);
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
       }
     }
   }

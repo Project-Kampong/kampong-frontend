@@ -5,10 +5,28 @@
 
       <form class="form-group">
         <div class="custom-input">
-          <label>Media (Images/ videos)</label>
-          <div class="custom-file-upload-container">
-            <label for="file-upload" class="custom-file-upload"> </label>
-            <input type="file" id="file-upload" (change)="uploadFile($event)" />
+          <label>Images (Maximum of 5)</label>
+          <div class="d-flex flex-wrap align-items-start mt-2 image-output">
+            <div
+              *ngFor="let file of fileDisplayArr; index as i"
+              class="image-container"
+              (click)="removeFile(i)"
+            >
+              <img src="{{ file }}" />
+            </div>
+
+            <div
+              *ngIf="fileLimit == false"
+              class="custom-file-upload-container"
+            >
+              <label for="file-upload" class="custom-file-upload"> </label>
+              <input
+                type="file"
+                accept="image/*"
+                id="file-upload"
+                (change)="uploadFile($event)"
+              />
+            </div>
           </div>
         </div>
         <mat-form-field class="full-width">

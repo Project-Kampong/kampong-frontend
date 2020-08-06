@@ -68,4 +68,7 @@ export class ListingsService {
       this.options
     );
   }
+  uploadFile(fd) {
+    return this.httpClient.post(this.url + "test/file-upload", fd);
+  }
 }

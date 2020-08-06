@@ -14,10 +14,11 @@
         <mat-form-field class="half-width">
           <mat-label>Date of Birth</mat-label>
           <input
+            readonly
+            disabled
             matInput
             [matDatepicker]="DateOfBirthPicker"
             formControlName="dob"
-            required
           />
           <mat-datepicker-toggle
             matSuffix

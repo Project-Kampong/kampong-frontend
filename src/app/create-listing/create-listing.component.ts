@@ -3,6 +3,9 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { MatChipInputEvent } from "@angular/material/chips";
 
+import { ListingsService } from "../services/listings.service";
+declare var $: any;
+
 @Component({
   selector: "app-create-listing",
   templateUrl: "./create-listing.component.html",
@@ -10,16 +13,64 @@ import { MatChipInputEvent } from "@angular/material/chips";
 })
 export class CreateListingComponent implements OnInit {
   selectedFile: File = null;
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    public ListingsService: ListingsService
+  ) {}
+
+  fileDisplayArr = [];
+  fileArr = [];
+  fileLimit = false;
+  fileCount = 0;
 
   ngOnInit() {}
 
   uploadFile(event) {
     this.selectedFile = <File>event.target.files[0];
-    console.log(this.selectedFile);
+    this.fileArr.push(this.selectedFile);
+
+    // Display Image
+    var reader: FileReader = new FileReader();
+    reader.onload = (e) => {
+      this.fileDisplayArr.push(reader.result.toString());
+    };
+    reader.readAsDataURL(event.target.files[0]);
+    this.fileLimitChecker(true);
   }
 
-  createListing() {}
+  removeFile(i) {
+    this.fileDisplayArr.splice(i, 1);
+    this.fileArr.splice(i, 1);
+    this.fileLimitChecker(false);
+  }
+
+  fileLimitChecker(increase) {
+    const maxFile = 5;
+    if (increase) {
+      this.fileCount = this.fileCount + 1;
+      if (this.fileCount == maxFile) {
+        this.fileLimit = true;
+      }
+    } else {
+      this.fileCount = this.fileCount - 1;
+      if (this.fileCount != maxFile) {
+        this.fileLimit = false;
+      }
+    }
+  }
+
+  createListing() {
+    // Gather Files
+    const fd = new FormData();
+    for (let i = 0; i < this.fileArr.length; i++) {
+      fd.append("file", this.fileArr[i]);
+    }
+    // fd.append("file", this.selectedFile);
+    // To be Replaced
+    this.ListingsService.uploadFile(fd).subscribe((data) => {
+      console.log(data);
+    });
+  }
 
   // Chips UI and Data
   visible = true;
