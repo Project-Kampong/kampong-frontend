@@ -45,6 +45,13 @@ export class ListingsService {
     );
   }
 
+  // Listing Likes
+  getSelectedListingLikes(listingId) {
+    return this.httpClient.get(
+      this.url + "api/listings/" + listingId + "/likes",
+      this.options
+    );
+  }
   // Listing FAQ
   getSelectedListingFAQ(listingId) {
     return this.httpClient.get(
@@ -68,7 +75,25 @@ export class ListingsService {
       this.options
     );
   }
+
+  // Write
   uploadFile(fd) {
     return this.httpClient.post(this.url + "test/file-upload", fd);
+  }
+
+  // Like A Listing
+  LikedListing(listing_id) {
+    return this.httpClient.post(
+      this.url + "api/likes",
+      { listing_id: listing_id },
+      this.AuthService.AuthOptions
+    );
+  }
+
+  UnLikedListing(like_id) {
+    return this.httpClient.delete(
+      this.url + "api/likes/" + like_id,
+      this.AuthService.AuthOptions
+    );
   }
 }

@@ -3,7 +3,7 @@
     <div class="col-lg-8">
       <h3>Create Listing</h3>
 
-      <form class="form-group">
+      <div class="form-group" [formGroup]="ListingForm">
         <div class="custom-input">
           <label>Images (Maximum of 5)</label>
           <div class="d-flex flex-wrap align-items-start mt-2 image-output">
@@ -31,15 +31,15 @@
         </div>
         <mat-form-field class="full-width">
           <mat-label>Name of Initiative</mat-label>
-          <input matInput required />
+          <input matInput required formControlName="title" />
         </mat-form-field>
         <mat-form-field class="full-width">
           <mat-label>Slogan</mat-label>
-          <input matInput required />
+          <input matInput required formControlName="tagline" />
         </mat-form-field>
         <mat-form-field class="full-width">
           <mat-label>Mission Statement</mat-label>
-          <input matInput required />
+          <input matInput required formControlName="mission" />
         </mat-form-field>
 
         <div class="custom-input">
@@ -82,6 +82,7 @@
             matInput
             cdkTextareaAutosize
             cdkAutosizeMinRows="1"
+            formControlName="summary"
           ></textarea>
         </mat-form-field>
         <mat-form-field class="full-width">
@@ -90,6 +91,7 @@
             matInput
             cdkTextareaAutosize
             cdkAutosizeMinRows="1"
+            formControlName="problem"
           ></textarea>
         </mat-form-field>
 
@@ -99,6 +101,7 @@
             matInput
             cdkTextareaAutosize
             cdkAutosizeMinRows="1"
+            formControlName="solution"
           ></textarea>
         </mat-form-field>
 
@@ -108,11 +111,49 @@
             matInput
             cdkTextareaAutosize
             cdkAutosizeMinRows="1"
+            formControlName="outcome"
           ></textarea>
         </mat-form-field>
+      </div>
 
+      <!-- Milestones -->
+      <div class="milestones-container">
+        <label>Milestones</label>
+        <div
+          *ngFor="let milestone of milestoneArr; i as index"
+          class="milestones"
+        >
+          <mat-form-field class="milestone-input">
+            <mat-label>Milestone</mat-label>
+            <input matInput [(ngModel)]="milestone.milestone" />
+          </mat-form-field>
+          <mat-form-field class="deadline-input">
+            <mat-label>Deadline</mat-label>
+            <input
+              [(ngModel)]="milestone.deadline"
+              matInput
+              [matDatepicker]="DateOfBirthPicker"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="DateOfBirthPicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #DateOfBirthPicker></mat-datepicker>
+          </mat-form-field>
+          <button
+            class="remove-milestone"
+            (click)="removeMilestone(i)"
+          ></button>
+        </div>
+
+        <button class="add-milestones" (click)="addMilestone()">
+          Add Milestone
+        </button>
+      </div>
+
+      <div class="submit-btn">
         <a class="btn yellow-btn" (click)="createListing()">Submit</a>
-      </form>
+      </div>
     </div>
   </div>
 </section>

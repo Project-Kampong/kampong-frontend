@@ -1,6 +1,6 @@
 export interface Listing {
   listing_id: String;
-  organisation_id: Number;
+  organisation_id: String;
   created_by: String;
   title: String;
   category: String;
@@ -28,14 +28,34 @@ export interface ListingSkills {
   skill: String;
 }
 
+export const CreateListing = {
+  title: "New title 1",
+  category: "test category",
+  about: "test about",
+  tagline: "test tagline",
+  mission: "test mission",
+};
+
+export const ListingStory = {
+  summary: "summary",
+  problem: "problem",
+  solution: "solution",
+  outcome: "outcome",
+};
+
 export const DefaultListing = {
-  UserID: "UserID",
-  FirstName: "Bruce",
-  LastName: "Wayne",
-  DateOfBirth: new Date(
-    "Tue May 01 1990 00:00:00 GMT+0800 (Singapore Standard Time)"
-  ),
-  Occupation: "Student",
-  AboutMe:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  listing_id: "default",
+  organisation_id: "default",
+  created_by: "default",
+  title: "default",
+  category: "default",
+  about: "default",
+  tagline: "default",
+  mission: "default",
+  listing_url: "default",
+  pic1: "default",
+  pic2: "default",
+  pic3: "default",
+  pic4: "default",
+  pic5: "default",
 };

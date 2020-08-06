@@ -6,6 +6,9 @@ import { MatChipInputEvent } from "@angular/material/chips";
 import { ListingsService } from "../services/listings.service";
 declare var $: any;
 
+// Interface
+import { Listing, CreateListing, ListingStory } from "../interfaces/listing";
+
 @Component({
   selector: "app-create-listing",
   templateUrl: "./create-listing.component.html",
@@ -13,6 +16,8 @@ declare var $: any;
 })
 export class CreateListingComponent implements OnInit {
   selectedFile: File = null;
+  ListingForm: FormGroup;
+
   constructor(
     private fb: FormBuilder,
     public ListingsService: ListingsService
@@ -23,7 +28,21 @@ export class CreateListingComponent implements OnInit {
   fileLimit = false;
   fileCount = 0;
 
-  ngOnInit() {}
+  milestoneArr = [{ milestone: "title", deadline: new Date("11/11/2020") }];
+  ngOnInit() {
+    this.ListingForm = this.fb.group({
+      ...CreateListing,
+      ...ListingStory,
+    });
+  }
+
+  addMilestone() {
+    this.milestoneArr.push({ milestone: "", deadline: new Date() });
+    console.log(this.milestoneArr);
+  }
+  removeMilestone(i) {
+    this.milestoneArr.splice(i, 1);
+  }
 
   uploadFile(event) {
     this.selectedFile = <File>event.target.files[0];

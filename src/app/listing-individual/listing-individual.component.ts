@@ -34,7 +34,9 @@ export class ListingIndividualComponent implements OnInit {
   FAQList: ListingFAQ[];
   SkillsList: ListingSkills[];
   ProfileInfo: Profile[];
+  listingLikes;
 
+  userLikedID = "";
   ngOnInit() {
     this.listingId = this.route.snapshot.params["id"];
     console.log(this.listingId);
@@ -59,6 +61,24 @@ export class ListingIndividualComponent implements OnInit {
           this.ProfileInfo = profile["data"];
           console.log(this.ProfileInfo);
         });
+
+        // Check User Liked List
+        this.ListingsService.getLikedListing().subscribe((data) => {
+          console.log(data["data"]);
+          const likedArr = data["data"];
+          for (var i = 0; i < likedArr.length; i++) {
+            if (likedArr[i].listing_id == this.listingId) {
+              this.userLikedID = likedArr[i].like_id;
+              $(".like-btn").addClass("liked");
+            }
+          }
+        });
+      }
+    );
+    // Get Num of Likes
+    this.ListingsService.getSelectedListingLikes(this.listingId).subscribe(
+      (data) => {
+        this.listingLikes = data["count"];
       }
     );
     // Get FAQ Info
@@ -85,8 +105,9 @@ export class ListingIndividualComponent implements OnInit {
     this.tabs_selected("story");
   }
 
-  UpdateSlicked = false;
   // UI Components
+
+  UpdateSlicked = false;
   initiateSlick() {
     if (this.UpdateSlicked) {
       return;
@@ -111,7 +132,19 @@ export class ListingIndividualComponent implements OnInit {
   }
 
   liked_clicked() {
-    // console.log("liked");
+    if (this.userLikedID == "") {
+      this.ListingsService.LikedListing(this.listingId).subscribe((data) => {
+        $(".like-btn").toggleClass("liked");
+        this.userLikedID = data["data"]["like_id"];
+      });
+    } else {
+      this.ListingsService.UnLikedListing(this.userLikedID).subscribe(
+        (data) => {
+          this.userLikedID = "";
+          $(".like-btn").toggleClass("liked");
+        }
+      );
+    }
   }
 
   tabs_selected(selected) {

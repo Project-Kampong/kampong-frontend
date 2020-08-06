@@ -175,3 +175,29 @@
     }
   }
 }
+
+// Like btn
+.like-btn {
+  &:before {
+    content: "\f004";
+    font-family: "Font Awesome\ 5 Free";
+    font-weight: 400;
+    padding-right: 0.5rem;
+  }
+  &:after {
+    content: "Like";
+  }
+}
+.liked {
+  background-color: #fb3958;
+  color: white;
+  border: none;
+
+  &:before {
+    font-weight: 900;
+    padding-right: 0.5rem;
+  }
+  &:after {
+    content: "Liked";
+  }
+}
