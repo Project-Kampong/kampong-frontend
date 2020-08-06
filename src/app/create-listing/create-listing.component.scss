@@ -85,7 +85,10 @@
 }
 
 .submit-btn {
-  margin-top: 5rem;
+  margin: 5rem 0;
+  a {
+    text-transform: uppercase;
+  }
 }
 // Milestones
 .milestones-container {

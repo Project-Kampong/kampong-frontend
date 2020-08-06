@@ -68,6 +68,22 @@ export class ListingsService {
     );
   }
 
+  // Listing Stories
+  getSelectedListingStories(listingId) {
+    return this.httpClient.get(
+      this.url + "api/listings/stories/" + listingId,
+      this.options
+    );
+  }
+
+  // Listing Milestones
+  getSelectedListingMilestones(listingId) {
+    return this.httpClient.get(
+      this.url + "api/listings/" + listingId + "/milestones",
+      this.options
+    );
+  }
+
   // Liked Listing - by User
   getLikedListing() {
     return this.httpClient.get(

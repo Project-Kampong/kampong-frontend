@@ -59,3 +59,10 @@ export const DefaultListing = {
   pic4: "default",
   pic5: "default",
 };
+
+export interface ListingStories {
+  outcome: String;
+  overview: String;
+  problem: String;
+  solution: String;
+}

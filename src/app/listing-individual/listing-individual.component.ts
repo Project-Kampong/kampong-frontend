@@ -10,6 +10,7 @@ import {
   DefaultListing,
   ListingFAQ,
   ListingSkills,
+  ListingStories,
 } from "../interfaces/listing";
 import { Profile } from "../interfaces/profile";
 
@@ -35,6 +36,8 @@ export class ListingIndividualComponent implements OnInit {
   SkillsList: ListingSkills[];
   ProfileInfo: Profile[];
   listingLikes;
+  MilestoneArr = [];
+  Stories: ListingStories[];
 
   userLikedID = "";
   ngOnInit() {
@@ -75,6 +78,7 @@ export class ListingIndividualComponent implements OnInit {
         });
       }
     );
+    // Public Data
     // Get Num of Likes
     this.ListingsService.getSelectedListingLikes(this.listingId).subscribe(
       (data) => {
@@ -92,6 +96,25 @@ export class ListingIndividualComponent implements OnInit {
     this.ListingsService.getSelectedListingSkills(this.listingId).subscribe(
       (data) => {
         this.SkillsList = data["data"];
+      }
+    );
+
+    // Get Stories
+    this.ListingsService.getSelectedListingStories(this.listingId).subscribe(
+      (data) => {
+        console.log(data);
+        this.Stories = data["data"];
+      }
+    );
+
+    // Get Milestones
+    this.ListingsService.getSelectedListingMilestones(this.listingId).subscribe(
+      (data) => {
+        console.log(data);
+        this.MilestoneArr = data["data"];
+        this.MilestoneArr.sort((a, b) => {
+          return <any>new Date(a.date) - <any>new Date(b.date);
+        });
       }
     );
 
