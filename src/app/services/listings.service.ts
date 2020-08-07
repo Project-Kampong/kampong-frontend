@@ -121,6 +121,14 @@ export class ListingsService {
     );
   }
 
+  createListingMilestones(data) {
+    return this.httpClient.post(
+      this.url + "api/milestones",
+      data,
+      this.AuthService.AuthOptions
+    );
+  }
+
   // Like A Listing
   LikedListing(listing_id) {
     return this.httpClient.post(

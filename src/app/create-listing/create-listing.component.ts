@@ -39,8 +39,12 @@ export class CreateListingComponent implements OnInit {
   addMilestone() {
     this.milestoneArr.push({ milestone: "", deadline: new Date() });
     console.log(this.milestoneArr);
+    this.milestoneArr.sort((a, b) => {
+      return <any>new Date(a.deadline) - <any>new Date(b.deadline);
+    });
   }
   removeMilestone(i) {
+    console.log(i);
     this.milestoneArr.splice(i, 1);
   }
 
@@ -129,8 +133,22 @@ export class CreateListingComponent implements OnInit {
     }).subscribe(
       (res) => {
         console.log(res);
+        const listing_id = res["data"]["listing_id"];
         // Handle Stories
+        this.ListingsService.UpdateListingStory(listing_id, {
+          overview: listingData.overview,
+          problem: listingData.problem,
+          solution: listingData.solution,
+          outcome: listingData.outcome,
+        });
         // Handle Milestones
+        for (var i = 0; i < this.milestoneArr.length; i++) {
+          this.ListingsService.createListingMilestones({
+            listing_id: listing_id,
+            description: this.milestoneArr[i].milestone,
+            date: this.milestoneArr[i].deadline,
+          });
+        }
         // Handle Hashtags
       },
       (err) => {
