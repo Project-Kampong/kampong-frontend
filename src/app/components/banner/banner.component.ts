@@ -15,7 +15,11 @@ export class BannerComponent implements OnInit {
     // Extract 3 From ListingData
     // To be replaced with featuredListings API
     for (var i = 0; i < 3; i++) {
-      this.featuredData.push(this.ListingsService.FeaturedListingData[i]);
+      const position = this.ListingsService.FeaturedListingData.length - i - 1;
+      console.log(position);
+      this.featuredData.push(
+        this.ListingsService.FeaturedListingData[position]
+      );
     }
   }
 

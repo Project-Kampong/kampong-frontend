@@ -38,9 +38,16 @@ export class ListingsService {
       });
   }
 
+  getPublicOwnedListings(userId) {
+    return this.httpClient.get(
+      this.url + "api/profiles/" + userId + "/listings/owner",
+      this.options
+    );
+  }
+
   getSelectedListing(listingId) {
     return this.httpClient.get(
-      this.url + "api/listings/" + listingId,
+      this.url + "api/listings/" + listingId + "/raw",
       this.options
     );
   }
@@ -63,7 +70,7 @@ export class ListingsService {
   // Listing Skills
   getSelectedListingSkills(listingId) {
     return this.httpClient.get(
-      this.url + "api/listings/" + listingId + "/skills",
+      this.url + "api/listings/" + listingId + "/listing-skills",
       this.options
     );
   }
@@ -109,7 +116,7 @@ export class ListingsService {
     return this.httpClient.post(
       this.url + "api/listings",
       data,
-      this.AuthService.AuthOptions
+      this.AuthService.OnlyAuthHttpHeaders
     );
   }
 
@@ -124,6 +131,40 @@ export class ListingsService {
   createListingMilestones(data) {
     return this.httpClient.post(
       this.url + "api/milestones",
+      data,
+      this.AuthService.AuthOptions
+    );
+  }
+
+  createListingHashtags(data) {
+    return this.httpClient.post(
+      this.url + "api/hashtags",
+      data,
+      this.AuthService.AuthOptions
+    );
+  }
+
+  createListingSkills(data) {
+    return this.httpClient.post(
+      this.url + "api/skills",
+      {
+        skill: data,
+      },
+      this.AuthService.AuthOptions
+    );
+  }
+
+  connectListingSkills(data) {
+    return this.httpClient.post(
+      this.url + "api/listing-skills",
+      data,
+      this.AuthService.AuthOptions
+    );
+  }
+
+  createListingFAQ(data) {
+    return this.httpClient.post(
+      this.url + "api/faqs",
       data,
       this.AuthService.AuthOptions
     );

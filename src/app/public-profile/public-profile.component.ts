@@ -23,8 +23,9 @@ export class PublicProfileComponent implements OnInit {
     public ProfileService: ProfileService
   ) {}
 
-  ProfileDetails: Profile[];
+  ProfileDetails: Profile = <Profile>{};
   LikedArr: Listing[] = [];
+  StartedArr: Listing[] = [];
   LikeCount = 0;
   profileIdSelected;
   ngOnInit() {
@@ -55,5 +56,11 @@ export class PublicProfileComponent implements OnInit {
       }
     );
     // Started
+    this.ListingsService.getPublicOwnedListings(
+      this.profileIdSelected
+    ).subscribe((data) => {
+      console.log(data);
+      this.StartedArr = data["data"];
+    });
   }
 }

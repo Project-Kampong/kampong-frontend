@@ -92,21 +92,37 @@
           </defs>
         </svg>
       </div>
-      <form id="login-details">
+      <form id="login-details" [formGroup]="LoginForm">
         <div class="d-flex">
           <div class="col-6 pl-0">
-            <input placeholder="First Name" type="text" />
+            <input
+              placeholder="First Name"
+              type="text"
+              formControlName="first_name"
+            />
           </div>
           <div class="col-6 pr-0">
-            <input placeholder="Last Name" type="text" />
+            <input
+              placeholder="Last Name"
+              type="text"
+              formControlName="last_name"
+            />
           </div>
         </div>
-        <input placeholder="Email" type="email" />
-        <input placeholder="Password" type="Password" />
-        <input placeholder="Confirm Password" type="Password" />
-        <input placeholder="Date of Birth" type="Password" />
+        <input placeholder="Email" type="email" formControlName="email" />
+        <input
+          placeholder="Password"
+          type="Password"
+          formControlName="password"
+        />
+        <input
+          placeholder="Confirm Password"
+          type="Password"
+          formControlName="confirmPassword"
+        />
+
         <div class="btn-container">
-          <button routerLink="/home" type="submit" class="btn login-btn">
+          <button (click)="register()" type="submit" class="btn login-btn">
             Register
           </button>
         </div>

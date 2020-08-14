@@ -25,11 +25,26 @@ export class AuthService {
   };
   AuthHttpHeaders;
   AuthOptions;
+  // Containers only token - No content type
+  OnlyAuthHttpHeaders;
 
   constructor(
     private httpClient: HttpClient,
     private CookieService: CookieService
   ) {}
+
+  userRegister(data) {
+    return this.httpClient
+      .post(this.URL + "api/auth/register", data, this.options)
+      .subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (err) => {
+          return false;
+        }
+      );
+  }
 
   userLogin(credentials) {
     return this.httpClient
@@ -66,6 +81,12 @@ export class AuthService {
 
     this.AuthOptions = {
       headers: this.AuthHttpHeaders,
+    };
+
+    this.OnlyAuthHttpHeaders = {
+      headers: new HttpHeaders({
+        authorization: authorizationCode,
+      }),
     };
 
     this.CookieService.set("token", token);

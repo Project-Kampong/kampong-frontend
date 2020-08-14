@@ -33,6 +33,24 @@
           <mat-label>Name of Initiative</mat-label>
           <input matInput required formControlName="title" />
         </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category">
+            <mat-optgroup
+              *ngFor="let group of categoryGroup"
+              [label]="group.name"
+              [disabled]="group.disabled"
+            >
+              <mat-option
+                *ngFor="let category of group.group"
+                [value]="category"
+              >
+                {{ category }}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+
         <mat-form-field class="full-width">
           <mat-label>Slogan</mat-label>
           <input matInput required formControlName="tagline" />
@@ -42,20 +60,25 @@
           <input matInput required formControlName="mission" />
         </mat-form-field>
 
-        <div class="custom-input">
-          <label>Looking For</label>
-          <div class="category-list">
-            <ul>
-              <li class="active">web developer</li>
-              <li class="active">app developer</li>
-              <li class="active">Marketing Coordinator</li>
-              <li>Business planner</li>
-              <li>Designer</li>
-            </ul>
-          </div>
-        </div>
+        <mat-form-field appearance="fill">
+          <mat-label>Looking For</mat-label>
+          <mat-select formControlName="SkillsList" multiple>
+            <mat-optgroup
+              *ngFor="let group of skillsets"
+              [label]="group.name"
+              [disabled]="group.disabled"
+            >
+              <mat-option
+                *ngFor="let category of group.group"
+                [value]="category"
+              >
+                {{ category }}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
 
-        <mat-form-field class="full-width">
+        <mat-form-field class="full-width hashtags-container">
           <mat-chip-list #chipList aria-label="Fruit selection">
             <mat-chip
               *ngFor="let hashtags of hashtags"
@@ -74,15 +97,17 @@
               (matChipInputTokenEnd)="add($event)"
             />
           </mat-chip-list>
+          <span *ngIf="hashtagsError == true" class="error"
+            >Maximum 3 Hashtags</span
+          >
         </mat-form-field>
-
         <mat-form-field class="full-width">
           <mat-label>Summary of Project</mat-label>
           <textarea
             matInput
             cdkTextareaAutosize
             cdkAutosizeMinRows="1"
-            formControlName="summary"
+            formControlName="overview"
           ></textarea>
         </mat-form-field>
         <mat-form-field class="full-width">
@@ -148,6 +173,37 @@
 
         <button class="add-milestones" (click)="addMilestone()">
           Add Milestone
+        </button>
+      </div>
+
+      <!-- FAQ -->
+      <div class="milestones-container">
+        <label>Frequent Ask Questions</label>
+        <div *ngFor="let faq of faqArr; index as i" class="milestones">
+          <mat-form-field class="milestone-input">
+            <mat-label>Question</mat-label>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              [(ngModel)]="faq.questions"
+            ></textarea>
+          </mat-form-field>
+          <mat-form-field class="milestone-input">
+            <mat-label>Answers</mat-label>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              [(ngModel)]="faq.answer"
+            ></textarea>
+          </mat-form-field>
+
+          <button class="remove-milestone" (click)="removeFAQ(i)"></button>
+        </div>
+
+        <button class="add-milestones" (click)="addFAQ()">
+          Add Question
         </button>
       </div>
 

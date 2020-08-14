@@ -30,21 +30,21 @@ export class ListingIndividualComponent implements OnInit {
   ) {}
 
   listingId;
+  hashID;
   ListingData: Listing[];
   SliderImageArr = [];
   FAQList: ListingFAQ[];
-  SkillsList: ListingSkills[];
+  SkillsList: ListingSkills[] = [];
   ProfileInfo: Profile[];
   listingLikes;
   MilestoneArr = [];
-  Stories: ListingStories[];
+  Stories: ListingStories = <ListingStories>{};
   Hashtags = [];
   userLikedID = "";
   ngOnInit() {
     this.listingId = this.route.snapshot.params["id"];
     console.log(this.listingId);
     window.scroll(0, 0);
-
     // Get Listing Info
     this.ListingsService.getSelectedListing(this.listingId).subscribe(
       (data) => {
@@ -77,6 +77,7 @@ export class ListingIndividualComponent implements OnInit {
         });
       }
     );
+
     // Public Data
     // Get Num of Likes
     this.ListingsService.getSelectedListingLikes(this.listingId).subscribe(
@@ -95,6 +96,7 @@ export class ListingIndividualComponent implements OnInit {
     this.ListingsService.getSelectedListingSkills(this.listingId).subscribe(
       (data) => {
         this.SkillsList = data["data"];
+        console.log(this.SkillsList);
       }
     );
 
@@ -109,6 +111,7 @@ export class ListingIndividualComponent implements OnInit {
     this.ListingsService.getSelectedListingStories(this.listingId).subscribe(
       (data) => {
         this.Stories = data["data"];
+        console.log(this.Stories);
       }
     );
 

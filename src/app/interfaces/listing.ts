@@ -37,7 +37,7 @@ export const CreateListing = {
 };
 
 export const ListingStory = {
-  summary: "summary",
+  overview: "overview",
   problem: "problem",
   solution: "solution",
   outcome: "outcome",

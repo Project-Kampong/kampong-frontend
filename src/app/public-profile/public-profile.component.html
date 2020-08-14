@@ -22,7 +22,7 @@
 
     <div class="profile-stats">
       <div class="stats">
-        <p>{{ LikeCount }}</p>
+        <p>{{ StartedArr.length }}</p>
         <span>Initiatives</span>
       </div>
       <div class="stats">
@@ -40,13 +40,13 @@
   </div>
 </section>
 
-<section class="container block-content">
+<section *ngIf="StartedArr.length != 0" class="container block-content">
   <div class="col-12">
     <h2>
       Initiatives I’ve Started
     </h2>
   </div>
-  <app-listing-cards></app-listing-cards>
+  <app-listing-cards [ListingData]="StartedArr"></app-listing-cards>
 </section>
 
 <section *ngIf="LikedArr.length != 0" class="container block-content">

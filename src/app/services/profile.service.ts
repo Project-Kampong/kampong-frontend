@@ -18,7 +18,7 @@ export class ProfileService {
 
   getUserProfile(userId) {
     return this.httpClient.get(
-      this.url + "api/profiles/" + userId,
+      this.url + "api/profiles/" + userId + "/raw",
       this.options
     );
   }
