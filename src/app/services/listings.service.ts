@@ -185,4 +185,27 @@ export class ListingsService {
       this.AuthService.AuthOptions
     );
   }
+
+  // Edit Listing
+  // Delete
+  removeMilestone(milestone_id) {
+    return this.httpClient.delete(
+      this.url + "api/milestones/" + milestone_id,
+      this.AuthService.AuthOptions
+    );
+  }
+
+  removeFAQ(faq_id) {
+    return this.httpClient.delete(
+      this.url + "api/faqs/" + faq_id,
+      this.AuthService.AuthOptions
+    );
+  }
+
+  removeHashtags(hashtag_id) {
+    return this.httpClient.delete(
+      this.url + "api/hashtags/" + hashtag_id,
+      this.AuthService.AuthOptions
+    );
+  }
 }

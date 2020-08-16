@@ -1,0 +1,21 @@
+<div class="d-flex flex-wrap listing-card-wrapper">
+  <a
+    *ngFor="let ListingData of ListingData"
+    class="listing-card col-6 col-lg-4"
+  >
+    <div class="card-cover">
+      <img (click)="selectedCard(ListingData)" src="{{ ListingData.pic1 }}" />
+      <div class="listing-card-body" (click)="selectedCard(ListingData)">
+        <div class="justify-content-between">
+          <div class="category">
+            <span>{{ ListingData.category }}</span>
+          </div>
+        </div>
+
+        <p class="title">{{ ListingData.title }}</p>
+        <p class="tagline">{{ ListingData.tagline }}</p>
+      </div>
+      <div class="edit-btn" (click)="editListing(ListingData)"></div>
+    </div>
+  </a>
+</div>

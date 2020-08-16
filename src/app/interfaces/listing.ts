@@ -29,18 +29,18 @@ export interface ListingSkills {
 }
 
 export const CreateListing = {
-  title: "New title 1",
-  category: "test category",
-  about: "test about",
-  tagline: "test tagline",
-  mission: "test mission",
+  title: "",
+  category: "",
+  about: "",
+  tagline: "",
+  mission: "",
 };
 
 export const ListingStory = {
-  overview: "overview",
-  problem: "problem",
-  solution: "solution",
-  outcome: "outcome",
+  overview: "",
+  problem: "",
+  solution: "",
+  outcome: "",
 };
 
 export const DefaultListing = {

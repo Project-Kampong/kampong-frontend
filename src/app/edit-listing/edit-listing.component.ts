@@ -3,7 +3,7 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { MatChipInputEvent } from "@angular/material/chips";
 
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 
 import { ListingsService } from "../services/listings.service";
 declare var $: any;
@@ -12,18 +12,20 @@ declare var $: any;
 import { Listing, CreateListing, ListingStory } from "../interfaces/listing";
 
 @Component({
-  selector: "app-create-listing",
-  templateUrl: "./create-listing.component.html",
-  styleUrls: ["./create-listing.component.scss"],
+  selector: "app-edit-listing",
+  templateUrl: "./edit-listing.component.html",
+  styleUrls: ["./edit-listing.component.scss"],
 })
-export class CreateListingComponent implements OnInit {
+export class EditListingComponent implements OnInit {
+  listingId;
   selectedFile: File = null;
   ListingForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     public ListingsService: ListingsService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   fileDisplayArr = [];
@@ -31,8 +33,8 @@ export class CreateListingComponent implements OnInit {
   fileLimit = false;
   fileCount = 0;
 
-  milestoneArr = [{ milestone: "", deadline: new Date() }];
-  faqArr = [{ questions: "", answer: "" }];
+  milestoneArr = [];
+  faqArr = [];
   categoryGroup = [
     {
       name: "Social",
@@ -143,17 +145,88 @@ export class CreateListingComponent implements OnInit {
   ];
 
   ngOnInit() {
+    window.scroll(0, 0);
+    this.listingId = this.route.snapshot.params["id"];
     this.ListingForm = this.fb.group({
       ...CreateListing,
       ...ListingStory,
       SkillsList: [],
     });
+
+    // Grab data
+    this.ListingsService.getSelectedListing(this.listingId).subscribe(
+      (data) => {
+        console.log(data["data"]);
+        this.ListingForm.patchValue(data["data"]);
+        // Handle Images
+        for (var i = 1; i < 6; i++) {
+          if (data["data"]["pic" + i] != null) {
+            this.fileDisplayArr.push({
+              file: data["data"]["pic" + i],
+              index: "pic" + i,
+            });
+          } else {
+            return;
+          }
+        }
+      }
+    );
+    this.ListingsService.getSelectedListingStories(this.listingId).subscribe(
+      (data) => {
+        console.log(data["data"]);
+        this.ListingForm.patchValue(data["data"]);
+      }
+    );
+
+    // Grab Milestone
+    this.ListingsService.getSelectedListingMilestones(this.listingId).subscribe(
+      (data) => {
+        const milestonesData = data["data"];
+        if (milestonesData.length == 0) {
+          this.milestoneArr.push({ deadline: "", milestone: "" });
+        } else {
+          milestonesData.map((x) => {
+            this.milestoneArr.push({
+              deadline: x.date,
+              milestone: x.description,
+              listing_id: x.listing_id,
+              milestone_id: x.milestone_id,
+            });
+          });
+        }
+      }
+    );
+    // Grab FAQ
+    this.ListingsService.getSelectedListingFAQ(this.listingId).subscribe(
+      (data) => {
+        const faqData = data["data"];
+        if (faqData.length == 0) {
+          this.faqArr.push({ questions: "", answer: "" });
+        } else {
+          faqData.map((x) => {
+            this.faqArr.push({
+              questions: x.question,
+              answer: x.answer,
+              listing_id: x.listing_id,
+              faq_id: x.faq_id,
+            });
+          });
+        }
+      }
+    );
+    // Grab Hashtags
+    this.ListingsService.getSelectedListingHashtags(this.listingId).subscribe(
+      (data) => {
+        const hashtagsData = data["data"];
+        hashtagsData.map((x) => {
+          this.hashtags.push({ tag: x.tag, hashtag_id: x.hashtag_id });
+        });
+      }
+    );
   }
 
   uploadFile(event) {
     this.selectedFile = <File>event.target.files[0];
-    // this.fileArr.push(this.selectedFile);
-
     // Display Image
     var reader: FileReader = new FileReader();
     reader.onload = (e) => {
@@ -162,33 +235,13 @@ export class CreateListingComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
     this.fileLimitChecker(true);
     this.fileArr.push(this.selectedFile);
-    console.log(this.fileArr);
-    // Upload to S3
-    // const fd = new FormData();
-    // fd.append("file", this.selectedFile);
-    // this.ListingsService.uploadFile(fd).subscribe(
-    //   (res) => {
-    //     console.log(res);
-    //     // Display Image
-    //     var reader: FileReader = new FileReader();
-    //     reader.onload = (e) => {
-    //       this.fileDisplayArr.push(reader.result.toString());
-    //     };
-    //     reader.readAsDataURL(event.target.files[0]);
-    //     this.fileLimitChecker(true);
-    //     this.fileArr.push(res["data"]);
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //     return;
-    //   }
-    // );
   }
 
-  removeFile(i) {
-    this.fileDisplayArr.splice(i, 1);
-    this.fileArr.splice(i, 1);
-    this.fileLimitChecker(false);
+  removeFile(file, i) {
+    console.log(file);
+    // this.fileDisplayArr.splice(i, 1);
+    // this.fileArr.splice(i, 1);
+    // this.fileLimitChecker(false);
   }
 
   fileLimitChecker(increase) {
@@ -319,7 +372,7 @@ export class CreateListingComponent implements OnInit {
     const index = this.hashtags.indexOf(data);
     if (index >= 0) {
       this.hashtags.splice(index, 1);
-
+      this.ListingsService.removeHashtags(data.hashtag_id).subscribe();
       if (this.hashtags.length == 3) {
         this.hashtagsError = true;
       } else {
@@ -330,21 +383,27 @@ export class CreateListingComponent implements OnInit {
 
   // Milestones and FAQ UI
   addMilestone() {
-    this.milestoneArr.push({ milestone: "", deadline: new Date() });
-    console.log(this.milestoneArr);
+    this.milestoneArr.push({ deadline: "", milestone: "" });
     this.milestoneArr.sort((a, b) => {
       return <any>new Date(a.deadline) - <any>new Date(b.deadline);
     });
   }
-  removeMilestone(i) {
-    console.log(i);
+  removeMilestone(milestone, i) {
     this.milestoneArr.splice(i, 1);
+    // Delete Milestone
+    if (milestone.milestone_id != null) {
+      this.ListingsService.removeMilestone(milestone.milestone_id).subscribe();
+    }
   }
 
   addFAQ() {
     this.faqArr.push({ questions: "", answer: "" });
   }
-  removeFAQ(i) {
+  removeFAQ(faq, i) {
     this.faqArr.splice(i, 1);
+    // Delete FAQ
+    if (faq.faq_id != null) {
+      this.ListingsService.removeFAQ(faq.faq_id).subscribe();
+    }
   }
 }

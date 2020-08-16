@@ -34,6 +34,8 @@ import { EditProfileComponent } from "./edit-profile/edit-profile.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CreateListingComponent } from "./create-listing/create-listing.component";
 import { PublicProfileComponent } from "./public-profile/public-profile.component";
+import { EditListingCardsComponent } from "./components/edit-listing-cards/edit-listing-cards.component";
+import { EditListingComponent } from "./edit-listing/edit-listing.component";
 
 @NgModule({
   declarations: [
@@ -52,6 +54,8 @@ import { PublicProfileComponent } from "./public-profile/public-profile.componen
     EditProfileComponent,
     CreateListingComponent,
     PublicProfileComponent,
+    EditListingCardsComponent,
+    EditListingComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,7 +75,7 @@ import { PublicProfileComponent } from "./public-profile/public-profile.componen
     { provide: MAT_DATE_LOCALE, useValue: "en-GB" },
     CookieService,
     // Production Line
-    { provide: LocationStrategy, useClass: HashLocationStrategy },
+    // { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
   bootstrap: [AppComponent],
 })

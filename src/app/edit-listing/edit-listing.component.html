@@ -1,0 +1,215 @@
+<section class="container block-content">
+  <div class="d-flex flex-wrap">
+    <div class="col-lg-8">
+      <h3>Edit Listing</h3>
+
+      <div class="form-group" [formGroup]="ListingForm">
+        <div class="custom-input">
+          <label>Images (Maximum of 5)</label>
+          <div class="d-flex flex-wrap align-items-start mt-2 image-output">
+            <div
+              *ngFor="let file of fileDisplayArr; index as i"
+              class="image-container"
+              (click)="removeFile(file, i)"
+            >
+              <img src="{{ file.file }}" />
+            </div>
+
+            <div
+              *ngIf="fileLimit == false"
+              class="custom-file-upload-container"
+            >
+              <label for="file-upload" class="custom-file-upload"> </label>
+              <input
+                type="file"
+                accept="image/*"
+                id="file-upload"
+                (change)="uploadFile($event)"
+              />
+            </div>
+          </div>
+        </div>
+        <mat-form-field class="full-width">
+          <mat-label>Name of Initiative</mat-label>
+          <input matInput required formControlName="title" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category">
+            <mat-optgroup
+              *ngFor="let group of categoryGroup"
+              [label]="group.name"
+              [disabled]="group.disabled"
+            >
+              <mat-option
+                *ngFor="let category of group.group"
+                [value]="category"
+              >
+                {{ category }}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Slogan</mat-label>
+          <input matInput required formControlName="tagline" />
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Mission Statement</mat-label>
+          <input matInput required formControlName="mission" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Looking For</mat-label>
+          <mat-select formControlName="SkillsList" multiple>
+            <mat-optgroup
+              *ngFor="let group of skillsets"
+              [label]="group.name"
+              [disabled]="group.disabled"
+            >
+              <mat-option
+                *ngFor="let category of group.group"
+                [value]="category"
+              >
+                {{ category }}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="full-width hashtags-container">
+          <mat-chip-list #chipList aria-label="Fruit selection">
+            <mat-chip
+              *ngFor="let hashtags of hashtags"
+              [selectable]="selectable"
+              [removable]="removable"
+              (removed)="remove(hashtags)"
+            >
+              {{ hashtags.tag }}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+              placeholder="Hashtags (Maximum Of 3)"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="add($event)"
+            />
+          </mat-chip-list>
+          <span *ngIf="hashtagsError == true" class="error"
+            >Maximum 3 Hashtags</span
+          >
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Summary of Project</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="1"
+            formControlName="overview"
+          ></textarea>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Current Problem</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="1"
+            formControlName="problem"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Solution</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="1"
+            formControlName="solution"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Ideal Outcome</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="1"
+            formControlName="outcome"
+          ></textarea>
+        </mat-form-field>
+      </div>
+
+      <!-- Milestones -->
+      <div class="milestones-container">
+        <label>Milestones</label>
+        <div
+          *ngFor="let milestone of milestoneArr; index as i"
+          class="milestones"
+        >
+          <mat-form-field class="milestone-input">
+            <mat-label>Milestone</mat-label>
+            <input matInput [(ngModel)]="milestone.milestone" />
+          </mat-form-field>
+          <mat-form-field class="deadline-input">
+            <mat-label>Deadline</mat-label>
+            <input
+              [(ngModel)]="milestone.deadline"
+              matInput
+              [matDatepicker]="DateOfBirthPicker"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="DateOfBirthPicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #DateOfBirthPicker></mat-datepicker>
+          </mat-form-field>
+          <button
+            class="remove-milestone"
+            (click)="removeMilestone(milestone, i)"
+          ></button>
+        </div>
+
+        <button class="add-milestones" (click)="addMilestone()">
+          Add Milestone
+        </button>
+      </div>
+
+      <!-- FAQ -->
+      <div class="milestones-container">
+        <label>Frequent Ask Questions</label>
+        <div *ngFor="let faq of faqArr; index as i" class="milestones">
+          <mat-form-field class="milestone-input">
+            <mat-label>Question</mat-label>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              [(ngModel)]="faq.questions"
+            ></textarea>
+          </mat-form-field>
+          <mat-form-field class="milestone-input">
+            <mat-label>Answers</mat-label>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              [(ngModel)]="faq.answer"
+            ></textarea>
+          </mat-form-field>
+
+          <button class="remove-milestone" (click)="removeFAQ(faq, i)"></button>
+        </div>
+
+        <button class="add-milestones" (click)="addFAQ()">
+          Add Question
+        </button>
+      </div>
+
+      <div class="submit-btn">
+        <a class="btn yellow-btn" (click)="createListing()">Save Initiative</a>
+      </div>
+    </div>
+  </div>
+</section>
