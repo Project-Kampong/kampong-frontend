@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 
 import { ListingsService } from "../services/listings.service";
 import { ProfileService } from "../services/profile.service";
-
+import { AuthService } from "../services/auth.service";
 // Interface
 import {
   Listing,
@@ -11,6 +11,7 @@ import {
   ListingFAQ,
   ListingSkills,
   ListingStories,
+  ListingComments,
 } from "../interfaces/listing";
 import { Profile } from "../interfaces/profile";
 
@@ -26,30 +27,60 @@ export class ListingIndividualComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private ListingsService: ListingsService,
-    private ProfileService: ProfileService
+    private ProfileService: ProfileService,
+    private AuthService: AuthService
   ) {}
 
   listingId;
   hashID;
-  ListingData: Listing[];
-  SliderImageArr = [];
-  FAQList: ListingFAQ[];
-  SkillsList: ListingSkills[] = [];
+
+  // Data Arr
+  ListingData: Listing = <Listing>{};
   ProfileInfo: Profile[];
-  listingLikes;
-  MilestoneArr = [];
-  Stories: ListingStories = <ListingStories>{};
   Hashtags = [];
+  // Stories
+  Stories: ListingStories = <ListingStories>{};
+  SkillsList: ListingSkills[] = [];
+  MilestoneArr = [];
+  // Faq
+  FAQList: ListingFAQ[];
+  // Comments
+  CommentsArr = [];
+  // Updates
+  UpdatesArr = [];
+
+  // UI
+  SliderImageArr = [];
+  listingLikes;
   userLikedID = "";
+  currentDate = new Date();
+
+  // Updates
+  fileDisplayArr = [];
+  fileArr = [];
+  fileLimit = false;
+  fileCount = 0;
+
   ngOnInit() {
-    this.listingId = this.route.snapshot.params["id"];
-    console.log(this.listingId);
+    console.log(this.ListingData);
     window.scroll(0, 0);
+    this.listingId = this.route.snapshot.params["id"];
+    this.getInitData();
+
+    // UI Components
+    $(".navigation-tabs li").on("click", function () {
+      $(".navigation-tabs li").removeClass("active");
+      $(this).addClass("active");
+    });
+    this.tabs_selected("story");
+  }
+
+  getInitData() {
     // Get Listing Info
     this.ListingsService.getSelectedListing(this.listingId).subscribe(
       (data) => {
         this.ListingData = data["data"];
-
+        console.log(this.ListingData);
         this.SliderImageArr.push(
           this.ListingData["pic1"],
           this.ListingData["pic2"],
@@ -57,6 +88,7 @@ export class ListingIndividualComponent implements OnInit {
           this.ListingData["pic4"],
           this.ListingData["pic5"]
         );
+        console.log(this.SliderImageArr);
         this.ProfileService.getUserProfile(
           this.ListingData["created_by"]
         ).subscribe((profile) => {
@@ -115,6 +147,27 @@ export class ListingIndividualComponent implements OnInit {
       }
     );
 
+    // Get Comments
+    this.ListingsService.getSelectedListingComments(this.listingId).subscribe(
+      (data) => {
+        this.CommentsArr = data["data"];
+        this.CommentsArr.sort((a, b) => {
+          return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+        });
+      }
+    );
+
+    // Get Updates
+    this.ListingsService.getSelectedListingUpdates(this.listingId).subscribe(
+      (data) => {
+        this.UpdatesArr = data["data"];
+        this.UpdatesArr.sort((a, b) => {
+          return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+        });
+        // this.initiateSlick();
+      }
+    );
+
     // Get Milestones
     this.ListingsService.getSelectedListingMilestones(this.listingId).subscribe(
       (data) => {
@@ -126,23 +179,187 @@ export class ListingIndividualComponent implements OnInit {
     );
 
     // End of Data Retrive
+  }
 
-    // UI Components
-    $(".navigation-tabs li").on("click", function () {
-      $(".navigation-tabs li").removeClass("active");
-      $(this).addClass("active");
+  // File Upload
+  selectedFile: File = null;
+  updatesDescription;
+  uploadFile(event) {
+    this.selectedFile = <File>event.target.files[0];
+    console.log(this.selectedFile.size);
+    if (this.selectedFile.size > 500000) {
+      console.log(this.selectedFile);
+    } else {
+      // Display Image
+      var reader: FileReader = new FileReader();
+      reader.onload = (e) => {
+        this.fileDisplayArr.push(reader.result.toString());
+      };
+      reader.readAsDataURL(event.target.files[0]);
+      this.fileLimitChecker(true);
+      this.fileArr.push(this.selectedFile);
+      console.log(this.fileArr);
+    }
+  }
+
+  removeFile(i) {
+    this.fileDisplayArr.splice(i, 1);
+    this.fileArr.splice(i, 1);
+    this.fileLimitChecker(false);
+  }
+
+  fileLimitChecker(increase) {
+    const maxFile = 5;
+    if (increase) {
+      this.fileCount = this.fileCount + 1;
+      if (this.fileCount == maxFile) {
+        this.fileLimit = true;
+      }
+    } else {
+      this.fileCount = this.fileCount - 1;
+      if (this.fileCount != maxFile) {
+        this.fileLimit = false;
+      }
+    }
+  }
+
+  submitUpdates() {
+    var updatesFd = new FormData();
+    updatesFd.append("description", this.updatesDescription);
+    updatesFd.append("listing_id", this.listingId);
+    for (var i = 0; i < this.fileArr.length; i++) {
+      updatesFd.append("pic" + (i + 1), this.fileArr[i].name);
+      updatesFd.append("pics", this.fileArr[i]);
+      console.log("pic" + (i + 1));
+    }
+    this.ListingsService.CreateListingUpdates(updatesFd).subscribe((data) => {
+      console.log(data);
+      this.fileArr = [];
+      this.fileDisplayArr = [];
+      this.updatesDescription = "";
+      this.fileCount = 0;
+      // Get Updates
+      this.ListingsService.getSelectedListingUpdates(this.listingId).subscribe(
+        (data) => {
+          this.UpdatesArr = data["data"];
+          this.UpdatesArr.sort((a, b) => {
+            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+          });
+        },
+        (err) => {},
+        () => {
+          setTimeout(() => {
+            this.initiateSlick();
+          }, 500);
+        }
+      );
     });
-    this.tabs_selected("story");
+  }
+
+  // Updates
+  getDiffInTime(time) {
+    const newTime = new Date(time);
+    var diff = this.currentDate.getTime() - newTime.getTime();
+    diff /= 1000;
+
+    var hh = Math.floor(diff / (60 * 60));
+    var dd = Math.floor(diff / (60 * 60 * 24));
+    var mm = Math.floor(diff / (60 * 60 * 24 * 30));
+    var yy = Math.floor(diff / (60 * 60 * 24 * 30 * 12));
+    if (hh > 24) {
+      // retun day
+      if (dd > 30) {
+        if (mm > 12) {
+          if (yy > 1) {
+            return yy + " Years ago";
+          } else {
+            return yy + " Year ago";
+          }
+        } else {
+          if (mm > 1) {
+            return mm + " Months ago";
+          } else {
+            return mm + " Month ago";
+          }
+        }
+      } else {
+        if (dd > 1) {
+          return dd + " Days ago";
+        } else {
+          return dd + " Day ago";
+        }
+      }
+    } else if (hh < 1) {
+      return "Less than 1 Hour ago";
+    } else {
+      if (hh > 1) {
+        return hh + " Hours ago";
+      } else {
+        return hh + " Hour ago";
+      }
+    }
+  }
+
+  comments;
+  // Comments
+  submitComments() {
+    console.log(this.comments);
+    this.ListingsService.CreateListingComments({
+      listing_id: this.listingId,
+      comment: this.comments,
+    }).subscribe((data) => {
+      this.comments = "";
+      console.log(data);
+    });
+  }
+  replyComments(data) {
+    console.log(data);
+    this.ListingsService.CreateListingComments({
+      listing_id: this.listingId,
+      comment: data.replyToComments,
+      reply_to_id: data.listing_comment_id,
+    }).subscribe((data) => {
+      console.log(data);
+      // Get Comments
+      this.ListingsService.getSelectedListingComments(this.listingId).subscribe(
+        (data) => {
+          this.CommentsArr = data["data"];
+          this.CommentsArr.sort((a, b) => {
+            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+          });
+          console.log(this.CommentsArr);
+        }
+      );
+    });
   }
 
   // UI Components
 
   UpdateSlicked = false;
   initiateSlick() {
-    if (this.UpdateSlicked) {
-      return;
-    } else {
-      this.UpdateSlicked = true;
+    console.log("initiating Slick");
+    // if (this.UpdateSlicked) {
+    //   return;
+    // } else {
+    //   this.UpdateSlicked = true;
+    //   $(".update-image-slider").slick({
+    //     slidesToShow: 2,
+    //     slidesToScroll: 1,
+    //     dots: true,
+    //     arrows: true,
+    //     infinite: false,
+    //     responsive: [
+    //       {
+    //         breakpoint: 1024,
+    //         settings: {
+    //           slidesToShow: 1,
+    //         },
+    //       },
+    //     ],
+    //   });
+    // }
+
+    if (!$(".update-image-slider").hasClass("slick-initialized")) {
       $(".update-image-slider").slick({
         slidesToShow: 2,
         slidesToScroll: 1,
@@ -158,6 +375,9 @@ export class ListingIndividualComponent implements OnInit {
           },
         ],
       });
+    } else {
+      $(".update-image-slider").slick("unslick");
+      this.initiateSlick();
     }
   }
 

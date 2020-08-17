@@ -1,17 +1,8 @@
-<div class="update-image-slider">
-  <div class="image-container">
-    <img
-      src="https://images.pexels.com/photos/2228586/pexels-photo-2228586.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-    />
-  </div>
-  <div class="image-container">
-    <img
-      src="https://images.pexels.com/photos/4624724/pexels-photo-4624724.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-    />
-  </div>
-  <div class="image-container">
-    <img
-      src="https://images.pexels.com/photos/4298000/pexels-photo-4298000.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-    />
+<div class="update-image-slider unslicked">
+  <div
+    *ngFor="let slide of SliderImages; let i = index"
+    class="image-container"
+  >
+    <img src="{{ slide }}" />
   </div>
 </div>

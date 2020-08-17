@@ -28,6 +28,17 @@ export interface ListingSkills {
   skill: String;
 }
 
+export interface ListingComments {
+  listing_comment_id: String;
+  listing_id: String;
+  user_id: String;
+  comment: String;
+  reply_to_id: String;
+  created_on: String;
+  updated_on: String;
+  nickname: String;
+}
+
 export const CreateListing = {
   title: "",
   category: "",

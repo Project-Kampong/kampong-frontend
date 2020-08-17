@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, EventEmitter } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 
 import { Listing, DefaultListing } from "../interfaces/listing";
@@ -27,6 +27,8 @@ export class ListingsService {
   // Variables
   ListingData: Listing[];
   FeaturedListingData: Listing[];
+
+  // Event Emitter
 
   getListings() {
     return this.httpClient
@@ -79,6 +81,22 @@ export class ListingsService {
   getSelectedListingStories(listingId) {
     return this.httpClient.get(
       this.url + "api/listings/stories/" + listingId,
+      this.options
+    );
+  }
+
+  // Listing Comments
+  getSelectedListingComments(listingId) {
+    return this.httpClient.get(
+      this.url + "api/listings/" + listingId + "/listing-comments",
+      this.options
+    );
+  }
+
+  // Updates
+  getSelectedListingUpdates(listingId) {
+    return this.httpClient.get(
+      this.url + "api/listings/" + listingId + "/listing-updates",
       this.options
     );
   }
@@ -167,6 +185,24 @@ export class ListingsService {
       this.url + "api/faqs",
       data,
       this.AuthService.AuthOptions
+    );
+  }
+
+  // Comments
+  CreateListingComments(data) {
+    return this.httpClient.post(
+      this.url + "api/listing-comments",
+      data,
+      this.AuthService.AuthOptions
+    );
+  }
+
+  // Updates
+  CreateListingUpdates(data) {
+    return this.httpClient.post(
+      this.url + "api/listing-updates",
+      data,
+      this.AuthService.OnlyAuthHttpHeaders
     );
   }
 

@@ -53,6 +53,7 @@ export class AuthService {
         (res) => {
           this.AuthToken = res["token"];
           this.setAuthHeaders(this.AuthToken);
+          this.CookieService.set("token", this.AuthToken);
           this.getUserDetails();
         },
         (err) => {
@@ -88,24 +89,23 @@ export class AuthService {
         authorization: authorizationCode,
       }),
     };
-
-    this.CookieService.set("token", token);
   }
 
   // Find token in cookies
   tokenExist() {
     const tokenExist = this.CookieService.get("token");
-    this.AuthToken = tokenExist;
-
-    if (tokenExist != null) {
-      console.log(tokenExist);
+    if (tokenExist != null && tokenExist != "") {
+      this.AuthToken = tokenExist;
       this.setAuthHeaders(tokenExist);
       this.getUserDetails();
     }
   }
 
   logout() {
-    this.CookieService.delete("token");
+    console.log("logout");
+    this.AuthToken = "";
+    this.isLoggedIn = false;
+    this.CookieService.delete("token", "/");
     window.location.href = "/login";
   }
 }
