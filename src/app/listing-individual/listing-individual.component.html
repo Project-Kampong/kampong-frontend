@@ -162,43 +162,53 @@
         "
         class="updates-input"
       >
-        <div class="custom-input">
-          <label class="input-label">Images (Maximum of 5)</label>
-          <div class="d-flex flex-wrap align-items-start mt-2 image-output">
-            <div
-              *ngFor="let file of fileDisplayArr; index as i"
-              class="image-container"
-              (click)="removeFile(i)"
-            >
-              <img src="{{ file }}" />
-            </div>
+        <div class="d-flex justify-content-end">
+          <button
+            class="outline-btn btn"
+            (click)="updatesFormOpen = updatesFormOpen ? false : true"
+          >
+            Post Update
+          </button>
+        </div>
+        <div *ngIf="updatesFormOpen == true" style="padding: 1rem;">
+          <div class="custom-input">
+            <label class="input-label">Images (Maximum of 5)</label>
+            <div class="d-flex flex-wrap align-items-start mt-2 image-output">
+              <div
+                *ngFor="let file of fileDisplayArr; index as i"
+                class="image-container"
+                (click)="removeFile(i)"
+              >
+                <img src="{{ file }}" />
+              </div>
 
-            <div
-              *ngIf="fileLimit == false"
-              class="custom-file-upload-container"
-            >
-              <label for="file-upload" class="custom-file-upload"> </label>
-              <input
-                type="file"
-                accept="image/*"
-                id="file-upload"
-                (change)="uploadFile($event)"
-              />
+              <div
+                *ngIf="fileLimit == false"
+                class="custom-file-upload-container"
+              >
+                <label for="file-upload" class="custom-file-upload"> </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="file-upload"
+                  (change)="uploadFile($event)"
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        <mat-form-field class="full-width">
-          <mat-label>Description</mat-label>
-          <textarea
-            matInput
-            cdkTextareaAutosize
-            cdkAutosizeMinRows="3"
-            [(ngModel)]="updatesDescription"
-          ></textarea>
-        </mat-form-field>
-        <div class="d-flex justify-content-end">
-          <button class="yellow-btn" (click)="submitUpdates()">Submit</button>
+          <mat-form-field class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="3"
+              [(ngModel)]="updatesDescription"
+            ></textarea>
+          </mat-form-field>
+          <div class="d-flex justify-content-end">
+            <button class="yellow-btn" (click)="submitUpdates()">Submit</button>
+          </div>
         </div>
       </div>
 

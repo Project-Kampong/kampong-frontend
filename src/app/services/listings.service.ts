@@ -224,6 +224,14 @@ export class ListingsService {
 
   // Edit Listing
   // Delete
+  removeListing(listingId) {
+    return this.httpClient.put(
+      this.url + "api/listings/" + listingId + "/deactivate",
+      {},
+      this.AuthService.AuthOptions
+    );
+  }
+
   removeMilestone(milestone_id) {
     return this.httpClient.delete(
       this.url + "api/milestones/" + milestone_id,

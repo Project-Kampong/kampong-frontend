@@ -406,4 +406,13 @@ export class EditListingComponent implements OnInit {
       this.ListingsService.removeFAQ(faq.faq_id).subscribe();
     }
   }
+
+  // Remove Listing
+  removeListing() {
+    if (confirm("Are you sure to delete " + this.ListingForm.value.title)) {
+      this.ListingsService.removeListing(this.listingId).subscribe((data) => {
+        console.log(data);
+      });
+    }
+  }
 }

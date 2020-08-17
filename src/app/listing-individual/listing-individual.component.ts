@@ -60,6 +60,7 @@ export class ListingIndividualComponent implements OnInit {
   fileArr = [];
   fileLimit = false;
   fileCount = 0;
+  updatesFormOpen = false;
 
   ngOnInit() {
     console.log(this.ListingData);
@@ -337,28 +338,6 @@ export class ListingIndividualComponent implements OnInit {
 
   UpdateSlicked = false;
   initiateSlick() {
-    console.log("initiating Slick");
-    // if (this.UpdateSlicked) {
-    //   return;
-    // } else {
-    //   this.UpdateSlicked = true;
-    //   $(".update-image-slider").slick({
-    //     slidesToShow: 2,
-    //     slidesToScroll: 1,
-    //     dots: true,
-    //     arrows: true,
-    //     infinite: false,
-    //     responsive: [
-    //       {
-    //         breakpoint: 1024,
-    //         settings: {
-    //           slidesToShow: 1,
-    //         },
-    //       },
-    //     ],
-    //   });
-    // }
-
     if (!$(".update-image-slider").hasClass("slick-initialized")) {
       $(".update-image-slider").slick({
         slidesToShow: 2,

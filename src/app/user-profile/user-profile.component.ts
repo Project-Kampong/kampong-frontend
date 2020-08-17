@@ -50,7 +50,9 @@ export class UserProfileComponent implements OnInit {
       for (var i = 0; i < Liked.length; i++) {
         this.ListingsService.getSelectedListing(Liked[i].listing_id).subscribe(
           (listing) => {
-            this.LikedArr.push(listing["data"]);
+            if (listing["data"].deleted_on == null) {
+              this.LikedArr.push(listing["data"]);
+            }
           }
         );
       }
@@ -60,7 +62,11 @@ export class UserProfileComponent implements OnInit {
       this.AuthService.LoggedInUserID
     ).subscribe((data) => {
       console.log(data);
-      this.StartedArr = data["data"];
+      data["data"].map((x) => {
+        if (x.deleted_on == null) {
+          this.StartedArr.push(x);
+        }
+      });
     });
   }
 }

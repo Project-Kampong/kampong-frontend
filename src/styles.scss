@@ -61,6 +61,18 @@ h3 {
     color: #fed45f !important;
   }
 }
+.red-btn {
+  display: block;
+  border: 2px solid #b33a3a;
+  background-color: #b33a3a;
+  color: white !important;
+  font-weight: bold;
+  font-size: 0.9rem;
+  &:hover {
+    background-color: white;
+    color: #b33a3a !important;
+  }
+}
 .outline-btn {
   display: inline-block;
   border: 1px solid black;

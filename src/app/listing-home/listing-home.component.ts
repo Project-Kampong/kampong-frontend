@@ -39,7 +39,9 @@ export class ListingHomeComponent implements OnInit {
       for (var i = 0; i < Liked.length; i++) {
         this.ListingsService.getSelectedListing(Liked[i].listing_id).subscribe(
           (listing) => {
-            this.LikedArr.push(listing["data"]);
+            if (listing["data"].deleted_on == null) {
+              this.LikedArr.push(listing["data"]);
+            }
           }
         );
       }
