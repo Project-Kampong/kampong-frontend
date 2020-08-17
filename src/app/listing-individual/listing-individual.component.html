@@ -259,6 +259,18 @@
               </p>
             </div>
           </div>
+          <div
+            *ngIf="
+              AuthService.isLoggedIn == true &&
+              ListingData.created_by == AuthService.LoggedInUserID
+            "
+            (click)="deleteUpdate(updates)"
+            class="d-flex justify-content-end p-1"
+          >
+            <button class="red-btn btn">
+              Delete Update
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -389,7 +401,9 @@
 
                         {{ reply.user_id }}
                       </p>
-                      <p class="time">{{ reply.updated_on | date }}</p>
+                      <p class="time">
+                        {{ reply.updated_on | date: "d MMM y" }}
+                      </p>
                     </div>
                     <p class="comments">
                       {{ reply.comment }}

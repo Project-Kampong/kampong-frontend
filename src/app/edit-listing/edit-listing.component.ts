@@ -412,6 +412,7 @@ export class EditListingComponent implements OnInit {
     if (confirm("Are you sure to delete " + this.ListingForm.value.title)) {
       this.ListingsService.removeListing(this.listingId).subscribe((data) => {
         console.log(data);
+        this.router.navigate(["/profile"]);
       });
     }
   }

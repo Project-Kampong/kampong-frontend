@@ -63,7 +63,6 @@ export class ListingIndividualComponent implements OnInit {
   updatesFormOpen = false;
 
   ngOnInit() {
-    console.log(this.ListingData);
     window.scroll(0, 0);
     this.listingId = this.route.snapshot.params["id"];
     this.getInitData();
@@ -81,7 +80,6 @@ export class ListingIndividualComponent implements OnInit {
     this.ListingsService.getSelectedListing(this.listingId).subscribe(
       (data) => {
         this.ListingData = data["data"];
-        console.log(this.ListingData);
         this.SliderImageArr.push(
           this.ListingData["pic1"],
           this.ListingData["pic2"],
@@ -108,78 +106,82 @@ export class ListingIndividualComponent implements OnInit {
             }
           }
         });
-      }
-    );
+      },
+      (err) => {
+        this.router.navigate(["/home"]);
+      },
+      () => {
+        // Public Data
+        // Get Num of Likes
+        this.ListingsService.getSelectedListingLikes(this.listingId).subscribe(
+          (data) => {
+            this.listingLikes = data["count"];
+          }
+        );
+        // Get FAQ Info
+        this.ListingsService.getSelectedListingFAQ(this.listingId).subscribe(
+          (data) => {
+            this.FAQList = data["data"];
+          }
+        );
 
-    // Public Data
-    // Get Num of Likes
-    this.ListingsService.getSelectedListingLikes(this.listingId).subscribe(
-      (data) => {
-        this.listingLikes = data["count"];
-      }
-    );
-    // Get FAQ Info
-    this.ListingsService.getSelectedListingFAQ(this.listingId).subscribe(
-      (data) => {
-        this.FAQList = data["data"];
-      }
-    );
+        // Get Skills
+        this.ListingsService.getSelectedListingSkills(this.listingId).subscribe(
+          (data) => {
+            this.SkillsList = data["data"];
+            console.log(this.SkillsList);
+          }
+        );
 
-    // Get Skills
-    this.ListingsService.getSelectedListingSkills(this.listingId).subscribe(
-      (data) => {
-        this.SkillsList = data["data"];
-        console.log(this.SkillsList);
-      }
-    );
-
-    // Get Hashtags
-    this.ListingsService.getSelectedListingHashtags(this.listingId).subscribe(
-      (data) => {
-        this.Hashtags = data["data"];
-      }
-    );
-
-    // Get Stories
-    this.ListingsService.getSelectedListingStories(this.listingId).subscribe(
-      (data) => {
-        this.Stories = data["data"];
-        console.log(this.Stories);
-      }
-    );
-
-    // Get Comments
-    this.ListingsService.getSelectedListingComments(this.listingId).subscribe(
-      (data) => {
-        this.CommentsArr = data["data"];
-        this.CommentsArr.sort((a, b) => {
-          return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+        // Get Hashtags
+        this.ListingsService.getSelectedListingHashtags(
+          this.listingId
+        ).subscribe((data) => {
+          this.Hashtags = data["data"];
         });
-      }
-    );
 
-    // Get Updates
-    this.ListingsService.getSelectedListingUpdates(this.listingId).subscribe(
-      (data) => {
-        this.UpdatesArr = data["data"];
-        this.UpdatesArr.sort((a, b) => {
-          return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+        // Get Stories
+        this.ListingsService.getSelectedListingStories(
+          this.listingId
+        ).subscribe((data) => {
+          this.Stories = data["data"];
+          console.log(this.Stories);
         });
-        // this.initiateSlick();
-      }
-    );
 
-    // Get Milestones
-    this.ListingsService.getSelectedListingMilestones(this.listingId).subscribe(
-      (data) => {
-        this.MilestoneArr = data["data"];
-        this.MilestoneArr.sort((a, b) => {
-          return <any>new Date(a.date) - <any>new Date(b.date);
+        // Get Comments
+        this.ListingsService.getSelectedListingComments(
+          this.listingId
+        ).subscribe((data) => {
+          this.CommentsArr = data["data"];
+          this.CommentsArr.sort((a, b) => {
+            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+          });
         });
+
+        // Get Updates
+        this.ListingsService.getSelectedListingUpdates(
+          this.listingId
+        ).subscribe((data) => {
+          this.UpdatesArr = data["data"];
+          this.UpdatesArr.sort((a, b) => {
+            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+          });
+          // this.initiateSlick();
+        });
+
+        // Get Milestones
+        this.ListingsService.getSelectedListingMilestones(
+          this.listingId
+        ).subscribe((data) => {
+          this.MilestoneArr = data["data"];
+          this.MilestoneArr.sort((a, b) => {
+            return <any>new Date(a.date) - <any>new Date(b.date);
+          });
+        });
+
+        // End of Data Retrive
       }
     );
-
-    // End of Data Retrive
   }
 
   // File Upload
@@ -311,6 +313,16 @@ export class ListingIndividualComponent implements OnInit {
     }).subscribe((data) => {
       this.comments = "";
       console.log(data);
+      // Get Comments
+      this.ListingsService.getSelectedListingComments(this.listingId).subscribe(
+        (data) => {
+          this.CommentsArr = data["data"];
+          this.CommentsArr.sort((a, b) => {
+            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+          });
+          console.log(this.CommentsArr);
+        }
+      );
     });
   }
   replyComments(data) {
@@ -386,5 +398,12 @@ export class ListingIndividualComponent implements OnInit {
 
   selectedProfile(user_id) {
     this.router.navigate(["/profile/" + user_id]);
+  }
+
+  // Delete
+  deleteUpdate(updates) {
+    if (confirm("Are you sure to delete update?")) {
+      console.log(updates);
+    }
   }
 }

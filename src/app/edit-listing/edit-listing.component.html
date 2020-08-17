@@ -148,23 +148,25 @@
           *ngFor="let milestone of milestoneArr; index as i"
           class="milestones"
         >
-          <mat-form-field class="milestone-input">
-            <mat-label>Milestone</mat-label>
-            <input matInput [(ngModel)]="milestone.milestone" />
-          </mat-form-field>
-          <mat-form-field class="deadline-input">
-            <mat-label>Deadline</mat-label>
-            <input
-              [(ngModel)]="milestone.deadline"
-              matInput
-              [matDatepicker]="DateOfBirthPicker"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="DateOfBirthPicker"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #DateOfBirthPicker></mat-datepicker>
-          </mat-form-field>
+          <div class="input-field-container">
+            <mat-form-field class="milestone-input">
+              <mat-label>Milestone</mat-label>
+              <input matInput [(ngModel)]="milestone.milestone" />
+            </mat-form-field>
+            <mat-form-field class="deadline-input">
+              <mat-label>Deadline</mat-label>
+              <input
+                [(ngModel)]="milestone.deadline"
+                matInput
+                [matDatepicker]="DateOfBirthPicker"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="DateOfBirthPicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #DateOfBirthPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
           <button
             class="remove-milestone"
             (click)="removeMilestone(milestone, i)"
@@ -180,25 +182,26 @@
       <div class="milestones-container">
         <label>Frequent Ask Questions</label>
         <div *ngFor="let faq of faqArr; index as i" class="milestones">
-          <mat-form-field class="milestone-input">
-            <mat-label>Question</mat-label>
-            <textarea
-              matInput
-              cdkTextareaAutosize
-              cdkAutosizeMinRows="1"
-              [(ngModel)]="faq.questions"
-            ></textarea>
-          </mat-form-field>
-          <mat-form-field class="milestone-input">
-            <mat-label>Answers</mat-label>
-            <textarea
-              matInput
-              cdkTextareaAutosize
-              cdkAutosizeMinRows="1"
-              [(ngModel)]="faq.answer"
-            ></textarea>
-          </mat-form-field>
-
+          <div class="input-field-container">
+            <mat-form-field class="milestone-input">
+              <mat-label>Question</mat-label>
+              <textarea
+                matInput
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="1"
+                [(ngModel)]="faq.questions"
+              ></textarea>
+            </mat-form-field>
+            <mat-form-field class="milestone-input">
+              <mat-label>Answers</mat-label>
+              <textarea
+                matInput
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="1"
+                [(ngModel)]="faq.answer"
+              ></textarea>
+            </mat-form-field>
+          </div>
           <button class="remove-milestone" (click)="removeFAQ(faq, i)"></button>
         </div>
 

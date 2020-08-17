@@ -98,10 +98,23 @@
     color: rgba(0, 0, 0, 0.54);
     margin-bottom: 1rem;
   }
+  .input-field-container {
+    display: flex;
+    flex: 1;
+    @media (max-width: 778px) {
+      flex-wrap: wrap;
+      .milestone-input {
+        width: 100% !important;
+      }
+    }
+  }
   .milestones {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    @media (max-width: 778px) {
+      margin-bottom: 2rem;
+    }
     .milestone-input,
     .deadline-input {
       width: 30%;
