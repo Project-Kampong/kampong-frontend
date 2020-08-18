@@ -28,6 +28,28 @@ export class ContentWrapperComponent implements OnInit {
     this.AuthService.LoginResponse.subscribe(() => {
       this.getInitData();
     });
+
+    $(".menu-btn, .close-menu-btn, .close-menu-overlay").on(
+      "click",
+      function () {
+        console.log("menu clicked");
+        if ($(".user-info-container").hasClass("menu-open")) {
+          $(".user-info-container")
+            .css({
+              right: "-100%",
+            })
+            .removeClass("menu-open");
+          $(".close-menu-overlay").removeClass("menu-open");
+        } else {
+          $(".user-info-container")
+            .css({
+              right: 0,
+            })
+            .addClass("menu-open");
+          $(".close-menu-overlay").addClass("menu-open");
+        }
+      }
+    );
   }
 
   getInitData() {

@@ -1,5 +1,7 @@
 <header>
-  <div class="d-flex align-items-center justify-content-between">
+  <div
+    class="d-flex align-items-center justify-content-between header-container"
+  >
     <ul>
       <li routerLink="/home">
         <svg
@@ -37,7 +39,9 @@
         </a>
       </li>
     </ul>
+    <div class="menu-btn"></div>
     <div class="user-info-container">
+      <div class="close-menu-btn"></div>
       <a
         *ngIf="AuthService.isLoggedIn"
         routerLink="/create"
@@ -67,6 +71,7 @@
           viewBox="0 0 18 13"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          class="dropdown-icon"
         >
           <path
             d="M17.7835 3.875C18.0625 3.59598 18.0625 3.13839 17.7835 2.85937L15.9308 1.01786C15.6518 0.738838 15.2054 0.738838 14.9263 1.01786L9 6.9442L3.07366 1.01786C2.79464 0.738838 2.34821 0.738838 2.0692 1.01786L0.216518 2.85937C-0.0624999 3.13839 -0.0624999 3.59598 0.216518 3.875L8.49777 12.1451C8.77679 12.4241 9.22321 12.4241 9.50223 12.1451L17.7835 3.875Z"
@@ -102,6 +107,7 @@
       </div>
     </div>
   </div>
+  <div class="close-menu-overlay"></div>
 </header>
 <body>
   <router-outlet></router-outlet>

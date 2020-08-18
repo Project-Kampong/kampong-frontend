@@ -72,7 +72,7 @@ export class EditListingComponent implements OnInit {
         "Jobs",
         "Wage",
         "Upskill",
-        "Technology ",
+        "Technology",
         "IT",
         "IoT 4.0",
         "Information",

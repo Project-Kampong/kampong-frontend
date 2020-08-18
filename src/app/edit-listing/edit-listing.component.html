@@ -1,10 +1,10 @@
 <section class="container block-content">
   <div class="d-flex flex-wrap">
-    <div class="col-lg-8">
+    <div class="col-lg-12 px-0">
       <h3>Edit Listing</h3>
 
       <div class="form-group" [formGroup]="ListingForm">
-        <div class="custom-input">
+        <div class="custom-input col-lg-8">
           <label>Images (Maximum of 5)</label>
           <div class="d-flex flex-wrap align-items-start mt-2 image-output">
             <div
@@ -29,56 +29,72 @@
             </div>
           </div>
         </div>
-        <mat-form-field class="full-width">
+        <mat-form-field class="full-width col-lg-8">
           <mat-label>Name of Initiative</mat-label>
           <input matInput required formControlName="title" />
         </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Category</mat-label>
-          <mat-select formControlName="category">
-            <mat-optgroup
-              *ngFor="let group of categoryGroup"
-              [label]="group.name"
-              [disabled]="group.disabled"
-            >
-              <mat-option
-                *ngFor="let category of group.group"
-                [value]="category"
+        <div class="col-lg-8">
+          <mat-form-field>
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              <mat-optgroup
+                *ngFor="let group of categoryGroup"
+                [label]="group.name"
+                [disabled]="group.disabled"
               >
-                {{ category }}
-              </mat-option>
-            </mat-optgroup>
-          </mat-select>
-        </mat-form-field>
+                <mat-option
+                  *ngFor="let category of group.group"
+                  [value]="category"
+                >
+                  {{ category }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field class="full-width">
+        <mat-form-field class="full-width col-lg-8">
           <mat-label>Slogan</mat-label>
-          <input matInput required formControlName="tagline" />
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="1"
+            required
+            formControlName="tagline"
+          ></textarea>
         </mat-form-field>
-        <mat-form-field class="full-width">
+        <mat-form-field class="full-width col-lg-8">
           <mat-label>Mission Statement</mat-label>
-          <input matInput required formControlName="mission" />
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="1"
+            required
+            formControlName="mission"
+          ></textarea>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Looking For</mat-label>
-          <mat-select formControlName="SkillsList" multiple>
-            <mat-optgroup
-              *ngFor="let group of skillsets"
-              [label]="group.name"
-              [disabled]="group.disabled"
-            >
-              <mat-option
-                *ngFor="let category of group.group"
-                [value]="category"
+        <div class="col-lg-8">
+          <mat-form-field>
+            <mat-label>Looking For</mat-label>
+            <mat-select formControlName="SkillsList" multiple>
+              <mat-optgroup
+                *ngFor="let group of skillsets"
+                [label]="group.name"
+                [disabled]="group.disabled"
               >
-                {{ category }}
-              </mat-option>
-            </mat-optgroup>
-          </mat-select>
-        </mat-form-field>
+                <mat-option
+                  *ngFor="let category of group.group"
+                  [value]="category"
+                >
+                  {{ category }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field class="full-width hashtags-container">
+        <mat-form-field class="full-width hashtags-container col-lg-8">
           <mat-chip-list #chipList aria-label="Fruit selection">
             <mat-chip
               *ngFor="let hashtags of hashtags"
@@ -101,120 +117,206 @@
             >Maximum 3 Hashtags</span
           >
         </mat-form-field>
-        <mat-form-field class="full-width">
-          <mat-label>Summary of Project</mat-label>
-          <textarea
-            matInput
-            cdkTextareaAutosize
-            cdkAutosizeMinRows="1"
-            formControlName="overview"
-          ></textarea>
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <mat-label>Current Problem</mat-label>
-          <textarea
-            matInput
-            cdkTextareaAutosize
-            cdkAutosizeMinRows="1"
-            formControlName="problem"
-          ></textarea>
-        </mat-form-field>
-
-        <mat-form-field class="full-width">
-          <mat-label>Solution</mat-label>
-          <textarea
-            matInput
-            cdkTextareaAutosize
-            cdkAutosizeMinRows="1"
-            formControlName="solution"
-          ></textarea>
-        </mat-form-field>
-
-        <mat-form-field class="full-width">
-          <mat-label>Ideal Outcome</mat-label>
-          <textarea
-            matInput
-            cdkTextareaAutosize
-            cdkAutosizeMinRows="1"
-            formControlName="outcome"
-          ></textarea>
-        </mat-form-field>
+        <div class="d-flex flex-wrap">
+          <mat-form-field class="full-width col-lg-8">
+            <mat-label>Summary of Project</mat-label>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              formControlName="overview"
+            ></textarea>
+          </mat-form-field>
+          <div class="col-lg-4 guidelines">
+            <ul>
+              <li>
+                <p>
+                  What are you trying to build that solves (problem) by
+                  (solution)?
+                </p>
+              </li>
+              <li>
+                <p>Why are you acting now?</p>
+              </li>
+              <li>
+                <p>What is the backstory?</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="d-flex flex-wrap">
+          <mat-form-field class="full-width col-lg-8">
+            <mat-label>Current Problem</mat-label>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              formControlName="problem"
+            ></textarea>
+          </mat-form-field>
+          <div class="col-lg-4 guidelines">
+            <ul>
+              <li>
+                <p>
+                  Who is affected by the problem?
+                </p>
+              </li>
+              <li>
+                <p>
+                  What is currently being done?
+                </p>
+              </li>
+              <li>
+                <p>
+                  What are the identified gaps?
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="d-flex flex-wrap">
+          <mat-form-field class="full-width col-lg-8">
+            <mat-label>Solution</mat-label>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              formControlName="solution"
+            ></textarea>
+          </mat-form-field>
+          <div class="col-lg-4 guidelines">
+            <ul>
+              <li>
+                <p>
+                  Who are your partners?
+                </p>
+              </li>
+              <li>
+                <p>
+                  What is the timeline & your main priority?
+                </p>
+              </li>
+              <li>
+                <p>
+                  What is your unique value proposition?
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="d-flex flex-wrap">
+          <mat-form-field class="full-width col-lg-8">
+            <mat-label>Ideal Outcome</mat-label>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              formControlName="outcome"
+            ></textarea>
+          </mat-form-field>
+          <div class="col-lg-4 guidelines">
+            <ul>
+              <li>
+                <p>
+                  What information/resources are needed?
+                </p>
+              </li>
+              <li>
+                <p>
+                  What steps must you "get right" to bring about change?
+                </p>
+              </li>
+              <li>
+                <p>
+                  How will you measure outcome and impact?
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       <!-- Milestones -->
-      <div class="milestones-container">
-        <label>Milestones</label>
-        <div
-          *ngFor="let milestone of milestoneArr; index as i"
-          class="milestones"
-        >
-          <div class="input-field-container">
-            <mat-form-field class="milestone-input">
-              <mat-label>Milestone</mat-label>
-              <input matInput [(ngModel)]="milestone.milestone" />
-            </mat-form-field>
-            <mat-form-field class="deadline-input">
-              <mat-label>Deadline</mat-label>
-              <input
-                [(ngModel)]="milestone.deadline"
-                matInput
-                [matDatepicker]="DateOfBirthPicker"
-              />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="DateOfBirthPicker"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #DateOfBirthPicker></mat-datepicker>
-            </mat-form-field>
+      <div class="col-lg-8">
+        <div class="milestones-container">
+          <label>Milestones</label>
+          <div
+            *ngFor="let milestone of milestoneArr; index as i"
+            class="milestones"
+          >
+            <div class="input-field-container">
+              <mat-form-field class="milestone-input">
+                <mat-label>Milestone</mat-label>
+                <input matInput [(ngModel)]="milestone.milestone" />
+              </mat-form-field>
+              <mat-form-field class="deadline-input">
+                <mat-label>Deadline</mat-label>
+                <input
+                  [(ngModel)]="milestone.deadline"
+                  matInput
+                  [matDatepicker]="DateOfBirthPicker"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="DateOfBirthPicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #DateOfBirthPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <button
+              class="remove-milestone"
+              (click)="removeMilestone(milestone, i)"
+            ></button>
           </div>
-          <button
-            class="remove-milestone"
-            (click)="removeMilestone(milestone, i)"
-          ></button>
+
+          <button class="add-milestones" (click)="addMilestone()">
+            Add Milestone
+          </button>
         </div>
 
-        <button class="add-milestones" (click)="addMilestone()">
-          Add Milestone
-        </button>
-      </div>
-
-      <!-- FAQ -->
-      <div class="milestones-container">
-        <label>Frequent Ask Questions</label>
-        <div *ngFor="let faq of faqArr; index as i" class="milestones">
-          <div class="input-field-container">
-            <mat-form-field class="milestone-input">
-              <mat-label>Question</mat-label>
-              <textarea
-                matInput
-                cdkTextareaAutosize
-                cdkAutosizeMinRows="1"
-                [(ngModel)]="faq.questions"
-              ></textarea>
-            </mat-form-field>
-            <mat-form-field class="milestone-input">
-              <mat-label>Answers</mat-label>
-              <textarea
-                matInput
-                cdkTextareaAutosize
-                cdkAutosizeMinRows="1"
-                [(ngModel)]="faq.answer"
-              ></textarea>
-            </mat-form-field>
+        <!-- FAQ -->
+        <div class="milestones-container">
+          <label>Frequent Ask Questions</label>
+          <div *ngFor="let faq of faqArr; index as i" class="milestones">
+            <div class="input-field-container">
+              <mat-form-field class="milestone-input">
+                <mat-label>Question</mat-label>
+                <textarea
+                  matInput
+                  cdkTextareaAutosize
+                  cdkAutosizeMinRows="1"
+                  [(ngModel)]="faq.questions"
+                ></textarea>
+              </mat-form-field>
+              <mat-form-field class="milestone-input">
+                <mat-label>Answers</mat-label>
+                <textarea
+                  matInput
+                  cdkTextareaAutosize
+                  cdkAutosizeMinRows="1"
+                  [(ngModel)]="faq.answer"
+                ></textarea>
+              </mat-form-field>
+            </div>
+            <button
+              class="remove-milestone"
+              (click)="removeFAQ(faq, i)"
+            ></button>
           </div>
-          <button class="remove-milestone" (click)="removeFAQ(faq, i)"></button>
+
+          <button class="add-milestones" (click)="addFAQ()">
+            Add Question
+          </button>
         </div>
 
-        <button class="add-milestones" (click)="addFAQ()">
-          Add Question
-        </button>
-      </div>
-
-      <div class="submit-btn">
-        <a class="btn yellow-btn" (click)="createListing()">Save Initiative</a>
-        <a class="btn red-btn mt-5" (click)="removeListing()"
-          >Delete Initiative</a
-        >
+        <div class="submit-btn">
+          <a class="btn yellow-btn" (click)="createListing()"
+            >Save Initiative</a
+          >
+          <a class="btn red-btn mt-5" (click)="removeListing()"
+            >Delete Initiative</a
+          >
+        </div>
       </div>
     </div>
   </div>
