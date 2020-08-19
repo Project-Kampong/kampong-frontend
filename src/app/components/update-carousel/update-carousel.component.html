@@ -1,4 +1,4 @@
-<div class="update-image-slider unslicked">
+<div *ngIf="SliderImages.length > 0" class="update-image-slider unslicked">
   <div
     *ngFor="let slide of SliderImages; let i = index"
     class="image-container"

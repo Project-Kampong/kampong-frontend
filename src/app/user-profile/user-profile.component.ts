@@ -40,7 +40,10 @@ export class UserProfileComponent implements OnInit {
       this.AuthService.LoggedInUserID
     ).subscribe((data) => {
       this.ProfileDetails = data["data"];
-      console.log(this.ProfileDetails);
+      if (this.ProfileDetails.profile_picture == null) {
+        this.ProfileDetails.profile_picture =
+          "https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png";
+      }
     });
 
     // Liked

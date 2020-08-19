@@ -29,7 +29,7 @@ export class ContentWrapperComponent implements OnInit {
       this.getInitData();
     });
 
-    $(".menu-btn, .close-menu-btn, .close-menu-overlay").on(
+    $(".menu-btn, .close-menu-btn, close-menu-overlay").on(
       "click",
       function () {
         console.log("menu clicked");
@@ -57,6 +57,11 @@ export class ContentWrapperComponent implements OnInit {
       this.AuthService.LoggedInUserID
     ).subscribe((data) => {
       this.ProfileDetails = data["data"];
+      if (this.ProfileDetails["profile_picture"] == null) {
+        this.ProfileDetails["profile_picture"] =
+          "https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png";
+      }
+
       if (this.dropDownInitiated) {
         return;
       } else {
@@ -68,9 +73,7 @@ export class ContentWrapperComponent implements OnInit {
         );
 
         $(".profile-dropdown").hover(
-          function () {
-            console.log("hover");
-          },
+          function () {},
           function () {
             $(this).removeClass("active");
           }

@@ -49,8 +49,8 @@
         >Start an Initiative</a
       >
       <div class="user-info" *ngIf="AuthService.isLoggedIn">
-        <div class="profile-image">
-          <img src="{{ ProfileDetails.profile_picture }}" />
+        <div *ngIf="ProfileDetails != null" class="profile-image">
+          <img src="{{ ProfileDetails['profile_picture'] }}" />
         </div>
         <p *ngIf="ProfileDetails != null" class="username">
           {{ ProfileDetails["nickname"] }}

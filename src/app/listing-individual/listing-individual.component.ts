@@ -36,7 +36,7 @@ export class ListingIndividualComponent implements OnInit {
 
   // Data Arr
   ListingData: Listing = <Listing>{};
-  ProfileInfo: Profile[];
+  ProfileInfo: Profile = <Profile>{};
   Hashtags = [];
   // Stories
   Stories: ListingStories = <ListingStories>{};
@@ -92,7 +92,10 @@ export class ListingIndividualComponent implements OnInit {
           this.ListingData["created_by"]
         ).subscribe((profile) => {
           this.ProfileInfo = profile["data"];
-          console.log(this.ProfileInfo);
+          if (this.ProfileInfo.profile_picture == null) {
+            this.ProfileInfo.profile_picture =
+              "https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png";
+          }
         });
 
         // Check User Liked List
@@ -413,6 +416,11 @@ export class ListingIndividualComponent implements OnInit {
   deleteUpdate(updates) {
     if (confirm("Are you sure to delete update?")) {
       console.log(updates);
+    }
+  }
+  deleteComments(comment) {
+    if (confirm("Are you sure to delete comment?")) {
+      console.log(comment);
     }
   }
 }
