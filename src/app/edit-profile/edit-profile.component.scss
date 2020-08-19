@@ -11,3 +11,31 @@
     width: 50%;
   }
 }
+
+.custom-input {
+  margin-bottom: 2rem;
+  label {
+    height: 100%;
+    width: 100%;
+  }
+  .custom-file-upload {
+    border: 1px dashed rgba(0, 0, 0, 0.5);
+    height: 180px;
+    width: 180px;
+    border-radius: 25px;
+    position: relative;
+    cursor: pointer;
+    &:after {
+      content: "\f067";
+      font-family: "Font Awesome\ 5 Free";
+      font-size: 2rem;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+  input {
+    display: none;
+  }
+}

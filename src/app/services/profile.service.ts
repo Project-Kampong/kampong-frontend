@@ -38,4 +38,12 @@ export class ProfileService {
       this.AuthOptions
     );
   }
+
+  updateUserProfilePic(userId, data) {
+    return this.httpClient.put(
+      this.url + "api/profiles/" + userId + "/photo",
+      data,
+      this.AuthService.OnlyAuthHttpHeaders
+    );
+  }
 }

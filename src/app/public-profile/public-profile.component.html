@@ -1,22 +1,15 @@
 <section *ngIf="ProfileDetails != null" class="container block-content">
   <div class="d-flex justify-content-between flex-wrap">
     <div class="d-flex">
-      <svg
-        width="80"
-        height="80"
-        viewBox="0 0 150 150"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M127.483 112.081C115.848 128.488 96.6797 139.286 75 139.286C53.3203 139.286 34.1518 128.488 22.5167 112.081C24.6931 96.4286 31.0547 82.5335 45.2846 80.6083C52.6507 88.644 63.2813 93.75 75 93.75C86.7188 93.75 97.3493 88.644 104.715 80.6083C118.945 82.5335 125.307 96.4286 127.483 112.081ZM107.143 53.5714C107.143 71.317 92.7455 85.7143 75 85.7143C57.2545 85.7143 42.8571 71.317 42.8571 53.5714C42.8571 35.8259 57.2545 21.4286 75 21.4286C92.7455 21.4286 107.143 35.8259 107.143 53.5714ZM150 75C150 33.5658 116.434 0 75 0C33.5658 0 0 33.5658 0 75C0 116.35 33.5658 150 75 150C116.518 150 150 116.267 150 75Z"
-          fill="black"
-          fill-opacity="0.3"
-        />
-      </svg>
+      <div class="profile-image">
+        <img src="{{ ProfileDetails.profile_picture }}" />
+      </div>
       <div class="user-details">
         <p class="name">{{ ProfileDetails.nickname }}</p>
-        <p class="position">{{ ProfileDetails.interest }}</p>
+        <p *ngIf="ProfileDetails.interest != null" class="position">
+          {{ ProfileDetails.interest }}
+        </p>
+        <p *ngIf="ProfileDetails.interest == null" class="position">Newbie</p>
       </div>
     </div>
 
@@ -32,7 +25,7 @@
     </div>
   </div>
 
-  <div class="border-top-card">
+  <div *ngIf="ProfileDetails.about != null" class="border-top-card">
     <label>About</label>
     <p>
       {{ ProfileDetails.about }}

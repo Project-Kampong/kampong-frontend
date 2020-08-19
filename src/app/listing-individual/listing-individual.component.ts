@@ -189,20 +189,29 @@ export class ListingIndividualComponent implements OnInit {
   updatesDescription;
   uploadFile(event) {
     this.selectedFile = <File>event.target.files[0];
-    console.log(this.selectedFile.size);
-    if (this.selectedFile.size > 500000) {
-      console.log(this.selectedFile);
-    } else {
-      // Display Image
-      var reader: FileReader = new FileReader();
-      reader.onload = (e) => {
-        this.fileDisplayArr.push(reader.result.toString());
-      };
-      reader.readAsDataURL(event.target.files[0]);
-      this.fileLimitChecker(true);
-      this.fileArr.push(this.selectedFile);
-      console.log(this.fileArr);
-    }
+    // Display Image
+    var reader: FileReader = new FileReader();
+    reader.onload = (e) => {
+      this.fileDisplayArr.push(reader.result.toString());
+    };
+    reader.readAsDataURL(event.target.files[0]);
+    this.fileLimitChecker(true);
+    this.fileArr.push(this.selectedFile);
+    console.log(this.fileArr);
+
+    // if (this.selectedFile.size > 500000) {
+    //   console.log(this.selectedFile);
+    // } else {
+    //   // Display Image
+    //   var reader: FileReader = new FileReader();
+    //   reader.onload = (e) => {
+    //     this.fileDisplayArr.push(reader.result.toString());
+    //   };
+    //   reader.readAsDataURL(event.target.files[0]);
+    //   this.fileLimitChecker(true);
+    //   this.fileArr.push(this.selectedFile);
+    //   console.log(this.fileArr);
+    // }
   }
 
   removeFile(i) {

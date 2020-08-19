@@ -1,3 +1,5 @@
+import { Validators } from "@angular/forms";
+
 export interface Listing {
   listing_id: String;
   organisation_id: String;
@@ -39,19 +41,49 @@ export interface ListingComments {
   nickname: String;
 }
 
+export interface ListingStories {
+  outcome: String;
+  overview: String;
+  problem: String;
+  solution: String;
+}
+
+// Validation
+const patternvalidation = Validators.pattern("^[a-zA-Z0-9 \n .,'()\"$#%&-]+$");
 export const CreateListing = {
-  title: "",
-  category: "",
+  title: [
+    "",
+    [Validators.required, Validators.maxLength(50), patternvalidation],
+  ],
+  category: ["", [Validators.required]],
   about: "",
-  tagline: "",
-  mission: "",
+  tagline: [
+    "",
+    [Validators.required, Validators.maxLength(100), patternvalidation],
+  ],
+  mission: [
+    "",
+    [Validators.required, Validators.maxLength(150), patternvalidation],
+  ],
 };
 
 export const ListingStory = {
-  overview: "",
-  problem: "",
-  solution: "",
-  outcome: "",
+  overview: [
+    "",
+    [Validators.required, Validators.maxLength(2500), patternvalidation],
+  ],
+  problem: [
+    "",
+    [Validators.required, Validators.maxLength(5000), patternvalidation],
+  ],
+  solution: [
+    "",
+    [Validators.required, Validators.maxLength(5000), patternvalidation],
+  ],
+  outcome: [
+    "",
+    [Validators.required, Validators.maxLength(5000), patternvalidation],
+  ],
 };
 
 export const DefaultListing = {
@@ -70,10 +102,3 @@ export const DefaultListing = {
   pic4: "default",
   pic5: "default",
 };
-
-export interface ListingStories {
-  outcome: String;
-  overview: String;
-  problem: String;
-  solution: String;
-}

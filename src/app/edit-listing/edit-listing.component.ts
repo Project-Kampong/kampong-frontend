@@ -1,6 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  ValidationErrors,
+} from "@angular/forms";
 import { MatChipInputEvent } from "@angular/material/chips";
 
 import { Router, ActivatedRoute } from "@angular/router";
@@ -259,6 +264,27 @@ export class EditListingComponent implements OnInit {
     }
   }
 
+  getFormValidationErrors() {
+    var error = false;
+    Object.keys(this.ListingForm.controls).forEach((key) => {
+      const controlErrors: ValidationErrors = this.ListingForm.get(key).errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach((keyError) => {
+          console.log(
+            "Key control: " + key + ", keyError: " + keyError + ", err value: ",
+            controlErrors[keyError]
+          );
+          error = true;
+        });
+      }
+    });
+    if (this.fileCount == 0) {
+      error = true;
+    }
+    return error;
+  }
+
+  // Submit Data
   createListing() {
     var routeTo;
     const listingData = this.ListingForm.value;

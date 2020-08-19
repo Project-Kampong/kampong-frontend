@@ -1,6 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  ValidationErrors,
+} from "@angular/forms";
 import { MatChipInputEvent } from "@angular/material/chips";
 
 import { Router } from "@angular/router";
@@ -32,7 +37,12 @@ export class CreateListingComponent implements OnInit {
   fileCount = 0;
 
   milestoneArr = [{ milestone: "", deadline: new Date() }];
-  faqArr = [{ questions: "", answer: "" }];
+  faqArr = [
+    {
+      questions: "",
+      answer: "",
+    },
+  ];
   categoryGroup = [
     {
       name: "Social",
@@ -152,8 +162,6 @@ export class CreateListingComponent implements OnInit {
 
   uploadFile(event) {
     this.selectedFile = <File>event.target.files[0];
-    // this.fileArr.push(this.selectedFile);
-
     // Display Image
     var reader: FileReader = new FileReader();
     reader.onload = (e) => {
@@ -163,26 +171,6 @@ export class CreateListingComponent implements OnInit {
     this.fileLimitChecker(true);
     this.fileArr.push(this.selectedFile);
     console.log(this.fileArr);
-    // Upload to S3
-    // const fd = new FormData();
-    // fd.append("file", this.selectedFile);
-    // this.ListingsService.uploadFile(fd).subscribe(
-    //   (res) => {
-    //     console.log(res);
-    //     // Display Image
-    //     var reader: FileReader = new FileReader();
-    //     reader.onload = (e) => {
-    //       this.fileDisplayArr.push(reader.result.toString());
-    //     };
-    //     reader.readAsDataURL(event.target.files[0]);
-    //     this.fileLimitChecker(true);
-    //     this.fileArr.push(res["data"]);
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //     return;
-    //   }
-    // );
   }
 
   removeFile(i) {
@@ -204,6 +192,26 @@ export class CreateListingComponent implements OnInit {
         this.fileLimit = false;
       }
     }
+  }
+
+  getFormValidationErrors() {
+    var error = false;
+    Object.keys(this.ListingForm.controls).forEach((key) => {
+      const controlErrors: ValidationErrors = this.ListingForm.get(key).errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach((keyError) => {
+          console.log(
+            "Key control: " + key + ", keyError: " + keyError + ", err value: ",
+            controlErrors[keyError]
+          );
+          error = true;
+        });
+      }
+    });
+    if (this.fileCount == 0) {
+      error = true;
+    }
+    return error;
   }
 
   createListing() {
@@ -238,13 +246,18 @@ export class CreateListingComponent implements OnInit {
         });
         // Handle Milestones
         for (var i = 0; i < this.milestoneArr.length; i++) {
-          this.ListingsService.createListingMilestones({
-            listing_id: listing_id,
-            description: this.milestoneArr[i].milestone,
-            date: this.milestoneArr[i].deadline,
-          }).subscribe((data) => {
-            console.log(data);
-          });
+          if (
+            this.milestoneArr[i].milestone != "" &&
+            this.milestoneArr[i].deadline != null
+          ) {
+            this.ListingsService.createListingMilestones({
+              listing_id: listing_id,
+              description: this.milestoneArr[i].milestone,
+              date: this.milestoneArr[i].deadline,
+            }).subscribe((data) => {
+              console.log(data);
+            });
+          }
         }
         // Handle Hashtags
         for (var i = 0; i < this.hashtags.length; i++) {
@@ -271,13 +284,15 @@ export class CreateListingComponent implements OnInit {
 
         // Handle FAQs
         for (var i = 0; i < this.faqArr.length; i++) {
-          this.ListingsService.createListingFAQ({
-            listing_id: listing_id,
-            question: this.faqArr[i].questions,
-            answer: this.faqArr[i].answer,
-          }).subscribe((data) => {
-            console.log(data);
-          });
+          if (this.faqArr[i].questions != "" && this.faqArr[i].answer != "") {
+            this.ListingsService.createListingFAQ({
+              listing_id: listing_id,
+              question: this.faqArr[i].questions,
+              answer: this.faqArr[i].answer,
+            }).subscribe((data) => {
+              console.log(data);
+            });
+          }
         }
       },
       (err) => {
@@ -299,7 +314,8 @@ export class CreateListingComponent implements OnInit {
   hashtags = [];
   hashtagsError = false;
   add(event: MatChipInputEvent): void {
-    const value = "#" + event.value.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, "");
+    const value =
+      "#" + event.value.replace(/[&\/\\#,+()$~%.'":*?<>\[\]{}]/g, "");
     if (this.hashtags.length == 3) {
       this.hashtagsError = true;
     } else if (value != "#") {
@@ -342,7 +358,10 @@ export class CreateListingComponent implements OnInit {
   }
 
   addFAQ() {
-    this.faqArr.push({ questions: "", answer: "" });
+    this.faqArr.push({
+      questions: "",
+      answer: "",
+    });
   }
   removeFAQ(i) {
     this.faqArr.splice(i, 1);

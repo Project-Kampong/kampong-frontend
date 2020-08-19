@@ -32,11 +32,22 @@
         <mat-form-field class="full-width col-lg-8">
           <mat-label>Name of Initiative</mat-label>
           <input matInput required formControlName="title" />
+          <!-- Errors Validation -->
+          <mat-error *ngIf="ListingForm.get('title').hasError('required')">
+            Name is required
+          </mat-error>
+          <mat-error *ngIf="ListingForm.get('title').hasError('maxlength')">
+            Name must not be more than 50 characters long.
+          </mat-error>
+          <mat-error *ngIf="ListingForm.get('title').hasError('pattern')">
+            Special characters not allowed
+          </mat-error>
+          <!-- End of Errors Validation -->
         </mat-form-field>
         <div class="col-lg-8">
           <mat-form-field>
             <mat-label>Category</mat-label>
-            <mat-select formControlName="category">
+            <mat-select required formControlName="category">
               <mat-optgroup
                 *ngFor="let group of categoryGroup"
                 [label]="group.name"
@@ -62,6 +73,17 @@
             required
             formControlName="tagline"
           ></textarea>
+          <!-- Errors Validation -->
+          <mat-error *ngIf="ListingForm.get('tagline').hasError('required')">
+            Slogan is required
+          </mat-error>
+          <mat-error *ngIf="ListingForm.get('tagline').hasError('maxlength')">
+            Slogan must not be more than 100 characters long.
+          </mat-error>
+          <mat-error *ngIf="ListingForm.get('tagline').hasError('pattern')">
+            Special characters not allowed
+          </mat-error>
+          <!-- End of Errors Validation -->
         </mat-form-field>
         <mat-form-field class="full-width col-lg-8">
           <mat-label>Mission Statement</mat-label>
@@ -72,6 +94,17 @@
             required
             formControlName="mission"
           ></textarea>
+          <!-- Errors Validation -->
+          <mat-error *ngIf="ListingForm.get('mission').hasError('required')">
+            Mission Statement is required
+          </mat-error>
+          <mat-error *ngIf="ListingForm.get('mission').hasError('maxlength')">
+            Mission Statement must not be more than 100 characters long.
+          </mat-error>
+          <mat-error *ngIf="ListingForm.get('mission').hasError('pattern')">
+            Special characters not allowed
+          </mat-error>
+          <!-- End of Errors Validation -->
         </mat-form-field>
 
         <div class="col-lg-8">
@@ -122,10 +155,24 @@
             <mat-label>Summary of Project</mat-label>
             <textarea
               matInput
+              required
               cdkTextareaAutosize
-              cdkAutosizeMinRows="1"
+              cdkAutosizeMinRows="3"
               formControlName="overview"
             ></textarea>
+            <!-- Errors Validation -->
+            <mat-error *ngIf="ListingForm.get('overview').hasError('required')">
+              Summary is required
+            </mat-error>
+            <mat-error
+              *ngIf="ListingForm.get('overview').hasError('maxlength')"
+            >
+              Summary must not be more than 2500 characters long.
+            </mat-error>
+            <mat-error *ngIf="ListingForm.get('overview').hasError('pattern')">
+              Special characters not allowed
+            </mat-error>
+            <!-- End of Errors Validation -->
           </mat-form-field>
           <div class="col-lg-4 guidelines">
             <ul>
@@ -149,10 +196,22 @@
             <mat-label>Current Problem</mat-label>
             <textarea
               matInput
+              required
               cdkTextareaAutosize
-              cdkAutosizeMinRows="1"
+              cdkAutosizeMinRows="3"
               formControlName="problem"
             ></textarea>
+            <!-- Errors Validation -->
+            <mat-error *ngIf="ListingForm.get('problem').hasError('required')">
+              Current Problem is required
+            </mat-error>
+            <mat-error *ngIf="ListingForm.get('problem').hasError('maxlength')">
+              Current Problem must not be more than 5000 characters long.
+            </mat-error>
+            <mat-error *ngIf="ListingForm.get('problem').hasError('pattern')">
+              Special characters not allowed
+            </mat-error>
+            <!-- End of Errors Validation -->
           </mat-form-field>
           <div class="col-lg-4 guidelines">
             <ul>
@@ -179,10 +238,24 @@
             <mat-label>Solution</mat-label>
             <textarea
               matInput
+              required
               cdkTextareaAutosize
-              cdkAutosizeMinRows="1"
+              cdkAutosizeMinRows="3"
               formControlName="solution"
             ></textarea>
+            <!-- Errors Validation -->
+            <mat-error *ngIf="ListingForm.get('solution').hasError('required')">
+              Solution is required
+            </mat-error>
+            <mat-error
+              *ngIf="ListingForm.get('solution').hasError('maxlength')"
+            >
+              Solution must not be more than 5000 characters long.
+            </mat-error>
+            <mat-error *ngIf="ListingForm.get('solution').hasError('pattern')">
+              Special characters not allowed
+            </mat-error>
+            <!-- End of Errors Validation -->
           </mat-form-field>
           <div class="col-lg-4 guidelines">
             <ul>
@@ -209,10 +282,22 @@
             <mat-label>Ideal Outcome</mat-label>
             <textarea
               matInput
+              required
               cdkTextareaAutosize
-              cdkAutosizeMinRows="1"
+              cdkAutosizeMinRows="3"
               formControlName="outcome"
             ></textarea>
+            <!-- Errors Validation -->
+            <mat-error *ngIf="ListingForm.get('outcome').hasError('required')">
+              Ideal Outcome is required
+            </mat-error>
+            <mat-error *ngIf="ListingForm.get('outcome').hasError('maxlength')">
+              Ideal Outcome must not be more than 5000 characters long.
+            </mat-error>
+            <mat-error *ngIf="ListingForm.get('outcome').hasError('pattern')">
+              Special characters not allowed
+            </mat-error>
+            <!-- End of Errors Validation -->
           </mat-form-field>
           <div class="col-lg-4 guidelines">
             <ul>
@@ -247,7 +332,11 @@
             <div class="input-field-container">
               <mat-form-field class="milestone-input">
                 <mat-label>Milestone</mat-label>
-                <input matInput [(ngModel)]="milestone.milestone" />
+                <input
+                  maxlength="50"
+                  matInput
+                  [(ngModel)]="milestone.milestone"
+                />
               </mat-form-field>
               <mat-form-field class="deadline-input">
                 <mat-label>Deadline</mat-label>
@@ -286,6 +375,7 @@
                   cdkTextareaAutosize
                   cdkAutosizeMinRows="1"
                   [(ngModel)]="faq.questions"
+                  maxlength="200"
                 ></textarea>
               </mat-form-field>
               <mat-form-field class="milestone-input">
@@ -295,6 +385,7 @@
                   cdkTextareaAutosize
                   cdkAutosizeMinRows="1"
                   [(ngModel)]="faq.answer"
+                  maxlength="500"
                 ></textarea>
               </mat-form-field>
             </div>
@@ -310,12 +401,16 @@
         </div>
 
         <div class="submit-btn">
-          <a class="btn yellow-btn" (click)="createListing()"
-            >Save Initiative</a
+          <button
+            class="btn yellow-btn"
+            (click)="createListing()"
+            [disabled]="getFormValidationErrors()"
           >
-          <a class="btn red-btn mt-5" (click)="removeListing()"
-            >Delete Initiative</a
-          >
+            Save Initiative
+          </button>
+          <button class="btn red-btn mt-5" (click)="removeListing()">
+            Delete Initiative
+          </button>
         </div>
       </div>
     </div>

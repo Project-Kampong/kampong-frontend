@@ -1,14 +1,46 @@
-<section class="container block-content">
+<section *ngIf="ProfileDetails != null" class="container block-content">
   <div class="d-flex flex-wrap">
     <div class="col-lg-4 order-lg-2 text-right">
       <a class="btn outline-btn">Change Password</a>
     </div>
     <div class="col-lg-8 order-lg-1">
       <h3>Edit Profile</h3>
+
       <form [formGroup]="EditProfileForm" class="form-group">
+        <div class="custom-input">
+          <div class="profile-image">
+            <label for="file-upload">
+              <img src="{{ ProfileDetails.profile_picture }}" />
+            </label>
+          </div>
+          <input
+            type="file"
+            accept="image/*"
+            id="file-upload"
+            (change)="uploadFile($event)"
+          />
+        </div>
+
         <mat-form-field class="full-width">
           <mat-label>Username</mat-label>
           <input matInput formControlName="nickname" required />
+          <!-- Errors Validation -->
+          <mat-error
+            *ngIf="EditProfileForm.get('nickname').hasError('required')"
+          >
+            Username is required
+          </mat-error>
+          <mat-error
+            *ngIf="EditProfileForm.get('nickname').hasError('maxlength')"
+          >
+            Username must not be more than 15 characters long.
+          </mat-error>
+          <mat-error
+            *ngIf="EditProfileForm.get('nickname').hasError('pattern')"
+          >
+            Special characters not allowed
+          </mat-error>
+          <!-- End of Errors Validation -->
         </mat-form-field>
 
         <mat-form-field class="half-width">
@@ -23,11 +55,33 @@
             [for]="DateOfBirthPicker"
           ></mat-datepicker-toggle>
           <mat-datepicker #DateOfBirthPicker></mat-datepicker>
+          <!-- Errors Validation -->
+          <mat-error *ngIf="EditProfileForm.get('dob').hasError('required')">
+            Date Of Birth is required
+          </mat-error>
+          <!-- End of Errors Validation -->
         </mat-form-field>
 
         <mat-form-field class="full-width">
           <mat-label>Interest</mat-label>
           <input matInput formControlName="interest" />
+          <!-- Errors Validation -->
+          <mat-error
+            *ngIf="EditProfileForm.get('interest').hasError('required')"
+          >
+            Interest is required
+          </mat-error>
+          <mat-error
+            *ngIf="EditProfileForm.get('interest').hasError('maxlength')"
+          >
+            Interest must not be more than 30 characters long.
+          </mat-error>
+          <mat-error
+            *ngIf="EditProfileForm.get('interest').hasError('pattern')"
+          >
+            Special characters not allowed
+          </mat-error>
+          <!-- End of Errors Validation -->
         </mat-form-field>
         <mat-form-field class="full-width text-field">
           <mat-label>About Me</mat-label>
@@ -37,6 +91,17 @@
             cdkAutosizeMinRows="3"
             formControlName="about"
           ></textarea>
+          <!-- Errors Validation -->
+          <mat-error *ngIf="EditProfileForm.get('about').hasError('required')">
+            About Me is required
+          </mat-error>
+          <mat-error *ngIf="EditProfileForm.get('about').hasError('maxlength')">
+            About Me must not be more than 1000 characters long.
+          </mat-error>
+          <mat-error *ngIf="EditProfileForm.get('about').hasError('pattern')">
+            Special characters not allowed
+          </mat-error>
+          <!-- End of Errors Validation -->
         </mat-form-field>
         <a class="btn yellow-btn" (click)="saveProfile()">SAVE</a>
       </form>

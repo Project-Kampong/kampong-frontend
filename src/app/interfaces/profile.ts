@@ -1,3 +1,5 @@
+import { Validators } from "@angular/forms";
+
 export interface Profile {
   nickname: String;
   FirstName: String;
@@ -5,12 +7,25 @@ export interface Profile {
   dob: Date;
   interest: String;
   about: String;
+  profile_picture: String;
 }
 
+// Validation
+const patternvalidation = Validators.pattern("^[a-zA-Z0-9 \n .,'()\"$#%&-]+$");
 export const DefaultProfile = {
-  nickname: "Batman",
-  dob: new Date("Tue May 01 1990 00:00:00 GMT+0800 (Singapore Standard Time)"),
-  interest: "Student",
-  about:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  nickname: [
+    "",
+    [Validators.required, Validators.maxLength(15), patternvalidation],
+  ],
+  dob: [new Date(), [Validators.required]],
+  interest: [
+    "Explorer",
+    [Validators.required, Validators.maxLength(30), patternvalidation],
+  ],
+  about: [
+    "",
+    [Validators.required, Validators.maxLength(1000), patternvalidation],
+  ],
+  profile_picture:
+    "https://images.pexels.com/photos/5089163/pexels-photo-5089163.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
 };

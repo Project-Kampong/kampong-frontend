@@ -15,13 +15,14 @@ import { Profile, DefaultProfile } from "../interfaces/profile";
 })
 export class EditProfileComponent implements OnInit {
   EditProfileForm: FormGroup;
-  ProfileDetails: Profile[];
+  ProfileDetails: Profile = <Profile>{};
   constructor(
     private fb: FormBuilder,
     public AuthService: AuthService,
     public ProfileService: ProfileService,
     private router: Router
   ) {}
+
   ngOnInit() {
     this.EditProfileForm = this.fb.group({
       ...DefaultProfile,
@@ -49,11 +50,39 @@ export class EditProfileComponent implements OnInit {
       this.EditProfileForm.value
     ).subscribe(
       (res) => {
-        this.router.navigate(["/profile"]);
+        if (this.selectedFile != null) {
+          var ImageFd = new FormData();
+          ImageFd.append("pic", this.selectedFile);
+          this.ProfileService.updateUserProfilePic(
+            this.ProfileDetails["user_id"],
+            ImageFd
+          ).subscribe(
+            (res) => {
+              this.router.navigate(["/profile"]);
+            },
+            (err) => {
+              console.log("error");
+            }
+          );
+        } else {
+          this.router.navigate(["/profile"]);
+        }
       },
       (err) => {
         console.log("error");
       }
     );
+  }
+
+  selectedFile;
+  uploadFile(event) {
+    this.selectedFile = <File>event.target.files[0];
+    // Display Image
+    var reader: FileReader = new FileReader();
+    reader.onload = (e) => {
+      // this.fileDisplayArr.push(reader.result.toString());
+      this.ProfileDetails.profile_picture = reader.result.toString();
+    };
+    reader.readAsDataURL(event.target.files[0]);
   }
 }
