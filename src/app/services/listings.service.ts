@@ -28,7 +28,16 @@ export class ListingsService {
   ListingData: Listing[];
   FeaturedListingData: Listing[];
 
-  // Event Emitter
+  // Eventemitter
+  SkillsetsReturned = new EventEmitter<void>();
+
+  // Static Data
+  getAllSkillsets(page) {
+    return this.httpClient.get(
+      this.url + "api/skills?page=" + page,
+      this.options
+    );
+  }
 
   getListings() {
     return this.httpClient
@@ -42,14 +51,14 @@ export class ListingsService {
 
   getPublicOwnedListings(userId) {
     return this.httpClient.get(
-      this.url + "api/profiles/" + userId + "/listings/owner",
+      this.url + "api/users/" + userId + "/listings/owner",
       this.options
     );
   }
 
   getSelectedListing(listingId) {
     return this.httpClient.get(
-      this.url + "api/listings/" + listingId + "/raw",
+      this.url + "api/listings/" + listingId,
       this.options
     );
   }
@@ -80,7 +89,7 @@ export class ListingsService {
   // Listing Stories
   getSelectedListingStories(listingId) {
     return this.httpClient.get(
-      this.url + "api/listings/stories/" + listingId,
+      this.url + "api/listings/" + listingId + "/stories",
       this.options
     );
   }
@@ -120,14 +129,18 @@ export class ListingsService {
   // Liked Listing - by User
   getLikedListing() {
     return this.httpClient.get(
-      this.url + "api/profiles/" + this.AuthService.LoggedInUserID + "/likes",
+      this.url + "api/users/" + this.AuthService.LoggedInUserID + "/likes",
       this.options
     );
   }
 
   // Write
   uploadFile(fd) {
-    return this.httpClient.post(this.url + "test/file-upload", fd);
+    return this.httpClient.post(
+      this.url + "api/file-upload",
+      fd,
+      this.AuthService.OnlyAuthHttpHeaders
+    );
   }
 
   createListing(data) {
@@ -140,7 +153,7 @@ export class ListingsService {
 
   UpdateListingStory(listingId, data) {
     return this.httpClient.put(
-      this.url + "api/listings/stories/" + listingId,
+      this.url + "api/listings/" + listingId + "/stories",
       data,
       this.AuthService.AuthOptions
     );
@@ -222,6 +235,31 @@ export class ListingsService {
     );
   }
 
+  // UPDATE LISTING INFO SECTION
+  updateListing(listingId, data) {
+    return this.httpClient.put(
+      this.url + "api/listings/" + listingId,
+      data,
+      this.AuthService.OnlyAuthHttpHeaders
+    );
+  }
+
+  updateMilestone(milestone_id, data) {
+    return this.httpClient.put(
+      this.url + "api/milestones/" + milestone_id,
+      data,
+      this.AuthService.AuthOptions
+    );
+  }
+
+  updateFAQ(faq_id, data) {
+    return this.httpClient.put(
+      this.url + "api/faqs/" + faq_id,
+      data,
+      this.AuthService.AuthOptions
+    );
+  }
+
   // Edit Listing
   // Delete
   removeListing(listingId) {
@@ -249,6 +287,13 @@ export class ListingsService {
   removeHashtags(hashtag_id) {
     return this.httpClient.delete(
       this.url + "api/hashtags/" + hashtag_id,
+      this.AuthService.AuthOptions
+    );
+  }
+
+  removeListingSkills(listing_skill_id) {
+    return this.httpClient.delete(
+      this.url + "api/listing-skills/" + listing_skill_id,
       this.AuthService.AuthOptions
     );
   }

@@ -97,67 +97,58 @@ export class CreateListingComponent implements OnInit {
   skillsets = [
     {
       name: "Big Data Analysis",
-      group: [
-        "Needs Analysis",
-        "Quantitative Research",
-        "Statistical Analysis",
-        "Compiling Statistics",
-        "Database Management",
-        "Modeling",
-        "Data Analytics",
-      ],
+      group: [],
     },
     {
-      name: "Coding & Programming",
-      group: ["Phone Applications", "Design UIUX", "Website Building"],
+      name: "Coding and Programming",
+      group: [],
     },
     {
       name: "Project Management",
-      group: [
-        "Benchmarking",
-        "Budget Planning",
-        "Operations",
-        "Quality Assurance",
-        "Scheduling",
-        "Fund Raiser",
-        "Administrative",
-        "Microsoft Office Skills",
-        "Negotiations",
-        "Public Speaking",
-      ],
+      group: [],
     },
     {
       name: "Social Media Experience",
-      group: [
-        "Content Management System",
-        "Digital Marketing",
-        "Networking",
-        "Search Engine Optimisation",
-        "Social Media Platforms",
-        "Web Analytics",
-        "Sales",
-        "Automated Marketing Software",
-        "Graphic Design",
-      ],
+      group: [],
     },
     {
       name: "Writing",
-      group: [
-        "Research",
-        "Emails",
-        "Client Relations",
-        "Technical Documentation",
-        "Requirements Gathering",
-      ],
+      group: [],
     },
   ];
 
+  rawSkillsets = [];
   ngOnInit() {
     this.ListingForm = this.fb.group({
       ...CreateListing,
       ...ListingStory,
       SkillsList: [],
     });
+
+    this.ListingsService.getAllSkillsets(1).subscribe((data) => {
+      this.rawSkillsets = data["data"];
+      if (data["pagination"]["next"] != null) {
+        this.ListingsService.getAllSkillsets(
+          data["pagination"]["next"]["page"]
+        ).subscribe((data) => {
+          data["data"].map((x) => {
+            this.rawSkillsets.push(x);
+          });
+          // Sort Skills
+          for (var i = 0; i < this.skillsets.length; i++) {
+            this.rawSkillsets.map((x) => {
+              if (x.skill_group == this.skillsets[i].name) {
+                this.skillsets[i].group.push(x);
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
+  getSkillsData(pagenum) {
+    return this.ListingsService.getAllSkillsets(pagenum);
   }
 
   uploadFile(event) {
@@ -200,10 +191,6 @@ export class CreateListingComponent implements OnInit {
       const controlErrors: ValidationErrors = this.ListingForm.get(key).errors;
       if (controlErrors != null) {
         Object.keys(controlErrors).forEach((keyError) => {
-          console.log(
-            "Key control: " + key + ", keyError: " + keyError + ", err value: ",
-            controlErrors[keyError]
-          );
           error = true;
         });
       }
@@ -212,6 +199,9 @@ export class CreateListingComponent implements OnInit {
       error = true;
     }
     return error;
+  }
+  saverange(newValue) {
+    console.log(this.ListingForm.value.SkillsList);
   }
 
   createListing() {
@@ -269,18 +259,13 @@ export class CreateListingComponent implements OnInit {
           });
         }
         // Handle Skills
-        // for (var i = 0; i < listingData.SkillsList.length; i++) {
-        //   console.log(listingData.SkillsList[i]);
-        //   this.ListingsService.createListingSkills(
-        //     listingData.SkillsList[i]
-        //   ).subscribe((data) => {
-        //     console.log(data);
-        //     this.ListingsService.connectListingSkills({
-        //       listing_id: listing_id,
-        //       skill_id: data["data"].skill_id,
-        //     });
-        //   });
-        // }
+        for (var i = 0; i < listingData.SkillsList.length; i++) {
+          console.log(listingData.SkillsList[i]);
+          this.ListingsService.connectListingSkills({
+            listing_id: listing_id,
+            skill_id: listingData.SkillsList[i],
+          }).subscribe((data) => {});
+        }
 
         // Handle FAQs
         for (var i = 0; i < this.faqArr.length; i++) {

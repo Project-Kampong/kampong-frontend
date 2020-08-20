@@ -41,35 +41,32 @@ export class PublicProfileComponent implements OnInit {
           this.ProfileDetails.profile_picture =
             "https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png";
         }
-      }
-    );
-
-    // Liked
-    this.ProfileService.getPublicLikes(this.profileIdSelected).subscribe(
-      (data) => {
-        const Liked = data["data"];
-        this.LikeCount = data["count"];
-        for (var i = 0; i < Liked.length; i++) {
-          this.ListingsService.getSelectedListing(
-            Liked[i].listing_id
-          ).subscribe((listing) => {
-            if (listing["data"].deleted_on == null) {
-              this.LikedArr.push(listing["data"]);
+      },
+      (err) => {
+        this.router.navigate(["/home"]);
+        return;
+      },
+      () => {
+        // Liked
+        this.ProfileService.getPublicLikes(this.profileIdSelected).subscribe(
+          (data) => {
+            const Liked = data["data"];
+            this.LikeCount = data["count"];
+            this.LikedArr = Liked;
+          }
+        );
+        // Started
+        this.ListingsService.getPublicOwnedListings(
+          this.profileIdSelected
+        ).subscribe((data) => {
+          console.log(data);
+          data["data"].map((x) => {
+            if (x.deleted_on == null) {
+              this.StartedArr.push(x);
             }
           });
-        }
+        });
       }
     );
-    // Started
-    this.ListingsService.getPublicOwnedListings(
-      this.profileIdSelected
-    ).subscribe((data) => {
-      console.log(data);
-      data["data"].map((x) => {
-        if (x.deleted_on == null) {
-          this.StartedArr.push(x);
-        }
-      });
-    });
   }
 }

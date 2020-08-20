@@ -12,7 +12,7 @@
               class="image-container"
               (click)="removeFile(file, i)"
             >
-              <img src="{{ file.file }}" />
+              <img src="{{ file }}" />
             </div>
 
             <div
@@ -118,9 +118,9 @@
               >
                 <mat-option
                   *ngFor="let category of group.group"
-                  [value]="category"
+                  [value]="category.skill_id"
                 >
-                  {{ category }}
+                  {{ category.skill }}
                 </mat-option>
               </mat-optgroup>
             </mat-select>
@@ -403,7 +403,7 @@
         <div class="submit-btn">
           <button
             class="btn yellow-btn"
-            (click)="createListing()"
+            (click)="saveListing()"
             [disabled]="getFormValidationErrors()"
           >
             Save Initiative

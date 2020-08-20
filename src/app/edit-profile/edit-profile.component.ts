@@ -85,4 +85,22 @@ export class EditProfileComponent implements OnInit {
     };
     reader.readAsDataURL(event.target.files[0]);
   }
+
+  oldpassword;
+  newpassword;
+  showErrorMsg = false;
+  // Update Password
+  updatePassword() {
+    this.AuthService.updatePassword({
+      oldPassword: this.oldpassword,
+      newPassword: this.newpassword,
+    }).subscribe(
+      (data) => {
+        console.log(data);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
 }

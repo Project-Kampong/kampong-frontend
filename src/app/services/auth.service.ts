@@ -108,4 +108,13 @@ export class AuthService {
     this.CookieService.delete("token", "/");
     window.location.href = "/login";
   }
+
+  // Update Password
+  updatePassword(data) {
+    return this.httpClient.put(
+      this.URL + "api/auth/updatepassword",
+      data,
+      this.AuthOptions
+    );
+  }
 }

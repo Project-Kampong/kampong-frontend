@@ -49,7 +49,9 @@ export interface ListingStories {
 }
 
 // Validation
-const patternvalidation = Validators.pattern("^[a-zA-Z0-9 \n .,'()\"$#%&-]+$");
+const patternvalidation = Validators.pattern(
+  "^[a-zA-Z0-9 \n .,'()\"$#%&-°*]+$"
+);
 export const CreateListing = {
   title: [
     "",

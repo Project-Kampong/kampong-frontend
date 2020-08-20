@@ -18,14 +18,14 @@ export class ProfileService {
 
   getUserProfile(userId) {
     return this.httpClient.get(
-      this.url + "api/profiles/" + userId + "/raw",
+      this.url + "api/users/" + userId + "/profiles",
       this.options
     );
   }
 
   getPublicLikes(userId) {
     return this.httpClient.get(
-      this.url + "api/profiles/" + userId + "/likes",
+      this.url + "api/users/" + userId + "/likes",
       this.options
     );
   }

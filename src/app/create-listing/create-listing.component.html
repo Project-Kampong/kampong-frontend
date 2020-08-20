@@ -110,7 +110,11 @@
         <div class="col-lg-8">
           <mat-form-field class="half-width">
             <mat-label>Looking For</mat-label>
-            <mat-select formControlName="SkillsList" multiple>
+            <mat-select
+              (ngModelChange)="saverange($event)"
+              formControlName="SkillsList"
+              multiple
+            >
               <mat-optgroup
                 *ngFor="let group of skillsets"
                 [label]="group.name"
@@ -118,9 +122,9 @@
               >
                 <mat-option
                   *ngFor="let category of group.group"
-                  [value]="category"
+                  [value]="category.skill_id"
                 >
-                  {{ category }}
+                  {{ category.skill }}
                 </mat-option>
               </mat-optgroup>
             </mat-select>

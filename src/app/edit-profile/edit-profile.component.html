@@ -107,4 +107,23 @@
       </form>
     </div>
   </div>
+  <div class="popup-bg"></div>
+  <div class="popup-box">
+    <div class="close-btn"></div>
+    <div class="fields-container">
+      <mat-form-field class="full-width">
+        <mat-label>Old Password</mat-label>
+        <input matInput required type="password" [(ngModel)]="oldpassword" />
+        <mat-error *ngIf="!showErrorMsg">
+          Invalid password
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>New Password</mat-label>
+        <input matInput required type="password" [(ngModel)]="newpassword" />
+      </mat-form-field>
+    </div>
+
+    <a class="btn yellow-btn" (click)="updatePassword()">Change Password</a>
+  </div>
 </section>

@@ -50,15 +50,7 @@ export class UserProfileComponent implements OnInit {
     this.ListingsService.getLikedListing().subscribe((data) => {
       const Liked = data["data"];
       this.LikeCount = data["count"];
-      for (var i = 0; i < Liked.length; i++) {
-        this.ListingsService.getSelectedListing(Liked[i].listing_id).subscribe(
-          (listing) => {
-            if (listing["data"].deleted_on == null) {
-              this.LikedArr.push(listing["data"]);
-            }
-          }
-        );
-      }
+      this.LikedArr = Liked;
     });
     // Started
     this.ListingsService.getPublicOwnedListings(
