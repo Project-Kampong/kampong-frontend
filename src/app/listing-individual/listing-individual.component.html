@@ -37,8 +37,13 @@
               <span>likes</span>
             </div>
             <div class="stats">
-              <p>80</p>
-              <span>patrons</span>
+              <p>
+                <a
+                  class="email-icon"
+                  href="mailto:{{ ListingData['email'] }}"
+                ></a>
+              </p>
+              <span>Contact</span>
             </div>
           </div>
           <p class="like-btn" (click)="liked_clicked()"></p>

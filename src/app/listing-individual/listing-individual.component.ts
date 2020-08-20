@@ -87,6 +87,7 @@ export class ListingIndividualComponent implements OnInit {
           this.ListingData["pic4"],
           this.ListingData["pic5"]
         );
+        console.log(this.ListingData);
         console.log(this.SliderImageArr);
         this.ProfileService.getUserProfile(
           this.ListingData["created_by"]
