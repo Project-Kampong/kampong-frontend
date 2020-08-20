@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
+declare var $: any;
+
 // Services
 import { AuthService } from "../services/auth.service";
 import { ProfileService } from "../services/profile.service";
@@ -58,6 +60,7 @@ export class EditProfileComponent implements OnInit {
             ImageFd
           ).subscribe(
             (res) => {
+              this.AuthService.LoginResponse.emit();
               this.router.navigate(["/profile"]);
             },
             (err) => {
@@ -65,6 +68,7 @@ export class EditProfileComponent implements OnInit {
             }
           );
         } else {
+          this.AuthService.LoginResponse.emit();
           this.router.navigate(["/profile"]);
         }
       },
@@ -97,10 +101,21 @@ export class EditProfileComponent implements OnInit {
     }).subscribe(
       (data) => {
         console.log(data);
+        this.oldpassword = new String();
+        this.newpassword = new String();
+        $(".popup-bg").removeClass("active");
+        $(".popup-box").removeClass("active");
       },
       (err) => {
+        this.showErrorMsg = true;
         console.log(err);
       }
     );
+  }
+
+  togglePopup() {
+    // Toggle popup
+    $(".popup-bg").toggleClass("active");
+    $(".popup-box").toggleClass("active");
   }
 }

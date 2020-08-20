@@ -33,7 +33,7 @@ export class ProfileService {
   // Write
   updateUserProfile(userId, data) {
     return this.httpClient.put(
-      this.url + "api/profiles/" + userId,
+      this.url + "api/users/" + userId + "/profiles",
       data,
       this.AuthOptions
     );
@@ -41,7 +41,7 @@ export class ProfileService {
 
   updateUserProfilePic(userId, data) {
     return this.httpClient.put(
-      this.url + "api/profiles/" + userId + "/photo",
+      this.url + "api/users/" + userId + "/profiles/upload-photo",
       data,
       this.AuthService.OnlyAuthHttpHeaders
     );

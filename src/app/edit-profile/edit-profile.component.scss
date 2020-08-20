@@ -60,6 +60,7 @@
 }
 
 .popup-bg {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -71,6 +72,7 @@
   backdrop-filter: blur(10px);
 }
 .popup-box {
+  display: none;
   padding: 2rem;
   width: 40%;
   min-width: 350px;
@@ -84,12 +86,15 @@
   .full-width {
     width: 100%;
   }
-  .fields-container {
-    margin-bottom: 1rem;
-  }
+  // .fields-container {
+  //   margin-bottom: 1rem;
+  // }
   .close-btn {
-    display: flex;
-    justify-content: flex-end;
+    display: inline-block;
+    position: relative;
+    left: 100%;
+    transform: translateX(-100%);
+    cursor: pointer;
     &:after {
       content: "\f00d";
       font-family: "Font Awesome\ 5 Free";
@@ -97,4 +102,19 @@
       font-size: 1.5rem;
     }
   }
+}
+
+.popup-bg.active {
+  display: block;
+}
+.popup-box.active {
+  display: block;
+}
+
+.error-msg {
+  display: block;
+  color: #f44336;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
 }

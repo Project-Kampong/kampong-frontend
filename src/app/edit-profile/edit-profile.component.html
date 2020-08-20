@@ -1,7 +1,7 @@
 <section *ngIf="ProfileDetails != null" class="container block-content">
   <div class="d-flex flex-wrap">
     <div class="col-lg-4 order-lg-2 text-right">
-      <a class="btn outline-btn">Change Password</a>
+      <a class="btn outline-btn" (click)="togglePopup()">Change Password</a>
     </div>
     <div class="col-lg-8 order-lg-1">
       <h3>Edit Profile</h3>
@@ -109,21 +109,20 @@
   </div>
   <div class="popup-bg"></div>
   <div class="popup-box">
-    <div class="close-btn"></div>
+    <div class="close-btn" (click)="togglePopup()"></div>
     <div class="fields-container">
       <mat-form-field class="full-width">
         <mat-label>Old Password</mat-label>
         <input matInput required type="password" [(ngModel)]="oldpassword" />
-        <mat-error *ngIf="!showErrorMsg">
-          Invalid password
-        </mat-error>
       </mat-form-field>
       <mat-form-field class="full-width">
         <mat-label>New Password</mat-label>
         <input matInput required type="password" [(ngModel)]="newpassword" />
       </mat-form-field>
     </div>
-
+    <span class="error-msg" *ngIf="showErrorMsg == true">
+      Invalid password, try again
+    </span>
     <a class="btn yellow-btn" (click)="updatePassword()">Change Password</a>
   </div>
 </section>
