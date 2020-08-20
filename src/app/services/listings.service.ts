@@ -297,4 +297,19 @@ export class ListingsService {
       this.AuthService.AuthOptions
     );
   }
+
+  removeListingComments(comment_id) {
+    return this.httpClient.put(
+      this.url + "api/listing-comments/" + comment_id + "/deactivate",
+      {},
+      this.AuthService.AuthOptions
+    );
+  }
+
+  removeListingUpdates(update_id) {
+    return this.httpClient.delete(
+      this.url + "api/listing-updates/" + update_id,
+      this.AuthService.AuthOptions
+    );
+  }
 }

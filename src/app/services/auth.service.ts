@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { CookieService } from "ngx-cookie-service";
+import { environment } from "./../../environments/environment";
 
 // Interface
 import { UserData } from "../interfaces/user";
@@ -10,7 +11,7 @@ import { UserData } from "../interfaces/user";
 export class AuthService {
   LoginResponse = new EventEmitter<void>();
 
-  public URL = "http://165.22.103.155/";
+  public URL = environment.apiUrl;
   public isLoggedIn = false;
   public AuthToken;
   private UserData: UserData[];

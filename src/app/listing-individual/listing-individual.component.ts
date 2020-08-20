@@ -28,7 +28,7 @@ export class ListingIndividualComponent implements OnInit {
     private route: ActivatedRoute,
     private ListingsService: ListingsService,
     private ProfileService: ProfileService,
-    private AuthService: AuthService
+    public AuthService: AuthService
   ) {}
 
   listingId;
@@ -416,11 +416,46 @@ export class ListingIndividualComponent implements OnInit {
   deleteUpdate(updates) {
     if (confirm("Are you sure to delete update?")) {
       console.log(updates);
+      this.ListingsService.removeListingUpdates(
+        updates.listing_update_id
+      ).subscribe(() => {
+        // Get Updates
+        this.ListingsService.getSelectedListingUpdates(
+          this.listingId
+        ).subscribe(
+          (data) => {
+            this.UpdatesArr = data["data"];
+            this.UpdatesArr.sort((a, b) => {
+              return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+            });
+          },
+          (err) => {},
+          () => {
+            setTimeout(() => {
+              this.initiateSlick();
+            }, 500);
+          }
+        );
+      });
     }
   }
   deleteComments(comment) {
     if (confirm("Are you sure to delete comment?")) {
       console.log(comment);
+      this.ListingsService.removeListingComments(
+        comment.listing_comment_id
+      ).subscribe(() => {
+        // Get Comments
+        this.ListingsService.getSelectedListingComments(
+          this.listingId
+        ).subscribe((data) => {
+          this.CommentsArr = data["data"];
+          this.CommentsArr.sort((a, b) => {
+            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+          });
+          console.log(this.CommentsArr);
+        });
+      });
     }
   }
 }

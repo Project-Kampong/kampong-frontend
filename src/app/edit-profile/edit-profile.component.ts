@@ -1,5 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  ValidationErrors,
+} from "@angular/forms";
 import { Router } from "@angular/router";
 
 declare var $: any;
@@ -117,5 +122,19 @@ export class EditProfileComponent implements OnInit {
     // Toggle popup
     $(".popup-bg").toggleClass("active");
     $(".popup-box").toggleClass("active");
+  }
+
+  getFormValidationErrors() {
+    var error = false;
+    Object.keys(this.EditProfileForm.controls).forEach((key) => {
+      const controlErrors: ValidationErrors = this.EditProfileForm.get(key)
+        .errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach((keyError) => {
+          error = true;
+        });
+      }
+    });
+    return error;
   }
 }

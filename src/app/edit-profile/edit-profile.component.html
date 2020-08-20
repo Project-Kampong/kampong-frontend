@@ -103,7 +103,13 @@
           </mat-error>
           <!-- End of Errors Validation -->
         </mat-form-field>
-        <a class="btn yellow-btn" (click)="saveProfile()">SAVE</a>
+        <button
+          class="btn yellow-btn"
+          [disabled]="getFormValidationErrors()"
+          (click)="saveProfile()"
+        >
+          SAVE
+        </button>
       </form>
     </div>
   </div>
