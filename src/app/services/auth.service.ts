@@ -10,6 +10,9 @@ import { UserData } from "../interfaces/user";
 })
 export class AuthService {
   LoginResponse = new EventEmitter<void>();
+  invalidLoginResponse = new EventEmitter<void>();
+  invalidRegisterResponse = new EventEmitter<void>();
+  validRegisterResponse = new EventEmitter<void>();
 
   public URL = environment.apiUrl;
   public isLoggedIn = false;
@@ -39,10 +42,10 @@ export class AuthService {
       .post(this.URL + "api/auth/register", data, this.options)
       .subscribe(
         (res) => {
-          console.log(res);
+          this.validRegisterResponse.emit();
         },
         (err) => {
-          return false;
+          this.invalidRegisterResponse.emit();
         }
       );
   }
@@ -58,6 +61,7 @@ export class AuthService {
           this.getUserDetails();
         },
         (err) => {
+          this.invalidLoginResponse.emit();
           return false;
         }
       );

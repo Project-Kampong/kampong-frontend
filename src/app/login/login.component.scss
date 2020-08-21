@@ -165,3 +165,12 @@ header {
     }
   }
 }
+
+.error-msg {
+  display: block;
+  text-align: left;
+  color: #f44336;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  font-weight: 400;
+}

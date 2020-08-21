@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   ) {}
 
   loginCredentials: FormGroup;
-
+  loginErrorMsg = false;
   ngOnInit() {
     this.loginCredentials = this.fb.group({
       ...UserLoginDefault,
@@ -29,9 +29,19 @@ export class LoginComponent implements OnInit {
     this.AuthService.LoginResponse.subscribe(() => {
       this.router.navigate(["/home"]);
     });
+    this.AuthService.invalidLoginResponse.subscribe(() => {
+      console.log("invalid login");
+      this.loginErrorMsg = true;
+    });
   }
   loginCheck() {
-    console.log("clicked");
-    this.AuthService.userLogin(this.loginCredentials.value);
+    if (
+      this.loginCredentials.value.email == "" ||
+      this.loginCredentials.value.password == ""
+    ) {
+      this.loginErrorMsg = true;
+    } else {
+      this.AuthService.userLogin(this.loginCredentials.value);
+    }
   }
 }

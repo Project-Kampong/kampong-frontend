@@ -123,16 +123,16 @@ header {
   text-align: center;
   form {
     margin-top: 1rem;
-    input {
-      width: 100%;
-      margin-top: 1rem;
-      border: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.281);
-      padding: 1rem 0.5rem;
-      &:focus {
-        outline: none;
-      }
-    }
+    // input {
+    //   width: 100%;
+    //   margin-top: 1rem;
+    //   border: none;
+    //   border-bottom: 1px solid rgba(0, 0, 0, 0.281);
+    //   padding: 1rem 0.5rem;
+    //   &:focus {
+    //     outline: none;
+    //   }
+    // }
 
     .btn-container {
       margin-top: 3rem;
@@ -164,4 +164,20 @@ header {
       }
     }
   }
+}
+
+.error-msg {
+  display: block;
+  text-align: left;
+  color: #f44336;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.res-msg {
+  display: block;
+  text-align: left;
+  color: #00ab66;
+  font-size: 0.9rem;
+  font-weight: 400;
 }

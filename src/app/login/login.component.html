@@ -99,6 +99,9 @@
           formControlName="password"
           type="Password"
         />
+        <span class="error-msg" *ngIf="loginErrorMsg == true">
+          Invalid Login, try again
+        </span>
         <div class="btn-container">
           <button (click)="loginCheck()" type="submit" class="btn login-btn">
             Login
@@ -107,7 +110,7 @@
             Register
           </button>
         </div>
-        <p>Forgot <a href="#">Username</a> or <a href="#">Password</a></p>
+        <p>Forgot <a href="#">Password</a>? too bad</p>
       </form>
     </div>
   </div>
