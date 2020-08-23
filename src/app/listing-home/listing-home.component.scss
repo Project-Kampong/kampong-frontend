@@ -1,1 +1,33 @@
-
+.filter-list {
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    // label {
+    //   font-weight: bold;
+    //   margin-right: 1rem;
+    //   &:before {
+    //     content: "\f0b0";
+    //     font-family: "Font Awesome\ 5 Free";
+    //     font-weight: 900;
+    //     font-size: 1.5rem;
+    //   }
+    // }
+    li {
+      width: 25%;
+      display: inline-block;
+      text-align: center;
+      img {
+        width: 50%;
+        max-width: 75px;
+      }
+      p {
+        margin: 0;
+        margin-top: 1rem;
+        font-size: 1rem;
+        text-transform: uppercase;
+        color: rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+}

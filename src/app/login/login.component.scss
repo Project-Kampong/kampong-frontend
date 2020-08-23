@@ -43,25 +43,30 @@ header {
 }
 
 .image-bg {
-  background-image: url("../../assets/images/login-bg.png");
+  background-image: url("https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
   min-height: 100vh;
   background-position: top;
   background-size: cover;
   background-repeat: none;
   padding: 5rem 3rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
+
+  .content-holder {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    @media (min-width: 1440px) {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+    @media (max-width: 1024px) {
+      justify-content: center;
+    }
+  }
   @media (max-width: 1024px) {
     justify-content: center;
   }
   .banner-content {
-    @media (min-width: 1024px) {
-      position: relative;
-      top: 40vh;
-      transform: translateY(-50%);
-    }
     @media (max-width: 1024px) {
       display: none;
     }

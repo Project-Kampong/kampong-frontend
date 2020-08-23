@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import { COMMA, ENTER, SPACE } from "@angular/cdk/keycodes";
 import {
   FormGroup,
   FormBuilder,
@@ -124,7 +124,6 @@ export class CreateListingComponent implements OnInit {
       ...ListingStory,
       SkillsList: [],
     });
-
     this.ListingsService.getAllSkillsets(1).subscribe((data) => {
       this.rawSkillsets = data["data"];
       if (data["pagination"]["next"] != null) {
@@ -259,12 +258,14 @@ export class CreateListingComponent implements OnInit {
           });
         }
         // Handle Skills
-        for (var i = 0; i < listingData.SkillsList.length; i++) {
-          console.log(listingData.SkillsList[i]);
-          this.ListingsService.connectListingSkills({
-            listing_id: listing_id,
-            skill_id: listingData.SkillsList[i],
-          }).subscribe((data) => {});
+        if (listingData.SkillsList != null) {
+          for (var i = 0; i < listingData.SkillsList.length; i++) {
+            console.log(listingData.SkillsList[i]);
+            this.ListingsService.connectListingSkills({
+              listing_id: listing_id,
+              skill_id: listingData.SkillsList[i],
+            }).subscribe((data) => {});
+          }
         }
 
         // Handle FAQs
@@ -282,7 +283,6 @@ export class CreateListingComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-        return;
       },
       () => {
         this.router.navigate(["/listing/" + routeTo]);
@@ -295,7 +295,7 @@ export class CreateListingComponent implements OnInit {
   selectable = false;
   removable = true;
   addOnBlur = true;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
   hashtags = [];
   hashtagsError = false;
   add(event: MatChipInputEvent): void {

@@ -13,7 +13,7 @@
         <p class="tagline">
           {{ ListingData["tagline"] }}
         </p>
-        <div class="category-list">
+        <div class="hashtags-list">
           <ul *ngIf="Hashtags != []">
             <li *ngFor="let data of Hashtags" class="active">
               {{ data.tag }}
@@ -40,10 +40,12 @@
               <p>
                 <a
                   class="email-icon"
-                  href="mailto:{{ ListingData['email'] }}"
+                  href="mailto:{{
+                    ListingData['email']
+                  }}?subject=Enquire about {{ ListingData['title'] }}"
                 ></a>
               </p>
-              <span>Contact</span>
+              <span>Enquire</span>
             </div>
           </div>
           <p class="like-btn" (click)="liked_clicked()"></p>

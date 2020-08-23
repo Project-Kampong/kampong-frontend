@@ -38,8 +38,8 @@ export class RegisterComponent implements OnInit {
     });
   }
   register() {
-    this.LoginForm.reset();
     this.AuthService.userRegister(this.LoginForm.value);
+    this.LoginForm.reset();
   }
 
   getFormValidationErrors() {

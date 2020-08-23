@@ -3,12 +3,20 @@
     padding-left: 2rem;
   }
   .category {
-    color: rgba(0, 0, 0, 0.3);
-    font-size: 1rem;
+    // color: rgba(0, 0, 0, 0.3);
+    // font-size: 1rem;
+    // font-weight: bold;
+    // border: 1px solid rgba(0, 0, 0, 0.15);
+    // padding: 0.25rem 0.75rem;
+    // border-radius: 5px;
+    // display: inline-block;
+
+    color: #34ad5f;
+    font-size: 0.9rem;
+    padding: 0.25rem 0;
     font-weight: bold;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    padding: 0.25rem 0.75rem;
-    border-radius: 5px;
+    text-transform: uppercase;
+    margin: 0;
     display: inline-block;
   }
   .title {
@@ -37,7 +45,7 @@
     cursor: pointer;
   }
 
-  .category-list {
+  .hashtags-list {
     ul {
       padding: 0;
     }
