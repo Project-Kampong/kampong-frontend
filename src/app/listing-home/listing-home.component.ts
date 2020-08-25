@@ -23,7 +23,7 @@ export class ListingHomeComponent implements OnInit {
       $(this).toggleClass("active");
     });
     // Get Public Listing
-    this.ListingsService.getListings();
+    this.ListingsService.getListingLoop(1);
     // Get Liked Listing
     if (this.AuthService.isLoggedIn) {
       this.getInitData();

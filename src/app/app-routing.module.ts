@@ -14,12 +14,14 @@ import { RegisterComponent } from "./register/register.component";
 import { EditProfileComponent } from "./edit-profile/edit-profile.component";
 import { CreateListingComponent } from "./create-listing/create-listing.component";
 import { EditListingComponent } from "./edit-listing/edit-listing.component";
+import { SearchComponent } from "./search/search.component";
 
 //ContentWrapperComponent
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "login", component: LoginComponent },
   { path: "register", component: RegisterComponent },
+  { path: "search", component: SearchComponent },
   {
     path: "",
     component: ContentWrapperComponent,

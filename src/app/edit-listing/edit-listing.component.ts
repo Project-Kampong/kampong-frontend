@@ -406,9 +406,7 @@ export class EditListingComponent implements OnInit {
   // Get Skillsets
   paginationSkillsets(pagenum) {
     this.ListingsService.getAllSkillsets(pagenum).subscribe((data) => {
-      data["data"].map((x) => {
-        this.rawSkillsets.push(x);
-      });
+      this.rawSkillsets.push(...data["data"]);
       // Check for More
       if (data["pagination"]["next"] != null) {
         this.paginationSkillsets(data["pagination"]["next"]["page"]);

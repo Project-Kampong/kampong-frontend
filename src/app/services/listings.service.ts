@@ -26,6 +26,7 @@ export class ListingsService {
 
   // Variables
   ListingData: Listing[];
+  tempListingData: Listing[] = [];
   FeaturedListingData: Listing[];
 
   // Eventemitter
@@ -39,14 +40,34 @@ export class ListingsService {
     );
   }
 
-  getListings() {
-    return this.httpClient
-      .get(this.url + "api/listings", this.options)
-      .subscribe((data) => {
-        this.ListingData = data["data"];
-        console.log(this.ListingData);
-        this.FeaturedListingData = data["data"];
-      });
+  getListings(page) {
+    return this.httpClient.get(
+      this.url + "api/listings?page=" + page,
+      this.options
+    );
+  }
+
+  getListingLoop(pagenum) {
+    this.getListings(pagenum).subscribe((data) => {
+      this.tempListingData.push(...data["data"]);
+      console.log(this.tempListingData);
+      this.FeaturedListingData = data["data"];
+      if (data["pagination"]["next"] != null) {
+        this.getListingLoop(data["pagination"]["next"]["page"]);
+      } else {
+        this.ListingData = this.tempListingData;
+      }
+    });
+  }
+
+  getSearchResult(keyword) {
+    return this.httpClient.get(
+      this.url +
+        "api/listings/search-title?title=" +
+        keyword +
+        "&limit=25&sensitivity=50",
+      this.options
+    );
   }
 
   getPublicOwnedListings(userId) {

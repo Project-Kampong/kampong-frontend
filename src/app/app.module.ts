@@ -36,6 +36,7 @@ import { CreateListingComponent } from "./create-listing/create-listing.componen
 import { PublicProfileComponent } from "./public-profile/public-profile.component";
 import { EditListingCardsComponent } from "./components/edit-listing-cards/edit-listing-cards.component";
 import { EditListingComponent } from "./edit-listing/edit-listing.component";
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { EditListingComponent } from "./edit-listing/edit-listing.component";
     PublicProfileComponent,
     EditListingCardsComponent,
     EditListingComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,

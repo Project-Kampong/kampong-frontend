@@ -124,30 +124,27 @@ export class CreateListingComponent implements OnInit {
       ...ListingStory,
       SkillsList: [],
     });
-    this.ListingsService.getAllSkillsets(1).subscribe((data) => {
-      this.rawSkillsets = data["data"];
-      if (data["pagination"]["next"] != null) {
-        this.ListingsService.getAllSkillsets(
-          data["pagination"]["next"]["page"]
-        ).subscribe((data) => {
-          data["data"].map((x) => {
-            this.rawSkillsets.push(x);
-          });
-          // Sort Skills
-          for (var i = 0; i < this.skillsets.length; i++) {
-            this.rawSkillsets.map((x) => {
-              if (x.skill_group == this.skillsets[i].name) {
-                this.skillsets[i].group.push(x);
-              }
-            });
-          }
-        });
-      }
-    });
+    this.paginationSkillsets(1);
   }
 
-  getSkillsData(pagenum) {
-    return this.ListingsService.getAllSkillsets(pagenum);
+  // Get Skillsets
+  paginationSkillsets(pagenum) {
+    this.ListingsService.getAllSkillsets(pagenum).subscribe((data) => {
+      this.rawSkillsets.push(...data["data"]);
+      // Check for More
+      if (data["pagination"]["next"] != null) {
+        this.paginationSkillsets(data["pagination"]["next"]["page"]);
+      } else {
+        // Sort Skills
+        for (var i = 0; i < this.skillsets.length; i++) {
+          this.rawSkillsets.map((x) => {
+            if (x.skill_group == this.skillsets[i].name) {
+              this.skillsets[i].group.push(x);
+            }
+          });
+        }
+      }
+    });
   }
 
   uploadFile(event) {

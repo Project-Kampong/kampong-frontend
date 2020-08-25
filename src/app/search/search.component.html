@@ -1,0 +1,19 @@
+<div class="search-bar col-12">
+  <div class="back-btn" (click)="goBack()"></div>
+  <mat-form-field class="full-width search-input">
+    <input
+      matInput
+      placeholder="What are you looking for?"
+      [(ngModel)]="searchInput"
+      (keydown.enter)="searchInitiated()"
+    />
+  </mat-form-field>
+  <a class="search-btn ml-3" (click)="searchInitiated()"></a>
+</div>
+
+<div *ngIf="resultsArr != null" class="container">
+  <p class="result-text">
+    <b>{{ resultsCount }}</b> Results found for <b>{{ resultsString }}</b>
+  </p>
+  <app-listing-cards [ListingData]="resultsArr"></app-listing-cards>
+</div>
