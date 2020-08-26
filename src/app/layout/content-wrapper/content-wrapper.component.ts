@@ -29,7 +29,7 @@ export class ContentWrapperComponent implements OnInit {
       this.getInitData();
     });
 
-    $(".menu-btn, .close-menu-btn, close-menu-overlay").on(
+    $(".menu-btn, .close-menu-btn, .close-menu-overlay").on(
       "click",
       function () {
         console.log("menu clicked");

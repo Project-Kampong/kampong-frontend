@@ -45,6 +45,10 @@ header {
     -ms-user-select: none;
     user-select: none;
 
+    @media (max-width: 991px) {
+      padding-left: 0;
+      justify-content: center;
+    }
     .username {
       margin: 0;
       padding: 0 1rem 0 0.5rem;
@@ -82,8 +86,8 @@ header {
   right: 0;
   top: 100%;
   z-index: 10;
+  padding: 1rem 0;
   background-color: white;
-  padding: 1rem 2rem;
   width: 200px;
   border-top: 1px solid rgba(0, 0, 0, 0.2);
   box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.2);
@@ -93,8 +97,10 @@ header {
     li {
       display: block;
       padding: 0.5rem 0;
-      text-align: left;
+
+      text-align: center;
       a {
+        display: inline-block;
         font-weight: 400;
         &:hover {
           color: #fed45f;
@@ -190,4 +196,17 @@ header {
       z-index: 4;
     }
   }
+}
+
+.mobile-show {
+  display: none !important;
+  @media (max-width: 991px) {
+    display: block !important;
+  }
+}
+
+.red-btn {
+  //  padding: 0.5rem 0;
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
 }

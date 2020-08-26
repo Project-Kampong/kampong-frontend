@@ -22,12 +22,18 @@ export class SearchComponent implements OnInit {
   resultsCount: string;
   resultsString: string;
   searchInput: string;
+
+  popularSearchList = [
+    "Project Kampong",
+    "Rebuilding Homes",
+    "YOUTH Mentorship Programme",
+    "CommStart 2020",
+  ];
   ngOnInit() {}
   goBack() {
     this.location.back();
   }
   searchInitiated() {
-    console.log(this.searchInput);
     if (this.searchInput.length > 0) {
       this.ListingsService.getSearchResult(this.searchInput).subscribe(
         (data) => {
@@ -37,5 +43,10 @@ export class SearchComponent implements OnInit {
         }
       );
     }
+  }
+
+  popularSearchClicked(value) {
+    this.searchInput = value;
+    this.searchInitiated();
   }
 }

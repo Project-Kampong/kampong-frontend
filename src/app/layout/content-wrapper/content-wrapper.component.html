@@ -60,20 +60,6 @@
           {{ ProfileDetails["nickname"] }}
         </p>
         <span class="dropdown-icon"></span>
-        <!-- <svg
-          width="15"
-          height="12"
-          viewBox="0 0 18 13"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          class="dropdown-icon"
-        >
-          <path
-            d="M17.7835 3.875C18.0625 3.59598 18.0625 3.13839 17.7835 2.85937L15.9308 1.01786C15.6518 0.738838 15.2054 0.738838 14.9263 1.01786L9 6.9442L3.07366 1.01786C2.79464 0.738838 2.34821 0.738838 2.0692 1.01786L0.216518 2.85937C-0.0624999 3.13839 -0.0624999 3.59598 0.216518 3.875L8.49777 12.1451C8.77679 12.4241 9.22321 12.4241 9.50223 12.1451L17.7835 3.875Z"
-            fill="currentColor"
-            fill-opacity="0.7"
-          />
-        </svg> -->
       </div>
       <a
         *ngIf="!AuthService.isLoggedIn"
@@ -83,20 +69,42 @@
       >
       <div class="profile-dropdown">
         <ul>
-          <li>
-            <a routerLink="/profile">
-              My Initiatives
+          <li class="mobile-show">
+            <a href="https://derricksp.github.io/kampong/" target="_blank"
+              >What We Do</a
+            >
+          </li>
+          <li class="mobile-show">
+            <a routerLink="/search">
+              <svg
+                width="20px"
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="fas"
+                data-icon="search"
+                class="svg-inline--fa fa-search fa-w-16 mr-2"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
+                ></path>
+              </svg>
+              Search
             </a>
+            <hr />
+          </li>
+
+          <li>
+            <a routerLink="/profile"> My Initiatives </a>
           </li>
           <li>
-            <a routerLink="/profile">
-              Profile
-            </a>
+            <a routerLink="/profile"> Profile </a>
           </li>
           <li>
-            <a (click)="logout()">
-              Log Out
-            </a>
+            <a class="btn red-btn" (click)="logout()"> Logout </a>
           </li>
         </ul>
       </div>

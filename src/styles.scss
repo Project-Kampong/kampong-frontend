@@ -73,6 +73,7 @@ h3 {
     color: #b33a3a !important;
   }
 }
+
 .outline-btn {
   display: inline-block;
   border: 1px solid black;
@@ -158,6 +159,31 @@ h3 {
       cursor: pointer;
       background: #34ad5f;
       color: white;
+    }
+  }
+}
+
+.suggested-search {
+  margin-bottom: 2rem;
+  .label {
+    color: #fb3958;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    li {
+      display: inline-block;
+      padding: 0.25rem 1rem;
+      border-radius: 20px;
+      color: #333;
+      font-weight: bold;
+      background: rgb(221, 221, 221);
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
     }
   }
 }

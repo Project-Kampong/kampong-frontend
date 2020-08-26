@@ -56,6 +56,7 @@ export class ListingsService {
         this.getListingLoop(data["pagination"]["next"]["page"]);
       } else {
         this.ListingData = this.tempListingData;
+        this.tempListingData = [];
       }
     });
   }
