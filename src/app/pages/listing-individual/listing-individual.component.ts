@@ -1,9 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Inject } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { ListingsService } from "@app/services/listings.service";
 import { ProfileService } from "@app/services/profile.service";
 import { AuthService } from "@app/services/auth.service";
+import { SnackbarService } from "@app/services/snackbar.service";
 // Interface
 import {
   Listing,
@@ -28,7 +29,8 @@ export class ListingIndividualComponent implements OnInit {
     private route: ActivatedRoute,
     private ListingsService: ListingsService,
     private ProfileService: ProfileService,
-    public AuthService: AuthService
+    public AuthService: AuthService,
+    public SnackbarService: SnackbarService
   ) {}
 
   listingId;
@@ -203,20 +205,6 @@ export class ListingIndividualComponent implements OnInit {
     this.fileLimitChecker(true);
     this.fileArr.push(this.selectedFile);
     console.log(this.fileArr);
-
-    // if (this.selectedFile.size > 500000) {
-    //   console.log(this.selectedFile);
-    // } else {
-    //   // Display Image
-    //   var reader: FileReader = new FileReader();
-    //   reader.onload = (e) => {
-    //     this.fileDisplayArr.push(reader.result.toString());
-    //   };
-    //   reader.readAsDataURL(event.target.files[0]);
-    //   this.fileLimitChecker(true);
-    //   this.fileArr.push(this.selectedFile);
-    //   console.log(this.fileArr);
-    // }
   }
 
   removeFile(i) {
@@ -258,12 +246,21 @@ export class ListingIndividualComponent implements OnInit {
       // Get Updates
       this.ListingsService.getSelectedListingUpdates(this.listingId).subscribe(
         (data) => {
+          this.SnackbarService.openSnackBar(
+            this.SnackbarService.DialogList.upload_updates.success,
+            true
+          );
           this.UpdatesArr = data["data"];
           this.UpdatesArr.sort((a, b) => {
             return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
           });
         },
-        (err) => {},
+        (err) => {
+          this.SnackbarService.openSnackBar(
+            this.SnackbarService.DialogList.upload_updates.error,
+            false
+          );
+        },
         () => {
           setTimeout(() => {
             this.initiateSlick();
@@ -330,6 +327,10 @@ export class ListingIndividualComponent implements OnInit {
       // Get Comments
       this.ListingsService.getSelectedListingComments(this.listingId).subscribe(
         (data) => {
+          this.SnackbarService.openSnackBar(
+            this.SnackbarService.DialogList.upload_comments.success,
+            true
+          );
           this.CommentsArr = data["data"];
           this.CommentsArr.sort((a, b) => {
             return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
@@ -350,6 +351,10 @@ export class ListingIndividualComponent implements OnInit {
       // Get Comments
       this.ListingsService.getSelectedListingComments(this.listingId).subscribe(
         (data) => {
+          this.SnackbarService.openSnackBar(
+            this.SnackbarService.DialogList.upload_comments.success,
+            true
+          );
           this.CommentsArr = data["data"];
           this.CommentsArr.sort((a, b) => {
             return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
@@ -389,12 +394,20 @@ export class ListingIndividualComponent implements OnInit {
   liked_clicked() {
     if (this.userLikedID == "") {
       this.ListingsService.LikedListing(this.listingId).subscribe((data) => {
+        this.SnackbarService.openSnackBar(
+          this.SnackbarService.DialogList.liked_listing.liked,
+          true
+        );
         $(".like-btn").toggleClass("liked");
         this.userLikedID = data["data"]["like_id"];
       });
     } else {
       this.ListingsService.UnLikedListing(this.userLikedID).subscribe(
         (data) => {
+          this.SnackbarService.openSnackBar(
+            this.SnackbarService.DialogList.liked_listing.unliked,
+            true
+          );
           this.userLikedID = "";
           $(".like-btn").toggleClass("liked");
         }
@@ -426,12 +439,21 @@ export class ListingIndividualComponent implements OnInit {
           this.listingId
         ).subscribe(
           (data) => {
+            this.SnackbarService.openSnackBar(
+              this.SnackbarService.DialogList.delete_updates.success,
+              true
+            );
             this.UpdatesArr = data["data"];
             this.UpdatesArr.sort((a, b) => {
               return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
             });
           },
-          (err) => {},
+          (err) => {
+            this.SnackbarService.openSnackBar(
+              this.SnackbarService.DialogList.delete_updates.error,
+              false
+            );
+          },
           () => {
             setTimeout(() => {
               this.initiateSlick();
@@ -447,6 +469,10 @@ export class ListingIndividualComponent implements OnInit {
       this.ListingsService.removeListingComments(
         comment.listing_comment_id
       ).subscribe(() => {
+        this.SnackbarService.openSnackBar(
+          this.SnackbarService.DialogList.delete_comments.success,
+          true
+        );
         // Get Comments
         this.ListingsService.getSelectedListingComments(
           this.listingId

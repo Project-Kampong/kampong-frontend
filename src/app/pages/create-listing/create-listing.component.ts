@@ -11,6 +11,7 @@ import { MatChipInputEvent } from "@angular/material/chips";
 import { Router } from "@angular/router";
 
 import { ListingsService } from "@app/services/listings.service";
+import { SnackbarService } from "@app/services/snackbar.service";
 declare var $: any;
 
 // Interface
@@ -28,7 +29,8 @@ export class CreateListingComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public ListingsService: ListingsService,
-    private router: Router
+    private router: Router,
+    public SnackbarService: SnackbarService
   ) {}
 
   fileDisplayArr = [];
@@ -280,8 +282,17 @@ export class CreateListingComponent implements OnInit {
       },
       (err) => {
         console.log(err);
+        this.SnackbarService.openSnackBar(
+          this.SnackbarService.DialogList.create_listing.error,
+          false
+        );
+        this.router.navigate(["/home"]);
       },
       () => {
+        this.SnackbarService.openSnackBar(
+          this.SnackbarService.DialogList.create_listing.success,
+          true
+        );
         this.router.navigate(["/listing/" + routeTo]);
       }
     );

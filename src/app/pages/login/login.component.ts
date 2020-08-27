@@ -4,6 +4,8 @@ import { AuthService } from "@app/services/auth.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
+import { SnackbarService } from "@app/services/snackbar.service";
+
 // Interface
 import { UserLogin, UserLoginDefault } from "@app/interfaces/user";
 
@@ -16,7 +18,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private AuthService: AuthService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    public SnackbarService: SnackbarService
   ) {}
 
   loginCredentials: FormGroup;
@@ -27,11 +30,17 @@ export class LoginComponent implements OnInit {
     });
 
     this.AuthService.LoginResponse.subscribe(() => {
+      this.SnackbarService.openSnackBar(
+        this.SnackbarService.DialogList.login.success,
+        true
+      );
       this.router.navigate(["/home"]);
     });
     this.AuthService.invalidLoginResponse.subscribe(() => {
-      console.log("invalid login");
-      this.loginErrorMsg = true;
+      this.SnackbarService.openSnackBar(
+        this.SnackbarService.DialogList.login.error,
+        false
+      );
     });
   }
   loginCheck() {
@@ -39,7 +48,10 @@ export class LoginComponent implements OnInit {
       this.loginCredentials.value.email == "" ||
       this.loginCredentials.value.password == ""
     ) {
-      this.loginErrorMsg = true;
+      this.SnackbarService.openSnackBar(
+        this.SnackbarService.DialogList.login.error,
+        false
+      );
     } else {
       this.AuthService.userLogin(this.loginCredentials.value);
     }

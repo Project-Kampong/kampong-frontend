@@ -12,6 +12,7 @@ declare var $: any;
 // Services
 import { AuthService } from "@app/services/auth.service";
 import { ProfileService } from "@app/services/profile.service";
+import { SnackbarService } from "@app/services/snackbar.service";
 // Interface
 import { Profile, DefaultProfile } from "@app/interfaces/profile";
 
@@ -27,7 +28,8 @@ export class EditProfileComponent implements OnInit {
     private fb: FormBuilder,
     public AuthService: AuthService,
     public ProfileService: ProfileService,
-    private router: Router
+    private router: Router,
+    public SnackbarService: SnackbarService
   ) {}
 
   ngOnInit() {
@@ -74,11 +76,20 @@ export class EditProfileComponent implements OnInit {
           );
         } else {
           this.AuthService.LoginResponse.emit();
+          this.SnackbarService.openSnackBar(
+            this.SnackbarService.DialogList.update_profile.success,
+            true
+          );
           this.router.navigate(["/profile"]);
         }
       },
       (err) => {
         console.log("error");
+        this.SnackbarService.openSnackBar(
+          this.SnackbarService.DialogList.update_profile.error,
+          false
+        );
+        this.router.navigate(["/profile"]);
       }
     );
   }

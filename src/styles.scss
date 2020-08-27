@@ -334,3 +334,55 @@ body {
     height: 160px;
   }
 }
+
+.success-dialog {
+  background: #00c09e;
+  .dialog-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .dialog-message {
+      color: white;
+    }
+  }
+  .close-btn {
+    border: none;
+    background: none;
+    &:focus {
+      outline: none;
+    }
+    &:after {
+      content: "\f057";
+      font-family: "Font Awesome\ 5 Free";
+      font-weight: bold;
+      font-size: 1.3rem;
+      color: white;
+    }
+  }
+}
+
+.error-dialog {
+  background: #ff3b4f;
+  .dialog-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .dialog-message {
+      color: white;
+    }
+  }
+  .close-btn {
+    border: none;
+    background: none;
+    &:focus {
+      outline: none;
+    }
+    &:after {
+      content: "\f057";
+      font-family: "Font Awesome\ 5 Free";
+      font-weight: bold;
+      font-size: 1.3rem;
+      color: white;
+    }
+  }
+}

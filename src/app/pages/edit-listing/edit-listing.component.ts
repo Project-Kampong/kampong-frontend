@@ -11,6 +11,7 @@ import { MatChipInputEvent } from "@angular/material/chips";
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { ListingsService } from "@app/services/listings.service";
+import { SnackbarService } from "@app/services/snackbar.service";
 declare var $: any;
 
 // Interface
@@ -30,7 +31,8 @@ export class EditListingComponent implements OnInit {
     private fb: FormBuilder,
     public ListingsService: ListingsService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public SnackbarService: SnackbarService
   ) {}
 
   fileDisplayArr = [];
@@ -335,10 +337,18 @@ export class EditListingComponent implements OnInit {
         });
       },
       (err) => {
+        this.SnackbarService.openSnackBar(
+          this.SnackbarService.DialogList.update_listing.error,
+          false
+        );
         console.log(err);
         return;
       },
       () => {
+        this.SnackbarService.openSnackBar(
+          this.SnackbarService.DialogList.update_listing.success,
+          true
+        );
         this.router.navigate(["/listing/" + this.listingId]);
       }
     );
@@ -507,10 +517,23 @@ export class EditListingComponent implements OnInit {
   // Remove Listing
   removeListing() {
     if (confirm("Are you sure to delete " + this.ListingForm.value.title)) {
-      this.ListingsService.removeListing(this.listingId).subscribe((data) => {
-        console.log(data);
-        this.router.navigate(["/profile"]);
-      });
+      this.ListingsService.removeListing(this.listingId).subscribe(
+        (data) => {
+          console.log(data);
+          this.SnackbarService.openSnackBar(
+            this.SnackbarService.DialogList.delete_listing.success,
+            true
+          );
+          this.router.navigate(["/profile"]);
+        },
+        (err) => {
+          this.SnackbarService.openSnackBar(
+            this.SnackbarService.DialogList.delete_listing.error,
+            false
+          );
+          this.router.navigate(["/profile"]);
+        }
+      );
     }
   }
 }

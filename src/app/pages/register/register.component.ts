@@ -6,6 +6,8 @@ import {
   ValidationErrors,
 } from "@angular/forms";
 
+import { SnackbarService } from "@app/services/snackbar.service";
+
 import { AuthService } from "@app/services/auth.service";
 
 @Component({
@@ -14,7 +16,11 @@ import { AuthService } from "@app/services/auth.service";
   styleUrls: ["./register.component.scss"],
 })
 export class RegisterComponent implements OnInit {
-  constructor(private fb: FormBuilder, public AuthService: AuthService) {}
+  constructor(
+    private fb: FormBuilder,
+    public AuthService: AuthService,
+    public SnackbarService: SnackbarService
+  ) {}
 
   LoginForm: FormGroup;
   showCheckMail = false;
@@ -31,10 +37,17 @@ export class RegisterComponent implements OnInit {
 
     this.AuthService.validRegisterResponse.subscribe(() => {
       this.showCheckMail = true;
+      this.SnackbarService.openSnackBar(
+        this.SnackbarService.DialogList.register.success,
+        true
+      );
     });
     this.AuthService.invalidRegisterResponse.subscribe(() => {
-      console.log("error true");
-      this.registerError = true;
+      this.SnackbarService.openSnackBar(
+        this.SnackbarService.DialogList.register.error,
+        false
+      );
+      // this.registerError = true;
     });
   }
   register() {

@@ -4,10 +4,9 @@ import { NgModule } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
-
 import { HashLocationStrategy, LocationStrategy } from "@angular/common";
-
 import { CookieService } from "ngx-cookie-service";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 // Material Components
 import { MatInputModule } from "@angular/material/input";
@@ -16,7 +15,7 @@ import { MatNativeDateModule, MAT_DATE_LOCALE } from "@angular/material";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSelectModule } from "@angular/material/select";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 // Components
 import { AppComponent } from "./app.component";
@@ -27,6 +26,8 @@ import { UpdateCarouselComponent } from "./components/update-carousel/update-car
 import { MilestonesComponent } from "./components/milestones/milestones.component";
 import { ContentWrapperComponent } from "./layout/content-wrapper/content-wrapper.component";
 import { EditListingCardsComponent } from "./components/edit-listing-cards/edit-listing-cards.component";
+import { SnackbarErrorComponent } from "./components/snackbar-error/snackbar-error.component";
+import { SnackbarSuccessComponent } from "./components/snackbar-success/snackbar-success.component";
 
 // Pages
 import { ListingHomeComponent } from "@app/pages/listing-home/listing-home.component";
@@ -60,6 +61,8 @@ import { SearchComponent } from "@app/pages/search/search.component";
     EditListingCardsComponent,
     EditListingComponent,
     SearchComponent,
+    SnackbarErrorComponent,
+    SnackbarSuccessComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,7 +77,10 @@ import { SearchComponent } from "@app/pages/search/search.component";
     MatChipsModule,
     MatIconModule,
     MatSelectModule,
+    MatSnackBarModule,
   ],
+  exports: [],
+  entryComponents: [SnackbarSuccessComponent, SnackbarErrorComponent],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: "en-GB" },
     CookieService,
