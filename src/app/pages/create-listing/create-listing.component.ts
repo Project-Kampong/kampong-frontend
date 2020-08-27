@@ -10,11 +10,11 @@ import { MatChipInputEvent } from "@angular/material/chips";
 
 import { Router } from "@angular/router";
 
-import { ListingsService } from "../services/listings.service";
+import { ListingsService } from "@app/services/listings.service";
 declare var $: any;
 
 // Interface
-import { Listing, CreateListing, ListingStory } from "../interfaces/listing";
+import { Listing, CreateListing, ListingStory } from "@app/interfaces/listing";
 
 @Component({
   selector: "app-create-listing",

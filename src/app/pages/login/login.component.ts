@@ -1,11 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 
-import { AuthService } from "../services/auth.service";
+import { AuthService } from "@app/services/auth.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
 // Interface
-import { UserLogin, UserLoginDefault } from "../interfaces/user";
+import { UserLogin, UserLoginDefault } from "@app/interfaces/user";
 
 @Component({
   selector: "app-login",

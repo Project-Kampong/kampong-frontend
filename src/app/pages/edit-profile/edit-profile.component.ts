@@ -10,10 +10,10 @@ import { Router } from "@angular/router";
 declare var $: any;
 
 // Services
-import { AuthService } from "../services/auth.service";
-import { ProfileService } from "../services/profile.service";
+import { AuthService } from "@app/services/auth.service";
+import { ProfileService } from "@app/services/profile.service";
 // Interface
-import { Profile, DefaultProfile } from "../interfaces/profile";
+import { Profile, DefaultProfile } from "@app/interfaces/profile";
 
 @Component({
   selector: "app-edit-profile",

@@ -1,7 +1,7 @@
-<app-banner *ngIf="ListingsService.ListingData != null"></app-banner>
+<app-banner *ngIf="ListingsService.ListingData"></app-banner>
 
-<section class="container block-content">
-  <div *ngIf="LikedArr.length != 0" class="col-12">
+<section *ngIf="LikedArr.length != 0" class="container block-content">
+  <div class="col-12">
     <h2>Your Favourites</h2>
   </div>
   <app-listing-cards [ListingData]="LikedArr"></app-listing-cards>
@@ -23,7 +23,7 @@
     </ul>
   </div> -->
   <app-listing-cards
-    *ngIf="ListingsService.ListingData != null"
+    *ngIf="ListingsService.ListingData"
     [ListingData]="ListingsService.ListingData"
   ></app-listing-cards>
 </section>

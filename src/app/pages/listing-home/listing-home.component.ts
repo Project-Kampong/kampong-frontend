@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { ListingsService } from "../services/listings.service";
-import { AuthService } from "../services/auth.service";
-import { Listing } from "../interfaces/listing";
+import { ListingsService } from "@app/services/listings.service";
+import { AuthService } from "@app/services/auth.service";
+import { Listing } from "@app/interfaces/listing";
 declare var $: any;
 
 @Component({

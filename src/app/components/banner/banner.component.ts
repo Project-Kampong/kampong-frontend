@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 declare var $: any;
-import { ListingsService } from "../../services/listings.service";
+import { ListingsService } from "@app/services/listings.service";
 
 @Component({
   selector: "app-banner",

@@ -2,21 +2,21 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
 // Layouts
+//ContentWrapperComponent
 import { ContentWrapperComponent } from "./layout/content-wrapper/content-wrapper.component";
 
 // Import Components
-import { ListingHomeComponent } from "./listing-home/listing-home.component";
-import { ListingIndividualComponent } from "./listing-individual/listing-individual.component";
-import { UserProfileComponent } from "./user-profile/user-profile.component";
-import { PublicProfileComponent } from "./public-profile/public-profile.component";
-import { LoginComponent } from "./login/login.component";
-import { RegisterComponent } from "./register/register.component";
-import { EditProfileComponent } from "./edit-profile/edit-profile.component";
-import { CreateListingComponent } from "./create-listing/create-listing.component";
-import { EditListingComponent } from "./edit-listing/edit-listing.component";
-import { SearchComponent } from "./search/search.component";
+import { ListingHomeComponent } from "@app/pages/listing-home/listing-home.component";
+import { ListingIndividualComponent } from "@app/pages/listing-individual/listing-individual.component";
+import { UserProfileComponent } from "@app/pages/user-profile/user-profile.component";
+import { PublicProfileComponent } from "@app/pages/public-profile/public-profile.component";
+import { LoginComponent } from "@app/pages/login/login.component";
+import { RegisterComponent } from "@app/pages/register/register.component";
+import { EditProfileComponent } from "@app/pages/edit-profile/edit-profile.component";
+import { CreateListingComponent } from "@app/pages/create-listing/create-listing.component";
+import { EditListingComponent } from "@app/pages/edit-listing/edit-listing.component";
+import { SearchComponent } from "@app/pages/search/search.component";
 
-//ContentWrapperComponent
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "login", component: LoginComponent },

@@ -2,11 +2,11 @@ import { Component, OnInit } from "@angular/core";
 
 declare var $: any;
 
-import { AuthService } from "../../services/auth.service";
-import { ProfileService } from "../../services/profile.service";
+import { AuthService } from "@app/services/auth.service";
+import { ProfileService } from "@app/services/profile.service";
 
 // Interface
-import { Profile } from "../../interfaces/profile";
+import { Profile } from "@app/interfaces/profile";
 @Component({
   selector: "app-content-wrapper",
   templateUrl: "./content-wrapper.component.html",

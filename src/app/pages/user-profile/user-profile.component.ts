@@ -1,12 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 
-import { ListingsService } from "../services/listings.service";
-import { AuthService } from "../services/auth.service";
-import { ProfileService } from "../services/profile.service";
+import { ListingsService } from "@app/services/listings.service";
+import { AuthService } from "@app/services/auth.service";
+import { ProfileService } from "@app/services/profile.service";
 
 // Interface
-import { Profile } from "../interfaces/profile";
-import { Listing } from "../interfaces/listing";
+import { Profile } from "@app/interfaces/profile";
+import { Listing } from "@app/interfaces/listing";
 
 @Component({
   selector: "app-user-profile",

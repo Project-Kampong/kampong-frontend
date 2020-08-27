@@ -2,7 +2,7 @@
   <div class="d-flex flex-wrap">
     <div class="col-lg-6 pr-lg-0">
       <app-image-carousel
-        *ngIf="SliderImageArr != []"
+        *ngIf="SliderImageArr"
         [SliderImages]="SliderImageArr"
       ></app-image-carousel>
     </div>
@@ -14,13 +14,13 @@
           {{ ListingData["tagline"] }}
         </p>
         <div class="hashtags-list">
-          <ul *ngIf="Hashtags != []">
+          <ul *ngIf="Hashtags">
             <li *ngFor="let data of Hashtags" class="active">
               {{ data.tag }}
             </li>
           </ul>
         </div>
-        <div class="user-info" *ngIf="ProfileInfo != null">
+        <div class="user-info" *ngIf="ProfileInfo">
           <div class="profile-image">
             <img src="{{ ProfileInfo.profile_picture }}" />
           </div>
@@ -32,7 +32,7 @@
 
         <div class="d-flex justify-content-between align-items-center">
           <div class="listing-stats">
-            <div class="stats" *ngIf="listingLikes != null">
+            <div class="stats" *ngIf="listingLikes">
               <p>{{ listingLikes }}</p>
               <span>likes</span>
             </div>
@@ -48,7 +48,11 @@
               <span>Enquire</span>
             </div>
           </div>
-          <p class="like-btn" (click)="liked_clicked()"></p>
+          <p
+            *ngIf="AuthService.isLoggedIn == true"
+            class="like-btn"
+            (click)="liked_clicked()"
+          ></p>
         </div>
       </div>
     </div>
@@ -88,49 +92,33 @@
 <section class="container block-content pt-4">
   <div class="col-12">
     <ul class="navigation-tabs">
-      <li class="active" (click)="tabs_selected('story')">
-        Story
-      </li>
-      <li (click)="tabs_selected('FAQ')">
-        FAQ
-      </li>
-      <li (click)="tabs_selected('updates')">
-        Updates
-      </li>
-      <li (click)="tabs_selected('comments')">
-        Comments
-      </li>
+      <li class="active" (click)="tabs_selected('story')">Story</li>
+      <li (click)="tabs_selected('FAQ')">FAQ</li>
+      <li (click)="tabs_selected('updates')">Updates</li>
+      <li (click)="tabs_selected('comments')">Comments</li>
     </ul>
 
     <!-- Tab Navigation Content -->
     <!-- Story -->
     <div class="tabs-content" id="story">
-      <div *ngIf="Stories != null">
+      <div *ngIf="Stories">
         <p>
           {{ Stories.overview }}
         </p>
-        <label>
-          Current Problem
-        </label>
+        <label> Current Problem </label>
         <p>
           {{ Stories.problem }}
         </p>
-        <label>
-          Solution
-        </label>
+        <label> Solution </label>
         <p>
           {{ Stories.solution }}
         </p>
-        <label>
-          Ideal outcome
-        </label>
+        <label> Ideal outcome </label>
         <p>
           {{ Stories.outcome }}
         </p>
       </div>
-      <label>
-        Milestones
-      </label>
+      <label> Milestones </label>
       <app-milestones
         *ngIf="MilestoneArr != []"
         [MilestoneArr]="MilestoneArr"
@@ -166,7 +154,7 @@
             Post Update
           </button>
         </div>
-        <div *ngIf="updatesFormOpen == true" style="padding: 1rem;">
+        <div *ngIf="updatesFormOpen == true" style="padding: 1rem">
           <div class="custom-input">
             <label class="input-label">Images (Maximum of 5)</label>
             <div class="d-flex flex-wrap align-items-start mt-2 image-output">
@@ -290,7 +278,7 @@
                 />
               </div>
             </div>
-            <div class="ml-3" style="flex: 1;">
+            <div class="ml-3" style="flex: 1">
               <div class="comments-info">
                 <div class="d-flex justify-content-between mb-2">
                   <p
@@ -372,7 +360,7 @@
                     />
                   </div>
                 </div>
-                <div class="ml-3" style="flex: 1;">
+                <div class="ml-3" style="flex: 1">
                   <div class="comments-info">
                     <div class="d-flex justify-content-between mb-2">
                       <p

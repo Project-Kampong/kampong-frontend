@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { AuthService } from "../services/auth.service";
+import { AuthService } from "@app/services/auth.service";
 
+import { API } from "@app/interfaces/api";
 @Injectable({
   providedIn: "root",
 })
@@ -17,14 +18,14 @@ export class ProfileService {
   AuthOptions = this.AuthService.AuthOptions;
 
   getUserProfile(userId) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/users/" + userId + "/profiles",
       this.options
     );
   }
 
   getPublicLikes(userId) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/users/" + userId + "/likes",
       this.options
     );
@@ -32,7 +33,7 @@ export class ProfileService {
 
   // Write
   updateUserProfile(userId, data) {
-    return this.httpClient.put(
+    return this.httpClient.put<API>(
       this.url + "api/users/" + userId + "/profiles",
       data,
       this.AuthOptions
@@ -40,7 +41,7 @@ export class ProfileService {
   }
 
   updateUserProfilePic(userId, data) {
-    return this.httpClient.put(
+    return this.httpClient.put<API>(
       this.url + "api/users/" + userId + "/profiles/upload-photo",
       data,
       this.AuthService.OnlyAuthHttpHeaders

@@ -16,27 +16,29 @@ import { MatNativeDateModule, MAT_DATE_LOCALE } from "@angular/material";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSelectModule } from "@angular/material/select";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 // Components
 import { AppComponent } from "./app.component";
-import { ListingHomeComponent } from "./listing-home/listing-home.component";
 import { BannerComponent } from "./components/banner/banner.component";
 import { ListingCardsComponent } from "./components/listing-cards/listing-cards.component";
-import { ListingIndividualComponent } from "./listing-individual/listing-individual.component";
 import { ImageCarouselComponent } from "./components/image-carousel/image-carousel.component";
 import { UpdateCarouselComponent } from "./components/update-carousel/update-carousel.component";
 import { MilestonesComponent } from "./components/milestones/milestones.component";
-import { UserProfileComponent } from "./user-profile/user-profile.component";
-import { LoginComponent } from "./login/login.component";
 import { ContentWrapperComponent } from "./layout/content-wrapper/content-wrapper.component";
-import { RegisterComponent } from "./register/register.component";
-import { EditProfileComponent } from "./edit-profile/edit-profile.component";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { CreateListingComponent } from "./create-listing/create-listing.component";
-import { PublicProfileComponent } from "./public-profile/public-profile.component";
 import { EditListingCardsComponent } from "./components/edit-listing-cards/edit-listing-cards.component";
-import { EditListingComponent } from "./edit-listing/edit-listing.component";
-import { SearchComponent } from './search/search.component';
+
+// Pages
+import { ListingHomeComponent } from "@app/pages/listing-home/listing-home.component";
+import { ListingIndividualComponent } from "@app/pages/listing-individual/listing-individual.component";
+import { UserProfileComponent } from "@app/pages/user-profile/user-profile.component";
+import { LoginComponent } from "@app/pages/login/login.component";
+import { RegisterComponent } from "@app/pages/register/register.component";
+import { EditProfileComponent } from "@app/pages/edit-profile/edit-profile.component";
+import { CreateListingComponent } from "@app/pages/create-listing/create-listing.component";
+import { PublicProfileComponent } from "@app/pages/public-profile/public-profile.component";
+import { EditListingComponent } from "@app/pages/edit-listing/edit-listing.component";
+import { SearchComponent } from "@app/pages/search/search.component";
 
 @NgModule({
   declarations: [

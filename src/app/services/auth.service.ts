@@ -4,7 +4,8 @@ import { CookieService } from "ngx-cookie-service";
 import { environment } from "./../../environments/environment";
 
 // Interface
-import { UserData } from "../interfaces/user";
+import { UserData } from "@app/interfaces/user";
+import { API } from "@app/interfaces/api";
 @Injectable({
   providedIn: "root",
 })
@@ -39,7 +40,7 @@ export class AuthService {
 
   userRegister(data) {
     return this.httpClient
-      .post(this.URL + "api/auth/register", data, this.options)
+      .post<API>(this.URL + "api/auth/register", data, this.options)
       .subscribe(
         (res) => {
           this.validRegisterResponse.emit();
@@ -52,7 +53,7 @@ export class AuthService {
 
   userLogin(credentials) {
     return this.httpClient
-      .post(this.URL + "api/auth/login", credentials, this.options)
+      .post<API>(this.URL + "api/auth/login", credentials, this.options)
       .subscribe(
         (res) => {
           this.AuthToken = res["token"];
@@ -68,7 +69,7 @@ export class AuthService {
   }
   getUserDetails() {
     return this.httpClient
-      .get(this.URL + "api/auth/me", this.AuthOptions)
+      .get<API>(this.URL + "api/auth/me", this.AuthOptions)
       .subscribe((data) => {
         console.log(data);
         this.UserData = data["data"];
@@ -116,7 +117,7 @@ export class AuthService {
 
   // Update Password
   updatePassword(data) {
-    return this.httpClient.put(
+    return this.httpClient.put<API>(
       this.URL + "api/auth/updatepassword",
       data,
       this.AuthOptions

@@ -1,10 +1,13 @@
 import { Injectable, EventEmitter } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-
-import { Listing, DefaultListing } from "../interfaces/listing";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { Listing, DefaultListing } from "@app/interfaces/listing";
+import { API } from "@app/interfaces/api";
 
 // Services Import
-import { AuthService } from "../services/auth.service";
+import { AuthService } from "@app/services/auth.service";
+import { title } from "process";
 @Injectable({
   providedIn: "root",
 })
@@ -34,14 +37,14 @@ export class ListingsService {
 
   // Static Data
   getAllSkillsets(page) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/skills?page=" + page,
       this.options
     );
   }
 
-  getListings(page) {
-    return this.httpClient.get(
+  getListings(page: number) {
+    return this.httpClient.get<API>(
       this.url + "api/listings?page=" + page,
       this.options
     );
@@ -50,7 +53,6 @@ export class ListingsService {
   getListingLoop(pagenum) {
     this.getListings(pagenum).subscribe((data) => {
       this.tempListingData.push(...data["data"]);
-      console.log(this.tempListingData);
       this.FeaturedListingData = data["data"];
       if (data["pagination"]["next"] != null) {
         this.getListingLoop(data["pagination"]["next"]["page"]);
@@ -62,7 +64,7 @@ export class ListingsService {
   }
 
   getSearchResult(keyword) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url +
         "api/listings/search-title?title=" +
         keyword +
@@ -72,14 +74,14 @@ export class ListingsService {
   }
 
   getPublicOwnedListings(userId) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/users/" + userId + "/listings/owner",
       this.options
     );
   }
 
   getSelectedListing(listingId) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/listings/" + listingId,
       this.options
     );
@@ -87,14 +89,14 @@ export class ListingsService {
 
   // Listing Likes
   getSelectedListingLikes(listingId) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/listings/" + listingId + "/likes",
       this.options
     );
   }
   // Listing FAQ
   getSelectedListingFAQ(listingId) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/listings/" + listingId + "/faqs",
       this.options
     );
@@ -102,7 +104,7 @@ export class ListingsService {
 
   // Listing Skills
   getSelectedListingSkills(listingId) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/listings/" + listingId + "/listing-skills",
       this.options
     );
@@ -110,7 +112,7 @@ export class ListingsService {
 
   // Listing Stories
   getSelectedListingStories(listingId) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/listings/" + listingId + "/stories",
       this.options
     );
@@ -118,7 +120,7 @@ export class ListingsService {
 
   // Listing Comments
   getSelectedListingComments(listingId) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/listings/" + listingId + "/listing-comments",
       this.options
     );
@@ -126,7 +128,7 @@ export class ListingsService {
 
   // Updates
   getSelectedListingUpdates(listingId) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/listings/" + listingId + "/listing-updates",
       this.options
     );
@@ -134,7 +136,7 @@ export class ListingsService {
 
   // Listing Milestones
   getSelectedListingMilestones(listingId) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/listings/" + listingId + "/milestones",
       this.options
     );
@@ -142,7 +144,7 @@ export class ListingsService {
 
   // Listing Hashtags
   getSelectedListingHashtags(listingId) {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/listings/" + listingId + "/hashtags",
       this.options
     );
@@ -150,7 +152,7 @@ export class ListingsService {
 
   // Liked Listing - by User
   getLikedListing() {
-    return this.httpClient.get(
+    return this.httpClient.get<API>(
       this.url + "api/users/" + this.AuthService.LoggedInUserID + "/likes",
       this.options
     );
@@ -158,7 +160,7 @@ export class ListingsService {
 
   // Write
   uploadFile(fd) {
-    return this.httpClient.post(
+    return this.httpClient.post<API>(
       this.url + "api/file-upload",
       fd,
       this.AuthService.OnlyAuthHttpHeaders
@@ -166,7 +168,7 @@ export class ListingsService {
   }
 
   createListing(data) {
-    return this.httpClient.post(
+    return this.httpClient.post<API>(
       this.url + "api/listings",
       data,
       this.AuthService.OnlyAuthHttpHeaders
@@ -174,7 +176,7 @@ export class ListingsService {
   }
 
   UpdateListingStory(listingId, data) {
-    return this.httpClient.put(
+    return this.httpClient.put<API>(
       this.url + "api/listings/" + listingId + "/stories",
       data,
       this.AuthService.AuthOptions
@@ -182,7 +184,7 @@ export class ListingsService {
   }
 
   createListingMilestones(data) {
-    return this.httpClient.post(
+    return this.httpClient.post<API>(
       this.url + "api/milestones",
       data,
       this.AuthService.AuthOptions
@@ -190,7 +192,7 @@ export class ListingsService {
   }
 
   createListingHashtags(data) {
-    return this.httpClient.post(
+    return this.httpClient.post<API>(
       this.url + "api/hashtags",
       data,
       this.AuthService.AuthOptions
@@ -198,7 +200,7 @@ export class ListingsService {
   }
 
   createListingSkills(data) {
-    return this.httpClient.post(
+    return this.httpClient.post<API>(
       this.url + "api/skills",
       {
         skill: data,
@@ -208,7 +210,7 @@ export class ListingsService {
   }
 
   connectListingSkills(data) {
-    return this.httpClient.post(
+    return this.httpClient.post<API>(
       this.url + "api/listing-skills",
       data,
       this.AuthService.AuthOptions
@@ -216,7 +218,7 @@ export class ListingsService {
   }
 
   createListingFAQ(data) {
-    return this.httpClient.post(
+    return this.httpClient.post<API>(
       this.url + "api/faqs",
       data,
       this.AuthService.AuthOptions
@@ -225,7 +227,7 @@ export class ListingsService {
 
   // Comments
   CreateListingComments(data) {
-    return this.httpClient.post(
+    return this.httpClient.post<API>(
       this.url + "api/listing-comments",
       data,
       this.AuthService.AuthOptions
@@ -234,7 +236,7 @@ export class ListingsService {
 
   // Updates
   CreateListingUpdates(data) {
-    return this.httpClient.post(
+    return this.httpClient.post<API>(
       this.url + "api/listing-updates",
       data,
       this.AuthService.OnlyAuthHttpHeaders
@@ -243,7 +245,7 @@ export class ListingsService {
 
   // Like A Listing
   LikedListing(listing_id) {
-    return this.httpClient.post(
+    return this.httpClient.post<API>(
       this.url + "api/likes",
       { listing_id: listing_id },
       this.AuthService.AuthOptions
@@ -251,7 +253,7 @@ export class ListingsService {
   }
 
   UnLikedListing(like_id) {
-    return this.httpClient.delete(
+    return this.httpClient.delete<API>(
       this.url + "api/likes/" + like_id,
       this.AuthService.AuthOptions
     );
@@ -259,7 +261,7 @@ export class ListingsService {
 
   // UPDATE LISTING INFO SECTION
   updateListing(listingId, data) {
-    return this.httpClient.put(
+    return this.httpClient.put<API>(
       this.url + "api/listings/" + listingId,
       data,
       this.AuthService.OnlyAuthHttpHeaders
@@ -267,7 +269,7 @@ export class ListingsService {
   }
 
   updateMilestone(milestone_id, data) {
-    return this.httpClient.put(
+    return this.httpClient.put<API>(
       this.url + "api/milestones/" + milestone_id,
       data,
       this.AuthService.AuthOptions
@@ -275,7 +277,7 @@ export class ListingsService {
   }
 
   updateFAQ(faq_id, data) {
-    return this.httpClient.put(
+    return this.httpClient.put<API>(
       this.url + "api/faqs/" + faq_id,
       data,
       this.AuthService.AuthOptions
@@ -285,7 +287,7 @@ export class ListingsService {
   // Edit Listing
   // Delete
   removeListing(listingId) {
-    return this.httpClient.put(
+    return this.httpClient.put<API>(
       this.url + "api/listings/" + listingId + "/deactivate",
       {},
       this.AuthService.AuthOptions
@@ -293,35 +295,35 @@ export class ListingsService {
   }
 
   removeMilestone(milestone_id) {
-    return this.httpClient.delete(
+    return this.httpClient.delete<API>(
       this.url + "api/milestones/" + milestone_id,
       this.AuthService.AuthOptions
     );
   }
 
   removeFAQ(faq_id) {
-    return this.httpClient.delete(
+    return this.httpClient.delete<API>(
       this.url + "api/faqs/" + faq_id,
       this.AuthService.AuthOptions
     );
   }
 
   removeHashtags(hashtag_id) {
-    return this.httpClient.delete(
+    return this.httpClient.delete<API>(
       this.url + "api/hashtags/" + hashtag_id,
       this.AuthService.AuthOptions
     );
   }
 
   removeListingSkills(listing_skill_id) {
-    return this.httpClient.delete(
+    return this.httpClient.delete<API>(
       this.url + "api/listing-skills/" + listing_skill_id,
       this.AuthService.AuthOptions
     );
   }
 
   removeListingComments(comment_id) {
-    return this.httpClient.put(
+    return this.httpClient.put<API>(
       this.url + "api/listing-comments/" + comment_id + "/deactivate",
       {},
       this.AuthService.AuthOptions
@@ -329,7 +331,7 @@ export class ListingsService {
   }
 
   removeListingUpdates(update_id) {
-    return this.httpClient.delete(
+    return this.httpClient.delete<API>(
       this.url + "api/listing-updates/" + update_id,
       this.AuthService.AuthOptions
     );

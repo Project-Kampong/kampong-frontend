@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { ListingsService } from "../services/listings.service";
-import { ProfileService } from "../services/profile.service";
-import { AuthService } from "../services/auth.service";
+import { ListingsService } from "@app/services/listings.service";
+import { ProfileService } from "@app/services/profile.service";
+import { AuthService } from "@app/services/auth.service";
 // Interface
 import {
   Listing,
@@ -12,8 +12,8 @@ import {
   ListingSkills,
   ListingStories,
   ListingComments,
-} from "../interfaces/listing";
-import { Profile } from "../interfaces/profile";
+} from "@app/interfaces/listing";
+import { Profile } from "@app/interfaces/profile";
 
 declare var $: any;
 
@@ -99,17 +99,18 @@ export class ListingIndividualComponent implements OnInit {
           }
         });
 
-        // Check User Liked List
-        this.ListingsService.getLikedListing().subscribe((data) => {
-          console.log(data["data"]);
-          const likedArr = data["data"];
-          for (var i = 0; i < likedArr.length; i++) {
-            if (likedArr[i].listing_id == this.listingId) {
-              this.userLikedID = likedArr[i].like_id;
-              $(".like-btn").addClass("liked");
+        if (this.AuthService.isLoggedIn) {
+          // Check User Liked List
+          this.ListingsService.getLikedListing().subscribe((data) => {
+            const likedArr = data["data"];
+            for (var i = 0; i < likedArr.length; i++) {
+              if (likedArr[i].listing_id == this.listingId) {
+                this.userLikedID = likedArr[i].like_id;
+                $(".like-btn").addClass("liked");
+              }
             }
-          }
-        });
+          });
+        }
       },
       (err) => {
         this.router.navigate(["/home"]);
