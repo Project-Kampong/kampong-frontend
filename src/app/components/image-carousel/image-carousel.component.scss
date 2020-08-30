@@ -17,7 +17,7 @@
   }
 }
 .carousel-nav {
-  margin-top: 2rem;
+  margin-top: 1rem;
   padding: 0 2rem;
   @media (max-width: 1024px) {
     margin-top: 1rem;
@@ -27,6 +27,7 @@
     padding: 0 0.5rem;
     display: flex;
     align-items: center;
+    justify-content: center;
     height: 70px;
     img {
       height: 100%;
@@ -39,6 +40,7 @@
 video {
   height: 100%;
   width: 100%;
+
   &:focus {
     outline: none;
   }

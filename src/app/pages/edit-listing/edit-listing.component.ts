@@ -129,7 +129,7 @@ export class EditListingComponent implements OnInit {
     });
 
     // Grab Skillsets
-    this.paginationSkillsets(1);
+    this.paginationSkillsets();
 
     // Grab data
     this.ListingsService.getSelectedListing(this.listingId).subscribe(
@@ -414,21 +414,16 @@ export class EditListingComponent implements OnInit {
   }
 
   // Get Skillsets
-  paginationSkillsets(pagenum) {
-    this.ListingsService.getAllSkillsets(pagenum).subscribe((data) => {
+  paginationSkillsets() {
+    this.ListingsService.getAllSkillsets().subscribe((data) => {
       this.rawSkillsets.push(...data["data"]);
-      // Check for More
-      if (data["pagination"]["next"] != null) {
-        this.paginationSkillsets(data["pagination"]["next"]["page"]);
-      } else {
-        // Sort Skills
-        for (var i = 0; i < this.skillsets.length; i++) {
-          this.rawSkillsets.map((x) => {
-            if (x.skill_group == this.skillsets[i].name) {
-              this.skillsets[i].group.push(x);
-            }
-          });
-        }
+      // Sort Skills
+      for (var i = 0; i < this.skillsets.length; i++) {
+        this.rawSkillsets.map((x) => {
+          if (x.skill_group == this.skillsets[i].name) {
+            this.skillsets[i].group.push(x);
+          }
+        });
       }
     });
   }

@@ -69,6 +69,10 @@ export class ContentWrapperComponent implements OnInit {
           $(".dropdown-icon").toggleClass("active");
           $(".profile-dropdown").toggleClass("active");
         });
+        $(".profile-dropdown li").on("click", function () {
+          $(".dropdown-icon").toggleClass("active");
+          $(".profile-dropdown").toggleClass("active");
+        });
         this.dropDownInitiated = true;
       }
     });

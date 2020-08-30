@@ -43,19 +43,25 @@ export class ImageCarouselComponent implements OnInit {
   navSlickInit() {
     if (this.navSlicked) {
       return;
-    } else {
-      this.navSlicked = true;
-      $(".carousel-nav").slick({
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        asNavFor: ".carousel-slider",
-        dots: false,
-        arrows: true,
-        infinite: false,
-        centerMode: true,
-        focusOnSelect: true,
-        adaptiveHeight: false,
-      });
+    } else if (this.SliderImages.length > 0) {
+      if (this.SliderImages.length > 1) {
+        this.navSlicked = true;
+        $(".carousel-nav").slick({
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          asNavFor: ".carousel-slider",
+          dots: false,
+          arrows: true,
+          infinite: false,
+          centerMode: true,
+          focusOnSelect: true,
+          adaptiveHeight: false,
+        });
+      } else if (this.SliderImages.length == 1) {
+        $(".carousel-nav img").css({
+          "max-width": "100px",
+        });
+      }
     }
   }
 }

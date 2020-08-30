@@ -36,16 +36,16 @@ export class ListingsService {
   SkillsetsReturned = new EventEmitter<void>();
 
   // Static Data
-  getAllSkillsets(page) {
+  getAllSkillsets() {
     return this.httpClient.get<API>(
-      this.url + "api/skills?page=" + page,
+      this.url + "api/skills?limit=100&",
       this.options
     );
   }
 
   getListings(page: number) {
     return this.httpClient.get<API>(
-      this.url + "api/listings?page=" + page,
+      this.url + "api/listings?sort=created_on&page=" + page,
       this.options
     );
   }
