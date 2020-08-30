@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Inject } from "@angular/core";
 
 import {
   MatSnackBar,
@@ -6,6 +6,7 @@ import {
   MatSnackBarVerticalPosition,
 } from "@angular/material/snack-bar";
 
+import { AuthService } from "@app/services/auth.service";
 import { SnackbarSuccessComponent } from "@app/components/snackbar-success/snackbar-success.component";
 import { SnackbarErrorComponent } from "@app/components/snackbar-error/snackbar-error.component";
 
@@ -13,7 +14,10 @@ import { SnackbarErrorComponent } from "@app/components/snackbar-error/snackbar-
   providedIn: "root",
 })
 export class SnackbarService {
-  constructor(private _snackBar: MatSnackBar) {}
+  constructor(
+    private _snackBar: MatSnackBar,
+    private AuthService: AuthService
+  ) {}
 
   DialogList = {
     login: {
@@ -63,12 +67,11 @@ export class SnackbarService {
     },
   };
 
-  Dialogmessage: String = "";
   horizontalPosition: MatSnackBarHorizontalPosition = "right";
   verticalPosition: MatSnackBarVerticalPosition = "top";
 
   openSnackBar(message: String, success: boolean) {
-    this.Dialogmessage = message;
+    this.AuthService.Dialogmessage = message;
     if (success) {
       this._snackBar.openFromComponent(SnackbarSuccessComponent, {
         duration: 1000,

@@ -20,6 +20,7 @@
     padding: 1rem;
     border: 0.5px solid rgba(0, 0, 0, 0.1);
     height: 12rem;
+    position: relative;
     .category {
       // display: inline-flex;
       span {
@@ -62,5 +63,26 @@
       text-overflow: ellipsis;
       white-space: pre-wrap;
     }
+  }
+}
+
+.project-status-overlay {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  .project-status {
+    transform: translateY(-100%);
+    display: block;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: white;
+  }
+  .project-open {
+    background: #00c09da9;
+  }
+  .project-close {
+    background: #2e4057a9;
   }
 }

@@ -1,5 +1,5 @@
 import { Component, Inject } from "@angular/core";
-import { SnackbarService } from "@app/services/snackbar.service";
+import { AuthService } from "@app/services/auth.service";
 
 import {
   MatSnackBarConfig,
@@ -14,7 +14,7 @@ import {
 })
 export class SnackbarErrorComponent {
   constructor(
-    public SnackbarService: SnackbarService,
+    public AuthService: AuthService,
     public snackBarRef: MatSnackBarRef<SnackbarErrorComponent>,
     @Inject(MAT_SNACK_BAR_DATA) public data: any
   ) {}
