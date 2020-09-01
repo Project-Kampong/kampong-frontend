@@ -9,10 +9,6 @@
     <div class="col-lg-6">
       <div class="info-container">
         <p class="category">{{ ListingData["category"] }}</p>
-        <p class="title">{{ ListingData["title"] }}</p>
-        <p class="tagline">
-          {{ ListingData["tagline"] }}
-        </p>
         <div class="hashtags-list">
           <ul *ngIf="Hashtags">
             <li *ngFor="let data of Hashtags" class="active">
@@ -20,6 +16,22 @@
             </li>
           </ul>
         </div>
+        <p class="title">{{ ListingData["title"] }}</p>
+        <p class="tagline">~ {{ ListingData["tagline"] }}</p>
+        <div class="project-status-container">
+          <p class="project-status project-open">Project Ongoing</p>
+        </div>
+        <div class="locationtags-list">
+          <ul>
+            <li>Marsiling</li>
+            <li>Woodlands</li>
+            <li>Ang Mo Kio</li>
+            <li>Yishun</li>
+            <li>khatib</li>
+            <li>Jurong</li>
+          </ul>
+        </div>
+        <div class="collapse-btn" (click)="toggle_collapse()"></div>
         <div class="user-info" *ngIf="ProfileInfo">
           <div class="profile-image">
             <img src="{{ ProfileInfo.profile_picture }}" />
@@ -38,12 +50,7 @@
             </div>
             <div class="stats">
               <p>
-                <a
-                  class="email-icon"
-                  href="mailto:{{
-                    ListingData['email']
-                  }}?subject=Enquire about {{ ListingData['title'] }}"
-                ></a>
+                <a class="email-icon" (click)="togglePopup()"></a>
               </p>
               <span>Enquire</span>
             </div>
@@ -398,5 +405,24 @@
       </div>
     </div>
     <!-- End of Tab Navigation Content -->
+  </div>
+
+  <div class="popup-bg"></div>
+  <div class="popup-box">
+    <div class="close-btn" (click)="togglePopup()"></div>
+    <p class="popup-title">Enquire about {{ ListingData.title }}</p>
+    <div class="fields-container">
+      <mat-form-field class="full-width">
+        <mat-label>Your Message</mat-label>
+        <textarea
+          matInput
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="10"
+          cdkAutosizeMaxRows="10"
+          [(ngModel)]="enquireMessage"
+        ></textarea>
+      </mat-form-field>
+    </div>
+    <a class="btn yellow-btn mt-5" (click)="sendMessage()">Send Message</a>
   </div>
 </section>
