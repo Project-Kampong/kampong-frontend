@@ -45,7 +45,7 @@
           <!-- End of Errors Validation -->
         </mat-form-field>
         <div class="col-lg-8">
-          <mat-form-field class="half-width">
+          <mat-form-field class="half-width" appearance="fill">
             <mat-label>Category</mat-label>
             <mat-select required formControlName="category">
               <mat-optgroup
@@ -108,7 +108,30 @@
         </mat-form-field>
 
         <div class="col-lg-8">
-          <mat-form-field class="half-width">
+          <mat-form-field class="half-width" appearance="fill">
+            <mat-label>Project Location</mat-label>
+            <mat-select
+              (ngModelChange)="saverange($event)"
+              formControlName="LocationsList"
+              multiple
+            >
+              <mat-optgroup
+                *ngFor="let group of locationList"
+                [label]="group.name"
+              >
+                <mat-option
+                  *ngFor="let category of group.group"
+                  [value]="category"
+                >
+                  {{ category }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-lg-8">
+          <mat-form-field class="half-width" appearance="fill">
             <mat-label>Looking For</mat-label>
             <mat-select
               (ngModelChange)="saverange($event)"
@@ -223,19 +246,13 @@
           <div class="col-lg-4 guidelines">
             <ul>
               <li>
-                <p>
-                  Who is affected by the problem?
-                </p>
+                <p>Who is affected by the problem?</p>
               </li>
               <li>
-                <p>
-                  What is currently being done?
-                </p>
+                <p>What is currently being done?</p>
               </li>
               <li>
-                <p>
-                  What are the identified gaps?
-                </p>
+                <p>What are the identified gaps?</p>
               </li>
             </ul>
           </div>
@@ -267,19 +284,13 @@
           <div class="col-lg-4 guidelines">
             <ul>
               <li>
-                <p>
-                  Who are your partners?
-                </p>
+                <p>Who are your partners?</p>
               </li>
               <li>
-                <p>
-                  What is the timeline & your main priority?
-                </p>
+                <p>What is the timeline & your main priority?</p>
               </li>
               <li>
-                <p>
-                  What is your unique value proposition?
-                </p>
+                <p>What is your unique value proposition?</p>
               </li>
             </ul>
           </div>
@@ -309,19 +320,13 @@
           <div class="col-lg-4 guidelines">
             <ul>
               <li>
-                <p>
-                  What information/resources are needed?
-                </p>
+                <p>What information/resources are needed?</p>
               </li>
               <li>
-                <p>
-                  What steps must you "get right" to bring about change?
-                </p>
+                <p>What steps must you "get right" to bring about change?</p>
               </li>
               <li>
-                <p>
-                  How will you measure outcome and impact?
-                </p>
+                <p>How will you measure outcome and impact?</p>
               </li>
             </ul>
           </div>
@@ -398,9 +403,7 @@
           <button class="remove-milestone" (click)="removeFAQ(i)"></button>
         </div>
 
-        <button class="add-milestones" (click)="addFAQ()">
-          Add Question
-        </button>
+        <button class="add-milestones" (click)="addFAQ()">Add Question</button>
       </div>
 
       <div class="submit-btn">
