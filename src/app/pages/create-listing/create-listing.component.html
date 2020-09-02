@@ -134,11 +134,7 @@
         <div class="col-lg-12 mt-3">
           <mat-form-field class="half-width" appearance="fill">
             <mat-label>Project Location</mat-label>
-            <mat-select
-              (ngModelChange)="saverange($event)"
-              formControlName="LocationsList"
-              multiple
-            >
+            <mat-select formControlName="LocationsList" multiple>
               <mat-optgroup
                 *ngFor="let group of locationList"
                 [label]="group.name"
@@ -223,10 +219,7 @@
 
         <div class="col-12 mt-3">
           <mat-accordion>
-            <mat-expansion-panel
-              (opened)="panelOpenState = true"
-              (closed)="panelOpenState = false"
-            >
+            <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <mat-panel-title>Story Block*</mat-panel-title>
               </mat-expansion-panel-header>
@@ -426,10 +419,7 @@
 
       <div class="col-lg-12">
         <mat-accordion>
-          <mat-expansion-panel
-            (opened)="panelOpenState = true"
-            (closed)="panelOpenState = false"
-          >
+          <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title>Milestones and FAQ</mat-panel-title>
             </mat-expansion-panel-header>

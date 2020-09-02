@@ -32,7 +32,6 @@ export class CreateListingComponent implements OnInit {
     private router: Router,
     public SnackbarService: SnackbarService
   ) {}
-  panelOpenState = false;
   fileDisplayArr = [];
   fileArr = [];
   fileLimit = false;
@@ -290,9 +289,6 @@ export class CreateListingComponent implements OnInit {
       error = true;
     }
     return error;
-  }
-  saverange(newValue) {
-    console.log(this.ListingForm.value.SkillsList);
   }
 
   createListing() {
