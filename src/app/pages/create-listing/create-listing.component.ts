@@ -32,7 +32,7 @@ export class CreateListingComponent implements OnInit {
     private router: Router,
     public SnackbarService: SnackbarService
   ) {}
-
+  panelOpenState = false;
   fileDisplayArr = [];
   fileArr = [];
   fileLimit = false;
@@ -95,6 +95,10 @@ export class CreateListingComponent implements OnInit {
       name: "Others",
       group: ["Productivity", "Innovation", "Research", "Manpower", "Design"],
     },
+    {
+      name: "Customise",
+      group: ["Create a Category"],
+    },
   ];
   skillsets = [
     {
@@ -118,6 +122,85 @@ export class CreateListingComponent implements OnInit {
       group: [],
     },
   ];
+  locationList = [
+    {
+      name: "North",
+      group: [
+        "Admirality",
+        "Kranji",
+        "Woodlands",
+        "Sembawang",
+        "Yishun",
+        "Yio Chu Kang",
+        "Seletar",
+        "Sengkang",
+      ],
+    },
+    {
+      name: "South",
+      group: [
+        "Holland",
+        "Queenstown",
+        "Bukit Merah",
+        "Telok Blangah",
+        "Pasir Panjang",
+        "Sentosa",
+        "Bukit Timah",
+        "Newton",
+        "Orchard",
+        "City",
+        "Marina South",
+      ],
+    },
+    {
+      name: "East",
+      group: [
+        "Serangoon",
+        "Punggol",
+        "Hougang",
+        "Tampines",
+        "Pasir Ris",
+        "Loyang",
+        "Simei",
+        "Kallang",
+        "Katong",
+        "East Coast",
+        "Macpherson",
+        "Bedok",
+        "Pulau Ubin",
+        "Pulau Tekong",
+      ],
+    },
+    {
+      name: "West",
+      group: [
+        "Lim Chu Kang",
+        "Choa Chu Kang",
+        "Bukit Panjang",
+        "Tuas",
+        "Jurong East",
+        "Jurong West",
+        "Jurong Industrial Estate",
+        "Bukit Batok",
+        "Hillview",
+        "West Coast",
+        "Clementi",
+      ],
+    },
+    {
+      name: "Central",
+      group: [
+        "Thomson",
+        "Marymount",
+        "Sin Ming",
+        "Ang Mo Kio",
+        "Bishan",
+        "Serangoon Gardens",
+        "MacRitchie",
+        "Toa Payoh",
+      ],
+    },
+  ];
 
   rawSkillsets = [];
   ngOnInit() {
@@ -125,8 +208,17 @@ export class CreateListingComponent implements OnInit {
       ...CreateListing,
       ...ListingStory,
       SkillsList: [],
+      LocationsList: [],
+      customCategory: ["", [Validators.maxLength(25)]],
     });
     this.paginationSkillsets();
+
+    // UI
+    $("#sidebar").stickySidebar({
+      topSpacing: 30,
+      resizeSensor: true,
+      minWidth: 992,
+    });
   }
 
   // Get Skillsets
@@ -191,6 +283,12 @@ export class CreateListingComponent implements OnInit {
     if (this.fileCount == 0) {
       error = true;
     }
+    if (
+      this.ListingForm.value.category == "Create a Category" &&
+      this.ListingForm.value.customCategory == ""
+    ) {
+      error = true;
+    }
     return error;
   }
   saverange(newValue) {
@@ -198,11 +296,20 @@ export class CreateListingComponent implements OnInit {
   }
 
   createListing() {
+    if (this.getFormValidationErrors() == true) {
+      this.SnackbarService.openSnackBar("Please complete the form", false);
+      return;
+    }
     var routeTo;
     const listingData = this.ListingForm.value;
     var ImageFd = new FormData();
     ImageFd.append("title", listingData.title);
-    ImageFd.append("category", listingData.category);
+
+    if (listingData.category == "Create a Category") {
+      ImageFd.append("category", listingData.customCategory);
+    } else {
+      ImageFd.append("category", listingData.category);
+    }
     ImageFd.append("tagline", listingData.tagline);
     ImageFd.append("mission", listingData.mission);
     ImageFd.append("listing_url", "www.test.com");
@@ -243,13 +350,15 @@ export class CreateListingComponent implements OnInit {
           }
         }
         // Handle Hashtags
-        for (var i = 0; i < this.hashtags.length; i++) {
-          this.ListingsService.createListingHashtags({
-            listing_id: listing_id,
-            tag: this.hashtags[i],
-          }).subscribe((data) => {
-            console.log(data);
-          });
+        if (this.hashtags.length > 1) {
+          for (var i = 0; i < this.hashtags.length; i++) {
+            this.ListingsService.createListingHashtags({
+              listing_id: listing_id,
+              tag: this.hashtags[i],
+            }).subscribe((data) => {
+              console.log(data);
+            });
+          }
         }
         // Handle Skills
         if (listingData.SkillsList != null) {

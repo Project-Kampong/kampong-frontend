@@ -1,11 +1,17 @@
 <section class="container block-content">
-  <div class="d-flex flex-wrap">
-    <div class="col-lg-12 px-0">
+  <div class="d-flex flex-wrap" id="main-container">
+    <div class="col-lg-4 px-lg-0 order-lg-2 mb-5 mb-lg-0" id="sidebar">
+      <div class="image-container sidebar__inner">
+        <img src="../../../assets/images/listing_template.png" />
+      </div>
+    </div>
+
+    <div class="col-lg-8 px-0 order-lg-1">
       <h3>Edit Listing</h3>
 
       <div class="form-group" [formGroup]="ListingForm">
-        <div class="custom-input col-lg-8">
-          <label>Images (Maximum of 5)</label>
+        <div class="custom-input col-lg-12">
+          <label>Images* (Maximum of 5)</label>
           <div class="d-flex flex-wrap align-items-start mt-2 image-output">
             <div
               *ngFor="let file of fileDisplayArr; index as i"
@@ -29,9 +35,10 @@
             </div>
           </div>
         </div>
-        <mat-form-field class="full-width col-lg-8">
+        <mat-form-field class="full-width col-lg-12">
           <mat-label>Name of Initiative</mat-label>
           <input matInput required formControlName="title" />
+          <mat-hint> {{ ListingForm.value.title.length }} / 50 </mat-hint>
           <!-- Errors Validation -->
           <mat-error *ngIf="ListingForm.get('title').hasError('required')">
             Name is required
@@ -44,8 +51,8 @@
           </mat-error>
           <!-- End of Errors Validation -->
         </mat-form-field>
-        <div class="col-lg-8">
-          <mat-form-field>
+        <div class="col-lg-12 mt-3">
+          <mat-form-field class="half-width" appearance="fill">
             <mat-label>Category</mat-label>
             <mat-select required formControlName="category">
               <mat-optgroup
@@ -62,9 +69,25 @@
               </mat-optgroup>
             </mat-select>
           </mat-form-field>
+
+          <mat-form-field
+            *ngIf="ListingForm.value.category == 'Create a Category'"
+            class="half-width px-3"
+          >
+            <mat-label>Create a Category</mat-label>
+            <input matInput formControlName="customCategory" />
+            <mat-hint> Enter a category </mat-hint>
+            <!-- Errors Validation -->
+            <mat-error
+              *ngIf="ListingForm.get('customCategory').hasError('maxlength')"
+            >
+              Category must not be more than 25 characters long.
+            </mat-error>
+            <!-- End of Errors Validation -->
+          </mat-form-field>
         </div>
 
-        <mat-form-field class="full-width col-lg-8">
+        <mat-form-field class="full-width col-lg-12">
           <mat-label>Slogan</mat-label>
           <textarea
             matInput
@@ -73,6 +96,7 @@
             required
             formControlName="tagline"
           ></textarea>
+          <mat-hint> {{ ListingForm.value.tagline.length }} / 100 </mat-hint>
           <!-- Errors Validation -->
           <mat-error *ngIf="ListingForm.get('tagline').hasError('required')">
             Slogan is required
@@ -85,7 +109,7 @@
           </mat-error>
           <!-- End of Errors Validation -->
         </mat-form-field>
-        <mat-form-field class="full-width col-lg-8">
+        <mat-form-field class="full-width col-lg-12">
           <mat-label>Mission Statement</mat-label>
           <textarea
             matInput
@@ -94,6 +118,7 @@
             required
             formControlName="mission"
           ></textarea>
+          <mat-hint> {{ ListingForm.value.mission.length }} / 150 </mat-hint>
           <!-- Errors Validation -->
           <mat-error *ngIf="ListingForm.get('mission').hasError('required')">
             Mission Statement is required
@@ -107,8 +132,31 @@
           <!-- End of Errors Validation -->
         </mat-form-field>
 
-        <div class="col-lg-8">
-          <mat-form-field>
+        <div class="col-lg-12 mt-3">
+          <mat-form-field class="half-width" appearance="fill">
+            <mat-label>Project Location</mat-label>
+            <mat-select
+              (ngModelChange)="saverange($event)"
+              formControlName="LocationsList"
+              multiple
+            >
+              <mat-optgroup
+                *ngFor="let group of locationList"
+                [label]="group.name"
+              >
+                <mat-option
+                  *ngFor="let location of group.group"
+                  [value]="location"
+                >
+                  {{ location }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-lg-12">
+          <mat-form-field class="half-width" appearance="fill">
             <mat-label>Looking For</mat-label>
             <mat-select formControlName="SkillsList" multiple>
               <mat-optgroup
@@ -127,7 +175,7 @@
           </mat-form-field>
         </div>
 
-        <mat-form-field class="full-width hashtags-container col-lg-8">
+        <mat-form-field class="full-width hashtags-container col-lg-12">
           <mat-chip-list #chipList aria-label="Fruit selection">
             <mat-chip
               *ngFor="let hashtags of hashtags"
@@ -146,260 +194,322 @@
               (matChipInputTokenEnd)="add($event)"
             />
           </mat-chip-list>
+          <mat-hint
+            >Use hashtags to improve the visibility of your content</mat-hint
+          >
           <span *ngIf="hashtagsError == true" class="error"
             >Maximum 3 Hashtags</span
           >
         </mat-form-field>
-        <div class="d-flex flex-wrap">
-          <mat-form-field class="full-width col-lg-8">
-            <mat-label>Summary of Project</mat-label>
-            <textarea
-              matInput
-              required
-              cdkTextareaAutosize
-              cdkAutosizeMinRows="3"
-              formControlName="overview"
-            ></textarea>
-            <!-- Errors Validation -->
-            <mat-error *ngIf="ListingForm.get('overview').hasError('required')">
-              Summary is required
-            </mat-error>
-            <mat-error
-              *ngIf="ListingForm.get('overview').hasError('maxlength')"
+
+        <mat-form-field class="full-width mt-3 col-lg-12">
+          <mat-label>Contact Email</mat-label>
+          <input matInput formControlName="user_email" />
+          <mat-hint>
+            Enter an email you will like to receive enquiries
+          </mat-hint>
+          <!-- Errors Validation -->
+          <mat-error *ngIf="ListingForm.get('user_email').hasError('email')">
+            Please Enter an Email
+          </mat-error>
+
+          <!-- End of Errors Validation -->
+        </mat-form-field>
+
+        <div class="col-12 mt-3">
+          <mat-accordion>
+            <mat-expansion-panel
+              (opened)="panelOpenState = true"
+              (closed)="panelOpenState = false"
             >
-              Summary must not be more than 2500 characters long.
-            </mat-error>
-            <mat-error *ngIf="ListingForm.get('overview').hasError('pattern')">
-              Special characters not allowed
-            </mat-error>
-            <!-- End of Errors Validation -->
-          </mat-form-field>
-          <div class="col-lg-4 guidelines">
-            <ul>
-              <li>
-                <p>
-                  What are you trying to build that solves (problem) by
-                  (solution)?
-                </p>
-              </li>
-              <li>
-                <p>Why are you acting now?</p>
-              </li>
-              <li>
-                <p>What is the backstory?</p>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="d-flex flex-wrap">
-          <mat-form-field class="full-width col-lg-8">
-            <mat-label>Current Problem</mat-label>
-            <textarea
-              matInput
-              required
-              cdkTextareaAutosize
-              cdkAutosizeMinRows="3"
-              formControlName="problem"
-            ></textarea>
-            <!-- Errors Validation -->
-            <mat-error *ngIf="ListingForm.get('problem').hasError('required')">
-              Current Problem is required
-            </mat-error>
-            <mat-error *ngIf="ListingForm.get('problem').hasError('maxlength')">
-              Current Problem must not be more than 5000 characters long.
-            </mat-error>
-            <mat-error *ngIf="ListingForm.get('problem').hasError('pattern')">
-              Special characters not allowed
-            </mat-error>
-            <!-- End of Errors Validation -->
-          </mat-form-field>
-          <div class="col-lg-4 guidelines">
-            <ul>
-              <li>
-                <p>
-                  Who is affected by the problem?
-                </p>
-              </li>
-              <li>
-                <p>
-                  What is currently being done?
-                </p>
-              </li>
-              <li>
-                <p>
-                  What are the identified gaps?
-                </p>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="d-flex flex-wrap">
-          <mat-form-field class="full-width col-lg-8">
-            <mat-label>Solution</mat-label>
-            <textarea
-              matInput
-              required
-              cdkTextareaAutosize
-              cdkAutosizeMinRows="3"
-              formControlName="solution"
-            ></textarea>
-            <!-- Errors Validation -->
-            <mat-error *ngIf="ListingForm.get('solution').hasError('required')">
-              Solution is required
-            </mat-error>
-            <mat-error
-              *ngIf="ListingForm.get('solution').hasError('maxlength')"
-            >
-              Solution must not be more than 5000 characters long.
-            </mat-error>
-            <mat-error *ngIf="ListingForm.get('solution').hasError('pattern')">
-              Special characters not allowed
-            </mat-error>
-            <!-- End of Errors Validation -->
-          </mat-form-field>
-          <div class="col-lg-4 guidelines">
-            <ul>
-              <li>
-                <p>
-                  Who are your partners?
-                </p>
-              </li>
-              <li>
-                <p>
-                  What is the timeline & your main priority?
-                </p>
-              </li>
-              <li>
-                <p>
-                  What is your unique value proposition?
-                </p>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="d-flex flex-wrap">
-          <mat-form-field class="full-width col-lg-8">
-            <mat-label>Ideal Outcome</mat-label>
-            <textarea
-              matInput
-              required
-              cdkTextareaAutosize
-              cdkAutosizeMinRows="3"
-              formControlName="outcome"
-            ></textarea>
-            <!-- Errors Validation -->
-            <mat-error *ngIf="ListingForm.get('outcome').hasError('required')">
-              Ideal Outcome is required
-            </mat-error>
-            <mat-error *ngIf="ListingForm.get('outcome').hasError('maxlength')">
-              Ideal Outcome must not be more than 5000 characters long.
-            </mat-error>
-            <mat-error *ngIf="ListingForm.get('outcome').hasError('pattern')">
-              Special characters not allowed
-            </mat-error>
-            <!-- End of Errors Validation -->
-          </mat-form-field>
-          <div class="col-lg-4 guidelines">
-            <ul>
-              <li>
-                <p>
-                  What information/resources are needed?
-                </p>
-              </li>
-              <li>
-                <p>
-                  What steps must you "get right" to bring about change?
-                </p>
-              </li>
-              <li>
-                <p>
-                  How will you measure outcome and impact?
-                </p>
-              </li>
-            </ul>
-          </div>
+              <mat-expansion-panel-header>
+                <mat-panel-title>Story Block*</mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="d-flex flex-wrap">
+                <mat-form-field class="full-width col-lg-12">
+                  <mat-label>Summary of Project</mat-label>
+                  <textarea
+                    matInput
+                    cdkTextareaAutosize
+                    required
+                    cdkAutosizeMinRows="3"
+                    formControlName="overview"
+                  ></textarea>
+                  <div class="guidelines">
+                    <ul>
+                      <label>Suggested Guidelines</label>
+                      <li>
+                        <p>
+                          What are you trying to build that solves (problem) by
+                          (solution)?
+                        </p>
+                      </li>
+                      <li>
+                        <p>Why are you acting now?</p>
+                      </li>
+                      <li>
+                        <p>What is the backstory?</p>
+                      </li>
+                    </ul>
+                  </div>
+                  <mat-hint>
+                    {{ ListingForm.value.overview.length }} / 2500
+                  </mat-hint>
+                  <!-- Errors Validation -->
+                  <mat-error
+                    *ngIf="ListingForm.get('overview').hasError('required')"
+                  >
+                    Summary is required
+                  </mat-error>
+                  <mat-error
+                    *ngIf="ListingForm.get('overview').hasError('maxlength')"
+                  >
+                    Summary must not be more than 2500 characters long.
+                  </mat-error>
+                  <mat-error
+                    *ngIf="ListingForm.get('overview').hasError('pattern')"
+                  >
+                    Special characters not allowed
+                  </mat-error>
+                  <!-- End of Errors Validation -->
+                </mat-form-field>
+              </div>
+              <div class="d-flex flex-wrap">
+                <mat-form-field class="full-width col-lg-12">
+                  <mat-label>Current Problem</mat-label>
+                  <textarea
+                    matInput
+                    required
+                    cdkTextareaAutosize
+                    cdkAutosizeMinRows="3"
+                    formControlName="problem"
+                  ></textarea>
+                  <div class="guidelines">
+                    <ul>
+                      <label>Suggested Guidelines</label>
+                      <li>
+                        <p>Who is affected by the problem?</p>
+                      </li>
+                      <li>
+                        <p>What is currently being done?</p>
+                      </li>
+                      <li>
+                        <p>What are the identified gaps?</p>
+                      </li>
+                    </ul>
+                  </div>
+                  <mat-hint>
+                    {{ ListingForm.value.problem.length }} / 5000
+                  </mat-hint>
+                  <!-- Errors Validation -->
+                  <mat-error
+                    *ngIf="ListingForm.get('problem').hasError('required')"
+                  >
+                    Current Problem is required
+                  </mat-error>
+                  <mat-error
+                    *ngIf="ListingForm.get('problem').hasError('maxlength')"
+                  >
+                    Current Problem must not be more than 5000 characters long.
+                  </mat-error>
+                  <mat-error
+                    *ngIf="ListingForm.get('problem').hasError('pattern')"
+                  >
+                    Special characters not allowed
+                  </mat-error>
+                  <!-- End of Errors Validation -->
+                </mat-form-field>
+              </div>
+              <div class="d-flex flex-wrap">
+                <mat-form-field class="full-width col-lg-12">
+                  <mat-label>Solution</mat-label>
+                  <textarea
+                    matInput
+                    required
+                    cdkTextareaAutosize
+                    cdkAutosizeMinRows="3"
+                    formControlName="solution"
+                  ></textarea>
+                  <div class="guidelines">
+                    <ul>
+                      <label>Suggested Guidelines</label>
+                      <li>
+                        <p>Who are your partners?</p>
+                      </li>
+                      <li>
+                        <p>What is the timeline & your main priority?</p>
+                      </li>
+                      <li>
+                        <p>What is your unique value proposition?</p>
+                      </li>
+                    </ul>
+                  </div>
+                  <mat-hint>
+                    {{ ListingForm.value.solution.length }} / 5000
+                  </mat-hint>
+                  <!-- Errors Validation -->
+                  <mat-error
+                    *ngIf="ListingForm.get('solution').hasError('required')"
+                  >
+                    Solution is required
+                  </mat-error>
+                  <mat-error
+                    *ngIf="ListingForm.get('solution').hasError('maxlength')"
+                  >
+                    Solution must not be more than 5000 characters long.
+                  </mat-error>
+                  <mat-error
+                    *ngIf="ListingForm.get('solution').hasError('pattern')"
+                  >
+                    Special characters not allowed
+                  </mat-error>
+                  <!-- End of Errors Validation -->
+                </mat-form-field>
+              </div>
+              <div class="d-flex flex-wrap">
+                <mat-form-field class="full-width col-lg-12">
+                  <mat-label>Ideal Outcome</mat-label>
+                  <textarea
+                    matInput
+                    required
+                    cdkTextareaAutosize
+                    cdkAutosizeMinRows="3"
+                    formControlName="outcome"
+                  ></textarea>
+                  <div class="guidelines">
+                    <ul>
+                      <label>Suggested Guidelines</label>
+                      <li>
+                        <p>What information/resources are needed?</p>
+                      </li>
+                      <li>
+                        <p>
+                          What steps must you "get right" to bring about change?
+                        </p>
+                      </li>
+                      <li>
+                        <p>How will you measure outcome and impact?</p>
+                      </li>
+                    </ul>
+                  </div>
+                  <mat-hint>
+                    {{ ListingForm.value.outcome.length }} / 5000
+                  </mat-hint>
+                  <!-- Errors Validation -->
+                  <mat-error
+                    *ngIf="ListingForm.get('outcome').hasError('required')"
+                  >
+                    Ideal Outcome is required
+                  </mat-error>
+                  <mat-error
+                    *ngIf="ListingForm.get('outcome').hasError('maxlength')"
+                  >
+                    Ideal Outcome must not be more than 5000 characters long.
+                  </mat-error>
+                  <mat-error
+                    *ngIf="ListingForm.get('outcome').hasError('pattern')"
+                  >
+                    Special characters not allowed
+                  </mat-error>
+                  <!-- End of Errors Validation -->
+                </mat-form-field>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
         </div>
       </div>
 
-      <!-- Milestones -->
-      <div class="col-lg-8">
-        <div class="milestones-container">
-          <label>Milestones</label>
-          <div
-            *ngFor="let milestone of milestoneArr; index as i"
-            class="milestones"
+      <!--  -->
+
+      <div class="col-lg-12">
+        <mat-accordion>
+          <mat-expansion-panel
+            (opened)="panelOpenState = true"
+            (closed)="panelOpenState = false"
           >
-            <div class="input-field-container">
-              <mat-form-field class="milestone-input">
-                <mat-label>Milestone</mat-label>
-                <input
-                  maxlength="50"
-                  matInput
-                  [(ngModel)]="milestone.milestone"
-                />
-              </mat-form-field>
-              <mat-form-field class="deadline-input">
-                <mat-label>Deadline</mat-label>
-                <input
-                  [(ngModel)]="milestone.deadline"
-                  matInput
-                  [matDatepicker]="DateOfBirthPicker"
-                />
-                <mat-datepicker-toggle
-                  matSuffix
-                  [for]="DateOfBirthPicker"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #DateOfBirthPicker></mat-datepicker>
-              </mat-form-field>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Milestones and FAQ</mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- Milestones -->
+
+            <div class="milestones-container">
+              <label>Milestones</label>
+              <div
+                *ngFor="let milestone of milestoneArr; index as i"
+                class="milestones"
+              >
+                <div class="input-field-container">
+                  <mat-form-field class="milestone-input">
+                    <mat-label>Milestone</mat-label>
+                    <input
+                      maxlength="50"
+                      matInput
+                      [(ngModel)]="milestone.milestone"
+                    />
+                  </mat-form-field>
+                  <mat-form-field class="deadline-input">
+                    <mat-label>Deadline</mat-label>
+                    <input
+                      [(ngModel)]="milestone.deadline"
+                      matInput
+                      [matDatepicker]="DateOfBirthPicker"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="DateOfBirthPicker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #DateOfBirthPicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <button
+                  class="remove-milestone"
+                  (click)="removeMilestone(milestone, i)"
+                ></button>
+              </div>
+
+              <button class="add-milestones" (click)="addMilestone()">
+                Add Milestone
+              </button>
             </div>
-            <button
-              class="remove-milestone"
-              (click)="removeMilestone(milestone, i)"
-            ></button>
-          </div>
 
-          <button class="add-milestones" (click)="addMilestone()">
-            Add Milestone
-          </button>
-        </div>
+            <!-- FAQ -->
+            <div class="milestones-container">
+              <label>Frequent Ask Questions</label>
+              <div *ngFor="let faq of faqArr; index as i" class="milestones">
+                <div class="input-field-container">
+                  <mat-form-field class="milestone-input">
+                    <mat-label>Question</mat-label>
+                    <textarea
+                      matInput
+                      cdkTextareaAutosize
+                      cdkAutosizeMinRows="1"
+                      [(ngModel)]="faq.questions"
+                      maxlength="200"
+                    ></textarea>
+                  </mat-form-field>
+                  <mat-form-field class="milestone-input">
+                    <mat-label>Answers</mat-label>
+                    <textarea
+                      matInput
+                      cdkTextareaAutosize
+                      cdkAutosizeMinRows="1"
+                      [(ngModel)]="faq.answer"
+                      maxlength="500"
+                    ></textarea>
+                  </mat-form-field>
+                </div>
+                <button
+                  class="remove-milestone"
+                  (click)="removeFAQ(faq, i)"
+                ></button>
+              </div>
 
-        <!-- FAQ -->
-        <div class="milestones-container">
-          <label>Frequent Ask Questions</label>
-          <div *ngFor="let faq of faqArr; index as i" class="milestones">
-            <div class="input-field-container">
-              <mat-form-field class="milestone-input">
-                <mat-label>Question</mat-label>
-                <textarea
-                  matInput
-                  cdkTextareaAutosize
-                  cdkAutosizeMinRows="1"
-                  [(ngModel)]="faq.questions"
-                  maxlength="200"
-                ></textarea>
-              </mat-form-field>
-              <mat-form-field class="milestone-input">
-                <mat-label>Answers</mat-label>
-                <textarea
-                  matInput
-                  cdkTextareaAutosize
-                  cdkAutosizeMinRows="1"
-                  [(ngModel)]="faq.answer"
-                  maxlength="500"
-                ></textarea>
-              </mat-form-field>
+              <button class="add-milestones" (click)="addFAQ()">
+                Add Question
+              </button>
             </div>
-            <button
-              class="remove-milestone"
-              (click)="removeFAQ(faq, i)"
-            ></button>
-          </div>
-
-          <button class="add-milestones" (click)="addFAQ()">
-            Add Question
-          </button>
-        </div>
-
+          </mat-expansion-panel>
+        </mat-accordion>
         <div class="submit-btn">
           <button
             class="btn yellow-btn"

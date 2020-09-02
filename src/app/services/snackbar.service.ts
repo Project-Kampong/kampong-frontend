@@ -65,6 +65,10 @@ export class SnackbarService {
       success: "Profile Successfully Updated",
       error: "Error, please try again later",
     },
+    send_message: {
+      success: "Your message have been send",
+      error: "Failed to send message",
+    },
   };
 
   horizontalPosition: MatSnackBarHorizontalPosition = "right";

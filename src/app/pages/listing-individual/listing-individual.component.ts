@@ -428,6 +428,38 @@ export class ListingIndividualComponent implements OnInit {
     this.router.navigate(["/profile/" + user_id]);
   }
 
+  // Collapse
+  toggle_collapse() {
+    $(".collapse-btn").toggleClass("active");
+    const iscollapsed = $(".collapse-btn").hasClass("active");
+    if (iscollapsed) {
+      $(".locationtags-list").css({
+        height: $(".locationtags-list ul").height() + 12 + "px",
+      });
+    } else {
+      $(".locationtags-list").css({
+        height: "4rem",
+      });
+    }
+  }
+
+  enquireMessage: String = "";
+  // Toggle Enquire popup
+  togglePopup() {
+    // Toggle popup
+    $(".popup-bg").toggleClass("active");
+    $(".popup-box").toggleClass("active");
+  }
+  sendMessage() {
+    if (this.enquireMessage != "") {
+      this.togglePopup();
+      this.SnackbarService.openSnackBar(
+        this.SnackbarService.DialogList.send_message.success,
+        true
+      );
+    }
+  }
+
   // Delete
   deleteUpdate(updates) {
     if (confirm("Are you sure to delete update?")) {

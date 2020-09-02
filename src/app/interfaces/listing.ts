@@ -15,6 +15,7 @@ export interface Listing {
   pic3: String;
   pic4: String;
   pic5: String;
+  user_email: String;
 }
 
 export interface ListingFAQ {
@@ -50,14 +51,14 @@ export interface ListingStories {
 
 // Validation
 const patternvalidation = Validators.pattern(
-  "^[a-zA-Z0-9 \n .,'()\"$#%&-°*]+$"
+  "^[a-zA-Z0-9 \n .,'()\"$#%&-°*!']+$"
 );
 export const CreateListing = {
   title: [
     "",
     [Validators.required, Validators.maxLength(50), patternvalidation],
   ],
-  category: ["", [Validators.required]],
+  category: ["", [Validators.required, Validators.maxLength(25)]],
   about: "",
   tagline: [
     "",
@@ -67,25 +68,14 @@ export const CreateListing = {
     "",
     [Validators.required, Validators.maxLength(150), patternvalidation],
   ],
+  user_email: ["", [Validators.email]],
 };
 
 export const ListingStory = {
-  overview: [
-    "",
-    [Validators.required, Validators.maxLength(2500), patternvalidation],
-  ],
-  problem: [
-    "",
-    [Validators.required, Validators.maxLength(5000), patternvalidation],
-  ],
-  solution: [
-    "",
-    [Validators.required, Validators.maxLength(5000), patternvalidation],
-  ],
-  outcome: [
-    "",
-    [Validators.required, Validators.maxLength(5000), patternvalidation],
-  ],
+  overview: ["", [Validators.required, Validators.maxLength(2500)]],
+  problem: ["", [Validators.required, Validators.maxLength(5000)]],
+  solution: ["", [Validators.required, Validators.maxLength(5000)]],
+  outcome: ["", [Validators.required, Validators.maxLength(5000)]],
 };
 
 export const DefaultListing = {
@@ -103,4 +93,5 @@ export const DefaultListing = {
   pic3: "default",
   pic4: "default",
   pic5: "default",
+  user_email: "default",
 };

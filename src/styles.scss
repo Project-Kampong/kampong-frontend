@@ -141,6 +141,7 @@ h3 {
 }
 
 .hashtags-list {
+  margin-top: 0.5rem;
   ul {
     list-style-type: none;
     padding: 0;
@@ -149,8 +150,32 @@ h3 {
     li {
       font-weight: 600;
       font-size: 1rem;
-      // text-transform: uppercase;
-      // border: 1px solid black;
+      display: inline-block;
+      margin-right: 0.5rem;
+      color: rgba(0, 0, 0, 0.5);
+      // padding: 0.25rem 0.5rem;
+      // margin-bottom: 0.75rem;
+      // border-radius: 5px;
+      // cursor: pointer;
+      // background: #34ad5f;
+      // color: white;
+    }
+  }
+}
+
+.locationtags-list {
+  transition: all 0.3s ease;
+  height: 4rem;
+  overflow: hidden;
+  margin-top: 1rem;
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    padding: 1rem 0;
+    li {
+      font-weight: 600;
+      font-size: 1rem;
       display: inline-block;
       padding: 0.25rem 0.5rem;
       margin-right: 0.5rem;
@@ -159,7 +184,33 @@ h3 {
       cursor: pointer;
       background: #34ad5f;
       color: white;
+      &:before {
+        content: "\f3c5";
+        color: white;
+        margin-right: 0.5rem;
+        font-weight: bold;
+        font-family: "Font Awesome\ 5 Free";
+      }
     }
+  }
+}
+.collapse-btn {
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: center;
+  border-top: 0.5px solid grey;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  &:after {
+    content: "\f078";
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: bold;
+    font-family: "Font Awesome\ 5 Free";
+  }
+}
+.collapse-btn.active {
+  &:after {
+    content: "\f077";
   }
 }
 
@@ -385,4 +436,56 @@ body {
       color: white;
     }
   }
+}
+
+.mat-expansion-panel {
+  .mat-expansion-panel-header {
+    font-size: 1rem;
+    background: #4e89ae !important;
+    &:hover {
+      background: #4e89ae !important;
+    }
+  }
+  .mat-expansion-panel-header-title {
+    color: white;
+    font-weight: bold;
+  }
+  .mat-expansion-indicator::after {
+    color: white;
+  }
+  .mat-expansion-panel-body {
+    padding-bottom: 3rem !important;
+    padding-top: 3rem !important;
+  }
+  textarea {
+    font-size: 1rem;
+  }
+  .full-width {
+    margin-bottom: 3rem !important;
+  }
+}
+
+.mat-form-field {
+  .mat-form-field-wrapper {
+    padding-bottom: 0.5rem;
+
+    .mat-form-field-underline {
+      position: initial !important;
+      display: block;
+      margin-top: -1px;
+    }
+
+    .mat-form-field-subscript-wrapper,
+    .mat-form-field-ripple {
+      position: initial !important;
+      display: table;
+    }
+
+    .mat-form-field-subscript-wrapper {
+      min-height: calc(1em + 1px);
+    }
+  }
+}
+.mat-form-field-label-wrapper {
+  font-size: 1rem !important;
 }
