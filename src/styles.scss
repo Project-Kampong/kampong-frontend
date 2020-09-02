@@ -457,6 +457,12 @@ body {
     padding-bottom: 3rem !important;
     padding-top: 3rem !important;
   }
+  textarea {
+    font-size: 1rem;
+  }
+  .full-width {
+    margin-bottom: 3rem !important;
+  }
 }
 
 .mat-form-field {
@@ -479,4 +485,7 @@ body {
       min-height: calc(1em + 1px);
     }
   }
+}
+.mat-form-field-label-wrapper {
+  font-size: 1rem !important;
 }

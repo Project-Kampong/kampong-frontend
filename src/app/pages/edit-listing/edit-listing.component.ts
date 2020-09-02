@@ -92,6 +92,10 @@ export class EditListingComponent implements OnInit {
       name: "Others",
       group: ["Productivity", "Innovation", "Research", "Manpower", "Design"],
     },
+    {
+      name: "Customise",
+      group: ["Create a Category"],
+    },
   ];
 
   skillsets = [
@@ -116,7 +120,85 @@ export class EditListingComponent implements OnInit {
       group: [],
     },
   ];
-
+  locationList = [
+    {
+      name: "North",
+      group: [
+        "Admirality",
+        "Kranji",
+        "Woodlands",
+        "Sembawang",
+        "Yishun",
+        "Yio Chu Kang",
+        "Seletar",
+        "Sengkang",
+      ],
+    },
+    {
+      name: "South",
+      group: [
+        "Holland",
+        "Queenstown",
+        "Bukit Merah",
+        "Telok Blangah",
+        "Pasir Panjang",
+        "Sentosa",
+        "Bukit Timah",
+        "Newton",
+        "Orchard",
+        "City",
+        "Marina South",
+      ],
+    },
+    {
+      name: "East",
+      group: [
+        "Serangoon",
+        "Punggol",
+        "Hougang",
+        "Tampines",
+        "Pasir Ris",
+        "Loyang",
+        "Simei",
+        "Kallang",
+        "Katong",
+        "East Coast",
+        "Macpherson",
+        "Bedok",
+        "Pulau Ubin",
+        "Pulau Tekong",
+      ],
+    },
+    {
+      name: "West",
+      group: [
+        "Lim Chu Kang",
+        "Choa Chu Kang",
+        "Bukit Panjang",
+        "Tuas",
+        "Jurong East",
+        "Jurong West",
+        "Jurong Industrial Estate",
+        "Bukit Batok",
+        "Hillview",
+        "West Coast",
+        "Clementi",
+      ],
+    },
+    {
+      name: "Central",
+      group: [
+        "Thomson",
+        "Marymount",
+        "Sin Ming",
+        "Ang Mo Kio",
+        "Bishan",
+        "Serangoon Gardens",
+        "MacRitchie",
+        "Toa Payoh",
+      ],
+    },
+  ];
   rawSkillsets = [];
 
   ngOnInit() {
@@ -126,6 +208,8 @@ export class EditListingComponent implements OnInit {
       ...CreateListing,
       ...ListingStory,
       SkillsList: [],
+      LocationsList: [],
+      customCategory: ["", [Validators.maxLength(25)]],
     });
 
     // Grab Skillsets
@@ -145,6 +229,24 @@ export class EditListingComponent implements OnInit {
           } else {
             return;
           }
+        }
+        // Category Finder
+        const currentCategory = data["data"].category;
+        var categoryFound = false;
+        this.categoryGroup.map((x) => {
+          x.group.map((y) => {
+            if (y == currentCategory) {
+              categoryFound = true;
+              return;
+            }
+          });
+        });
+        if (!categoryFound) {
+          this.categoryGroup.map((x) => {
+            if (x.name == "Customise") {
+              x.group.push(currentCategory);
+            }
+          });
         }
       }
     );
@@ -213,6 +315,13 @@ export class EditListingComponent implements OnInit {
         console.log(this.ListingForm.value);
       }
     );
+
+    // UI
+    $("#sidebar").stickySidebar({
+      topSpacing: 30,
+      resizeSensor: true,
+      minWidth: 992,
+    });
   }
   SkillsetsCC = [];
   // Submit Data
@@ -222,7 +331,12 @@ export class EditListingComponent implements OnInit {
     console.log(listingData);
     var listingUpdates = new FormData();
     listingUpdates.append("title", listingData.title);
-    listingUpdates.append("category", listingData.category);
+    // listingUpdates.append("category", listingData.category);
+    if (listingData.category == "Create a Category") {
+      listingUpdates.append("category", listingData.customCategory);
+    } else {
+      listingUpdates.append("category", listingData.category);
+    }
     listingUpdates.append("tagline", listingData.tagline);
     listingUpdates.append("mission", listingData.mission);
     for (var i = 0; i < this.fileArr.length; i++) {
