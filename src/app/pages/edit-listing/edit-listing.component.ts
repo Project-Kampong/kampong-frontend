@@ -97,7 +97,6 @@ export class EditListingComponent implements OnInit {
       group: ["Create a Category"],
     },
   ];
-
   skillsets = [
     {
       name: "Big Data Analysis",
@@ -331,7 +330,6 @@ export class EditListingComponent implements OnInit {
     console.log(listingData);
     var listingUpdates = new FormData();
     listingUpdates.append("title", listingData.title);
-    // listingUpdates.append("category", listingData.category);
     if (listingData.category == "Create a Category") {
       listingUpdates.append("category", listingData.customCategory);
     } else {
