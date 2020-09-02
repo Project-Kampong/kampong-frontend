@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import {
   FormGroup,
+  FormControl,
   FormBuilder,
   Validators,
   ValidationErrors,
@@ -9,6 +10,21 @@ import {
 import { SnackbarService } from "@app/services/snackbar.service";
 
 import { AuthService } from "@app/services/auth.service";
+
+function passwordValidator(control: FormControl) {
+  let password = control.value;
+  const containsNum = /\d/.test(password);
+  var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  var Capitalise = /[A-Z]/;
+  if (!format.test(password) || !containsNum || !Capitalise.test(password)) {
+    return {
+      passwordChecker: {
+        parsedPassword: password,
+      },
+    };
+  }
+  return null;
+}
 
 @Component({
   selector: "app-register",
@@ -28,11 +44,15 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.LoginForm = this.fb.group({
-      first_name: ["", [Validators.maxLength(10), Validators.required]],
-      last_name: ["", [Validators.maxLength(10), Validators.required]],
+      first_name: ["", [Validators.maxLength(25), Validators.required]],
+      last_name: ["", [Validators.maxLength(25), Validators.required]],
       email: ["", [Validators.email, Validators.required]],
-      password: ["", [Validators.minLength(6), Validators.required]],
-      confirmPassword: ["", [Validators.minLength(6)]],
+      password: [
+        "",
+        [Validators.minLength(8), Validators.required, passwordValidator],
+      ],
+      confirmPassword: ["", [Validators.minLength(8)]],
+      termsAndCondition: false,
     });
 
     this.AuthService.validRegisterResponse.subscribe(() => {
@@ -51,8 +71,15 @@ export class RegisterComponent implements OnInit {
     });
   }
   register() {
-    this.AuthService.userRegister(this.LoginForm.value);
-    this.LoginForm.reset();
+    if (this.LoginForm.value.termsAndCondition != true) {
+      this.SnackbarService.openSnackBar(
+        "Please accept the terms and conditions",
+        false
+      );
+    } else {
+      this.AuthService.userRegister(this.LoginForm.value);
+      this.LoginForm.reset();
+    }
   }
 
   getFormValidationErrors() {
