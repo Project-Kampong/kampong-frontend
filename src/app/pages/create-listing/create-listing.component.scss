@@ -184,3 +184,16 @@
     }
   }
 }
+
+.image-container {
+  @media (min-width: 991px) {
+    padding-left: 2rem;
+  }
+  img {
+    width: 100%;
+  }
+}
+
+.inner-wrapper-sticky {
+  left: auto !important;
+}

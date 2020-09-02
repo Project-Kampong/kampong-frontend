@@ -437,3 +437,24 @@ body {
     }
   }
 }
+
+.mat-expansion-panel {
+  .mat-expansion-panel-header {
+    font-size: 1rem;
+    background: #4e89ae !important;
+    &:hover {
+      background: #4e89ae !important;
+    }
+  }
+  .mat-expansion-panel-header-title {
+    color: white;
+    font-weight: bold;
+  }
+  .mat-expansion-indicator::after {
+    color: white;
+  }
+  .mat-expansion-panel-body {
+    padding-bottom: 3rem !important;
+    padding-top: 3rem !important;
+  }
+}

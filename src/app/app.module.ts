@@ -16,6 +16,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatExpansionModule } from "@angular/material/expansion";
 
 // Components
 import { AppComponent } from "./app.component";
@@ -78,6 +79,7 @@ import { SearchComponent } from "@app/pages/search/search.component";
     MatIconModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatExpansionModule,
   ],
   exports: [],
   entryComponents: [SnackbarSuccessComponent, SnackbarErrorComponent],
