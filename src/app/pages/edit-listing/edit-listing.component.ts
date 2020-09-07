@@ -202,6 +202,13 @@ export class EditListingComponent implements OnInit {
 
   ngOnInit() {
     window.scroll(0, 0);
+    // UI
+    // $("#sidebar").stickySidebar({
+    //   topSpacing: 30,
+    //   resizeSensor: "true",
+    //   minWidth: 992,
+    // });
+
     this.listingId = this.route.snapshot.params["id"];
     this.ListingForm = this.fb.group({
       ...CreateListing,
@@ -314,13 +321,6 @@ export class EditListingComponent implements OnInit {
         console.log(this.ListingForm.value);
       }
     );
-
-    // UI
-    $("#sidebar").stickySidebar({
-      topSpacing: 30,
-      resizeSensor: true,
-      minWidth: 992,
-    });
   }
   SkillsetsCC = [];
   // Submit Data

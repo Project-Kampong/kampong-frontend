@@ -213,11 +213,11 @@ export class CreateListingComponent implements OnInit {
     this.paginationSkillsets();
 
     // UI
-    $("#sidebar").stickySidebar({
-      topSpacing: 30,
-      resizeSensor: true,
-      minWidth: 992,
-    });
+    // $("#sidebar").stickySidebar({
+    //   topSpacing: 30,
+    //   resizeSensor: "true",
+    //   minWidth: 992,
+    // });
   }
 
   // Get Skillsets
