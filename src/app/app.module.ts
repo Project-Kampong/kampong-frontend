@@ -42,6 +42,7 @@ import { CreateListingComponent } from "@app/pages/create-listing/create-listing
 import { PublicProfileComponent } from "@app/pages/public-profile/public-profile.component";
 import { EditListingComponent } from "@app/pages/edit-listing/edit-listing.component";
 import { SearchComponent } from "@app/pages/search/search.component";
+import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { SearchComponent } from "@app/pages/search/search.component";
     SearchComponent,
     SnackbarErrorComponent,
     SnackbarSuccessComponent,
+    OnboardingComponent,
   ],
   imports: [
     BrowserModule,
