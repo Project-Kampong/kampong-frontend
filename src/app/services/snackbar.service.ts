@@ -78,14 +78,14 @@ export class SnackbarService {
     this.AuthService.Dialogmessage = message;
     if (success) {
       this._snackBar.openFromComponent(SnackbarSuccessComponent, {
-        duration: 1000,
+        duration: 5000,
         panelClass: "success-dialog",
         horizontalPosition: this.horizontalPosition,
         verticalPosition: this.verticalPosition,
       });
     } else {
       this._snackBar.openFromComponent(SnackbarErrorComponent, {
-        duration: 1000,
+        duration: 5000,
         panelClass: "error-dialog",
         horizontalPosition: this.horizontalPosition,
         verticalPosition: this.verticalPosition,

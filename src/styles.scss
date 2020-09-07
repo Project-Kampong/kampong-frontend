@@ -10,6 +10,17 @@ body {
   padding-top: 3rem;
 }
 
+.onboarding-header {
+  h1 {
+    font-size: 2rem;
+  }
+  p {
+    display: inline-block;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+  }
+}
+
 h2 {
   font-size: 1.5625rem;
   font-weight: bold;

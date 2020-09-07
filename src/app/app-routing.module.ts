@@ -16,6 +16,7 @@ import { EditProfileComponent } from "@app/pages/edit-profile/edit-profile.compo
 import { CreateListingComponent } from "@app/pages/create-listing/create-listing.component";
 import { EditListingComponent } from "@app/pages/edit-listing/edit-listing.component";
 import { SearchComponent } from "@app/pages/search/search.component";
+import { OnboardingComponent } from "@app/pages/onboarding/onboarding.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -33,6 +34,7 @@ const routes: Routes = [
       { path: "profile", component: UserProfileComponent },
       { path: "edit-profile", component: EditProfileComponent },
       { path: "profile/:id", component: PublicProfileComponent },
+      { path: "onboarding", component: OnboardingComponent },
     ],
   },
 ];
