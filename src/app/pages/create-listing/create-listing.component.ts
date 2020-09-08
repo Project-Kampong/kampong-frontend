@@ -211,13 +211,6 @@ export class CreateListingComponent implements OnInit {
       customCategory: ["", [Validators.maxLength(25)]],
     });
     this.paginationSkillsets();
-
-    // UI
-    // $("#sidebar").stickySidebar({
-    //   topSpacing: 30,
-    //   resizeSensor: "true",
-    //   minWidth: 992,
-    // });
   }
 
   // Get Skillsets

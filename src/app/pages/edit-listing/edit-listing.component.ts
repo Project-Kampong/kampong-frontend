@@ -202,12 +202,6 @@ export class EditListingComponent implements OnInit {
 
   ngOnInit() {
     window.scroll(0, 0);
-    // UI
-    // $("#sidebar").stickySidebar({
-    //   topSpacing: 30,
-    //   resizeSensor: "true",
-    //   minWidth: 992,
-    // });
 
     this.listingId = this.route.snapshot.params["id"];
     this.ListingForm = this.fb.group({
