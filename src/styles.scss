@@ -500,3 +500,52 @@ body {
 .mat-form-field-label-wrapper {
   font-size: 1rem !important;
 }
+
+// footer
+$navy: #364f6b;
+
+footer {
+  background: $navy;
+  margin-top: 10rem;
+  padding: 5rem 0;
+  padding-bottom: 1rem;
+  .logo-container {
+    margin-bottom: 2rem;
+    img {
+      max-height: 40px;
+    }
+  }
+  small {
+    text-align: center;
+    display: block;
+    margin-top: 10rem;
+    color: white;
+    font-size: 0.8rem;
+  }
+  .footer-links {
+    .link-col {
+      padding: 0 2rem;
+      label {
+        color: white;
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        margin-bottom: 1rem;
+        li {
+          a {
+            color: white;
+            font-weight: 300;
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+    .link-col:last-child {
+      padding-right: 0;
+    }
+  }
+}

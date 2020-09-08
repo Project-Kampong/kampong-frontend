@@ -189,11 +189,11 @@
 }
 
 .sidebar__inner {
-  @media (min-width: 991px) {
-    padding-left: 2rem;
-  }
   img {
     width: 100%;
+    @media (min-width: 991px) {
+      padding-left: 2rem;
+    }
   }
 }
 
