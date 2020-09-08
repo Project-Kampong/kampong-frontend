@@ -55,6 +55,13 @@ export class OnboardingComponent implements OnInit {
   }
 
   saveProfile() {
+    if (this.getFormValidationErrors()) {
+      this.SnackbarService.openSnackBar(
+        this.SnackbarService.DialogList.setup_profile.validation_error,
+        false
+      );
+      return;
+    }
     this.ProfileService.updateUserProfile(
       this.ProfileDetails["user_id"],
       this.EditProfileForm.value
@@ -78,7 +85,7 @@ export class OnboardingComponent implements OnInit {
         } else {
           this.AuthService.LoginResponse.emit();
           this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.update_profile.success,
+            this.SnackbarService.DialogList.setup_profile.success,
             true
           );
           this.router.navigate(["/profile"]);
@@ -87,7 +94,7 @@ export class OnboardingComponent implements OnInit {
       (err) => {
         console.log("error");
         this.SnackbarService.openSnackBar(
-          this.SnackbarService.DialogList.update_profile.error,
+          this.SnackbarService.DialogList.setup_profile.error,
           false
         );
         this.router.navigate(["/profile"]);

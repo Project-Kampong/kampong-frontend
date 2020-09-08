@@ -65,6 +65,11 @@ export class SnackbarService {
       success: "Profile Successfully Updated",
       error: "Error, please try again later",
     },
+    setup_profile: {
+      success: "Profile Setup Complete ",
+      error: "Error, please try again later",
+      validation_error: "Plesae complete the setup",
+    },
     send_message: {
       success: "Your message have been send",
       error: "Failed to send message",
