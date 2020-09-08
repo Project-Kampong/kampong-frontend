@@ -18,6 +18,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatStepperModule } from "@angular/material/stepper";
 
 // Components
 import { AppComponent } from "./app.component";
@@ -42,7 +43,7 @@ import { CreateListingComponent } from "@app/pages/create-listing/create-listing
 import { PublicProfileComponent } from "@app/pages/public-profile/public-profile.component";
 import { EditListingComponent } from "@app/pages/edit-listing/edit-listing.component";
 import { SearchComponent } from "@app/pages/search/search.component";
-import { OnboardingComponent } from './pages/onboarding/onboarding.component';
+import { OnboardingComponent } from "./pages/onboarding/onboarding.component";
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { OnboardingComponent } from './pages/onboarding/onboarding.component';
     MatSnackBarModule,
     MatExpansionModule,
     MatCheckboxModule,
+    MatStepperModule,
   ],
   exports: [],
   entryComponents: [SnackbarSuccessComponent, SnackbarErrorComponent],
