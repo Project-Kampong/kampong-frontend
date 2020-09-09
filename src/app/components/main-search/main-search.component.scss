@@ -1,0 +1,31 @@
+.main-search {
+    background: white;
+}
+
+.video-container {
+    position: relative;
+    top: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 95vh;
+    overflow: hidden;
+}
+
+.video-container video {
+    min-width: 100vw;
+    min-height: 95vh;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.content-holder {
+    height: inherit;
+    width: inherit;
+    position: absolute;
+    text-align: center;
+    transform: translate(0%, 20%);
+}

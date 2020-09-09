@@ -23,6 +23,7 @@ import { MatStepperModule } from "@angular/material/stepper";
 // Components
 import { AppComponent } from "./app.component";
 import { BannerComponent } from "./components/banner/banner.component";
+import { MainSearchComponent } from "./components/main-search/main-search.component";
 import { ListingCardsComponent } from "./components/listing-cards/listing-cards.component";
 import { ImageCarouselComponent } from "./components/image-carousel/image-carousel.component";
 import { UpdateCarouselComponent } from "./components/update-carousel/update-carousel.component";
@@ -68,6 +69,7 @@ import { OnboardingComponent } from "./pages/onboarding/onboarding.component";
     SnackbarErrorComponent,
     SnackbarSuccessComponent,
     OnboardingComponent,
+    MainSearchComponent,
   ],
   imports: [
     BrowserModule,

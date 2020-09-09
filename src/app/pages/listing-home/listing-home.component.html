@@ -1,5 +1,9 @@
-<app-banner *ngIf="ListingsService.ListingData"></app-banner>
-
+<section>
+  <main-search></main-search>
+</section>
+<section class="container block-content">
+  <app-banner *ngIf="ListingsService.ListingData"></app-banner>
+</section>
 <section *ngIf="LikedArr.length != 0" class="container block-content">
   <div class="col-12">
     <h2>Your Favourites</h2>
