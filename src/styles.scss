@@ -59,6 +59,22 @@ h3 {
     }
   }
 }
+.mat-option-text {
+  overflow: auto;
+  text-overflow: unset;
+}
+
+.mat-select-panel .mat-optgroup-label,
+.mat-select-panel .mat-option {
+  white-space: pre-wrap;
+  overflow: auto;
+  text-overflow: unset;
+  line-height: inherit !important;
+  height: auto !important;
+  padding-bottom: 1rem !important;
+  padding-top: 1rem !important;
+}
+
 // Buttons
 .yellow-btn {
   display: block;
@@ -147,6 +163,51 @@ h3 {
   ul {
     li {
       cursor: default;
+    }
+  }
+}
+
+.jobs-list {
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    padding: 1rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    li {
+      display: inline-block;
+      margin-right: 1rem;
+      margin-bottom: 1rem;
+      background: #4ea0ae;
+      padding: 0.5rem 1rem;
+      padding-bottom: 0;
+      border-radius: 5px;
+      p {
+        color: white;
+      }
+      .listing-jobs {
+        .job-title {
+          margin: 0;
+          font-weight: bold;
+        }
+        .job-description {
+          margin: 0;
+          margin-top: 1rem;
+          margin-bottom: 2rem;
+          white-space: pre-wrap;
+          display: none;
+        }
+      }
+      .collapse-btn {
+        border-color: white;
+        margin: 0;
+        margin-top: 0.5rem;
+        &:after {
+          color: white;
+        }
+      }
     }
   }
 }

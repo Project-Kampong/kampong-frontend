@@ -42,6 +42,12 @@ export class ListingsService {
       this.options
     );
   }
+  getAllLocations() {
+    return this.httpClient.get<API>(
+      this.url + "api/locations?limit=100&",
+      this.options
+    );
+  }
 
   getListings(page: number) {
     return this.httpClient.get<API>(
@@ -150,6 +156,22 @@ export class ListingsService {
     );
   }
 
+  // Listing Location
+  getSelectedListingLocations(listingId) {
+    return this.httpClient.get<API>(
+      this.url + "api/listings/" + listingId + "/listing-locations",
+      this.options
+    );
+  }
+
+  // Listing Jobs
+  getSelectedListingJobs(listingId) {
+    return this.httpClient.get<API>(
+      this.url + "api/listings/" + listingId + "/jobs",
+      this.options
+    );
+  }
+
   // Liked Listing - by User
   getLikedListing() {
     return this.httpClient.get<API>(
@@ -225,6 +247,22 @@ export class ListingsService {
     );
   }
 
+  createListingLocation(data) {
+    return this.httpClient.post<API>(
+      this.url + "api/listing-locations",
+      data,
+      this.AuthService.AuthOptions
+    );
+  }
+
+  createListingJobs(data) {
+    return this.httpClient.post<API>(
+      this.url + "api/jobs",
+      data,
+      this.AuthService.AuthOptions
+    );
+  }
+
   // Comments
   CreateListingComments(data) {
     return this.httpClient.post<API>(
@@ -284,6 +322,14 @@ export class ListingsService {
     );
   }
 
+  updateJobs(job_id, data) {
+    return this.httpClient.put<API>(
+      this.url + "api/jobs/" + job_id,
+      data,
+      this.AuthService.AuthOptions
+    );
+  }
+
   // Edit Listing
   // Delete
   removeListing(listingId) {
@@ -318,6 +364,21 @@ export class ListingsService {
   removeListingSkills(listing_skill_id) {
     return this.httpClient.delete<API>(
       this.url + "api/listing-skills/" + listing_skill_id,
+      this.AuthService.AuthOptions
+    );
+  }
+
+  removeListingLocation(listing_location_id) {
+    return this.httpClient.delete<API>(
+      this.url + "api/listing-locations/" + listing_location_id,
+      this.AuthService.AuthOptions
+    );
+  }
+
+  removeListingJobs(listing_job_id) {
+    return this.httpClient.put<API>(
+      this.url + "api/jobs/" + listing_job_id + "/deactivate",
+      {},
       this.AuthService.AuthOptions
     );
   }
