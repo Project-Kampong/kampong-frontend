@@ -21,17 +21,18 @@
         <div class="project-status-container">
           <p class="project-status project-open">Project Ongoing</p>
         </div>
-        <div class="locationtags-list">
+        <div *ngIf="ListingLocation.length > 0" class="locationtags-list">
           <ul>
-            <li>Marsiling</li>
-            <li>Woodlands</li>
-            <li>Ang Mo Kio</li>
-            <li>Yishun</li>
-            <li>khatib</li>
-            <li>Jurong</li>
+            <li *ngFor="let location of ListingLocation">
+              {{ location.location }}
+            </li>
           </ul>
         </div>
-        <div class="collapse-btn" (click)="toggle_collapse()"></div>
+        <div
+          *ngIf="ListingLocation.length > 0"
+          class="collapse-btn location-expand"
+          (click)="toggle_collapse()"
+        ></div>
         <div class="user-info" *ngIf="ProfileInfo">
           <div class="profile-image">
             <img src="{{ ProfileInfo.profile_picture }}" />
@@ -77,7 +78,6 @@
             fill="#F1CB4A"
           />
         </svg>
-
         <p>{{ ListingData["mission"] }}</p>
       </div>
     </div>
@@ -89,9 +89,22 @@
   <div class="col-12">
     <h2>Looking For</h2>
   </div>
-  <div class="category-list anti-select-category-list col-12">
+  <div class="jobs-list col-12">
     <ul>
-      <li *ngFor="let skills of SkillsList">{{ skills.skill }}</li>
+      <li *ngFor="let skills of SkillsList">
+        <div class="listing-jobs">
+          <p class="job-title">{{ skills.job_title }}</p>
+          <p [className]="'job-description job-number-' + skills.job_id">
+            {{ skills.job_description }}
+          </p>
+          <div
+            [className]="
+              'collapse-btn jobs-expand job-collapse-' + skills.job_id
+            "
+            (click)="toggle_jobs(skills.job_id)"
+          ></div>
+        </div>
+      </li>
     </ul>
   </div>
 </section>
