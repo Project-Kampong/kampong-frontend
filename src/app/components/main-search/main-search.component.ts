@@ -22,7 +22,7 @@ export class MainSearchComponent implements OnInit {
         {
             name: "North",
             group: [
-            "Admirality",
+            "Admiralty",
             "Kranji",
             "Woodlands",
             "Sembawang",
@@ -152,7 +152,7 @@ export class MainSearchComponent implements OnInit {
     ngOnInit() {
         this.searchParams = this.fb.group({
             nameParams: new FormControl(''),
-            locationParams: [],
+            locationParams: new FormControl('Admiralty'),
             categoryParams: []
         })
     }

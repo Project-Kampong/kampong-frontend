@@ -14,11 +14,13 @@
             </div>
             <div class="search-box">
                 <form [formGroup]="searchParams" (ngSubmit)="initiateSearch()">
-                    <mat-form-field class="mat-form-field-box" appearance="outline">
-                        <input matInput formControlName="nameParams" placeholder="Search Kampong">
+                    <mat-form-field class="mat-form-field-box" appearance="fill">
+                        <mat-label>Search Kampong</mat-label>
+                        <input matInput formControlName="nameParams">
                     </mat-form-field>
-                    <mat-form-field appearance="outline">
-                        <mat-select formControlName="locationParams" multiple disableOptionCentering placeholder="Location">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Location</mat-label>
+                        <mat-select formControlName="locationParams" multiple disableOptionCentering>
                             <mat-optgroup
                             *ngFor="let group of locationList"
                             [label]="group.name"
@@ -32,8 +34,9 @@
                             </mat-optgroup>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field appearance="outline">
-                        <mat-select formControlName="categoryParams" multiple disableOptionCentering placeholder="Category">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Category</mat-label>
+                        <mat-select formControlName="categoryParams" multiple disableOptionCentering>
                             <mat-optgroup
                             *ngFor="let group of categoryList"
                             [label]="group.name"
@@ -47,7 +50,7 @@
                             </mat-optgroup>
                         </mat-select>
                     </mat-form-field>
-                    <button mat-icon-button type="submit" style="height: 63px; width: 60px;" color="primary">
+                    <button mat-icon-button type="submit" style="height: 60px; width: 60px; transform: translate(0px, -4px)" color="primary">
                         <mat-icon>search</mat-icon>
                     </button>
                 </form>
