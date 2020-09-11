@@ -1,7 +1,7 @@
+import { state } from '@angular/animations';
 import { Component, OnInit, Input } from "@angular/core";
-import { ListingsService } from '@app/services/listings.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import { Location } from "@angular/common";
+import { Router } from "@angular/router";
 declare var $: any;
 
 @Component({
@@ -15,6 +15,7 @@ export class MainSearchComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
+        private router: Router
         ) { }
 
     locationList = [
@@ -158,6 +159,9 @@ export class MainSearchComponent implements OnInit {
 
     initiateSearch() {
         console.log(this.searchParams.value);
+        this.router.navigate(["/search"], {
+            state: {name: this.searchParams.value.nameParams}
+        });
     }
 
 }

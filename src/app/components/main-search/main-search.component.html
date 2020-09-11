@@ -16,7 +16,7 @@
                         <input matInput formControlName="nameParams" placeholder="Search Kampong">
                     </mat-form-field>
                     <mat-form-field appearance="outline">
-                        <mat-select formControlName="locationParams" multiple placeholder="Location">
+                        <mat-select formControlName="locationParams" multiple disableOptionCentering placeholder="Location">
                             <mat-optgroup
                             *ngFor="let group of locationList"
                             [label]="group.name"
@@ -31,7 +31,7 @@
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field appearance="outline">
-                        <mat-select formControlName="categoryParams" multiple placeholder="Category">
+                        <mat-select formControlName="categoryParams" multiple disableOptionCentering placeholder="Category">
                             <mat-optgroup
                             *ngFor="let group of categoryList"
                             [label]="group.name"
