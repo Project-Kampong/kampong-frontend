@@ -51,6 +51,8 @@ export class ListingIndividualComponent implements OnInit {
   CommentsArr = [];
   // Updates
   UpdatesArr = [];
+  // Locations
+  ListingLocation = [];
 
   // UI
   SliderImageArr = [];
@@ -64,7 +66,7 @@ export class ListingIndividualComponent implements OnInit {
   fileLimit = false;
   fileCount = 0;
   updatesFormOpen = false;
-
+  locationList = [];
   ngOnInit() {
     window.scroll(0, 0);
     this.listingId = this.route.snapshot.params["id"];
@@ -79,6 +81,12 @@ export class ListingIndividualComponent implements OnInit {
   }
 
   getInitData() {
+    // Static
+    this.ListingsService.getAllLocations().subscribe((data) => {
+      console.log(data);
+      this.locationList = data["data"];
+    });
+
     // Get Listing Info
     this.ListingsService.getSelectedListing(this.listingId).subscribe(
       (data) => {
@@ -134,7 +142,13 @@ export class ListingIndividualComponent implements OnInit {
         );
 
         // Get Skills
-        this.ListingsService.getSelectedListingSkills(this.listingId).subscribe(
+        // this.ListingsService.getSelectedListingSkills(this.listingId).subscribe(
+        //   (data) => {
+        //     this.SkillsList = data["data"];
+        //     console.log(this.SkillsList);
+        //   }
+        // );
+        this.ListingsService.getSelectedListingJobs(this.listingId).subscribe(
           (data) => {
             this.SkillsList = data["data"];
             console.log(this.SkillsList);
@@ -146,6 +160,13 @@ export class ListingIndividualComponent implements OnInit {
           this.listingId
         ).subscribe((data) => {
           this.Hashtags = data["data"];
+        });
+
+        // Get Location
+        this.ListingsService.getSelectedListingLocations(
+          this.listingId
+        ).subscribe((data) => {
+          this.ListingLocation = data["data"];
         });
 
         // Get Stories
@@ -430,8 +451,8 @@ export class ListingIndividualComponent implements OnInit {
 
   // Collapse
   toggle_collapse() {
-    $(".collapse-btn").toggleClass("active");
-    const iscollapsed = $(".collapse-btn").hasClass("active");
+    $(".location-expand").toggleClass("active");
+    const iscollapsed = $(".location-expand").hasClass("active");
     if (iscollapsed) {
       $(".locationtags-list").css({
         height: $(".locationtags-list ul").height() + 12 + "px",
@@ -441,6 +462,12 @@ export class ListingIndividualComponent implements OnInit {
         height: "4rem",
       });
     }
+  }
+  toggle_jobs(id) {
+    const jobsSelected = ".job-number-" + id;
+    const jobsBtn = ".job-collapse-" + id;
+    $(jobsSelected).slideToggle();
+    $(jobsBtn).toggleClass("active");
   }
 
   enquireMessage: String = "";

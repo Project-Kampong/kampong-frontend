@@ -442,25 +442,25 @@
   margin: 1rem 0;
   display: flex;
   justify-content: space-between;
-  .project-status {
-    display: inline-block;
-    margin-bottom: 0;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.9rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    color: white;
-    &:before {
-      content: "\f017";
-      font-family: "Font Awesome\ 5 Free";
-      font-weight: 400;
-      margin-right: 0.5rem;
-    }
+}
+.project-status {
+  display: inline-block;
+  margin-bottom: 0;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: white;
+  &:before {
+    content: "\f017";
+    font-family: "Font Awesome\ 5 Free";
+    font-weight: 400;
+    margin-right: 0.5rem;
   }
-  .project-open {
-    background: #00c09da9;
-  }
-  .project-close {
-    background: #2e4057a9;
-  }
+}
+.project-open {
+  background: #00c09da9;
+}
+.project-close {
+  background: #2e4057a9;
 }

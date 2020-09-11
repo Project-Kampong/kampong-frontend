@@ -119,86 +119,9 @@ export class EditListingComponent implements OnInit {
       group: [],
     },
   ];
-  locationList = [
-    {
-      name: "North",
-      group: [
-        "Admirality",
-        "Kranji",
-        "Woodlands",
-        "Sembawang",
-        "Yishun",
-        "Yio Chu Kang",
-        "Seletar",
-        "Sengkang",
-      ],
-    },
-    {
-      name: "South",
-      group: [
-        "Holland",
-        "Queenstown",
-        "Bukit Merah",
-        "Telok Blangah",
-        "Pasir Panjang",
-        "Sentosa",
-        "Bukit Timah",
-        "Newton",
-        "Orchard",
-        "City",
-        "Marina South",
-      ],
-    },
-    {
-      name: "East",
-      group: [
-        "Serangoon",
-        "Punggol",
-        "Hougang",
-        "Tampines",
-        "Pasir Ris",
-        "Loyang",
-        "Simei",
-        "Kallang",
-        "Katong",
-        "East Coast",
-        "Macpherson",
-        "Bedok",
-        "Pulau Ubin",
-        "Pulau Tekong",
-      ],
-    },
-    {
-      name: "West",
-      group: [
-        "Lim Chu Kang",
-        "Choa Chu Kang",
-        "Bukit Panjang",
-        "Tuas",
-        "Jurong East",
-        "Jurong West",
-        "Jurong Industrial Estate",
-        "Bukit Batok",
-        "Hillview",
-        "West Coast",
-        "Clementi",
-      ],
-    },
-    {
-      name: "Central",
-      group: [
-        "Thomson",
-        "Marymount",
-        "Sin Ming",
-        "Ang Mo Kio",
-        "Bishan",
-        "Serangoon Gardens",
-        "MacRitchie",
-        "Toa Payoh",
-      ],
-    },
-  ];
+  locationList = [];
   rawSkillsets = [];
+  lookingForArr = [];
 
   ngOnInit() {
     window.scroll(0, 0);
@@ -207,13 +130,16 @@ export class EditListingComponent implements OnInit {
     this.ListingForm = this.fb.group({
       ...CreateListing,
       ...ListingStory,
-      SkillsList: [],
       LocationsList: [],
       customCategory: ["", [Validators.maxLength(25)]],
     });
 
     // Grab Skillsets
     this.paginationSkillsets();
+    this.ListingsService.getAllLocations().subscribe((data) => {
+      console.log(data);
+      this.locationList = data["data"];
+    });
 
     // Grab data
     this.ListingsService.getSelectedListing(this.listingId).subscribe(
@@ -302,21 +228,43 @@ export class EditListingComponent implements OnInit {
         });
       }
     );
-    // Grab Skillsets
-    this.ListingsService.getSelectedListingSkills(this.listingId).subscribe(
+
+    // Grab Jobs
+    this.ListingsService.getSelectedListingJobs(this.listingId).subscribe(
       (data) => {
         console.log(data);
-        var skillsarr = [];
-        this.SkillsetsCC = data["data"];
-        data["data"].map((x) => {
-          skillsarr.push(x.skill_id);
+        const jobsList = data["data"];
+        jobsList.map((x) => {
+          this.lookingForArr.push({
+            skills: x.job_title,
+            description: x.job_description,
+            job_id: x.job_id,
+          });
         });
-        this.ListingForm.controls["SkillsList"].setValue(skillsarr);
-        console.log(this.ListingForm.value);
+        this.lookingForArr.push({
+          skills: "",
+          description: "",
+        });
+      }
+    );
+
+    // Grab Location
+    this.ListingsService.getSelectedListingLocations(this.listingId).subscribe(
+      (data) => {
+        console.log(data);
+        const locationData = data["data"];
+        var tempLocation = [];
+        // Carbon Copy of location
+        this.LocationsetsCC = locationData;
+        locationData.map((x) => {
+          tempLocation.push(x.location_id);
+        });
+        this.ListingForm.controls["LocationsList"].setValue(tempLocation);
+        console.log(this.ListingForm.value.LocationsList);
       }
     );
   }
-  SkillsetsCC = [];
+  LocationsetsCC = [];
   // Submit Data
   saveListing() {
     var routeTo;
@@ -331,6 +279,7 @@ export class EditListingComponent implements OnInit {
     }
     listingUpdates.append("tagline", listingData.tagline);
     listingUpdates.append("mission", listingData.mission);
+    listingUpdates.append("email", listingData.user_email);
     for (var i = 0; i < this.fileArr.length; i++) {
       listingUpdates.append("pic" + (i + 1), this.fileArr[i]);
     }
@@ -414,32 +363,63 @@ export class EditListingComponent implements OnInit {
         });
 
         // Update Looking For
-        var createSkillsArr = [];
-        listingData.SkillsList.map((x) => {
-          var notexist = true;
-          this.SkillsetsCC.map((y) => {
-            if (x == y.skill_id) {
-              notexist = false;
-              y.exist = true;
-              return;
+        // Remove Jobs
+        this.jobsRemoveArr.map((x) => {
+          this.ListingsService.removeListingJobs(x).subscribe();
+        });
+        // Update
+        this.lookingForArr.map((x) => {
+          if (x.skills != "" && x.description != "") {
+            if (x.job_id != null) {
+              this.ListingsService.updateJobs(x.job_id, {
+                job_title: x.skills,
+                job_description: x.description,
+              }).subscribe();
+            } else {
+              // Create
+              this.ListingsService.createListingJobs({
+                listing_id: this.listingId,
+                job_title: x.skills,
+                job_description: x.description,
+              }).subscribe();
+            }
+          } else {
+            return;
+          }
+        });
+
+        // Location
+        listingData.LocationsList.map((x) => {
+          var exist = false;
+          this.LocationsetsCC.map((y) => {
+            console.log(y.location_id, x);
+            if (y.location_id == x) {
+              console.log("match");
+              exist = true;
             }
           });
-          if (notexist == true) {
-            createSkillsArr.push(x);
+          if (!exist) {
+            // create location
+            this.ListingsService.createListingLocation({
+              listing_id: this.listingId,
+              location_id: x,
+            }).subscribe();
           }
         });
-        this.SkillsetsCC.map((x) => {
-          if (x.exist == null) {
-            this.ListingsService.removeListingSkills(
-              x.listing_skill_id
+
+        // Delete location
+        this.LocationsetsCC.map((x) => {
+          var exist = false;
+          listingData.LocationsList.map((y) => {
+            if (x.location_id == y) {
+              exist = true;
+            }
+          });
+          if (!exist) {
+            this.ListingsService.removeListingLocation(
+              x.listing_location_id
             ).subscribe();
           }
-        });
-        createSkillsArr.map((x) => {
-          this.ListingsService.connectListingSkills({
-            listing_id: this.listingId,
-            skill_id: x,
-          }).subscribe();
         });
       },
       (err) => {
@@ -635,6 +615,23 @@ export class EditListingComponent implements OnInit {
           this.router.navigate(["/profile"]);
         }
       );
+    }
+  }
+
+  // Looking for
+  addDescription() {
+    this.lookingForArr.push({ skills: "", description: "" });
+    console.log(this.lookingForArr);
+  }
+  jobsRemoveArr = [];
+  removeDescription(item, index) {
+    this.lookingForArr.splice(index, 1);
+    if (this.lookingForArr.length == 0) {
+      this.lookingForArr.push({ skills: "", description: "" });
+    }
+    if (item.job_id != null) {
+      this.jobsRemoveArr.push(item.job_id);
+      console.log(this.jobsRemoveArr);
     }
   }
 }

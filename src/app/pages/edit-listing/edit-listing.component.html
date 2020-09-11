@@ -136,37 +136,12 @@
           <mat-form-field class="half-width" appearance="fill">
             <mat-label>Project Location</mat-label>
             <mat-select formControlName="LocationsList" multiple>
-              <mat-optgroup
-                *ngFor="let group of locationList"
-                [label]="group.name"
+              <mat-option
+                *ngFor="let location of locationList"
+                [value]="location.location_id"
               >
-                <mat-option
-                  *ngFor="let location of group.group"
-                  [value]="location"
-                >
-                  {{ location }}
-                </mat-option>
-              </mat-optgroup>
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <div class="col-lg-12">
-          <mat-form-field class="half-width" appearance="fill">
-            <mat-label>Looking For</mat-label>
-            <mat-select formControlName="SkillsList" multiple>
-              <mat-optgroup
-                *ngFor="let group of skillsets"
-                [label]="group.name"
-                [disabled]="group.disabled"
-              >
-                <mat-option
-                  *ngFor="let category of group.group"
-                  [value]="category.skill_id"
-                >
-                  {{ category.skill }}
-                </mat-option>
-              </mat-optgroup>
+                {{ location.location }}
+              </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -412,9 +387,7 @@
         </div>
       </div>
 
-      <!--  -->
-
-      <div class="col-lg-12">
+      <div class="col-lg-12 mt-5">
         <mat-accordion>
           <mat-expansion-panel>
             <mat-expansion-panel-header>
@@ -500,6 +473,65 @@
             </div>
           </mat-expansion-panel>
         </mat-accordion>
+      </div>
+
+      <div class="col-lg-12 mt-5">
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Skills you are looking for</mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- Looking for section -->
+            <div class="milestones-container">
+              <label>Looking For</label>
+              <div
+                *ngFor="let item of lookingForArr; index as i"
+                class="milestones"
+              >
+                <div class="input-field-container">
+                  <mat-form-field class="milestone-input">
+                    <mat-label>Skills Required</mat-label>
+                    <mat-select [(ngModel)]="item.skills">
+                      <mat-optgroup
+                        *ngFor="let group of skillsets"
+                        [label]="group.name"
+                        [disabled]="group.disabled"
+                      >
+                        <mat-option
+                          *ngFor="let category of group.group"
+                          [value]="category.skill"
+                        >
+                          {{ category.skill }}
+                        </mat-option>
+                      </mat-optgroup>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field class="milestone-input">
+                    <mat-label>Description</mat-label>
+                    <textarea
+                      matInput
+                      cdkTextareaAutosize
+                      cdkAutosizeMinRows="1"
+                      [(ngModel)]="item.description"
+                      maxlength="500"
+                    ></textarea>
+                  </mat-form-field>
+                </div>
+                <button
+                  class="remove-milestone"
+                  (click)="removeDescription(item, i)"
+                ></button>
+              </div>
+
+              <button class="add-milestones" (click)="addDescription()">
+                Add Skills
+              </button>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+
+      <div class="col-lg-12">
         <div class="submit-btn">
           <button
             class="btn yellow-btn"
