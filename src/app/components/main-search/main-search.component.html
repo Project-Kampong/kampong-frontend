@@ -1,17 +1,53 @@
 <div class="main-search">
     <div class="video-container">
-        <video loop muted autoplay>
-            <source src="../../../assets/images/singapore.mp4" type="video/mp4" />
+        <video loop [muted]="true" autoplay>
+            <source src="../../../assets/images/test.mp4" type="video/mp4" />
         </video>
         <div class="content-holder">
             <div>
-                <h1 style="color: white; font-size: 5rem;">Let's play a role!</h1>
+                <span style="color: white; font-size: 5rem;">Building Good From The Ground Up</span>
             </div>
             <div>
-                <form>
-                    <input type="text">
-                    <input type="text">
-                    <input type="text">
+                <span style="color: white; font-size: 1.25rem;">Find initiatives and activities to volunteer at from all around Singapore</span>
+            </div>
+            <div class="search-box">
+                <form [formGroup]="searchParams" (ngSubmit)="initiateSearch()">
+                    <mat-form-field class="mat-form-field-box" appearance="outline">
+                        <input matInput formControlName="nameParams" placeholder="Search Kampong">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-select formControlName="locationParams" multiple placeholder="Location">
+                            <mat-optgroup
+                            *ngFor="let group of locationList"
+                            [label]="group.name"
+                            >
+                                <mat-option
+                                *ngFor="let location of group.group"
+                                [value]="location"
+                                >
+                                {{ location }}
+                                </mat-option>
+                            </mat-optgroup>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-select formControlName="categoryParams" multiple placeholder="Category">
+                            <mat-optgroup
+                            *ngFor="let group of categoryList"
+                            [label]="group.name"
+                            >
+                                <mat-option
+                                *ngFor="let category of group.group"
+                                [value]="category"
+                                >
+                                {{ category }}
+                                </mat-option>
+                            </mat-optgroup>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-icon-button type="submit" style="height: 63px; width: 60px;" color="primary">
+                        <mat-icon>search</mat-icon>
+                    </button>
                 </form>
             </div>
         </div>

@@ -25,7 +25,32 @@
 .content-holder {
     height: inherit;
     width: inherit;
-    position: absolute;
     text-align: center;
     transform: translate(0%, 20%);
 }
+
+.mat-form-field-box {
+    color: white !important;
+    width: 30vw;
+    height: auto;
+}
+
+.search-box {
+    width: auto;
+    height: 30vh;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: white !important;
+    background-color: white !important;
+}
+
+::ng-deep input.mat-input-element {
+    color: #484a4c;
+  }
+  
+/*
+::ng-deep .mat-input-element::placeholder{
+    color: black;
+}
+*/
