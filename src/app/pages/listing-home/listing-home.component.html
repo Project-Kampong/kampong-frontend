@@ -1,16 +1,9 @@
-<<<<<<< HEAD
-<div *ngIf="ListingsService.FeaturedListingData != null">
-  <app-banner></app-banner>
-</div>
-
-=======
 <section>
   <main-search></main-search>
 </section>
 <section class="container block-content">
   <app-banner *ngIf="ListingsService.ListingData"></app-banner>
 </section>
->>>>>>> d-landing
 <section *ngIf="LikedArr.length != 0" class="container block-content">
   <div class="col-12">
     <h2>Your Favourites</h2>
