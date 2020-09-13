@@ -1,4 +1,6 @@
-<app-banner *ngIf="ListingsService.ListingData"></app-banner>
+<div *ngIf="ListingsService.FeaturedListingData != null">
+  <app-banner></app-banner>
+</div>
 
 <section *ngIf="LikedArr.length != 0" class="container block-content">
   <div class="col-12">

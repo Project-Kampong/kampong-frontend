@@ -68,7 +68,7 @@ export const CreateListing = {
     "",
     [Validators.required, Validators.maxLength(150), patternvalidation],
   ],
-  user_email: ["", [Validators.email]],
+  user_email: ["", [Validators.required, Validators.email]],
 };
 
 export const ListingStory = {
