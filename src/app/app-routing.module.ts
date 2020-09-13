@@ -22,7 +22,6 @@ const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
   { path: "login", component: LoginComponent },
   { path: "register", component: RegisterComponent },
-  { path: "search", component: SearchComponent },
   {
     path: "",
     component: ContentWrapperComponent,
@@ -35,6 +34,7 @@ const routes: Routes = [
       { path: "edit-profile", component: EditProfileComponent },
       { path: "profile/:id", component: PublicProfileComponent },
       { path: "onboarding", component: OnboardingComponent },
+      { path: "search", component: SearchComponent },
     ],
   },
 ];
