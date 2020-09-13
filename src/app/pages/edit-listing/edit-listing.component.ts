@@ -279,7 +279,7 @@ export class EditListingComponent implements OnInit {
     }
     listingUpdates.append("tagline", listingData.tagline);
     listingUpdates.append("mission", listingData.mission);
-    listingUpdates.append("email", listingData.user_email);
+    listingUpdates.append("listing_email", listingData.user_email);
     for (var i = 0; i < this.fileArr.length; i++) {
       listingUpdates.append("pic" + (i + 1), this.fileArr[i]);
     }

@@ -228,7 +228,7 @@ export class CreateListingComponent implements OnInit {
     ImageFd.append("tagline", listingData.tagline);
     ImageFd.append("mission", listingData.mission);
     ImageFd.append("listing_url", "www.test.com");
-    ImageFd.append("email", listingData.user_email);
+    ImageFd.append("listing_email", listingData.user_email);
     for (var i = 0; i < this.fileArr.length; i++) {
       ImageFd.append("pic" + (i + 1), this.fileArr[i].name);
       ImageFd.append("pics", this.fileArr[i]);

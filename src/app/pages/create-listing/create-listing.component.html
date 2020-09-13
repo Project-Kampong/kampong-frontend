@@ -181,6 +181,9 @@
             Enter an email you will like to receive enquiries
           </mat-hint>
           <!-- Errors Validation -->
+          <mat-error *ngIf="ListingForm.get('user_email').hasError('required')">
+            Email is required
+          </mat-error>
           <mat-error *ngIf="ListingForm.get('user_email').hasError('email')">
             Please Enter an Email
           </mat-error>
