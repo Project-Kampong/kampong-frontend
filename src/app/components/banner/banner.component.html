@@ -2,29 +2,36 @@
   <div *ngFor="let listing of featuredData; let i = index" class="banner">
     <span *ngIf="i == featuredData.length - 1">{{ sliderSlickInit() }}</span>
 
+    
     <img src="{{ listing.pic1 }}" />
     <div class="banner-overlay">
       <div class="container">
-        <p class="category">{{ listing.category }}</p>
-        <p class="title">{{ listing.title }}</p>
-        <p class="tagline">
-          {{ listing.tagline }}
-        </p>
-        <a routerLink="/listing/{{ listing.listing_id }}" class="view-btn"
-          >View
-          <svg
-            width="20"
-            height="15"
-            viewBox="0 0 20 15"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M18.7218 8.20711C19.1124 7.81658 19.1124 7.18342 18.7218 6.79289L12.3579 0.428932C11.9674 0.0384079 11.3342 0.0384079 10.9437 0.428932C10.5531 0.819456 10.5531 1.45262 10.9437 1.84315L16.6005 7.5L10.9437 13.1569C10.5531 13.5474 10.5531 14.1805 10.9437 14.5711C11.3342 14.9616 11.9674 14.9616 12.3579 14.5711L18.7218 8.20711ZM0.985352 8.5H18.0147V6.5H0.985352V8.5Z"
-              fill="white"
-            />
-          </svg>
-        </a>
+        <div class="info-box">
+          <div style="max-height: 320px; height: 320px;">
+            <p class="title">{{ listing.title }}</p>
+            <p class="category">{{ listing.category }}</p>
+            <p class="tagline">
+              {{ listing.tagline }}
+            </p>
+          </div>
+          <div>
+            <a routerLink="/listing/{{ listing.listing_id }}" class="view-btn"
+              >View
+              <svg
+                width="20"
+                height="15"
+                viewBox="0 0 20 15"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M18.7218 8.20711C19.1124 7.81658 19.1124 7.18342 18.7218 6.79289L12.3579 0.428932C11.9674 0.0384079 11.3342 0.0384079 10.9437 0.428932C10.5531 0.819456 10.5531 1.45262 10.9437 1.84315L16.6005 7.5L10.9437 13.1569C10.5531 13.5474 10.5531 14.1805 10.9437 14.5711C11.3342 14.9616 11.9674 14.9616 12.3579 14.5711L18.7218 8.20711ZM0.985352 8.5H18.0147V6.5H0.985352V8.5Z"
+                  fill="white"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>

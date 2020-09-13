@@ -1,0 +1,78 @@
+<div class="main-search">
+  <div class="video-container">
+    <video loop [muted]="true" autoplay>
+      <source
+        src="https://test-video-bucket-darren.s3-ap-southeast-1.amazonaws.com/test.mp4"
+        type="video/mp4"
+      />
+    </video>
+    <div class="content-holder">
+      <div class="content-holder-inner container">
+        <span class="hero-text">Building Good From The Ground Up</span>
+        <span class="hero-small"
+          >Find initiatives and activities to volunteer at from all around
+          Singapore</span
+        >
+
+        <div class="search-box">
+          <form
+            [formGroup]="searchParams"
+            (ngSubmit)="initiateSearch()"
+            class="search-box-inner"
+          >
+            <mat-form-field
+              class="full-mobile mat-form-field-box"
+              appearance="fill"
+            >
+              <mat-label>Search Kampong</mat-label>
+              <input matInput formControlName="nameParams" />
+            </mat-form-field>
+            <mat-form-field class="half-mobile" appearance="fill">
+              <mat-label>Location</mat-label>
+              <mat-select
+                formControlName="locationParams"
+                multiple
+                disableOptionCentering
+              >
+                <mat-optgroup
+                  *ngFor="let group of locationList"
+                  [label]="group.name"
+                >
+                  <mat-option
+                    *ngFor="let location of group.group"
+                    [value]="location"
+                  >
+                    {{ location }}
+                  </mat-option>
+                </mat-optgroup>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="half-mobile" appearance="fill">
+              <mat-label>Category</mat-label>
+              <mat-select
+                formControlName="categoryParams"
+                multiple
+                disableOptionCentering
+              >
+                <mat-optgroup
+                  *ngFor="let group of categoryList"
+                  [label]="group.name"
+                >
+                  <mat-option
+                    *ngFor="let category of group.group"
+                    [value]="category"
+                  >
+                    {{ category }}
+                  </mat-option>
+                </mat-optgroup>
+              </mat-select>
+            </mat-form-field>
+            <button mat-icon-button type="submit" class="search-banner-btn">
+              <mat-icon>search</mat-icon>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

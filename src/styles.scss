@@ -562,6 +562,12 @@ body {
   font-size: 1rem !important;
 }
 
+.search-box {
+  .mat-form-field-flex {
+    border-radius: 0 !important;
+  }
+}
+
 // footer
 $navy: #364f6b;
 
