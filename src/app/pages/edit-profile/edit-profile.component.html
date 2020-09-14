@@ -64,21 +64,21 @@
         </mat-form-field>
 
         <mat-form-field class="full-width">
-          <mat-label>Interest</mat-label>
-          <input matInput formControlName="interest" />
+          <mat-label>Occupation</mat-label>
+          <input matInput formControlName="occupation" />
           <!-- Errors Validation -->
           <mat-error
-            *ngIf="EditProfileForm.get('interest').hasError('required')"
+            *ngIf="EditProfileForm.get('occupation').hasError('required')"
           >
-            Interest is required
+            Occupation is required
           </mat-error>
           <mat-error
-            *ngIf="EditProfileForm.get('interest').hasError('maxlength')"
+            *ngIf="EditProfileForm.get('occupation').hasError('maxlength')"
           >
-            Interest must not be more than 30 characters long.
+            Occupation must not be more than 30 characters long.
           </mat-error>
           <mat-error
-            *ngIf="EditProfileForm.get('interest').hasError('pattern')"
+            *ngIf="EditProfileForm.get('occupation').hasError('pattern')"
           >
             Special characters not allowed
           </mat-error>

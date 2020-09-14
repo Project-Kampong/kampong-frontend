@@ -10,10 +10,10 @@
       </div>
       <div class="user-details">
         <p class="name">{{ ProfileDetails.nickname }}</p>
-        <p *ngIf="ProfileDetails.interest != null" class="position">
-          {{ ProfileDetails.interest }}
+        <p *ngIf="ProfileDetails.occupation != null" class="position">
+          {{ ProfileDetails.occupation }}
         </p>
-        <p *ngIf="ProfileDetails.interest == null" class="position">Newbie</p>
+        <p *ngIf="ProfileDetails.occupation == null" class="position">Newbie</p>
       </div>
     </div>
 
@@ -39,18 +39,14 @@
 
 <section *ngIf="StartedArr.length != 0" class="container block-content">
   <div class="col-12">
-    <h2>
-      Initiatives I’ve Started
-    </h2>
+    <h2>Initiatives I’ve Started</h2>
   </div>
   <app-edit-listing-cards [ListingData]="StartedArr"></app-edit-listing-cards>
 </section>
 
 <section *ngIf="LikedArr.length != 0" class="container block-content">
   <div class="col-12">
-    <h2>
-      Initiatives I’ve Liked
-    </h2>
+    <h2>Initiatives I’ve Liked</h2>
   </div>
   <app-listing-cards [ListingData]="LikedArr"></app-listing-cards>
 </section>

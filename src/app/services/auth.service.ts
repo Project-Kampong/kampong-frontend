@@ -17,6 +17,7 @@ export class AuthService {
 
   public URL = environment.apiUrl;
   public isLoggedIn = false;
+  public is_activated = false;
   public AuthToken;
   private UserData: UserData[];
   public LoggedInUserID;
@@ -46,6 +47,10 @@ export class AuthService {
       .subscribe(
         (res) => {
           this.validRegisterResponse.emit();
+          this.AuthToken = res["token"];
+          this.setAuthHeaders(this.AuthToken);
+          this.CookieService.set("token", this.AuthToken);
+          this.getUserDetails();
         },
         (err) => {
           this.invalidRegisterResponse.emit();
@@ -76,6 +81,7 @@ export class AuthService {
         console.log(data);
         this.UserData = data["data"];
         this.LoggedInUserID = this.UserData["user_id"];
+        this.is_activated = this.UserData["is_activated"];
         this.isLoggedIn = true;
         this.LoginResponse.emit();
       });
