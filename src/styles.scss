@@ -337,18 +337,35 @@ h3 {
   }
   .slick-arrow {
     z-index: 100;
-    height: 2rem;
-    width: 2rem;
+    height: none !important;
+    width: 4rem;
+    height: 4rem;
+    top: 100% !important;
+    transform: translateY(-100%);
+    &:before {
+      font-weight: bold;
+      font-family: "Font Awesome\ 5 Free";
+      width: 4rem;
+      height: 4rem;
+      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.5);
+    }
   }
   .slick-prev {
-    left: 25px !important;
+    left: auto !important;
+    right: 4rem !important;
     &::before {
+      content: "\f053";
       font-size: 2rem;
     }
   }
   .slick-next {
-    right: 25px !important;
+    right: 0 !important;
     &::before {
+      content: "\f054";
       font-size: 2rem;
     }
   }

@@ -33,13 +33,17 @@ export class BannerComponent implements OnInit {
         adaptiveHeight: true,
         arrows: true,
         dots: true,
-        infinite: false,
+        infinite: true,
+        autoplay: true,
+        autoplaySpeed: 2000,
+        draggable: false,
         speed: 300,
         responsive: [
           {
             breakpoint: 1024,
             settings: {
               arrows: false,
+              draggable: true,
             },
           },
         ],
