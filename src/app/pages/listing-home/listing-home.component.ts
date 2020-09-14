@@ -15,7 +15,6 @@ export class ListingHomeComponent implements OnInit {
     public AuthService: AuthService
   ) {}
 
-  LikedArr: Listing[] = [];
   ngOnInit() {
     window.scroll(0, 0);
 
@@ -24,27 +23,5 @@ export class ListingHomeComponent implements OnInit {
     });
     // Get Public Listing
     this.ListingsService.getListingLoop(1);
-    // Get Liked Listing
-    if (this.AuthService.isLoggedIn) {
-      this.getInitData();
-    }
-    this.AuthService.LoginResponse.subscribe(() => {
-      this.getInitData();
-    });
-  }
-
-  getInitData() {
-    this.ListingsService.getLikedListing().subscribe((data) => {
-      const Liked = data["data"];
-      for (var i = 0; i < Liked.length; i++) {
-        this.ListingsService.getSelectedListing(Liked[i].listing_id).subscribe(
-          (listing) => {
-            if (listing["data"].deleted_on == null) {
-              this.LikedArr.push(listing["data"]);
-            }
-          }
-        );
-      }
-    });
   }
 }
