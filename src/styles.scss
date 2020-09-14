@@ -338,15 +338,15 @@ h3 {
   .slick-arrow {
     z-index: 100;
     height: none !important;
-    width: 4rem;
-    height: 4rem;
+    width: 3rem;
+    height: 3rem;
     top: 100% !important;
     transform: translateY(-100%);
     &:before {
       font-weight: bold;
       font-family: "Font Awesome\ 5 Free";
-      width: 4rem;
-      height: 4rem;
+      width: 3rem;
+      height: 3rem;
       display: block;
       display: flex;
       align-items: center;
@@ -356,7 +356,7 @@ h3 {
   }
   .slick-prev {
     left: auto !important;
-    right: 4rem !important;
+    right: 3.1rem !important;
     &::before {
       content: "\f053";
       font-size: 2rem;
@@ -552,6 +552,10 @@ body {
   .full-width {
     margin-bottom: 3rem !important;
   }
+}
+
+textarea {
+  color: black !important;
 }
 
 .mat-form-field {

@@ -8,6 +8,7 @@ export interface Profile {
   interest: String;
   about: String;
   profile_picture: String;
+  occupation: String;
 }
 
 // Validation
@@ -19,6 +20,10 @@ export const DefaultProfile = {
   ],
   dob: [new Date(), [Validators.required]],
   interest: [
+    "Explorer",
+    [Validators.required, Validators.maxLength(30), patternvalidation],
+  ],
+  occupation: [
     "Explorer",
     [Validators.required, Validators.maxLength(30), patternvalidation],
   ],

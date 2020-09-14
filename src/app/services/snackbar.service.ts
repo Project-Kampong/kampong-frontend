@@ -74,6 +74,9 @@ export class SnackbarService {
       success: "Your message have been send",
       error: "Failed to send message",
     },
+    verify: {
+      msg: "PLease verify your email",
+    },
   };
 
   horizontalPosition: MatSnackBarHorizontalPosition = "right";

@@ -12,6 +12,7 @@ import { Router } from "@angular/router";
 
 import { ListingsService } from "@app/services/listings.service";
 import { SnackbarService } from "@app/services/snackbar.service";
+import { AuthService } from "@app/services/auth.service";
 declare var $: any;
 
 // Interface
@@ -30,7 +31,8 @@ export class CreateListingComponent implements OnInit {
     private fb: FormBuilder,
     public ListingsService: ListingsService,
     private router: Router,
-    public SnackbarService: SnackbarService
+    public SnackbarService: SnackbarService,
+    private AuthService: AuthService
   ) {}
   fileDisplayArr = [];
   fileArr = [];
@@ -125,6 +127,13 @@ export class CreateListingComponent implements OnInit {
 
   rawSkillsets = [];
   ngOnInit() {
+    if (!this.AuthService.is_activated) {
+      this.SnackbarService.openSnackBar(
+        this.SnackbarService.DialogList.verify.msg,
+        true
+      );
+      this.router.navigate(["/home"]);
+    }
     this.ListingForm = this.fb.group({
       ...CreateListing,
       ...ListingStory,

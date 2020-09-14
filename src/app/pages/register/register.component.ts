@@ -10,6 +10,7 @@ import {
 import { SnackbarService } from "@app/services/snackbar.service";
 
 import { AuthService } from "@app/services/auth.service";
+import { Router, ActivatedRoute } from "@angular/router";
 
 function passwordValidator(control: FormControl) {
   let password = control.value;
@@ -33,6 +34,7 @@ function passwordValidator(control: FormControl) {
 })
 export class RegisterComponent implements OnInit {
   constructor(
+    private router: Router,
     private fb: FormBuilder,
     public AuthService: AuthService,
     public SnackbarService: SnackbarService
@@ -56,11 +58,7 @@ export class RegisterComponent implements OnInit {
     });
 
     this.AuthService.validRegisterResponse.subscribe(() => {
-      this.showCheckMail = true;
-      this.SnackbarService.openSnackBar(
-        this.SnackbarService.DialogList.register.success,
-        true
-      );
+      this.router.navigate(["/onboarding"]);
     });
     this.AuthService.invalidRegisterResponse.subscribe(() => {
       this.SnackbarService.openSnackBar(
