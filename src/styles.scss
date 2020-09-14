@@ -337,9 +337,8 @@ h3 {
   }
   .slick-arrow {
     z-index: 100;
-    height: none !important;
-    width: 3rem;
-    height: 3rem;
+    width: 3rem !important;
+    height: 3rem !important;
     top: 100% !important;
     transform: translateY(-100%);
     &:before {
