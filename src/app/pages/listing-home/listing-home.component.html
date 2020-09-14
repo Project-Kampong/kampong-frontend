@@ -4,28 +4,11 @@
 <section class="container block-content">
   <app-banner *ngIf="ListingsService.ListingData"></app-banner>
 </section>
-<section *ngIf="LikedArr.length != 0" class="container block-content">
-  <div class="col-12">
-    <h2>Your Favourites</h2>
-  </div>
-  <app-listing-cards [ListingData]="LikedArr"></app-listing-cards>
-</section>
 
 <section class="container block-content">
   <div class="col-12">
     <h2>Fresh Finds</h2>
   </div>
-  <!-- <div class="filter-list col-12">
-    <ul>
-      <li class="active">
-        <img src="https://image.flaticon.com/icons/svg/3050/3050283.svg" />
-        <p>Social</p>
-      </li>
-      <li class="active">Environment</li>
-      <li class="active">Economical</li>
-      <li>Others</li>
-    </ul>
-  </div> -->
   <app-listing-cards
     *ngIf="ListingsService.ListingData"
     [ListingData]="ListingsService.ListingData"
