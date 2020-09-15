@@ -28,6 +28,9 @@ export class ContentWrapperComponent implements OnInit {
     this.AuthService.LoginResponse.subscribe(() => {
       this.getInitData();
     });
+    this.AuthService.validRegisterResponse.subscribe(() => {
+      this.getInitData();
+    });
 
     $(".menu-btn, .close-menu-btn, .close-menu-overlay").on(
       "click",

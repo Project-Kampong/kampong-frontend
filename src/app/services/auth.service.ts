@@ -50,7 +50,7 @@ export class AuthService {
           this.AuthToken = res["token"];
           this.setAuthHeaders(this.AuthToken);
           this.CookieService.set("token", this.AuthToken);
-          this.getUserDetails();
+          this.getUserDetailsRegister();
         },
         (err) => {
           this.invalidRegisterResponse.emit();
@@ -84,6 +84,18 @@ export class AuthService {
         this.is_activated = this.UserData["is_activated"];
         this.isLoggedIn = true;
         this.LoginResponse.emit();
+      });
+  }
+  getUserDetailsRegister() {
+    return this.httpClient
+      .get<API>(this.URL + "api/auth/me", this.AuthOptions)
+      .subscribe((data) => {
+        console.log(data);
+        this.UserData = data["data"];
+        this.LoggedInUserID = this.UserData["user_id"];
+        this.is_activated = this.UserData["is_activated"];
+        this.isLoggedIn = true;
+        this.validRegisterResponse.emit();
       });
   }
 

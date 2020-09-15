@@ -37,16 +37,18 @@
   </div>
 </section>
 
-<section *ngIf="StartedArr.length != 0" class="container block-content">
-  <div class="col-12">
-    <h2>Initiatives I’ve Started</h2>
-  </div>
-  <app-edit-listing-cards [ListingData]="StartedArr"></app-edit-listing-cards>
-</section>
+<div class="set-min-height">
+  <section *ngIf="StartedArr.length != 0" class="container block-content">
+    <div class="col-12">
+      <h2>Initiatives I’ve Started</h2>
+    </div>
+    <app-edit-listing-cards [ListingData]="StartedArr"></app-edit-listing-cards>
+  </section>
 
-<section *ngIf="LikedArr.length != 0" class="container block-content">
-  <div class="col-12">
-    <h2>Initiatives I’ve Liked</h2>
-  </div>
-  <app-listing-cards [ListingData]="LikedArr"></app-listing-cards>
-</section>
+  <section *ngIf="LikedArr.length != 0" class="container block-content">
+    <div class="col-12">
+      <h2>Initiatives I’ve Liked</h2>
+    </div>
+    <app-listing-cards [ListingData]="LikedArr"></app-listing-cards>
+  </section>
+</div>

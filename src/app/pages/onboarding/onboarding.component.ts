@@ -43,9 +43,13 @@ export class OnboardingComponent implements OnInit {
     this.AuthService.LoginResponse.subscribe(() => {
       this.getInitData();
     });
+    this.AuthService.validRegisterResponse.subscribe(() => {
+      this.getInitData();
+    });
   }
 
   getInitData() {
+    console.log(this.AuthService.LoggedInUserID);
     this.ProfileService.getUserProfile(
       this.AuthService.LoggedInUserID
     ).subscribe((data) => {
