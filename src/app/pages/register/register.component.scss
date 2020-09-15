@@ -185,3 +185,11 @@ header {
   font-size: 0.9rem;
   font-weight: 400;
 }
+
+.loading-btn {
+  display: inline-block;
+  img {
+    height: 100%;
+    max-height: 2rem;
+  }
+}

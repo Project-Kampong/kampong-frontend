@@ -43,6 +43,7 @@ export class RegisterComponent implements OnInit {
   LoginForm: FormGroup;
   showCheckMail = false;
   registerError = false;
+  showLoading = false;
 
   ngOnInit() {
     this.LoginForm = this.fb.group({
@@ -61,6 +62,7 @@ export class RegisterComponent implements OnInit {
       this.router.navigate(["/onboarding"]);
     });
     this.AuthService.invalidRegisterResponse.subscribe(() => {
+      this.showLoading = false;
       this.SnackbarService.openSnackBar(
         this.SnackbarService.DialogList.register.error,
         false
@@ -75,6 +77,7 @@ export class RegisterComponent implements OnInit {
         false
       );
     } else {
+      this.showLoading = true;
       this.AuthService.userRegister(this.LoginForm.value);
       this.LoginForm.reset();
     }
