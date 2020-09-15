@@ -203,6 +203,9 @@
               class="btn login-btn"
             >
               Register
+              <span class="loading-btn" *ngIf="showLoading">
+                <img src="../../assets/images/loading-icon.gif" />
+              </span>
             </button>
           </div>
           <p>Have an account? <a routerLink="/login">Login</a></p>

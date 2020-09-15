@@ -12,7 +12,9 @@ export interface Profile {
 }
 
 // Validation
-const patternvalidation = Validators.pattern("^[a-zA-Z0-9 \n .,'()\"$#%&-]+$");
+const patternvalidation = Validators.pattern(
+  "^[a-zA-Z0-9 \n .,'()\"$#%&-_!]+$"
+);
 export const DefaultProfile = {
   nickname: [
     "",
@@ -27,10 +29,7 @@ export const DefaultProfile = {
     "Explorer",
     [Validators.required, Validators.maxLength(30), patternvalidation],
   ],
-  about: [
-    "",
-    [Validators.required, Validators.maxLength(1000), patternvalidation],
-  ],
+  about: ["", [Validators.required, Validators.maxLength(1000)]],
   profile_picture:
     "https://images.pexels.com/photos/5089163/pexels-photo-5089163.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
 };
