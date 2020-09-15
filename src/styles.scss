@@ -133,6 +133,10 @@ h3 {
   }
 }
 
+.set-min-height {
+  min-height: 50vh;
+}
+
 // Components
 .category-list {
   ul {
@@ -431,10 +435,6 @@ html,
 body {
   height: 100%;
 }
-// body {
-//   margin: 0;
-//   font-family: Roboto, "Helvetica Neue", sans-serif;
-// }
 
 // Profile Image
 .profile-image {
@@ -442,7 +442,7 @@ body {
   height: 80px;
   border-radius: 100%;
   overflow: hidden;
-  border: 2px solid gold;
+  border: 2px solid $primary-yellow;
   img {
     width: 100%;
     min-height: 100%;

@@ -70,7 +70,7 @@
       <div class="profile-dropdown">
         <ul>
           <li class="mobile-show">
-            <a href="https://derricksp.github.io/kampong/" target="_blank"
+            <a href="https://derricksp.github.io/kampong-2/" target="_blank"
               >What We Do</a
             >
           </li>
@@ -97,13 +97,13 @@
             <hr />
           </li>
 
-          <li>
+          <li *ngIf="AuthService.isLoggedIn">
             <a routerLink="/profile"> My Initiatives </a>
           </li>
-          <li>
+          <li *ngIf="AuthService.isLoggedIn">
             <a routerLink="/profile"> Profile </a>
           </li>
-          <li>
+          <li *ngIf="AuthService.isLoggedIn">
             <a class="btn red-btn" (click)="logout()"> Logout </a>
           </li>
         </ul>

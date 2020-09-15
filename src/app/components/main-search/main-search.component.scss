@@ -70,8 +70,10 @@
   .search-box-inner {
     display: flex;
     align-items: flex-start;
-    flex-wrap: wrap;
     justify-content: center;
+    @media (max-width: 991px) {
+      flex-wrap: wrap;
+    }
   }
   .search-banner-btn {
     color: white;
