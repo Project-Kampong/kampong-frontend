@@ -176,15 +176,17 @@
 
         <mat-form-field class="full-width mt-3 col-lg-12">
           <mat-label>Contact Email</mat-label>
-          <input matInput formControlName="user_email" />
+          <input matInput formControlName="listing_email" />
           <mat-hint>
             Enter an email you will like to receive enquiries
           </mat-hint>
           <!-- Errors Validation -->
-          <mat-error *ngIf="ListingForm.get('user_email').hasError('required')">
+          <mat-error
+            *ngIf="ListingForm.get('listing_email').hasError('required')"
+          >
             Email is required
           </mat-error>
-          <mat-error *ngIf="ListingForm.get('user_email').hasError('email')">
+          <mat-error *ngIf="ListingForm.get('listing_email').hasError('email')">
             Please Enter an Email
           </mat-error>
 
@@ -207,23 +209,6 @@
                     cdkAutosizeMinRows="3"
                     formControlName="overview"
                   ></textarea>
-                  <div class="guidelines">
-                    <ul>
-                      <label>Suggested Guidelines</label>
-                      <li>
-                        <p>
-                          What are you trying to build that solves (problem) by
-                          (solution)?
-                        </p>
-                      </li>
-                      <li>
-                        <p>Why are you acting now?</p>
-                      </li>
-                      <li>
-                        <p>What is the backstory?</p>
-                      </li>
-                    </ul>
-                  </div>
                   <mat-hint>
                     {{ ListingForm.value.overview.length }} / 2500
                   </mat-hint>
@@ -245,6 +230,23 @@
                   </mat-error>
                   <!-- End of Errors Validation -->
                 </mat-form-field>
+                <div class="guidelines">
+                  <ul>
+                    <label>Suggested Guidelines</label>
+                    <li>
+                      <p>
+                        What are you trying to build that solves (problem) by
+                        (solution)?
+                      </p>
+                    </li>
+                    <li>
+                      <p>Why are you acting now?</p>
+                    </li>
+                    <li>
+                      <p>What is the backstory?</p>
+                    </li>
+                  </ul>
+                </div>
               </div>
               <div class="d-flex flex-wrap">
                 <mat-form-field class="full-width col-lg-12">
@@ -256,20 +258,6 @@
                     cdkAutosizeMinRows="3"
                     formControlName="problem"
                   ></textarea>
-                  <div class="guidelines">
-                    <ul>
-                      <label>Suggested Guidelines</label>
-                      <li>
-                        <p>Who is affected by the problem?</p>
-                      </li>
-                      <li>
-                        <p>What is currently being done?</p>
-                      </li>
-                      <li>
-                        <p>What are the identified gaps?</p>
-                      </li>
-                    </ul>
-                  </div>
                   <mat-hint>
                     {{ ListingForm.value.problem.length }} / 5000
                   </mat-hint>
@@ -291,6 +279,20 @@
                   </mat-error>
                   <!-- End of Errors Validation -->
                 </mat-form-field>
+                <div class="guidelines">
+                  <ul>
+                    <label>Suggested Guidelines</label>
+                    <li>
+                      <p>Who is affected by the problem?</p>
+                    </li>
+                    <li>
+                      <p>What is currently being done?</p>
+                    </li>
+                    <li>
+                      <p>What are the identified gaps?</p>
+                    </li>
+                  </ul>
+                </div>
               </div>
               <div class="d-flex flex-wrap">
                 <mat-form-field class="full-width col-lg-12">
@@ -302,20 +304,6 @@
                     cdkAutosizeMinRows="3"
                     formControlName="solution"
                   ></textarea>
-                  <div class="guidelines">
-                    <ul>
-                      <label>Suggested Guidelines</label>
-                      <li>
-                        <p>Who are your partners?</p>
-                      </li>
-                      <li>
-                        <p>What is the timeline & your main priority?</p>
-                      </li>
-                      <li>
-                        <p>What is your unique value proposition?</p>
-                      </li>
-                    </ul>
-                  </div>
                   <mat-hint>
                     {{ ListingForm.value.solution.length }} / 5000
                   </mat-hint>
@@ -337,6 +325,20 @@
                   </mat-error>
                   <!-- End of Errors Validation -->
                 </mat-form-field>
+                <div class="guidelines">
+                  <ul>
+                    <label>Suggested Guidelines</label>
+                    <li>
+                      <p>Who are your partners?</p>
+                    </li>
+                    <li>
+                      <p>What is the timeline & your main priority?</p>
+                    </li>
+                    <li>
+                      <p>What is your unique value proposition?</p>
+                    </li>
+                  </ul>
+                </div>
               </div>
               <div class="d-flex flex-wrap">
                 <mat-form-field class="full-width col-lg-12">
@@ -348,22 +350,7 @@
                     cdkAutosizeMinRows="3"
                     formControlName="outcome"
                   ></textarea>
-                  <div class="guidelines">
-                    <ul>
-                      <label>Suggested Guidelines</label>
-                      <li>
-                        <p>What information/resources are needed?</p>
-                      </li>
-                      <li>
-                        <p>
-                          What steps must you "get right" to bring about change?
-                        </p>
-                      </li>
-                      <li>
-                        <p>How will you measure outcome and impact?</p>
-                      </li>
-                    </ul>
-                  </div>
+
                   <mat-hint>
                     {{ ListingForm.value.outcome.length }} / 5000
                   </mat-hint>
@@ -385,6 +372,22 @@
                   </mat-error>
                   <!-- End of Errors Validation -->
                 </mat-form-field>
+                <div class="guidelines">
+                  <ul>
+                    <label>Suggested Guidelines</label>
+                    <li>
+                      <p>What information/resources are needed?</p>
+                    </li>
+                    <li>
+                      <p>
+                        What steps must you "get right" to bring about change?
+                      </p>
+                    </li>
+                    <li>
+                      <p>How will you measure outcome and impact?</p>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </mat-expansion-panel>
           </mat-accordion>

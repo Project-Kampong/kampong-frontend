@@ -15,7 +15,7 @@ export interface Listing {
   pic3: String;
   pic4: String;
   pic5: String;
-  user_email: String;
+  listing_email: String;
 }
 
 export interface ListingFAQ {
@@ -68,7 +68,7 @@ export const CreateListing = {
     "",
     [Validators.required, Validators.maxLength(150), patternvalidation],
   ],
-  user_email: ["", [Validators.required, Validators.email]],
+  listing_email: ["", [Validators.required, Validators.email]],
 };
 
 export const ListingStory = {
@@ -93,5 +93,5 @@ export const DefaultListing = {
   pic3: "default",
   pic4: "default",
   pic5: "default",
-  user_email: "default",
+  listing_email: "default",
 };

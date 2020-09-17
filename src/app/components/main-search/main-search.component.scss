@@ -91,17 +91,19 @@
   }
 }
 
-::ng-deep .mat-form-field .mat-form-field-flex {
-  color: white !important;
-  background-color: white !important;
-}
+.main-search {
+  ::ng-deep .mat-form-field .mat-form-field-flex {
+    color: white !important;
+    background-color: white !important;
+  }
 
-::ng-deep input.mat-input-element {
-  color: #484a4c;
-}
+  ::ng-deep input.mat-input-element {
+    color: #484a4c;
+  }
 
-::ng-deep .mat-form-field-flex {
-  height: 60px !important;
+  ::ng-deep .mat-form-field-flex {
+    height: 60px !important;
+  }
 }
 
 /*
