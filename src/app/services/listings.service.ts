@@ -49,6 +49,13 @@ export class ListingsService {
     );
   }
 
+  getFeaturedListings() {
+    return this.httpClient.get<API>(
+      this.url + "api/featured-listings",
+      this.options
+    );
+  }
+
   getListings(page: number) {
     return this.httpClient.get<API>(
       this.url + "api/listings?sort=created_on&page=" + page,

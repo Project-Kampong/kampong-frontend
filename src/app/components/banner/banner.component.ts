@@ -12,15 +12,17 @@ export class BannerComponent implements OnInit {
   featuredData = [];
   slickInitiated = false;
   ngOnInit() {
-    // Extract 3 From ListingData
-    // To be replaced with featuredListings API
-    for (var i = 0; i < 3; i++) {
-      const position = this.ListingsService.FeaturedListingData.length - i - 1;
-      console.log(position);
-      this.featuredData.push(
-        this.ListingsService.FeaturedListingData[position]
-      );
-    }
+    this.ListingsService.getFeaturedListings().subscribe((data) => {
+      console.log(data);
+      const tempFeatured = data["data"];
+      tempFeatured.map((x) => {
+        this.ListingsService.getSelectedListing(x.listing_id).subscribe(
+          (item) => {
+            this.featuredData.push(item["data"]);
+          }
+        );
+      });
+    });
   }
 
   sliderSlickInit() {
