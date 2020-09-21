@@ -148,15 +148,19 @@ export class MainSearchComponent implements OnInit {
   ngOnInit() {
     this.searchParams = this.fb.group({
       nameParams: new FormControl(""),
-      locationParams: new FormControl(""),
-      categoryParams: new FormControl(""),
+      locationParams: new FormControl([]),
+      categoryParams: new FormControl([]),
     });
   }
 
   initiateSearch() {
     console.log(this.searchParams.value);
     this.router.navigate(["/search"], {
-      state: { name: this.searchParams.value.nameParams },
+      state: { 
+        name: this.searchParams.value.nameParams,
+        location: this.searchParams.value.locationParams,
+        category: this.searchParams.value.categoryParams,
+      },
     });
   }
 }

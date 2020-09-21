@@ -79,9 +79,9 @@ export class ListingsService {
   getSearchResult(keyword) {
     return this.httpClient.get<API>(
       this.url +
-        "api/listings/search-title?title=" +
+        "api/listings/search?keyword=" +
         keyword +
-        "&limit=25&sensitivity=50",
+        "limit=25",
       this.options
     );
   }

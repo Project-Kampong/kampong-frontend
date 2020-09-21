@@ -26,7 +26,11 @@
 <div class="container" style="min-height: 100vh">
   <div *ngIf="resultsArr != null">
     <p class="result-text">
-      <b>{{ resultsCount }}</b> Results found for <b>{{ resultsString }}</b>
+      <b>{{ resultsCount }}</b> Initiatives found for <b>{{ resultsInputString }}</b>
+      <br>
+      Locations searched: <b>{{ resultsLocString }}</b>
+      <br>
+      Categories: <b> {{ resultsCatString }} </b>
     </p>
     <app-listing-cards [ListingData]="resultsArr"></app-listing-cards>
   </div>

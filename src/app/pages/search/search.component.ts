@@ -22,8 +22,12 @@ export class SearchComponent implements OnInit {
 
   resultsArr: Listing[];
   resultsCount: string;
-  resultsString: string;
+  resultsInputString: string = "Everything";
+  resultsCatString: string[] = ["All interests"];
+  resultsLocString: string[] = ["All locations"];
   searchInput: string;
+  catInput: string[];
+  locInput: string[];
 
   popularSearchList = [
     "Project Kampong",
@@ -33,21 +37,40 @@ export class SearchComponent implements OnInit {
   ];
   ngOnInit() {
     this.searchInput = this.location.getState()["name"] ? this.location.getState()["name"] : "";
+    this.catInput = this.location.getState()["category"] ? this.location.getState()["category"] : [];
+    this.locInput = this.location.getState()["location"] ? this.location.getState()["location"] : [];
     this.searchInitiated();
   }
   goBack() {
     this.location.back();
   }
   searchInitiated() {
-    if (this.searchInput.length > 0) {
-      this.ListingsService.getSearchResult(this.searchInput).subscribe(
+    this.searchInput.trim();
+    if (this.searchInput.length > 0 || this.catInput.length > 0 || this.locInput.length > 0) {
+      const keywords = this.concatKeywords();
+      console.log(keywords);
+      this.ListingsService.getSearchResult(keywords).subscribe(
         (data) => {
           this.resultsArr = data["data"];
           this.resultsCount = data["data"].length;
-          this.resultsString = this.searchInput;
+          this.resultsInputString = this.searchInput.length > 0 ? this.searchInput : this.resultsInputString;
+          this.resultsLocString = this.locInput.length > 0 ? this.locInput : this.resultsLocString;
+          this.resultsCatString = this.catInput.length > 0 ? this.catInput : this.resultsCatString;
+
         }
       );
     }
+  }
+  
+  concatKeywords() {
+    const searchArray = this.searchInput.split(' ').filter(e => e.length > 0);;
+    const resultArr = this.catInput.concat(this.locInput).concat(searchArray);
+    let result = '';
+    for (let i = 0; i < resultArr.length; i++) {
+      result += resultArr[i];
+      result += '&'
+    }
+    return result;
   }
 
   popularSearchClicked(value) {
