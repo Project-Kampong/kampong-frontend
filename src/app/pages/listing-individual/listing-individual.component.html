@@ -207,8 +207,8 @@
                 <img src="{{ ProfileInfo.profile_picture }}" />
               </div>
               <div class="ml-3">
-                <p class="user medium-s">by {{ ProfileInfo["nickname"] }}</p>
-                <p class="datetime light-s">
+                <p class="user regular-s">by {{ ProfileInfo["nickname"] }}</p>
+                <p class="datetime light-xs">
                   {{ updates.updated_on | date: "d MMM y" }}
                 </p>
               </div>
@@ -298,7 +298,7 @@
                     {{ comments.updated_on | date: "d MMM y" }}
                   </p>
                 </div>
-                <p class="comments light-m">
+                <p class="comments light-s">
                   {{ comments.comment }}
                 </p>
               </div>
@@ -381,7 +381,7 @@
                         {{ reply.updated_on | date: "d MMM y" }}
                       </p>
                     </div>
-                    <p class="comments light-m">
+                    <p class="comments light-s">
                       {{ reply.comment }}
                     </p>
                   </div>
