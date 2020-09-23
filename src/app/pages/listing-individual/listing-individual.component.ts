@@ -414,26 +414,33 @@ export class ListingIndividualComponent implements OnInit {
   }
 
   liked_clicked() {
-    if (this.userLikedID == "") {
-      this.ListingsService.LikedListing(this.listingId).subscribe((data) => {
-        this.SnackbarService.openSnackBar(
-          this.SnackbarService.DialogList.liked_listing.liked,
-          true
-        );
-        $(".like-btn").toggleClass("liked");
-        this.userLikedID = data["data"]["like_id"];
-      });
+    if (!this.AuthService.isLoggedIn) {
+      this.SnackbarService.openSnackBar("Please login to like", true);
+      return;
     } else {
-      this.ListingsService.UnLikedListing(this.userLikedID).subscribe(
-        (data) => {
+      if (this.userLikedID == "") {
+        this.ListingsService.LikedListing(this.listingId).subscribe((data) => {
           this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.liked_listing.unliked,
+            this.SnackbarService.DialogList.liked_listing.liked,
             true
           );
-          this.userLikedID = "";
           $(".like-btn").toggleClass("liked");
-        }
-      );
+          this.listingLikes = this.listingLikes + 1;
+          this.userLikedID = data["data"]["like_id"];
+        });
+      } else {
+        this.ListingsService.UnLikedListing(this.userLikedID).subscribe(
+          (data) => {
+            this.SnackbarService.openSnackBar(
+              this.SnackbarService.DialogList.liked_listing.unliked,
+              true
+            );
+            this.userLikedID = "";
+            $(".like-btn").toggleClass("liked");
+            this.listingLikes = this.listingLikes - 1;
+          }
+        );
+      }
     }
   }
 
@@ -447,27 +454,6 @@ export class ListingIndividualComponent implements OnInit {
 
   selectedProfile(user_id) {
     this.router.navigate(["/profile/" + user_id]);
-  }
-
-  // Collapse
-  toggle_collapse() {
-    $(".location-expand").toggleClass("active");
-    const iscollapsed = $(".location-expand").hasClass("active");
-    if (iscollapsed) {
-      $(".locationtags-list").css({
-        height: $(".locationtags-list ul").height() + 12 + "px",
-      });
-    } else {
-      $(".locationtags-list").css({
-        height: "4rem",
-      });
-    }
-  }
-  toggle_jobs(id) {
-    const jobsSelected = ".job-number-" + id;
-    const jobsBtn = ".job-collapse-" + id;
-    $(jobsSelected).slideToggle();
-    $(jobsBtn).toggleClass("active");
   }
 
   enquireMessage: String = "";

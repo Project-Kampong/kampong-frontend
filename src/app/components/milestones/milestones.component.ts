@@ -11,4 +11,8 @@ export class MilestonesComponent implements OnInit {
   @Input() MilestoneArr = [];
 
   ngOnInit() {}
+
+  isDateBeforeToday(date) {
+    return new Date(date) < new Date(new Date());
+  }
 }

@@ -1,14 +1,30 @@
 $(document).ready(function () {
   // // UI
+  navigationStick();
   var lastScrollTop = 0;
   $(window).scroll(function (event) {
     stickybar();
     lastScrollTop = $(this).scrollTop();
+    navigationStick();
   });
 
   $(window).resize(function () {
     stickybar();
   });
+
+  function navigationStick() {
+    if (!$("body").find(".navigation-container").length) {
+      return;
+    } else {
+      var st = $(this).scrollTop();
+      var startSticky = $(".navigation-container").offset().top;
+      if (st > startSticky) {
+        $(".sticky-navigation").addClass("sticky-active");
+      } else {
+        $(".sticky-navigation").removeClass("sticky-active");
+      }
+    }
+  }
 
   function stickybar() {
     if (!$("body").find(".sidebar__inner").length) {
