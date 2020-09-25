@@ -7,7 +7,9 @@ $font-xsmall: 1rem;
 $font-small: 1.2rem;
 $font-medium: 1.3rem;
 $font-large: 1.8rem;
+$font-xlarge: 2rem;
 
+$shadow-border: 1px solid rgba(0, 0, 0, 0.11);
 // Fonts
 body {
   font-family: "Open Sans", sans-serif;
@@ -29,6 +31,10 @@ body {
   &-l {
     font-weight: 300 !important;
     font-size: $font-large;
+  }
+  &-xl {
+    font-weight: 300 !important;
+    font-size: $font-xlarge;
   }
 }
 .regular {
@@ -97,8 +103,18 @@ body {
 .primary-badge {
   background: $primary;
   color: white;
-  font-size: $font-small;
-  font-weight: 700;
+  font-size: $font-xsmall;
+  font-weight: 600;
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+.small-badge {
+  background: $primary;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
   display: inline-block;
   padding: 0.25rem 1rem;
   border-radius: 5px;
@@ -191,20 +207,22 @@ body {
 }
 
 h2 {
-  font-size: 1.5625rem;
-  font-weight: bold;
+  font-size: $font-medium;
+  font-weight: 400;
   position: relative;
   padding-bottom: 0.5rem;
-  display: inline-block;
-  &:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 3px;
-    width: 100px;
-    background: #e80f0f;
-  }
+  color: black;
+  text-transform: capitalize;
+  border-bottom: $shadow-border;
+  // &:after {
+  //   content: "";
+  //   position: absolute;
+  //   bottom: 0;
+  //   left: 0;
+  //   height: 3px;
+  //   width: 100px;
+  //   background: #e80f0f;
+  // }
 }
 
 h3 {
@@ -439,26 +457,33 @@ h3 {
   .slick-dots {
     bottom: 0 !important;
     li {
+      margin: 0 0.5rem;
       button {
         position: relative;
         &:before {
           content: "";
-          width: 20px;
+          width: 25px;
           height: 5px;
-          background-color: $primary-yellow;
+          background-color: #ffffff;
+          border-radius: 10px;
           position: absolute;
           top: 0;
           left: 0;
+
+          @media (max-width: 1024px) {
+            background-color: #c4c4c4;
+          }
         }
       }
     }
   }
   .slick-arrow {
     z-index: 100;
-    width: 3rem !important;
-    height: 3rem !important;
+    width: auto !important;
+    height: auto !important;
     top: 100% !important;
     transform: translateY(-100%);
+    padding: 0.5rem;
     &:before {
       font-weight: bold;
       font-family: "Font Awesome\ 5 Free";
@@ -468,7 +493,13 @@ h3 {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 0, 0.5);
+      border: 3px solid rgba(255, 255, 255, 0.5);
+      border-radius: 100%;
+
+      @media (max-width: 1024px) {
+        border: 3px solid #c4c4c470;
+        color: #c4c4c470;
+      }
     }
   }
   .slick-prev {
@@ -476,14 +507,14 @@ h3 {
     right: 3.1rem !important;
     &::before {
       content: "\f053";
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
   }
   .slick-next {
     right: 0 !important;
     &::before {
       content: "\f054";
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
   }
 }

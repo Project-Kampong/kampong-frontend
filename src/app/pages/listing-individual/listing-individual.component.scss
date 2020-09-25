@@ -43,6 +43,9 @@
   }
   .child-container {
     padding-left: 5rem;
+    @media (max-width: 991px) {
+      padding-left: 2rem;
+    }
   }
 }
 .comments-input,

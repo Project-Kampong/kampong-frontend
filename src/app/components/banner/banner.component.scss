@@ -1,9 +1,14 @@
+.slick-belt {
+  margin-top: 2rem;
+}
 .banner {
   position: relative;
-  background: rgba(0, 0, 0, 0.6);
+  // background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
+  border: 1px solid rgba(0, 0, 0, 0.11);
+  cursor: pointer;
   img {
     height: 400px;
     width: 100%;
@@ -46,18 +51,13 @@
       overflow: hidden;
     }
     .title {
-      color: white;
-      font-size: 1.8rem;
-      font-weight: bold;
       margin-bottom: 0.5rem;
       max-height: 130px;
       text-overflow: ellipsis;
       overflow: hidden;
+      text-transform: capitalize;
     }
     .tagline {
-      color: white;
-      font-size: 1.3rem;
-      font-weight: 400;
       max-height: 130px;
       height: 130px;
       text-transform: capitalize;
@@ -65,7 +65,6 @@
       overflow: hidden;
 
       @media (max-width: 991px) {
-        font-size: 1.3rem;
         max-width: 100%;
         height: auto !important;
       }
@@ -79,6 +78,9 @@
     // margin-top: 20px;
     // margin-bottom: 20px;
     padding: 2rem;
+    @media (max-width: 1024px) {
+      padding-bottom: 5rem;
+    }
   }
 
   .view-btn-box {
@@ -89,7 +91,7 @@
 
   .view-btn {
     display: inline-block !important;
-    color: white;
+    color: black;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1rem;
