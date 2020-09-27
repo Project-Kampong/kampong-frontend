@@ -832,3 +832,439 @@ footer {
     }
   }
 }
+
+// CMS
+.CMS-editor {
+  position: relative;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: "Open Sans", sans-serif;
+    vertical-align: baseline;
+    z-index: -1 !important;
+  }
+
+  h1 {
+    font-size: $font-large;
+    font-weight: 700;
+  }
+  h2 {
+    font-size: $font-medium;
+    font-weight: 700;
+  }
+  h3 {
+    font-size: $font-small;
+    font-weight: 700;
+  }
+  span,
+  div {
+    font-size: $font-small;
+    font-weight: 300;
+  }
+  b {
+    font-weight: 700;
+  }
+
+  font-family: "Open Sans", sans-serif;
+  #output {
+    min-height: 100px;
+    // box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
+    border: $shadow-border;
+    background: white;
+    padding: 1rem;
+    &:focus {
+      outline: none;
+    }
+    li {
+      margin-bottom: 1rem;
+    }
+  }
+  #result-output {
+    li {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .action-container {
+    margin-bottom: 1rem;
+    position: absolute;
+    top: 0;
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      li {
+        height: 3rem;
+        width: 3rem;
+        background: #407088;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        button {
+          border: none;
+          background: #407088;
+          i {
+            color: #eeeeee;
+            font-size: 1.2rem;
+          }
+        }
+      }
+    }
+  }
+}
+.editing-active {
+  padding-top: 5rem;
+  .sticky-active {
+    position: fixed;
+    top: 0;
+  }
+}
+
+// Create Listing Revamp
+.listing-creation {
+  // temp
+  margin-bottom: 10rem;
+  .listing-section {
+    margin-bottom: 5rem;
+  }
+  .listing-stepper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    p {
+      font-size: $font-medium;
+      font-weight: 300;
+      margin: 0;
+      text-transform: capitalize;
+    }
+    span {
+      margin-right: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      border: 2px solid $primary;
+      color: $primary;
+      font-size: $font-medium;
+      font-weight: 700;
+      border-radius: 100%;
+    }
+  }
+
+  // Content
+  .listing-form {
+    padding-left: 4rem;
+    max-width: 800px;
+    .form-item {
+      margin-bottom: 2rem;
+      label {
+        font-weight: 700;
+        color: $primary;
+      }
+    }
+    input,
+    textarea {
+      border: none;
+      border-radius: 0;
+      border-bottom: 2px solid $primary;
+      // color: $primary;
+      font-weight: 300;
+      padding: 0.1rem 0;
+      font-size: $font-small;
+      width: 100%;
+      &:focus {
+        outline: none;
+      }
+    }
+    textarea {
+      border: 2px solid $primary;
+      padding: 0.5rem;
+    }
+    select {
+      display: block;
+      border-color: $primary;
+      border-radius: 0;
+      padding: 0.2rem;
+      font-weight: 300;
+      font-size: $font-small;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  .no-effect {
+    padding-left: 4rem;
+    max-width: 800px;
+    .form-item {
+      margin-bottom: 2rem;
+      label {
+        font-weight: 700;
+        color: $primary;
+      }
+    }
+  }
+
+  //
+  .custom-input {
+    padding-bottom: 2rem;
+    .custom-file-upload-container {
+      .custom-file-upload {
+        border: 2px dashed $primary;
+        height: 180px;
+        width: 180px;
+        border-radius: 25px;
+        position: relative;
+        cursor: pointer;
+        &:after {
+          content: "\f067";
+          font-family: "Font Awesome\ 5 Free";
+          font-size: 2rem;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          color: $primary;
+          font-weight: bold;
+        }
+      }
+      input {
+        display: none;
+      }
+    }
+  }
+
+  .image-output {
+    .image-container {
+      height: 180px;
+      width: 180px;
+      border-radius: 25px;
+      margin-right: 1rem;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      position: relative;
+      img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      &:hover {
+        &:after {
+          cursor: pointer;
+          content: "\f068";
+          font-family: "Font Awesome\ 5 Free";
+          font-weight: 900;
+          font-size: 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $primary;
+
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.3);
+        }
+      }
+    }
+  }
+
+  // Milestones
+  .milestones-container {
+    margin-top: 2rem;
+    .milestones {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .milestone-input,
+      .deadline-input {
+        width: 30%;
+        margin-bottom: 0;
+        margin-right: 1rem;
+      }
+      .milestone-input {
+        flex: 1;
+      }
+
+      .remove-milestone {
+        background-color: white;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+        &:after {
+          cursor: pointer;
+          content: "\f068";
+          font-family: "Font Awesome\ 5 Free";
+          font-weight: 900;
+          background-color: $primary;
+          padding: 0.5rem;
+          color: white;
+          border-radius: 50%;
+        }
+      }
+    }
+    .input-field-container {
+      display: flex;
+      flex: 1;
+      @media (max-width: 778px) {
+        flex-wrap: wrap;
+        .milestone-input {
+          width: 100% !important;
+        }
+      }
+    }
+
+    .add-milestones {
+      border: none;
+      background-color: $primary;
+      padding: 0.5rem 1rem;
+      color: white;
+      // text-transform: uppercase;
+      border-radius: 0;
+      width: 100%;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  // FAQ
+  .faq-container {
+    margin-top: 2rem;
+    .faq {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      .faq-input {
+        width: 100%;
+        margin-bottom: 0;
+        margin-right: 1rem;
+      }
+      .faq-input {
+        flex: 1;
+        width: 100%;
+      }
+
+      .remove-faq {
+        background-color: white;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+        &:after {
+          cursor: pointer;
+          content: "\f068";
+          font-family: "Font Awesome\ 5 Free";
+          font-weight: 900;
+          background-color: $primary;
+          padding: 0.5rem;
+          color: white;
+          border-radius: 50%;
+        }
+      }
+    }
+    .input-field-container {
+      width: 100%;
+      .faq-input {
+        margin-bottom: 1rem;
+      }
+      .bg-colored {
+        textarea {
+          background: $primary !important;
+          color: white !important;
+          font-weight: 600;
+          border: none;
+          &::placeholder {
+            color: white !important;
+          }
+        }
+      }
+    }
+
+    .add-faq {
+      border: none;
+      background-color: $primary;
+      padding: 0.5rem 1rem;
+      color: white;
+      // text-transform: uppercase;
+      border-radius: 0;
+      width: 100%;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  // Skills
+  .skills-container {
+    margin-top: 2rem;
+    .skills {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      .skills-input {
+        width: 100%;
+        margin-bottom: 0;
+        margin-right: 1rem;
+      }
+      .skills-input {
+        flex: 1;
+        width: 100%;
+      }
+
+      .remove-skills {
+        background-color: white;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+        &:after {
+          cursor: pointer;
+          content: "\f068";
+          font-family: "Font Awesome\ 5 Free";
+          font-weight: 900;
+          background-color: $primary;
+          padding: 0.5rem;
+          color: white;
+          border-radius: 50%;
+        }
+      }
+    }
+    .input-field-container {
+      width: 100%;
+      .skills-input {
+        margin-bottom: 1rem;
+      }
+    }
+
+    .add-skills {
+      border: none;
+      background-color: $primary;
+      padding: 0.5rem 1rem;
+      color: white;
+      border-radius: 0;
+      width: 100%;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}

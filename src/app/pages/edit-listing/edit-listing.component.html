@@ -193,6 +193,121 @@
         </mat-form-field>
 
         <div class="col-12 mt-3">
+          <div class="CMS-editor editing-active">
+            <div class="action-container">
+              <ul>
+                <li>
+                  <button
+                    type="button"
+                    data-command="justifyLeft"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-align-left"></i>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-command="justifyCenter"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-align-center"></i>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-command="justifyRight"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-align-right"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button type="button" data-command="bold" class="action-btn">
+                    <i class="fas fa-bold"></i>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-command="underline"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-underline"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="insertOrderedList"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-list-ol"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="insertUnorderedList"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-list-ul"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="createlink"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-link"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="formatBlock"
+                    data-size="H1"
+                    class="action-btn"
+                  >
+                    <i>H1</i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="formatBlock"
+                    data-size="H2"
+                    class="action-btn"
+                  >
+                    <i>H2</i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="formatBlock"
+                    data-size="H3"
+                    class="action-btn"
+                  >
+                    <i>H3</i>
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div contenteditable="true" id="output"></div>
+          </div>
+        </div>
+
+        <div class="col-12 mt-3">
           <mat-accordion>
             <mat-expansion-panel>
               <mat-expansion-panel-header>

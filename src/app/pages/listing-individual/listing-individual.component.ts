@@ -174,7 +174,11 @@ export class ListingIndividualComponent implements OnInit {
           this.listingId
         ).subscribe((data) => {
           this.Stories = data["data"];
-          console.log(this.Stories);
+          this.Stories.overview = data["data"].overview
+            .replace(/&lt;/g, "<")
+            .replace(/<a/g, "<a target='_blank'");
+
+          $("#result-output").html(this.Stories.overview);
         });
 
         // Get Comments

@@ -127,13 +127,13 @@ export class CreateListingComponent implements OnInit {
 
   rawSkillsets = [];
   ngOnInit() {
-    if (!this.AuthService.is_activated) {
-      this.SnackbarService.openSnackBar(
-        this.SnackbarService.DialogList.verify.msg,
-        true
-      );
-      this.router.navigate(["/home"]);
-    }
+    // if (!this.AuthService.is_activated) {
+    //   this.SnackbarService.openSnackBar(
+    //     this.SnackbarService.DialogList.verify.msg,
+    //     true
+    //   );
+    //   this.router.navigate(["/home"]);
+    // }
     this.ListingForm = this.fb.group({
       ...CreateListing,
       ...ListingStory,
@@ -146,7 +146,26 @@ export class CreateListingComponent implements OnInit {
       console.log(data);
       this.locationList = data["data"];
     });
+
+    // CMS
+    $(".action-container .action-btn").on("click", function () {
+      let cmd = $(this).data("command");
+      console.log(cmd);
+      if (cmd == "createlink") {
+        let url = prompt("Enter the link here: ", "https://");
+        document.execCommand(cmd, false, url);
+      } else if (cmd == "formatBlock") {
+        let size = $(this).data("size");
+        document.execCommand(cmd, false, size);
+      } else {
+        document.execCommand(cmd, false, null);
+      }
+    });
   }
+
+  // generateHTML() {
+  //   document.getElementById("result").textContent = this.output.innerHTML;
+  // }
 
   // Get Skillsets
   paginationSkillsets() {
@@ -220,10 +239,10 @@ export class CreateListingComponent implements OnInit {
   }
 
   createListing() {
-    if (this.getFormValidationErrors() == true) {
-      this.SnackbarService.openSnackBar("Please complete the form", false);
-      return;
-    }
+    // if (this.getFormValidationErrors() == true) {
+    //   this.SnackbarService.openSnackBar("Please complete the form", false);
+    //   return;
+    // }
     var routeTo;
     const listingData = this.ListingForm.value;
     var ImageFd = new FormData();
@@ -238,6 +257,7 @@ export class CreateListingComponent implements OnInit {
     ImageFd.append("mission", listingData.mission);
     ImageFd.append("listing_url", "www.test.com");
     ImageFd.append("listing_email", listingData.listing_email);
+    ImageFd.append("listing_status", "ongoing");
     for (var i = 0; i < this.fileArr.length; i++) {
       ImageFd.append("pic" + (i + 1), this.fileArr[i].name);
       ImageFd.append("pics", this.fileArr[i]);
@@ -251,10 +271,10 @@ export class CreateListingComponent implements OnInit {
         console.log(listing_id);
         // Handle Stories
         this.ListingsService.UpdateListingStory(listing_id, {
-          overview: listingData.overview,
-          problem: listingData.problem,
-          solution: listingData.solution,
-          outcome: listingData.outcome,
+          overview: $("#output").html(),
+          problem: "test",
+          solution: "test",
+          outcome: "test",
         }).subscribe((data) => {
           console.log(data);
         });

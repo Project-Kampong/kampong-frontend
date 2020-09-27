@@ -6,11 +6,30 @@ $(document).ready(function () {
     stickybar();
     lastScrollTop = $(this).scrollTop();
     navigationStick();
+    actionbarStick();
   });
 
   $(window).resize(function () {
     stickybar();
   });
+
+  function actionbarStick() {
+    if (!$("body").find(".editing-active").length) {
+      return;
+    } else {
+      var st = $(this).scrollTop();
+      var startSticky = $(".editing-active").offset().top;
+      var totalStickyHeight =
+        $(".editing-active").offset().top + $(".editing-active").height();
+      if (st > startSticky && st < totalStickyHeight) {
+        $(".action-container").addClass("sticky-active");
+      } else if (st > totalStickyHeight) {
+        $(".action-container").removeClass("sticky-active");
+      } else {
+        $(".action-container").removeClass("sticky-active");
+      }
+    }
+  }
 
   function navigationStick() {
     if (!$("body").find(".navigation-container").length) {

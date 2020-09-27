@@ -179,7 +179,12 @@ export class EditListingComponent implements OnInit {
     this.ListingsService.getSelectedListingStories(this.listingId).subscribe(
       (data) => {
         console.log(data["data"]);
-        this.ListingForm.patchValue(data["data"]);
+        var tempData = data["data"];
+        tempData.overview = data["data"].overview
+          .replace(/&lt;/g, "<")
+          .replace(/<a/g, "<a target='_blank'");
+        $("#output").html(tempData.overview);
+        this.ListingForm.patchValue(tempData);
       }
     );
 
@@ -263,6 +268,21 @@ export class EditListingComponent implements OnInit {
         console.log(this.ListingForm.value.LocationsList);
       }
     );
+
+    // CMS
+    $(".action-container .action-btn").on("click", function () {
+      let cmd = $(this).data("command");
+      console.log(cmd);
+      if (cmd == "createlink") {
+        let url = prompt("Enter the link here: ", "https://");
+        document.execCommand(cmd, false, url);
+      } else if (cmd == "formatBlock") {
+        let size = $(this).data("size");
+        document.execCommand(cmd, false, size);
+      } else {
+        document.execCommand(cmd, false, null);
+      }
+    });
   }
   LocationsetsCC = [];
   // Submit Data
@@ -292,10 +312,7 @@ export class EditListingComponent implements OnInit {
       (data) => {
         console.log(data);
         this.ListingsService.UpdateListingStory(this.listingId, {
-          overview: listingData.overview,
-          problem: listingData.problem,
-          solution: listingData.solution,
-          outcome: listingData.outcome,
+          overview: $("#output").html(),
         }).subscribe((data) => {
           console.log(data);
         });
