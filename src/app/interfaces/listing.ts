@@ -72,10 +72,34 @@ export const CreateListing = {
 };
 
 export const ListingStory = {
-  overview: ["", [Validators.required, Validators.maxLength(2500)]],
-  problem: ["", [Validators.required, Validators.maxLength(5000)]],
-  solution: ["", [Validators.required, Validators.maxLength(5000)]],
-  outcome: ["", [Validators.required, Validators.maxLength(5000)]],
+  overview: [
+    "",
+    [
+      // Validators.required,
+      // Validators.maxLength(2500)
+    ],
+  ],
+  problem: [
+    "",
+    [
+      // Validators.required,
+      // Validators.maxLength(5000)
+    ],
+  ],
+  solution: [
+    "",
+    [
+      // Validators.required,
+      //Validators.maxLength(5000)
+    ],
+  ],
+  outcome: [
+    "",
+    [
+      // Validators.required,
+      //Validators.maxLength(5000)
+    ],
+  ],
 };
 
 export const DefaultListing = {

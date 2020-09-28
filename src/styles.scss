@@ -3,6 +3,7 @@
 $primary-yellow: #fed45f;
 
 $primary: #4f8a8b;
+$action-yellow: #ffcb74;
 $font-xsmall: 1rem;
 $font-small: 1.2rem;
 $font-medium: 1.3rem;
@@ -262,17 +263,24 @@ h3 {
   padding-top: 1rem !important;
 }
 
+button,
+.btn {
+  &:focus {
+    outline: none;
+  }
+}
 // Buttons
 .yellow-btn {
   display: block;
-  border: 2px solid #fed45f;
-  background-color: #fed45f;
+  border: 2px solid $action-yellow;
+  background-color: $action-yellow;
+  border-radius: 0;
   color: white !important;
-  font-weight: bold;
-  font-size: 0.9rem;
+  font-weight: 600;
+  font-size: $font-xsmall;
   &:hover {
     background-color: white;
-    color: #fed45f !important;
+    color: $action-yellow !important;
   }
 }
 .red-btn {
@@ -280,8 +288,9 @@ h3 {
   border: 2px solid #b33a3a;
   background-color: #b33a3a;
   color: white !important;
-  font-weight: bold;
-  font-size: 0.9rem;
+  border-radius: 0;
+  font-weight: 600;
+  font-size: $font-xsmall;
   &:hover {
     background-color: white;
     color: #b33a3a !important;
@@ -786,10 +795,8 @@ textarea {
 
 // footer
 $navy: #364f6b;
-
 footer {
   background: $navy;
-  margin-top: 10rem;
   padding: 5rem 0;
   padding-bottom: 1rem;
   .logo-container {
@@ -829,6 +836,597 @@ footer {
     }
     .link-col:last-child {
       padding-right: 0;
+    }
+  }
+}
+
+// CMS
+.CMS-editor {
+  position: relative;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: "Open Sans", sans-serif;
+    vertical-align: baseline;
+    position: initial;
+  }
+
+  h1 {
+    font-size: $font-large;
+    font-weight: 700;
+  }
+  h2 {
+    font-size: $font-medium;
+    font-weight: 700;
+  }
+  h3 {
+    font-size: $font-small;
+    font-weight: 700;
+  }
+  span,
+  div {
+    font-size: $font-small;
+    font-weight: 300;
+  }
+  b {
+    font-weight: 700;
+  }
+
+  font-family: "Open Sans", sans-serif;
+  #output {
+    min-height: 100px;
+    // box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
+    border: $shadow-border;
+    background: white;
+    padding: 1rem;
+    &:focus {
+      outline: none;
+    }
+    li {
+      margin-bottom: 1rem;
+    }
+  }
+  #result-output {
+    li {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .action-container {
+    margin-bottom: 1rem;
+    position: absolute;
+    top: 0;
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      li {
+        height: 3rem;
+        width: 3rem;
+        background: #407088;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        button {
+          border: none;
+          background: #407088;
+          i {
+            color: #eeeeee;
+            font-size: 1.2rem;
+          }
+        }
+      }
+    }
+  }
+}
+.editing-active {
+  padding-top: 5rem;
+  .sticky-active {
+    position: fixed;
+    top: 0;
+  }
+}
+
+.floating-actions-container {
+  position: relative;
+  .floating-actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem 0;
+    background: white;
+    border-top: $shadow-border;
+    .submit-btn {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+  .floating-actions-active {
+    position: fixed !important;
+  }
+}
+
+// Create Listing Revamp
+.listing-creation {
+  // temp
+  margin-bottom: 10rem;
+  .listing-section {
+    margin-bottom: 5rem;
+  }
+  .listing-stepper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    p {
+      font-size: $font-medium;
+      font-weight: 300;
+      margin: 0;
+      text-transform: capitalize;
+    }
+    span {
+      margin-right: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      border: 2px solid $primary;
+      color: $primary;
+      font-size: $font-medium;
+      font-weight: 700;
+      border-radius: 100%;
+    }
+  }
+
+  // Content
+  .hint {
+    font-size: $font-xsmall;
+    display: block;
+    text-align: right;
+    color: $primary;
+  }
+  .error-hint {
+    font-size: $font-xsmall;
+    font-style: italic;
+    color: #ff0033;
+  }
+  .listing-form {
+    padding-left: 4rem;
+    max-width: 800px;
+    .form-item {
+      margin-bottom: 2rem;
+      label {
+        font-weight: 700;
+        color: $primary;
+      }
+    }
+    input,
+    textarea {
+      border: none;
+      border-radius: 0;
+      border-bottom: 1px solid $primary;
+      // color: $primary;
+      font-weight: 300;
+      padding: 0.1rem 0;
+      font-size: $font-small;
+      width: 100%;
+      &:focus {
+        outline: none;
+      }
+    }
+    textarea {
+      border: 1px solid $primary;
+      padding: 0.5rem;
+    }
+    select {
+      display: block;
+      border-color: $primary;
+      border-radius: 0;
+      padding: 0.2rem;
+      font-weight: 300;
+      font-size: $font-small;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  .no-effect {
+    padding-left: 4rem;
+    max-width: 800px;
+    .form-item {
+      margin-bottom: 2rem;
+      label {
+        font-weight: 700;
+        color: $primary;
+      }
+    }
+  }
+
+  // image upload
+  .custom-input {
+    padding-bottom: 2rem;
+    .custom-file-upload-container {
+      .custom-file-upload {
+        border: 2px dashed $primary;
+        height: 180px;
+        width: 180px;
+        border-radius: 25px;
+        position: relative;
+        cursor: pointer;
+        &:after {
+          content: "\f067";
+          font-family: "Font Awesome\ 5 Free";
+          font-size: 2rem;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          color: $primary;
+          font-weight: bold;
+        }
+      }
+      input {
+        display: none;
+      }
+    }
+  }
+
+  .image-output {
+    .image-container {
+      height: 180px;
+      width: 180px;
+      border-radius: 25px;
+      margin-right: 1rem;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      position: relative;
+      img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      &:hover {
+        &:after {
+          cursor: pointer;
+          content: "\f068";
+          font-family: "Font Awesome\ 5 Free";
+          font-weight: 900;
+          font-size: 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $primary;
+
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.3);
+        }
+      }
+    }
+  }
+
+  // Hashtags
+  .hashtags-container {
+    position: relative;
+    width: 100%;
+    .error {
+      position: absolute;
+      bottom: -1.2rem;
+      right: 0;
+      color: red;
+      font-size: 0.8rem;
+    }
+  }
+  // Milestones
+  .milestones-container {
+    margin-top: 2rem;
+    .milestones {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .milestone-input,
+      .deadline-input {
+        width: 30%;
+        margin-bottom: 0;
+        margin-right: 1rem;
+      }
+      .milestone-input {
+        flex: 1;
+      }
+
+      .remove-milestone {
+        background-color: white;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+        &:after {
+          cursor: pointer;
+          content: "\f068";
+          font-family: "Font Awesome\ 5 Free";
+          font-weight: 900;
+          background-color: $primary;
+          padding: 0.5rem;
+          color: white;
+          border-radius: 50%;
+        }
+      }
+    }
+    .input-field-container {
+      display: flex;
+      flex: 1;
+      @media (max-width: 778px) {
+        flex-wrap: wrap;
+        .milestone-input {
+          width: 100% !important;
+        }
+      }
+    }
+
+    .add-milestones {
+      border: none;
+      background-color: $primary;
+      padding: 0.5rem 1rem;
+      color: white;
+      // text-transform: uppercase;
+      border-radius: 0;
+      width: 100%;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  // FAQ
+  .faq-container {
+    margin-top: 2rem;
+    .faq {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      .faq-input {
+        width: 100%;
+        margin-bottom: 0;
+        margin-right: 1rem;
+      }
+      .faq-input {
+        flex: 1;
+        width: 100%;
+      }
+
+      .remove-faq {
+        background-color: white;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+        &:after {
+          cursor: pointer;
+          content: "\f068";
+          font-family: "Font Awesome\ 5 Free";
+          font-weight: 900;
+          background-color: $primary;
+          padding: 0.5rem;
+          color: white;
+          border-radius: 50%;
+        }
+      }
+    }
+    .input-field-container {
+      width: 100%;
+      .faq-input {
+        margin-bottom: 1rem;
+      }
+      .bg-colored {
+        textarea {
+          background: $primary !important;
+          color: white !important;
+          font-weight: 600;
+          border: none;
+          &::placeholder {
+            color: white !important;
+          }
+        }
+      }
+    }
+
+    .add-faq {
+      border: none;
+      background-color: $primary;
+      padding: 0.5rem 1rem;
+      color: white;
+      // text-transform: uppercase;
+      border-radius: 0;
+      width: 100%;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  // Skills
+  .skills-container {
+    margin-top: 2rem;
+    .skills {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      .skills-input {
+        width: 100%;
+        margin-bottom: 0;
+        margin-right: 1rem;
+      }
+      .skills-input {
+        flex: 1;
+        width: 100%;
+      }
+
+      .remove-skills {
+        background-color: white;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+        &:after {
+          cursor: pointer;
+          content: "\f068";
+          font-family: "Font Awesome\ 5 Free";
+          font-weight: 900;
+          background-color: $primary;
+          padding: 0.5rem;
+          color: white;
+          border-radius: 50%;
+        }
+      }
+    }
+    .input-field-container {
+      width: 100%;
+      .skills-input {
+        margin-bottom: 1rem;
+      }
+    }
+
+    .add-skills {
+      border: none;
+      background-color: $primary;
+      padding: 0.5rem 1rem;
+      color: white;
+      border-radius: 0;
+      width: 100%;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+// Profile Page revamp
+.profile-display {
+  overflow: hidden;
+  .profile-item-container {
+    padding: 5rem 0;
+    @media (max-width: 991px) {
+      padding: 0;
+      margin-top: 5rem;
+    }
+    .profile-item {
+      margin-bottom: 5rem;
+      .activity-stat {
+        margin-bottom: 0rem;
+        b {
+          color: $primary;
+          font-weight: 700;
+          font-size: $font-large;
+          min-width: 2rem;
+          text-align: center;
+          display: inline-block;
+        }
+      }
+    }
+  }
+  // Utilities
+  .limit-width {
+    @media (min-width: 991px) {
+      max-width: 40%;
+    }
+  }
+  .bg-colored {
+    z-index: 1;
+    height: 100%;
+    @media (min-width: 991px) {
+      min-height: 100vh;
+      position: relative;
+    }
+    &:before {
+      content: "";
+      position: absolute;
+      background: #e5e5e5;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 100vw;
+      z-index: -1;
+
+      @media (max-width: 991px) {
+        // right: -50%;
+        // width: 200vw;
+        display: none;
+      }
+    }
+  }
+  .bg-colored-mobile {
+    @media (max-width: 991px) {
+      position: relative;
+      z-index: 1;
+    }
+  }
+  .user-details {
+    padding-left: 1rem;
+    p {
+      margin: 0;
+    }
+    .name {
+      font-size: $font-medium;
+      font-weight: 400;
+      margin-bottom: 0.25rem;
+    }
+    .position {
+      font-size: $font-xsmall;
+      font-weight: 300;
+      font-style: italic;
+    }
+  }
+  .sticky-profile-container {
+    position: relative;
+    height: 100%;
+    .sticky-profile {
+      top: 0;
+      width: 100%;
+      @media (min-width: 991px) {
+        position: absolute;
+      }
+    }
+    .sticky-active {
+      @media (min-width: 991px) {
+        position: fixed;
+      }
+    }
+  }
+  .profile-nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    margin-top: 5rem;
+    @media (max-width: 991px) {
+      display: none;
+    }
+    li {
+      font-weight: 300;
+      font-size: $font-small;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+    }
+    .active {
+      font-weight: 400;
     }
   }
 }

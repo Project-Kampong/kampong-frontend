@@ -1,5 +1,8 @@
 <div class="d-flex flex-wrap listing-card-wrapper">
-  <div class="col-lg-4 px-2" *ngFor="let ListingData of ListingData">
+  <div
+    [className]="'px-2 col-lg-' + ColNum"
+    *ngFor="let ListingData of ListingData"
+  >
     <div (click)="selectedCard(ListingData)" class="listing-card">
       <img src="{{ ListingData.pic1 }}" />
       <div class="listing-card-body">

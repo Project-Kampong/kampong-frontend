@@ -8,6 +8,7 @@ import { ProfileService } from "@app/services/profile.service";
 // Interface
 import { Profile } from "@app/interfaces/profile";
 import { Listing } from "@app/interfaces/listing";
+declare var $: any;
 
 @Component({
   selector: "app-public-profile",
@@ -68,5 +69,13 @@ export class PublicProfileComponent implements OnInit {
         });
       }
     );
+  }
+
+  scrollToSection(id) {
+    console.log($("#" + id).offset().top);
+    var scrollAmt = $("#" + id).offset().top - 20;
+    $(".profile-nav li").removeClass("active");
+    $("#" + id + "-nav").addClass("active");
+    $("html, body").animate({ scrollTop: scrollAmt }, 50);
   }
 }

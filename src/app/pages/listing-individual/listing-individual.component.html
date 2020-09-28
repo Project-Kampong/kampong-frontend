@@ -107,21 +107,9 @@
     <!-- Story -->
     <div class="tabs-content" id="story">
       <div *ngIf="Stories">
-        <p class="light-s">
-          {{ Stories.overview }}
-        </p>
-        <label> Whats the problem? </label>
-        <p class="light-s">
-          {{ Stories.problem }}
-        </p>
-        <label> How can we help? </label>
-        <p class="light-s">
-          {{ Stories.solution }}
-        </p>
-        <label> whats our goal? </label>
-        <p class="light-s">
-          {{ Stories.outcome }}
-        </p>
+        <div class="CMS-editor">
+          <div id="result-output"></div>
+        </div>
       </div>
     </div>
     <!-- FAQ -->

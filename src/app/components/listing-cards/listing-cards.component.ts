@@ -10,6 +10,7 @@ export class ListingCardsComponent implements OnInit {
   constructor(private router: Router) {}
 
   @Input() ListingData;
+  @Input() ColNum;
 
   ngOnInit() {
     console.log(this.ListingData);
