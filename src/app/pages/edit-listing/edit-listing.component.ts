@@ -193,12 +193,12 @@ export class EditListingComponent implements OnInit {
       (data) => {
         const milestonesData = data["data"];
         if (milestonesData.length == 0) {
-          this.milestoneArr.push({ deadline: new Date(), milestone: "" });
+          this.milestoneArr.push({ date: new Date(), description: "" });
         } else {
           milestonesData.map((x) => {
             this.milestoneArr.push({
-              deadline: x.date,
-              milestone: x.description,
+              date: x.date,
+              description: x.description,
               listing_id: x.listing_id,
               milestone_id: x.milestone_id,
             });
@@ -287,6 +287,10 @@ export class EditListingComponent implements OnInit {
   LocationsetsCC = [];
   // Submit Data
   saveListing() {
+    if (this.getFormValidationErrors() == true) {
+      this.SnackbarService.openSnackBar("Please complete the form", false);
+      return;
+    }
     var routeTo;
     const listingData = this.ListingForm.value;
     console.log(listingData);
@@ -300,8 +304,12 @@ export class EditListingComponent implements OnInit {
     listingUpdates.append("tagline", listingData.tagline);
     listingUpdates.append("mission", listingData.mission);
     listingUpdates.append("listing_email", listingData.listing_email);
-    for (var i = 0; i < this.fileArr.length; i++) {
-      listingUpdates.append("pic" + (i + 1), this.fileArr[i]);
+    for (var i = 0; i < 5; i++) {
+      if (this.fileArr[i]) {
+        listingUpdates.append("pic" + (i + 1), this.fileArr[i]);
+      } else {
+        listingUpdates.append("pic" + (i + 1), null);
+      }
     }
 
     // Update Main Listing
@@ -338,24 +346,20 @@ export class EditListingComponent implements OnInit {
         });
         this.milestoneArr.map((x) => {
           console.log(x);
-          if (
-            x.milestone_id == null &&
-            x.milestone != "" &&
-            x.deadline != null
-          ) {
+          if (x.milestone_id == null && x.description != "" && x.date != null) {
             this.ListingsService.createListingMilestones({
               listing_id: this.listingId,
-              description: x.milestone,
-              date: x.deadline,
+              description: x.description,
+              date: x.date,
             }).subscribe();
           } else if (
             x.milestone_id != null &&
-            x.milestone != "" &&
-            x.deadline != null
+            x.description != "" &&
+            x.date != null
           ) {
             this.ListingsService.updateMilestone(x.milestone_id, {
-              description: x.milestone,
-              date: x.deadline,
+              description: x.description,
+              date: x.date,
             }).subscribe();
           }
         });
@@ -584,9 +588,9 @@ export class EditListingComponent implements OnInit {
 
   // Milestones and FAQ UI
   addMilestone() {
-    this.milestoneArr.push({ deadline: new Date(), milestone: "" });
+    this.milestoneArr.push({ date: new Date(), description: "" });
     this.milestoneArr.sort((a, b) => {
-      return <any>new Date(a.deadline) - <any>new Date(b.deadline);
+      return <any>new Date(a.date) - <any>new Date(b.date);
     });
   }
   milestoneRemoveArr = [];
@@ -597,6 +601,11 @@ export class EditListingComponent implements OnInit {
       this.milestoneRemoveArr.push(milestone.milestone_id);
       // this.ListingsService.removeMilestone(milestone.milestone_id).subscribe();
     }
+  }
+  sortMilestone() {
+    this.milestoneArr = this.milestoneArr.sort((a, b) => {
+      return <any>new Date(a.date) - <any>new Date(b.date);
+    });
   }
 
   addFAQ() {

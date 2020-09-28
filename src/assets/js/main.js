@@ -1,17 +1,43 @@
 $(document).ready(function () {
   // // UI
   navigationStick();
+  actionbarStick();
+  floatingActions();
+  profileNavStick();
   var lastScrollTop = 0;
   $(window).scroll(function (event) {
     stickybar();
     lastScrollTop = $(this).scrollTop();
     navigationStick();
     actionbarStick();
+    floatingActions();
+    profileNavStick();
   });
 
   $(window).resize(function () {
     stickybar();
   });
+
+  function profileNavStick() {
+    if (!$("body").find(".sticky-profile-container").length) {
+      return;
+    } else {
+      var st = $(this).scrollTop();
+      var startSticky = $(".sticky-profile-container").offset().top;
+      var totalStickyHeight =
+        $(".sticky-profile-container").offset().top +
+        $(".sticky-profile-container").height() -
+        $(".sticky-profile").height();
+      console.log(st, totalStickyHeight);
+      if (st > startSticky && st < totalStickyHeight) {
+        $(".sticky-profile").addClass("sticky-active");
+      } else if (st > totalStickyHeight) {
+        $(".sticky-profile").removeClass("sticky-active");
+      } else {
+        $(".sticky-profile").removeClass("sticky-active");
+      }
+    }
+  }
 
   function actionbarStick() {
     if (!$("body").find(".editing-active").length) {
@@ -27,6 +53,25 @@ $(document).ready(function () {
         $(".action-container").removeClass("sticky-active");
       } else {
         $(".action-container").removeClass("sticky-active");
+      }
+    }
+  }
+
+  function floatingActions() {
+    if (!$("body").find(".floating-actions-container").length) {
+      return;
+    } else {
+      var st = $(this).scrollTop() + $(this).height();
+      var startSticky = $(".floating-actions-container").offset().top;
+      var totalStickyHeight =
+        $(".floating-actions-container").offset().top +
+        $(".floating-actions-container").height();
+      if (st < startSticky && st < totalStickyHeight) {
+        $(".floating-actions").addClass("floating-actions-active");
+      } else if (st > totalStickyHeight) {
+        $(".floating-actions").removeClass("floating-actions-active");
+      } else {
+        $(".floating-actions").removeClass("floating-actions-active");
       }
     }
   }

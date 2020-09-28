@@ -3,6 +3,7 @@
 $primary-yellow: #fed45f;
 
 $primary: #4f8a8b;
+$action-yellow: #ffcb74;
 $font-xsmall: 1rem;
 $font-small: 1.2rem;
 $font-medium: 1.3rem;
@@ -262,17 +263,24 @@ h3 {
   padding-top: 1rem !important;
 }
 
+button,
+.btn {
+  &:focus {
+    outline: none;
+  }
+}
 // Buttons
 .yellow-btn {
   display: block;
-  border: 2px solid #fed45f;
-  background-color: #fed45f;
+  border: 2px solid $action-yellow;
+  background-color: $action-yellow;
+  border-radius: 0;
   color: white !important;
-  font-weight: bold;
-  font-size: 0.9rem;
+  font-weight: 600;
+  font-size: $font-xsmall;
   &:hover {
     background-color: white;
-    color: #fed45f !important;
+    color: $action-yellow !important;
   }
 }
 .red-btn {
@@ -280,8 +288,9 @@ h3 {
   border: 2px solid #b33a3a;
   background-color: #b33a3a;
   color: white !important;
-  font-weight: bold;
-  font-size: 0.9rem;
+  border-radius: 0;
+  font-weight: 600;
+  font-size: $font-xsmall;
   &:hover {
     background-color: white;
     color: #b33a3a !important;
@@ -786,10 +795,8 @@ textarea {
 
 // footer
 $navy: #364f6b;
-
 footer {
   background: $navy;
-  margin-top: 10rem;
   padding: 5rem 0;
   padding-bottom: 1rem;
   .logo-container {
@@ -851,7 +858,7 @@ footer {
     font-size: 100%;
     font-family: "Open Sans", sans-serif;
     vertical-align: baseline;
-    z-index: -1 !important;
+    position: initial;
   }
 
   h1 {
@@ -932,6 +939,26 @@ footer {
   }
 }
 
+.floating-actions-container {
+  position: relative;
+  .floating-actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem 0;
+    background: white;
+    border-top: $shadow-border;
+    .submit-btn {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+  .floating-actions-active {
+    position: fixed !important;
+  }
+}
+
 // Create Listing Revamp
 .listing-creation {
   // temp
@@ -965,6 +992,17 @@ footer {
   }
 
   // Content
+  .hint {
+    font-size: $font-xsmall;
+    display: block;
+    text-align: right;
+    color: $primary;
+  }
+  .error-hint {
+    font-size: $font-xsmall;
+    font-style: italic;
+    color: #ff0033;
+  }
   .listing-form {
     padding-left: 4rem;
     max-width: 800px;
@@ -979,7 +1017,7 @@ footer {
     textarea {
       border: none;
       border-radius: 0;
-      border-bottom: 2px solid $primary;
+      border-bottom: 1px solid $primary;
       // color: $primary;
       font-weight: 300;
       padding: 0.1rem 0;
@@ -990,7 +1028,7 @@ footer {
       }
     }
     textarea {
-      border: 2px solid $primary;
+      border: 1px solid $primary;
       padding: 0.5rem;
     }
     select {
@@ -1017,7 +1055,7 @@ footer {
     }
   }
 
-  //
+  // image upload
   .custom-input {
     padding-bottom: 2rem;
     .custom-file-upload-container {
@@ -1084,6 +1122,18 @@ footer {
     }
   }
 
+  // Hashtags
+  .hashtags-container {
+    position: relative;
+    width: 100%;
+    .error {
+      position: absolute;
+      bottom: -1.2rem;
+      right: 0;
+      color: red;
+      font-size: 0.8rem;
+    }
+  }
   // Milestones
   .milestones-container {
     margin-top: 2rem;
@@ -1265,6 +1315,118 @@ footer {
       &:focus {
         outline: none;
       }
+    }
+  }
+}
+
+// Profile Page revamp
+.profile-display {
+  overflow: hidden;
+  .profile-item-container {
+    padding: 5rem 0;
+    @media (max-width: 991px) {
+      padding: 0;
+      margin-top: 5rem;
+    }
+    .profile-item {
+      margin-bottom: 5rem;
+      .activity-stat {
+        margin-bottom: 0rem;
+        b {
+          color: $primary;
+          font-weight: 700;
+          font-size: $font-large;
+          min-width: 2rem;
+          text-align: center;
+          display: inline-block;
+        }
+      }
+    }
+  }
+  // Utilities
+  .limit-width {
+    @media (min-width: 991px) {
+      max-width: 40%;
+    }
+  }
+  .bg-colored {
+    z-index: 1;
+    height: 100%;
+    @media (min-width: 991px) {
+      min-height: 100vh;
+      position: relative;
+    }
+    &:before {
+      content: "";
+      position: absolute;
+      background: #e5e5e5;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 100vw;
+      z-index: -1;
+
+      @media (max-width: 991px) {
+        // right: -50%;
+        // width: 200vw;
+        display: none;
+      }
+    }
+  }
+  .bg-colored-mobile {
+    @media (max-width: 991px) {
+      position: relative;
+      z-index: 1;
+    }
+  }
+  .user-details {
+    padding-left: 1rem;
+    p {
+      margin: 0;
+    }
+    .name {
+      font-size: $font-medium;
+      font-weight: 400;
+      margin-bottom: 0.25rem;
+    }
+    .position {
+      font-size: $font-xsmall;
+      font-weight: 300;
+      font-style: italic;
+    }
+  }
+  .sticky-profile-container {
+    position: relative;
+    height: 100%;
+    .sticky-profile {
+      top: 0;
+      width: 100%;
+      @media (min-width: 991px) {
+        position: absolute;
+      }
+    }
+    .sticky-active {
+      @media (min-width: 991px) {
+        position: fixed;
+      }
+    }
+  }
+  .profile-nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    margin-top: 5rem;
+    @media (max-width: 991px) {
+      display: none;
+    }
+    li {
+      font-weight: 300;
+      font-size: $font-small;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+    }
+    .active {
+      font-weight: 400;
     }
   }
 }

@@ -39,7 +39,7 @@ export class CreateListingComponent implements OnInit {
   fileLimit = false;
   fileCount = 0;
 
-  milestoneArr = [{ milestone: "", deadline: new Date() }];
+  milestoneArr = [{ description: "", date: new Date() }];
   faqArr = [
     {
       questions: "",
@@ -239,10 +239,10 @@ export class CreateListingComponent implements OnInit {
   }
 
   createListing() {
-    // if (this.getFormValidationErrors() == true) {
-    //   this.SnackbarService.openSnackBar("Please complete the form", false);
-    //   return;
-    // }
+    if (this.getFormValidationErrors() == true) {
+      this.SnackbarService.openSnackBar("Please complete the form", false);
+      return;
+    }
     var routeTo;
     const listingData = this.ListingForm.value;
     var ImageFd = new FormData();
@@ -281,13 +281,13 @@ export class CreateListingComponent implements OnInit {
         // Handle Milestones
         for (var i = 0; i < this.milestoneArr.length; i++) {
           if (
-            this.milestoneArr[i].milestone != "" &&
-            this.milestoneArr[i].deadline != null
+            this.milestoneArr[i].description != "" &&
+            this.milestoneArr[i].date != null
           ) {
             this.ListingsService.createListingMilestones({
               listing_id: listing_id,
-              description: this.milestoneArr[i].milestone,
-              date: this.milestoneArr[i].deadline,
+              description: this.milestoneArr[i].description,
+              date: this.milestoneArr[i].date,
             }).subscribe((data) => {
               console.log(data);
             });
@@ -400,10 +400,15 @@ export class CreateListingComponent implements OnInit {
 
   // Milestones and FAQ UI
   addMilestone() {
-    this.milestoneArr.push({ milestone: "", deadline: new Date() });
+    this.milestoneArr.push({ description: "", date: new Date() });
     console.log(this.milestoneArr);
     this.milestoneArr.sort((a, b) => {
-      return <any>new Date(a.deadline) - <any>new Date(b.deadline);
+      return <any>new Date(a.date) - <any>new Date(b.date);
+    });
+  }
+  sortMilestone() {
+    this.milestoneArr = this.milestoneArr.sort((a, b) => {
+      return <any>new Date(a.date) - <any>new Date(b.date);
     });
   }
   removeMilestone(i) {

@@ -1,21 +1,34 @@
 <div class="d-flex flex-wrap listing-card-wrapper">
-  <a
+  <div
+    [className]="'px-2 col-lg-' + ColNum"
     *ngFor="let ListingData of ListingData"
-    class="listing-card col-6 col-lg-4"
   >
-    <div class="card-cover">
-      <img (click)="selectedCard(ListingData)" src="{{ ListingData.pic1 }}" />
-      <div class="listing-card-body" (click)="selectedCard(ListingData)">
-        <div class="justify-content-between">
-          <div class="category">
-            <span>{{ ListingData.category }}</span>
-          </div>
+    <div (click)="selectedCard(ListingData)" class="listing-card">
+      <img src="{{ ListingData.pic1 }}" />
+      <div class="listing-card-body">
+        <div>
+          <p class="small-badge">{{ ListingData.category }}</p>
+          <p class="title medium-s">{{ ListingData.title }}</p>
+          <p class="tagline light-xs">{{ ListingData.tagline }}</p>
         </div>
 
-        <p class="title">{{ ListingData.title }}</p>
-        <p class="tagline">{{ ListingData.tagline }}</p>
+        <div *ngIf="ListingData.locations">
+          <div class="locationtags-list">
+            <div class="location-icon"></div>
+            <ul>
+              <li
+                class="light-xs"
+                *ngFor="let location of ListingData.locations"
+              >
+                {{ location }}
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="edit-btn" (click)="editListing(ListingData)"></div>
+      <button class="edit-btn" (click)="editListing(ListingData)">
+        Edit Listing
+      </button>
     </div>
-  </a>
+  </div>
 </div>

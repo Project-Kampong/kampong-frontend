@@ -7,14 +7,39 @@
       </div>
       <div class="listing-form" [formGroup]="ListingForm">
         <div class="form-item">
-          <label>Name Of Initiative</label>
+          <label>Name Of Initiative *</label>
           <input
             placeholder="Give your initiative a name"
             formControlName="title"
           />
+          <span class="hint"> {{ ListingForm.value.title.length }} / 50 </span>
+
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('title').hasError('maxlength')"
+          >
+            Name must not be more than 50 characters long.
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('title').hasError('pattern')"
+          >
+            Special characters not allowed
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="
+              ListingForm.get('title').hasError('required') &&
+              ListingForm.controls['title']?.touched
+            "
+          >
+            Name is required
+          </span>
+          <!-- End of Errors Validation -->
         </div>
 
-        <div class="form-item">
+        <div class="form-item d-flex">
           <mat-form-field appearance="fill">
             <mat-label>Category</mat-label>
             <mat-select required formControlName="category">
@@ -32,18 +57,57 @@
               </mat-optgroup>
             </mat-select>
           </mat-form-field>
+
+          <div
+            *ngIf="ListingForm.value.category == 'Create a Category'"
+            class="half-width px-3"
+          >
+            <label>Create a Category</label>
+            <input
+              matInput
+              formControlName="customCategory"
+              placeholder="Enter your category"
+            />
+            <!-- Errors Validation -->
+            <span
+              class="error-hint"
+              *ngIf="ListingForm.get('customCategory').hasError('maxlength')"
+            >
+              Category must not be more than 25 characters long.
+            </span>
+            <!-- End of Errors Validation -->
+          </div>
         </div>
 
         <div class="form-item">
-          <label>Contact Email</label>
+          <label>Contact Email *</label>
           <input
             placeholder="Give your initiative a name"
             formControlName="listing_email"
           />
+
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="
+              ListingForm.get('listing_email').hasError('required') &&
+              ListingForm.controls['listing_email']?.touched
+            "
+          >
+            Email is required
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('listing_email').hasError('email')"
+          >
+            Please Enter a Valid Email
+          </span>
+
+          <!-- End of Errors Validation -->
         </div>
 
         <div class="form-item">
-          <label>Slogan</label>
+          <label>Slogan *</label>
           <textarea
             cdkTextareaAutosize
             cdkAutosizeMinRows="5"
@@ -51,10 +115,36 @@
             formControlName="tagline"
           >
           </textarea>
+          <span class="hint">
+            {{ ListingForm.value.tagline.length }} / 100
+          </span>
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="
+              ListingForm.get('tagline').hasError('required') &&
+              ListingForm.controls['tagline']?.touched
+            "
+          >
+            Slogan is required
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('tagline').hasError('maxlength')"
+          >
+            Slogan must not be more than 100 characters long.
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('tagline').hasError('pattern')"
+          >
+            Special characters not allowed
+          </span>
+          <!-- End of Errors Validation -->
         </div>
 
         <div class="form-item">
-          <label>Mission</label>
+          <label>Mission *</label>
           <textarea
             cdkTextareaAutosize
             cdkAutosizeMinRows="5"
@@ -62,24 +152,83 @@
             formControlName="mission"
           >
           </textarea>
+          <span class="hint">
+            {{ ListingForm.value.mission.length }} / 150
+          </span>
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="
+              ListingForm.get('mission').hasError('required') &&
+              ListingForm.controls['mission']?.touched
+            "
+          >
+            Mission Statement is required
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('mission').hasError('maxlength')"
+          >
+            Mission Statement must not be more than 100 characters long.
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('mission').hasError('pattern')"
+          >
+            Special characters not allowed
+          </span>
+          <!-- End of Errors Validation -->
         </div>
-
+      </div>
+      <div class="no-effect">
         <div class="listing-stepper">
           <p>additional information</p>
         </div>
 
         <div class="form-item">
-          <mat-form-field appearance="fill">
-            <mat-label>Project Location</mat-label>
-            <mat-select formControlName="LocationsList" multiple>
-              <mat-option
-                *ngFor="let location of locationList"
-                [value]="location.location_id"
+          <div [formGroup]="ListingForm">
+            <mat-form-field appearance="fill">
+              <mat-label>Project Location</mat-label>
+              <mat-select formControlName="LocationsList" multiple>
+                <mat-option
+                  *ngFor="let location of locationList"
+                  [value]="location.location_id"
+                >
+                  {{ location.location }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field class="hashtags-container">
+              <mat-chip-list #chipList aria-label="Fruit selection">
+                <mat-chip
+                  *ngFor="let hashtags of hashtags"
+                  [selectable]="selectable"
+                  [removable]="removable"
+                  (removed)="remove(hashtags)"
+                >
+                  {{ hashtags }}
+                  <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input
+                  placeholder="Hashtags (Maximum Of 3)"
+                  [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="addOnBlur"
+                  (matChipInputTokenEnd)="add($event)"
+                />
+              </mat-chip-list>
+              <mat-hint
+                >Use hashtags to improve the visibility of your
+                content</mat-hint
               >
-                {{ location.location }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+              <span *ngIf="hashtagsError == true" class="error"
+                >Maximum 3 Hashtags</span
+              >
+            </mat-form-field>
+          </div>
         </div>
       </div>
     </div>
@@ -129,6 +278,7 @@
       </div>
       <div class="listing-form" [formGroup]="ListingForm">
         <div class="form-item">
+          <label>Story Block *</label>
           <div class="CMS-editor editing-active">
             <div class="action-container">
               <ul>
@@ -273,6 +423,7 @@
         <p>what are your goals?</p>
       </div>
       <div class="no-effect">
+        <app-milestones [(MilestoneArr)]="milestoneArr"></app-milestones>
         <div class="form-item">
           <div class="milestones-container">
             <div
@@ -285,15 +436,17 @@
                   <input
                     maxlength="50"
                     matInput
-                    [(ngModel)]="milestone.milestone"
+                    [(ngModel)]="milestone.description"
                   />
+                  <mat-hint> {{ milestone.description.length }}/50 </mat-hint>
                 </mat-form-field>
                 <mat-form-field class="deadline-input">
                   <mat-label>Deadline</mat-label>
                   <input
-                    [(ngModel)]="milestone.deadline"
+                    [(ngModel)]="milestone.date"
                     matInput
                     [matDatepicker]="DateOfBirthPicker"
+                    (ngModelChange)="sortMilestone()"
                   />
                   <mat-datepicker-toggle
                     matSuffix
@@ -347,6 +500,7 @@
                     [(ngModel)]="faq.answer"
                     maxlength="500"
                   ></textarea>
+                  <span class="hint"> {{ faq.answer.length }} / 500 </span>
                 </div>
               </div>
               <button class="remove-faq" (click)="removeFAQ(i)"></button>
@@ -397,6 +551,7 @@
                   [(ngModel)]="item.description"
                   maxlength="500"
                 ></textarea>
+                <span class="hint"> {{ item.description.length }} / 500 </span>
               </div>
               <button
                 class="remove-skills"
@@ -411,11 +566,13 @@
         </div>
       </div>
     </div>
-
-    <!-- Submit -->
-
-    <div class="listing-section">
-      <div class="listing-form">
+  </div>
+</section>
+<section>
+  <!-- Submit -->
+  <div class="listing-section floating-actions-container">
+    <div class="floating-actions">
+      <div class="container">
         <div class="submit-btn">
           <button class="btn yellow-btn" (click)="createListing()">
             Create Initiative
