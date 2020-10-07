@@ -1,157 +1,125 @@
-<section class="container block-content" *ngIf="ListingData.listing_id != null">
-  <div class="d-flex flex-wrap">
-    <div class="col-lg-6 pr-lg-0">
-      <app-image-carousel
-        *ngIf="SliderImageArr"
-        [SliderImages]="SliderImageArr"
-      ></app-image-carousel>
+<section class="bg-section" *ngIf="ListingData.listing_id != null">
+  <div class="container">
+    <div class="col-12 text-center project-info-container">
+      <p class="primary-badge">{{ ListingData["category"] }}</p>
+      <p class="regular-l">{{ ListingData["title"] }}</p>
+      <p class="light-m mission">{{ ListingData["mission"] }}</p>
     </div>
-    <div class="col-lg-6">
-      <div class="info-container">
-        <p class="category">{{ ListingData["category"] }}</p>
-        <div class="hashtags-list">
-          <ul *ngIf="Hashtags">
-            <li *ngFor="let data of Hashtags" class="active">
-              {{ data.tag }}
-            </li>
-          </ul>
-        </div>
-        <p class="title">{{ ListingData["title"] }}</p>
-        <p class="tagline">~ {{ ListingData["tagline"] }}</p>
-        <div class="project-status-container">
-          <p class="project-status project-open">Project Ongoing</p>
-        </div>
-        <div *ngIf="ListingLocation.length > 0" class="locationtags-list">
-          <ul>
-            <li *ngFor="let location of ListingLocation">
-              {{ location.location }}
-            </li>
-          </ul>
-        </div>
-        <div
-          *ngIf="ListingLocation.length > 0"
-          class="collapse-btn location-expand"
-          (click)="toggle_collapse()"
-        ></div>
-        <div class="user-info" *ngIf="ProfileInfo">
-          <div class="profile-image">
-            <img src="{{ ProfileInfo.profile_picture }}" />
-          </div>
-
-          <p class="username" (click)="selectedProfile(ProfileInfo['user_id'])">
-            {{ ProfileInfo["nickname"] }}
-          </p>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="listing-stats">
-            <div class="stats" *ngIf="listingLikes">
-              <p>{{ listingLikes }}</p>
-              <span>likes</span>
+    <div class="d-flex flex-wrap">
+      <div class="col-lg-8">
+        <app-image-carousel
+          *ngIf="SliderImageArr"
+          [SliderImages]="SliderImageArr"
+        ></app-image-carousel>
+      </div>
+      <div class="col-lg-4">
+        <div class="project-sidebar-container">
+          <div>
+            <div class="project-status-container">
+              <p class="project-status project-open bold-xs">Project Ongoing</p>
             </div>
-            <div class="stats">
-              <p>
-                <a class="email-icon" (click)="togglePopup()"></a>
+            <p class="light-m">{{ ListingData["tagline"] }}</p>
+            <div class="hashtags-list">
+              <ul *ngIf="Hashtags">
+                <li *ngFor="let data of Hashtags" class="light-xs">
+                  {{ data.tag }}
+                </li>
+              </ul>
+            </div>
+            <div *ngIf="ListingLocation.length > 0" class="locationtags-list">
+              <div class="location-icon"></div>
+              <ul>
+                <li class="light-xs" *ngFor="let location of ListingLocation">
+                  {{ location.location }}
+                </li>
+              </ul>
+            </div>
+
+            <div class="button-container">
+              <button class="primary-button" (click)="togglePopup()">
+                Enquire this project
+              </button>
+            </div>
+
+            <div>
+              <p (click)="liked_clicked()" class="light-xs like-btn">
+                {{ listingLikes }} Likes
               </p>
-              <span>Enquire</span>
             </div>
           </div>
-          <p
-            *ngIf="AuthService.isLoggedIn == true"
-            class="like-btn"
-            (click)="liked_clicked()"
-          ></p>
+
+          <div *ngIf="ProfileInfo">
+            <div
+              class="user-info"
+              (click)="selectedProfile(ProfileInfo['user_id'])"
+            >
+              <div class="profile-image">
+                <img src="{{ ProfileInfo.profile_picture }}" />
+              </div>
+
+              <p class="username light-s">
+                {{ ProfileInfo["nickname"] }}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-12">
-      <div class="mission">
-        <svg
-          width="64"
-          height="56"
-          viewBox="0 0 64 56"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M0 56C0 52.6061 0 49.2121 0 45.8182C0 42.2828 0 38.8182 0 35.4242C0 24.5354 1.59637 15.9798 4.78912 9.75758C7.98186 3.53536 13.5692 0.282833 21.551 0L25.6871 8.27274C21.1882 8.69697 18.068 10.8182 16.3265 14.6364C14.7302 18.3131 13.932 24.1818 13.932 32.2424H25.4694V56H0ZM38.3129 56C38.3129 52.6061 38.3129 49.2121 38.3129 45.8182C38.3129 42.2828 38.3129 38.8182 38.3129 35.4242C38.3129 24.5354 39.9093 15.9798 43.102 9.75758C46.2948 3.53536 51.8821 0.282833 59.8639 0L64 8.27274C59.5011 8.69697 56.3809 10.8182 54.6395 14.6364C53.0431 18.3131 52.2449 24.1818 52.2449 32.2424H63.7823V56H38.3129Z"
-            fill="#F1CB4A"
-          />
-        </svg>
-        <p>{{ ListingData["mission"] }}</p>
-      </div>
-    </div>
+  </div>
+  <div class="milestone-timeline container">
+    <app-milestones
+      *ngIf="MilestoneArr != []"
+      [MilestoneArr]="MilestoneArr"
+    ></app-milestones>
   </div>
 </section>
 
-<hr />
-<section *ngIf="SkillsList.length > 0" class="container block-content">
-  <div class="col-12">
-    <h2>Looking For</h2>
-  </div>
-  <div class="jobs-list col-12">
-    <ul>
-      <li *ngFor="let skills of SkillsList">
-        <div class="listing-jobs">
-          <p class="job-title">{{ skills.job_title }}</p>
-          <p [className]="'job-description job-number-' + skills.job_id">
-            {{ skills.job_description }}
-          </p>
-          <div
-            [className]="
-              'collapse-btn jobs-expand job-collapse-' + skills.job_id
-            "
-            (click)="toggle_jobs(skills.job_id)"
-          ></div>
-        </div>
-      </li>
-    </ul>
+<section class="navigation-container">
+  <div class="sticky-navigation">
+    <div class="container">
+      <ul class="navigation-tabs">
+        <li class="active" (click)="tabs_selected('story')">Story</li>
+        <li (click)="tabs_selected('FAQ')">FAQ</li>
+        <li (click)="tabs_selected('updates')">Updates</li>
+        <li (click)="tabs_selected('comments')">Comments</li>
+        <li (click)="tabs_selected('skills')">Looking For</li>
+      </ul>
+    </div>
   </div>
 </section>
 
 <section class="container block-content pt-4">
   <div class="col-12">
-    <ul class="navigation-tabs">
-      <li class="active" (click)="tabs_selected('story')">Story</li>
-      <li (click)="tabs_selected('FAQ')">FAQ</li>
-      <li (click)="tabs_selected('updates')">Updates</li>
-      <li (click)="tabs_selected('comments')">Comments</li>
-    </ul>
-
     <!-- Tab Navigation Content -->
+    <!-- Skills -->
+    <div class="tabs-content" id="skills">
+      <div *ngIf="SkillsList.length > 0">
+        <div class="skills-item" *ngFor="let skills of SkillsList">
+          <p class="job-title medium-s">
+            {{ skills.job_title }}
+          </p>
+          <p class="job-description light-s">
+            {{ skills.job_description }}
+          </p>
+        </div>
+      </div>
+    </div>
     <!-- Story -->
     <div class="tabs-content" id="story">
       <div *ngIf="Stories">
-        <p>
-          {{ Stories.overview }}
-        </p>
-        <label> Current Problem </label>
-        <p>
-          {{ Stories.problem }}
-        </p>
-        <label> Solution </label>
-        <p>
-          {{ Stories.solution }}
-        </p>
-        <label> Ideal outcome </label>
-        <p>
-          {{ Stories.outcome }}
-        </p>
+        <div class="CMS-editor">
+          <div id="result-output"></div>
+        </div>
       </div>
-      <label> Milestones </label>
-      <app-milestones
-        *ngIf="MilestoneArr != []"
-        [MilestoneArr]="MilestoneArr"
-      ></app-milestones>
     </div>
     <!-- FAQ -->
     <div class="tabs-content" id="FAQ">
       <div *ngIf="FAQList != []" class="faq-container">
         <div *ngFor="let faq of FAQList" class="faq-item">
-          <b>
+          <b class="regular-s">
             {{ faq.question }}
           </b>
-          <p>
+          <p class="light-s">
             {{ faq.answer }}
           </p>
         </div>
@@ -227,14 +195,16 @@
                 <img src="{{ ProfileInfo.profile_picture }}" />
               </div>
               <div class="ml-3">
-                <p class="user">by {{ ProfileInfo["nickname"] }}</p>
-                <p class="datetime">
+                <p class="user regular-s">by {{ ProfileInfo["nickname"] }}</p>
+                <p class="datetime light-xs">
                   {{ updates.updated_on | date: "d MMM y" }}
                 </p>
               </div>
             </div>
             <div>
-              <p class="datetime">{{ getDiffInTime(updates.updated_on) }}</p>
+              <p class="datetime light-xs">
+                {{ getDiffInTime(updates.updated_on) }}
+              </p>
             </div>
           </div>
           <div class="card-content">
@@ -248,7 +218,7 @@
               ]"
             ></app-update-carousel>
             <div class="text-content">
-              <p>
+              <p class="light-s">
                 {{ updates.description }}
               </p>
             </div>
@@ -303,7 +273,7 @@
                 <div class="d-flex justify-content-between mb-2">
                   <p
                     (click)="selectedProfile(comments.user_id)"
-                    class="username"
+                    class="username medium-s"
                   >
                     <span
                       *ngIf="comments.user_id == ListingData.created_by"
@@ -312,11 +282,11 @@
                     >
                     {{ comments.nickname }}
                   </p>
-                  <p class="time">
+                  <p class="time light-xs">
                     {{ comments.updated_on | date: "d MMM y" }}
                   </p>
                 </div>
-                <p class="comments">
+                <p class="comments light-s">
                   {{ comments.comment }}
                 </p>
               </div>
@@ -384,7 +354,7 @@
                   <div class="comments-info">
                     <div class="d-flex justify-content-between mb-2">
                       <p
-                        class="username"
+                        class="username medium-s"
                         (click)="selectedProfile(reply.user_id)"
                       >
                         <span
@@ -395,11 +365,11 @@
 
                         {{ reply.nickname }}
                       </p>
-                      <p class="time">
+                      <p class="time light-xs">
                         {{ reply.updated_on | date: "d MMM y" }}
                       </p>
                     </div>
-                    <p class="comments">
+                    <p class="comments light-s">
                       {{ reply.comment }}
                     </p>
                   </div>

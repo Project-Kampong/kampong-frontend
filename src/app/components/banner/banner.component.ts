@@ -11,13 +11,16 @@ export class BannerComponent implements OnInit {
   constructor(public ListingsService: ListingsService) {}
   featuredData = [];
   slickInitiated = false;
+  numtoget = 0;
   ngOnInit() {
     this.ListingsService.getFeaturedListings().subscribe((data) => {
       console.log(data);
       const tempFeatured = data["data"];
+      this.numtoget = data["count"];
       tempFeatured.map((x) => {
         this.ListingsService.getSelectedListing(x.listing_id).subscribe(
           (item) => {
+            console.log(item["data"]);
             this.featuredData.push(item["data"]);
           }
         );
@@ -28,7 +31,7 @@ export class BannerComponent implements OnInit {
   sliderSlickInit() {
     if (this.slickInitiated) {
       return;
-    } else {
+    } else if (this.featuredData.length == this.numtoget) {
       // Jquery
       $(".slick-belt").slick({
         slidesToShow: 1,
@@ -44,8 +47,7 @@ export class BannerComponent implements OnInit {
           {
             breakpoint: 1024,
             settings: {
-              arrows: false,
-              draggable: true,
+              autoplay: false,
             },
           },
         ],

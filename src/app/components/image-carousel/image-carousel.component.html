@@ -8,14 +8,4 @@
       <span *ngIf="islast">{{ sliderSlickInit() }}</span>
     </div>
   </div>
-  <!--  carousel-nav -->
-  <div class="carousel-nav">
-    <div
-      *ngFor="let data of SliderImages; last as last"
-      class="image-container"
-    >
-      <img src="{{ data }}" />
-      <span *ngIf="last">{{ navSlickInit() }}</span>
-    </div>
-  </div>
 </div>

@@ -1,184 +1,3 @@
-.info-container {
-  @media (min-width: 1024px) {
-    padding-left: 2rem;
-  }
-  .category {
-    // color: rgba(0, 0, 0, 0.3);
-    // font-size: 1rem;
-    // font-weight: bold;
-    // border: 1px solid rgba(0, 0, 0, 0.15);
-    // padding: 0.25rem 0.75rem;
-    // border-radius: 5px;
-    // display: inline-block;
-
-    color: #34ad5f;
-    font-size: 0.9rem;
-    padding: 0.25rem 0;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin: 0;
-    display: inline-block;
-  }
-  .title {
-    color: rgb(0, 0, 0);
-    font-size: 1.7rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
-  .tagline {
-    color: rgba(0, 0, 0, 0.7);
-    font-size: 1.2rem;
-    font-weight: 400;
-    text-transform: capitalize;
-    letter-spacing: 0.05rem;
-    margin-bottom: 0;
-    font-style: italic;
-  }
-  .user-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  .username {
-    display: inline-block;
-    padding: 1rem 0;
-    padding-left: 0.5rem;
-    margin: 0;
-    cursor: pointer;
-  }
-
-  .hashtags-list {
-    ul {
-      padding: 0;
-    }
-    li {
-      font-size: 0.9rem;
-      cursor: default;
-    }
-  }
-}
-
-.mission {
-  display: flex;
-  padding-top: 4rem;
-  p {
-    padding-left: 5rem;
-    font-size: 2rem;
-    font-weight: 900;
-    color: #6b6b6b;
-    text-transform: capitalize;
-    @media (max-width: 1024px) {
-      padding-left: 2rem;
-      font-size: 1.8rem;
-    }
-  }
-  svg {
-    min-width: 50px;
-  }
-}
-
-.listing-stats {
-  display: flex;
-  align-items: center;
-  .stats {
-    padding: 0 1.5rem;
-    text-align: center;
-    border-left: 1px solid black;
-    p {
-      margin: 0;
-      font-size: 1.5rem;
-      font-weight: bold;
-      line-height: 1.5rem;
-    }
-    span {
-      text-transform: capitalize;
-    }
-  }
-  .stats:first-child {
-    border: none;
-    padding-left: 0;
-  }
-}
-
-.like-btn {
-  cursor: pointer;
-  display: inline-block;
-  border-radius: 5px;
-  padding: 0.5rem 1rem;
-  border: 1px solid black;
-  margin: 0;
-}
-
-.navigation-tabs {
-  list-style-type: none;
-  margin: 0;
-  margin-bottom: 3rem;
-  padding: 0;
-  li {
-    text-transform: uppercase;
-    display: inline-block;
-    padding: 0.25rem 0;
-    margin: 0 1rem;
-    cursor: pointer;
-  }
-  .active {
-    font-weight: bold;
-    border-bottom: 3px solid black;
-  }
-  li:first-child {
-    margin-left: 0;
-  }
-}
-
-.tabs-content {
-  padding-bottom: 5rem;
-  display: none;
-  p {
-    font-size: 1.2rem;
-    white-space: pre-line;
-  }
-  label {
-    font-size: 1.3rem;
-    background-color: #2589a7;
-    padding: 0.25rem 1.5rem;
-    color: white;
-    font-weight: 600;
-    margin: 4rem 0 2rem 0;
-    border-left: 0.5rem solid #ffcb43;
-  }
-}
-
-// Updates Card
-.update-card {
-  padding: 1rem;
-  margin-bottom: 5rem;
-  .card-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    border-bottom: 1px solid #d9d9d9;
-    padding: 0 1rem;
-    padding-bottom: 1.5rem;
-    p {
-      margin: 0;
-    }
-    .user {
-      font-size: 1.2rem;
-      padding-bottom: 0.25rem;
-      font-weight: bold;
-    }
-    .datetime {
-      font-size: 1rem;
-      color: rgba(0, 0, 0, 0.5);
-    }
-  }
-  .card-content {
-    .text-content {
-      margin: 4rem 1rem 3rem 1rem;
-    }
-  }
-}
-
 // Comments
 .comments-container {
   .comments-card {
@@ -197,9 +16,6 @@
     .time {
       font-size: 1rem;
       color: rgba(0, 0, 0, 0.5);
-    }
-    .comments {
-      font-size: 1rem;
     }
     .reply-btn {
       padding: 0;
@@ -227,6 +43,9 @@
   }
   .child-container {
     padding-left: 5rem;
+    @media (max-width: 991px) {
+      padding-left: 2rem;
+    }
   }
 }
 .comments-input,
@@ -256,42 +75,6 @@
       color: #6b6b6b;
     }
   }
-}
-
-// Like btn
-.like-btn {
-  &:before {
-    content: "\f004";
-    font-family: "Font Awesome\ 5 Free";
-    font-weight: 400;
-    padding-right: 0.5rem;
-  }
-  &:after {
-    content: "Like";
-  }
-}
-.liked {
-  background-color: #fb3958;
-  color: white;
-  border: none;
-
-  &:before {
-    font-weight: 900;
-    padding-right: 0.5rem;
-  }
-  &:after {
-    content: "Liked";
-  }
-}
-
-.owner-badge {
-  font-weight: 400;
-  font-size: 0.9rem;
-  background-color: #088366;
-  color: white;
-  border-radius: 5px;
-  padding: 0.25rem 0.5rem;
-  text-transform: uppercase;
 }
 
 .custom-input {
@@ -370,20 +153,6 @@
   }
 }
 
-.email-icon {
-  text-decoration: none;
-  cursor: pointer;
-  color: #007bff;
-  &:after {
-    content: "\f086";
-    font-family: "Font Awesome\ 5 Free";
-    font-weight: 900;
-  }
-  &:hover {
-    color: #007bff;
-  }
-}
-
 // popup
 .popup-bg {
   display: none;
@@ -438,19 +207,79 @@
   display: block;
 }
 
+// Revamp
+$grey: #f5f5f5;
+$primary: #4f8a8b;
+.bg-section {
+  background-color: $grey;
+  padding: 3rem 0;
+  // border-bottom: 1px solid #c4c4c4;
+}
+.project-info-container {
+  margin-bottom: 2rem;
+  .mission {
+    margin: 0 auto;
+    text-transform: capitalize;
+    @media (min-width: 991px) {
+      width: 80%;
+    }
+  }
+}
+.project-sidebar-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 100%;
+  @media (min-width: 991px) {
+    padding-left: 1rem;
+  }
+  @media (max-width: 991px) {
+    padding-top: 2rem;
+  }
+  .user-info {
+    display: flex;
+    cursor: pointer;
+    .profile-image {
+      margin-right: 0.5rem;
+      img {
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: cover;
+      }
+    }
+    .username {
+      margin: 0;
+    }
+  }
+  .like-btn {
+    cursor: pointer;
+    &:before {
+      content: "\f004";
+      font-family: "Font Awesome\ 5 Free";
+      font-weight: 400;
+      padding-right: 0.5rem;
+      color: $primary;
+    }
+  }
+  .liked {
+    &:before {
+      font-weight: 900;
+    }
+  }
+}
+
 .project-status-container {
-  margin: 1rem 0;
   display: flex;
   justify-content: space-between;
 }
 .project-status {
   display: inline-block;
   margin-bottom: 0;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
   font-weight: 900;
-  text-transform: uppercase;
+  text-transform: capitalize;
   color: white;
+  margin-bottom: 1rem;
   &:before {
     content: "\f017";
     font-family: "Font Awesome\ 5 Free";
@@ -459,8 +288,148 @@
   }
 }
 .project-open {
-  background: #00c09da9;
+  background: #3282b8;
 }
 .project-close {
   background: #2e4057a9;
+}
+
+.navigation-container {
+  position: relative;
+  .sticky-navigation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border: 1px solid #c4c4c4;
+    background-color: white;
+    z-index: 100;
+    overflow: auto;
+  }
+  .sticky-active {
+    position: fixed;
+  }
+  .navigation-tabs {
+    display: inline-flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    li {
+      text-transform: capitalize;
+      display: block;
+      padding: 1rem 0;
+      margin: 0 1rem;
+      cursor: pointer;
+      font-weight: 400;
+      font-size: 1rem;
+      white-space: pre;
+    }
+    .active {
+      font-weight: 700;
+      padding: 1rem;
+      border-bottom: 3px solid black;
+    }
+    li:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.tabs-content {
+  padding: 3rem 0;
+  padding-top: 5rem;
+  display: none;
+  p {
+    white-space: pre-line;
+  }
+  label {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 4rem 0 2rem 0;
+    text-transform: capitalize;
+  }
+}
+
+.owner-badge {
+  font-weight: 400;
+  font-size: 0.9rem;
+  background-color: #088366;
+  color: white;
+  border-radius: 5px;
+  padding: 0.25rem 0.5rem;
+  text-transform: uppercase;
+}
+
+// Updates Card
+.update-card {
+  padding: 1rem;
+  margin-bottom: 5rem;
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid #d9d9d9;
+    padding: 0 1rem;
+    padding-bottom: 1.5rem;
+    p {
+      margin: 0;
+    }
+    .user {
+      padding-bottom: 0.25rem;
+    }
+    .datetime {
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
+  .card-content {
+    .text-content {
+      margin: 4rem 1rem 3rem 1rem;
+    }
+  }
+}
+
+// Looking for
+.skills-item {
+  margin-bottom: 2rem;
+  p {
+    margin: 0;
+  }
+  .job-title {
+    background: $primary;
+    display: inline-block;
+    padding: 0.5rem 2rem;
+    padding-left: 2.5rem;
+    color: white;
+    position: relative;
+    transform: translateY(50%);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    z-index: 1;
+    &:before {
+      content: "\f0eb";
+      font-family: "Font Awesome\ 5 Free";
+      font-weight: 400;
+      font-size: 1.5rem;
+      color: white;
+      background: $primary;
+      height: 60px;
+      width: 60px;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 100%;
+      left: 0;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+  .job-description {
+    position: relative;
+    padding: 2rem;
+    padding-top: 3rem;
+    background: $grey;
+    border-radius: 5px;
+    white-space: pre-line;
+  }
 }

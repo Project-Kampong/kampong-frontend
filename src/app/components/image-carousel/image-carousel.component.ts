@@ -32,11 +32,11 @@ export class ImageCarouselComponent implements OnInit {
       $(".carousel-slider").slick({
         slidesToShow: 1,
         slidesToScroll: 1,
-        arrows: false,
-        fade: true,
+        arrows: true,
+        dots: true,
         infinite: false,
         adaptiveHeight: false,
-        asNavFor: ".carousel-nav",
+        // asNavFor: ".carousel-nav",
       });
     }
   }

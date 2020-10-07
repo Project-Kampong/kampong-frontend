@@ -1,49 +1,97 @@
-<section *ngIf="ProfileDetails != null" class="container block-content">
-  <div class="d-flex justify-content-between flex-wrap">
-    <div class="d-flex">
-      <div class="profile-image">
-        <img src="{{ ProfileDetails.profile_picture }}" />
-      </div>
-      <div class="user-details">
-        <p class="name">{{ ProfileDetails.nickname }}</p>
-        <p *ngIf="ProfileDetails.occupation != null" class="position">
-          {{ ProfileDetails.occupation }}
-        </p>
-        <p *ngIf="ProfileDetails.occupation == null" class="position">Newbie</p>
+<section *ngIf="ProfileDetails != null" class="profile-display">
+  <div class="container d-flex flex-wrap bg-colored-mobile">
+    <div class="col-lg-4 pl-lg-0 pr-lg-5">
+      <div class="bg-colored profile-item-container">
+        <div class="sticky-profile-container">
+          <div class="sticky-profile pt-lg-3">
+            <div class="d-flex">
+              <div class="profile-image">
+                <img src="{{ ProfileDetails.profile_picture }}" />
+              </div>
+              <div class="user-details">
+                <p class="name">{{ ProfileDetails.nickname }}</p>
+                <p *ngIf="ProfileDetails.occupation != null" class="position">
+                  {{ ProfileDetails.occupation }}
+                </p>
+                <p *ngIf="ProfileDetails.occupation == null" class="position">
+                  Newbie
+                </p>
+              </div>
+            </div>
+
+            <ul class="profile-nav">
+              <li
+                class="active"
+                id="profile-nav"
+                (click)="scrollToSection('profile')"
+              >
+                My Profile
+              </li>
+              <li (click)="scrollToSection('started')" id="started-nav">
+                Initiatives I've Started
+              </li>
+              <li (click)="scrollToSection('liked')" id="liked-nav">
+                Initiatives I've Liked
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
+    <div class="col-12 col-lg-8">
+      <div class="profile-item-container">
+        <div class="profile-item pt-lg-4" id="profile">
+          <div *ngIf="ProfileDetails.about != null">
+            <h2>About</h2>
+            <p class="light-s">
+              {{ ProfileDetails.about }}
+            </p>
+          </div>
+        </div>
+        <div class="profile-item">
+          <div class="limit-width">
+            <h2>Activity</h2>
+            <p class="light-s activity-stat">
+              <b>
+                {{ StartedArr.length }}
+              </b>
+              Initiatives Started
+            </p>
+            <p class="light-s activity-stat">
+              <b>
+                {{ LikedArr.length }}
+              </b>
+              Initiatives Liked
+            </p>
+            <p class="light-s activity-stat">
+              <b>
+                {{ StartedArr.length }}
+              </b>
+              Comments
+            </p>
+          </div>
+        </div>
 
-    <div class="profile-stats">
-      <div class="stats">
-        <p>{{ StartedArr.length }}</p>
-        <span>Initiatives</span>
-      </div>
-      <div class="stats">
-        <p>{{ LikedArr.length }}</p>
-        <span>Following</span>
+        <div class="profile-item" id="started">
+          <div *ngIf="StartedArr.length != 0">
+            <h2>Initiatives I've Started</h2>
+            <app-listing-cards
+              [ListingData]="StartedArr"
+              [ColNum]="6"
+            ></app-listing-cards>
+          </div>
+        </div>
+
+        <div class="profile-item" id="liked">
+          <div *ngIf="LikedArr.length != 0">
+            <h2>Initiatives I've Liked</h2>
+            <app-listing-cards
+              [ListingData]="LikedArr"
+              [ColNum]="6"
+            ></app-listing-cards>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div *ngIf="ProfileDetails.about != null" class="border-top-card">
-    <label>About</label>
-    <p>
-      {{ ProfileDetails.about }}
-    </p>
   </div>
 </section>
-<div class="set-min-height">
-  <section *ngIf="StartedArr.length != 0" class="container block-content">
-    <div class="col-12">
-      <h2>Initiatives I’ve Started</h2>
-    </div>
-    <app-listing-cards [ListingData]="StartedArr"></app-listing-cards>
-  </section>
-
-  <section *ngIf="LikedArr.length != 0" class="container block-content">
-    <div class="col-12">
-      <h2>Initiatives I’ve Liked</h2>
-    </div>
-    <app-listing-cards [ListingData]="LikedArr"></app-listing-cards>
-  </section>
-</div>
