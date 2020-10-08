@@ -404,4 +404,12 @@ export class ListingsService {
       this.AuthService.AuthOptions
     );
   }
+
+  sendEnquiry(data) {
+    return this.httpClient.post<API>(
+      this.url + "api/send-email",
+      data,
+      this.options
+    )
+  }
 }
