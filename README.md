@@ -1,6 +1,6 @@
 # Kampong Frontend
 
-![Build](https://github.com/Project-Kampong/kampong-frontend/workflows/Build/badge.svg) [![Total alerts](https://img.shields.io/lgtm/alerts/g/Project-Kampong/kampong-frontend.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Project-Kampong/kampong-frontend/alerts/)
+![Build](https://github.com/Project-Kampong/kampong-frontend/workflows/Build/badge.svg) [![Total alerts](https://img.shields.io/lgtm/alerts/g/Project-Kampong/kampong-frontend.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Project-Kampong/kampong-frontend/alerts/) [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Project-Kampong/kampong-frontend.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Project-Kampong/kampong-frontend/context:javascript)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.9.
 
