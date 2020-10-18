@@ -1,6 +1,6 @@
 # Kampong Frontend
 
-![Build](https://github.com/Project-Kampong/kampong-frontend/workflows/Build/badge.svg) [![Total alerts](https://img.shields.io/lgtm/alerts/g/Project-Kampong/kampong-frontend.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Project-Kampong/kampong-frontend/alerts/) [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Project-Kampong/kampong-frontend.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Project-Kampong/kampong-frontend/context:javascript)
+![Build](https://github.com/Project-Kampong/kampong-frontend/workflows/Build/badge.svg) [![Total alerts](https://img.shields.io/lgtm/alerts/g/Project-Kampong/kampong-frontend.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Project-Kampong/kampong-frontend/alerts/) [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Project-Kampong/kampong-frontend.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Project-Kampong/kampong-frontend/context:javascript) [![Netlify Status](https://api.netlify.com/api/v1/badges/6ac1a4d6-e8a8-4853-9ea9-875dc1f33e5b/deploy-status)](https://app.netlify.com/sites/kampong/deploys)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.9.
 
