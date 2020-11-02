@@ -1,6 +1,6 @@
 <div>
   <div>
-    <div class="sticky-search-bar container">
+    <div class="container">
       <div class="search-bar container mb-3 mt-5">
         <div class="back-btn" (click)="goBack()"></div>
         <mat-form-field class="full-width search-input">
@@ -13,51 +13,75 @@
         </mat-form-field>
         <a class="search-btn ml-3" (click)="searchInitiated()"></a>
       </div>
-      <div class="container">
-        <form
-          [formGroup]="searchParams"
-        >
-          <mat-form-field appearance="fill">
-            <mat-label>Location</mat-label>
-            <mat-select
-              formControlName="locationParams"
-              multiple
-              disableOptionCentering
-              >
-              <mat-optgroup
-                *ngFor="let group of locationList"
-                [label]="group.name"
-              >
-                <mat-option
-                  *ngFor="let location of group.group"
-                  [value]="location"
-                >
-                  {{ location }}
-                </mat-option>
-              </mat-optgroup>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Category</mat-label>
-            <mat-select
-              formControlName="categoryParams"
-              multiple
-              disableOptionCentering
+      <div class="expansion-div">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            Filters
+          </mat-expansion-panel-header>
+          <div class="container">
+            <form
+              [formGroup]="searchParams"
             >
-              <mat-optgroup
-                *ngFor="let group of categoryList"
-                [label]="group.name"
-              >
-                <mat-option
-                  *ngFor="let category of group.group"
-                  [value]="category"
-                >
-                 {{ category }}
-                </mat-option>
-              </mat-optgroup>
-            </mat-select>
-          </mat-form-field>
-        </form>
+              <div class="form-div">
+                <mat-form-field appearance="fill">
+                  <mat-label>Location</mat-label>
+                  <mat-select
+                    formControlName="locationParams"
+                    multiple
+                    disableOptionCentering
+                    >
+                    <mat-optgroup
+                      *ngFor="let group of locationList"
+                      [label]="group.name"
+                    >
+                      <mat-option
+                        *ngFor="let location of group.group"
+                        [value]="location"
+                      >
+                        {{ location }}
+                      </mat-option>
+                    </mat-optgroup>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="form-div">
+                <mat-form-field appearance="fill">
+                  <mat-label>Category</mat-label>
+                  <mat-select
+                    formControlName="categoryParams"
+                    multiple
+                    disableOptionCentering
+                  >
+                    <mat-optgroup
+                      *ngFor="let group of categoryList"
+                      [label]="group.name"
+                    >
+                      <mat-option
+                        *ngFor="let category of group.group"
+                        [value]="category"
+                      >
+                      {{ category }}
+                      </mat-option>
+                    </mat-optgroup>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </form>
+          </div>
+        </mat-expansion-panel>
+      </div>
+      <div class="container">
+        <div class="suggested-search">
+          <p class="label">Popular Searches</p>
+          <ul>
+            <li
+              *ngFor="let popular of popularSearchList"
+              (click)="popularSearchClicked(popular)"
+            >
+              {{ popular }}
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="container">
         <div>

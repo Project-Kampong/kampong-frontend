@@ -4,8 +4,9 @@ import { Location } from "@angular/common";
 import { ListingsService } from "@app/services/listings.service";
 import { AuthService } from "@app/services/auth.service";
 import { Listing } from "@app/interfaces/listing";
-import { Router } from "@angular/router";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { locationList } from "@app/util/locations";
+import { categoryList } from "@app/util/categories";
 declare var $: any;
 
 @Component({
@@ -13,17 +14,18 @@ declare var $: any;
   templateUrl: "./search.component.html",
   styleUrls: ["./search.component.scss"],
 })
+
 export class SearchComponent implements OnInit {
 
   searchParams: FormGroup;
-
-  constructor(
-    public ListingsService: ListingsService,
-    public AuthService: AuthService,
-    private location: Location,
-    private fb: FormBuilder,
-  ) {}
-
+  locationList: Object[];
+  categoryList: Object[];
+  popularSearchList: string[] = [
+    "Project Kampong",
+    "Rebuilding Homes",
+    "YOUTH Mentorship Programme",
+    "CommStart 2020",
+  ]
   resultsArr: Listing[];
   resultsCount: string;
   resultsInputString: string = "Everything";
@@ -33,175 +35,76 @@ export class SearchComponent implements OnInit {
   catInput: string[];
   locInput: string[];
 
-  locationList = [
-    {
-      name: "North",
-      group: [
-        "Admiralty",
-        "Kranji",
-        "Woodlands",
-        "Sembawang",
-        "Yishun",
-        "Yio Chu Kang",
-        "Seletar",
-        "Sengkang",
-      ],
-    },
-    {
-      name: "South",
-      group: [
-        "Holland",
-        "Queenstown",
-        "Bukit Merah",
-        "Telok Blangah",
-        "Pasir Panjang",
-        "Sentosa",
-        "Bukit Timah",
-        "Newton",
-        "Orchard",
-        "City",
-        "Marina South",
-      ],
-    },
-    {
-      name: "East",
-      group: [
-        "Serangoon",
-        "Punggol",
-        "Hougang",
-        "Tampines",
-        "Pasir Ris",
-        "Loyang",
-        "Simei",
-        "Kallang",
-        "Katong",
-        "East Coast",
-        "Macpherson",
-        "Bedok",
-        "Pulau Ubin",
-        "Pulau Tekong",
-      ],
-    },
-    {
-      name: "West",
-      group: [
-        "Lim Chu Kang",
-        "Choa Chu Kang",
-        "Bukit Panjang",
-        "Tuas",
-        "Jurong East",
-        "Jurong West",
-        "Jurong Industrial Estate",
-        "Bukit Batok",
-        "Hillview",
-        "West Coast",
-        "Clementi",
-      ],
-    },
-    {
-      name: "Central",
-      group: [
-        "Thomson",
-        "Marymount",
-        "Sin Ming",
-        "Ang Mo Kio",
-        "Bishan",
-        "Serangoon Gardens",
-        "MacRitchie",
-        "Toa Payoh",
-      ],
-    },
-  ];
-  categoryList = [
-    {
-      name: "Social",
-      group: [
-        "Health",
-        "Marriage",
-        "Education",
-        "Mentorship",
-        "Retirement",
-        "Housing",
-        "Rental Flats",
-        "Family",
-        "Gender",
-        "Elderly",
-        "Youth",
-        "Youth At Risk",
-        "Pre-School",
-        "Race",
-        "Language",
-        "Science",
-        "Art",
-        "Sports",
-        "Poverty",
-        "Inequality",
-      ],
-    },
-    {
-      name: "Environment",
-      group: ["Recycling", "Green", "Water", "Waste", "Food", "Growing"],
-    },
-    {
-      name: "Economical",
-      group: [
-        "Finance",
-        "Jobs",
-        "Wage",
-        "Upskill",
-        "Technology ",
-        "IT",
-        "IoT 4.0",
-        "Information",
-        "Automation",
-        "Online",
-        "Digitalization",
-      ],
-    },
-    {
-      name: "Others",
-      group: ["Productivity", "Innovation", "Research", "Manpower", "Design"],
-    },
-  ];
+  constructor(
+    public ListingsService: ListingsService,
+    public AuthService: AuthService,
+    private location: Location,
+    private fb: FormBuilder,
+  ) {
 
-  popularSearchList = [
-    "Project Kampong",
-    "Rebuilding Homes",
-    "YOUTH Mentorship Programme",
-    "CommStart 2020",
-  ];
-  ngOnInit() {
-    this.searchInput = this.location.getState()["name"] ? this.location.getState()["name"] : "";
-    this.catInput = this.location.getState()["category"] ? this.location.getState()["category"] : [];
-    this.locInput = this.location.getState()["location"] ? this.location.getState()["location"] : [];
-    this.searchInitiated();
+    this.locationList = locationList;
+    this.categoryList = categoryList;
     this.searchParams = this.fb.group({
       nameParams: new FormControl(""),
       locationParams: new FormControl([]),
       categoryParams: new FormControl([])
     })
+
   }
+
+  ngOnInit() {
+    this.searchInput = this.location.getState()["name"] ? this.location.getState()["name"] : "";
+    this.searchInitiated(true);
+  }
+
+  /**
+   * Go back to main landing page
+   */
   goBack() {
     this.location.back();
   }
-  searchInitiated() {
+
+  /**
+   * Start searchin for listings
+   * 
+   * @param onStart Optional argument that states whether the search should set from location state or form group state
+   */
+  searchInitiated(onStart ?: boolean) {
+    
     this.searchInput.trim();
+    this.catInput = this.searchParams.value.categoryParams ? this.searchParams.value.categoryParams : [];
+    this.locInput = this.searchParams.value.locationParams ? this.searchParams.value.locationParams : [];
+
+    if (onStart) {
+      this.catInput = this.location.getState()["category"] ? this.location.getState()["category"] : [];
+      this.locInput = this.location.getState()["location"] ? this.location.getState()["location"] : [];
+      this.searchParams.value.categoryParams = this.catInput;
+    }
+
     if (this.searchInput.length > 0 || this.catInput.length > 0 || this.locInput.length > 0) {
       const keywords = this.concatKeywords();
-      console.log(keywords);
       this.ListingsService.getSearchResult(keywords).subscribe(
         (data) => {
           this.resultsArr = data["data"];
           this.resultsCount = data["data"].length;
-          this.resultsInputString = this.searchInput.length > 0 ? this.searchInput : this.resultsInputString;
-          this.resultsLocString = this.locInput.length > 0 ? this.locInput : this.resultsLocString;
-          this.resultsCatString = this.catInput.length > 0 ? this.catInput : this.resultsCatString;
-
+          this.resultsInputString = this.searchInput.length > 0 ? this.searchInput : "Everything";
+          this.resultsLocString = this.locInput.length > 0 ? this.locInput : ["All locations"];
+          this.resultsCatString = this.catInput.length > 0 ? this.catInput : ["All interests"];
         }
       );
+    } else {
+      this.ListingsService.getListings(1).subscribe((data) => {
+        this.resultsArr = data["data"];
+        this.resultsInputString = "Everything";
+        this.resultsLocString = ["All locations"];
+        this.resultsCatString = ["All interests"];
+      })
     }
   }
   
+  /**
+   * Concatenate the keywords for the API GET route
+   */
   concatKeywords() {
     const searchArray = this.searchInput.split(' ').filter(e => e.length > 0);;
     const resultArr = this.catInput.concat(this.locInput).concat(searchArray);
@@ -213,8 +116,15 @@ export class SearchComponent implements OnInit {
     return result;
   }
 
+  /**
+   * Search a specific value that is popular
+   * 
+   * @param value Popular search field
+   */
   popularSearchClicked(value) {
     this.searchInput = value;
+    this.locInput = [];
+    this.catInput = [];
     this.searchInitiated();
   }
 }
