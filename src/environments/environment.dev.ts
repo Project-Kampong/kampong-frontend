@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: "https://dev.kampong.app",
+  apiUrl: "https://dev.kampong.app/",
 };
