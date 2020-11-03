@@ -1,0 +1,584 @@
+<section class="container block-content">
+  <div class="listing-creation">
+    <div class="listing-section">
+      <div class="listing-stepper">
+        <span> 1 </span>
+        <p>Project Information</p>
+      </div>
+      <div class="listing-form" [formGroup]="ListingForm">
+        <div class="form-item">
+          <label>Name Of Organisation *</label>
+          <input
+            placeholder="Give your initiative a name"
+            formControlName="title"
+          />
+          <span class="hint"> {{ ListingForm.value.title.length }} / 50 </span>
+
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('title').hasError('maxlength')"
+          >
+            Name must not be more than 50 characters long.
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('title').hasError('pattern')"
+          >
+            Special characters not allowed
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="
+              ListingForm.get('title').hasError('required') &&
+              ListingForm.controls['title']?.touched
+            "
+          >
+            Name is required
+          </span>
+          <!-- End of Errors Validation -->
+        </div>
+
+        <div class="form-item d-flex">
+          <mat-form-field appearance="fill">
+            <mat-label>Category</mat-label>
+            <mat-select required formControlName="category">
+              <mat-optgroup
+                *ngFor="let group of categoryGroup"
+                [label]="group.name"
+                [disabled]="group.disabled"
+              >
+                <mat-option
+                  *ngFor="let category of group.group"
+                  [value]="category"
+                >
+                  {{ category }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+
+          <div
+            *ngIf="ListingForm.value.category == 'Create a Category'"
+            class="half-width px-3"
+          >
+            <label>Create a Category</label>
+            <input
+              matInput
+              formControlName="customCategory"
+              placeholder="Enter your category"
+            />
+            <!-- Errors Validation -->
+            <span
+              class="error-hint"
+              *ngIf="ListingForm.get('customCategory').hasError('maxlength')"
+            >
+              Category must not be more than 25 characters long.
+            </span>
+            <!-- End of Errors Validation -->
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label>Contact Email *</label>
+          <input
+            placeholder="Give your initiative a name"
+            formControlName="listing_email"
+          />
+
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="
+              ListingForm.get('listing_email').hasError('required') &&
+              ListingForm.controls['listing_email']?.touched
+            "
+          >
+            Email is required
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('listing_email').hasError('email')"
+          >
+            Please Enter a Valid Email
+          </span>
+
+          <!-- End of Errors Validation -->
+        </div>
+
+        <div class="form-item">
+          <label>Slogan *</label>
+          <textarea
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="5"
+            placeholder="Give your initiative a name"
+            formControlName="tagline"
+          >
+          </textarea>
+          <span class="hint">
+            {{ ListingForm.value.tagline.length }} / 100
+          </span>
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="
+              ListingForm.get('tagline').hasError('required') &&
+              ListingForm.controls['tagline']?.touched
+            "
+          >
+            Slogan is required
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('tagline').hasError('maxlength')"
+          >
+            Slogan must not be more than 100 characters long.
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('tagline').hasError('pattern')"
+          >
+            Special characters not allowed
+          </span>
+          <!-- End of Errors Validation -->
+        </div>
+
+        <div class="form-item">
+          <label>Mission *</label>
+          <textarea
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="5"
+            placeholder="Give your initiative a name"
+            formControlName="mission"
+          >
+          </textarea>
+          <span class="hint">
+            {{ ListingForm.value.mission.length }} / 150
+          </span>
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="
+              ListingForm.get('mission').hasError('required') &&
+              ListingForm.controls['mission']?.touched
+            "
+          >
+            Mission Statement is required
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('mission').hasError('maxlength')"
+          >
+            Mission Statement must not be more than 100 characters long.
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="ListingForm.get('mission').hasError('pattern')"
+          >
+            Special characters not allowed
+          </span>
+          <!-- End of Errors Validation -->
+        </div>
+      </div>
+      <div class="no-effect">
+        <div class="listing-stepper">
+          <p>additional information</p>
+        </div>
+
+        <div class="form-item">
+          <div [formGroup]="ListingForm">
+            <mat-form-field appearance="fill">
+              <mat-label>Project Location</mat-label>
+              <mat-select formControlName="LocationsList" multiple>
+                <mat-option
+                  *ngFor="let location of locationList"
+                  [value]="location.location_id"
+                >
+                  {{ location.location }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field class="hashtags-container">
+              <mat-chip-list #chipList aria-label="Fruit selection">
+                <mat-chip
+                  *ngFor="let hashtags of hashtags"
+                  [selectable]="selectable"
+                  [removable]="removable"
+                  (removed)="remove(hashtags)"
+                >
+                  {{ hashtags }}
+                  <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input
+                  placeholder="Hashtags (Maximum Of 3)"
+                  [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="addOnBlur"
+                  (matChipInputTokenEnd)="add($event)"
+                />
+              </mat-chip-list>
+              <mat-hint
+                >Use hashtags to improve the visibility of your
+                content</mat-hint
+              >
+              <span *ngIf="hashtagsError == true" class="error"
+                >Maximum 3 Hashtags</span
+              >
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="listing-section">
+      <div class="listing-stepper">
+        <span> 2 </span>
+        <p>Upload your images</p>
+      </div>
+      <div class="listing-form" [formGroup]="ListingForm">
+        <div class="form-item">
+          <div class="custom-input col-lg-12">
+            <label>Images* (Maximum of 5)</label>
+            <div class="d-flex flex-wrap align-items-start mt-2 image-output">
+              <div
+                *ngFor="let file of fileDisplayArr; index as i"
+                class="image-container"
+                (click)="removeFile(i)"
+              >
+                <img src="{{ file }}" />
+              </div>
+
+              <div
+                *ngIf="fileLimit == false"
+                class="custom-file-upload-container"
+              >
+                <label for="file-upload" class="custom-file-upload"> </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="file-upload"
+                  (change)="uploadFile($event)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="listing-section">
+      <div class="listing-stepper">
+        <span> 3 </span>
+        <p>tell us more about your initiative</p>
+      </div>
+      <div class="listing-form" [formGroup]="ListingForm">
+        <div class="form-item">
+          <label>Story Block *</label>
+          <div class="CMS-editor editing-active">
+            <div class="action-container">
+              <ul>
+                <li>
+                  <button
+                    type="button"
+                    data-command="justifyLeft"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-align-left"></i>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-command="justifyCenter"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-align-center"></i>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-command="justifyRight"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-align-right"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button type="button" data-command="bold" class="action-btn">
+                    <i class="fas fa-bold"></i>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-command="underline"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-underline"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="insertOrderedList"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-list-ol"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="insertUnorderedList"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-list-ul"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="createlink"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-link"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="formatBlock"
+                    data-size="H1"
+                    class="action-btn"
+                  >
+                    <i>H1</i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="formatBlock"
+                    data-size="H2"
+                    class="action-btn"
+                  >
+                    <i>H2</i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="formatBlock"
+                    data-size="H3"
+                    class="action-btn"
+                  >
+                    <i>H3</i>
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div contenteditable="true" id="output">
+              <b
+                >This is a paragraph. It is editable. Try to change this
+                text.</b
+              >
+              <div>
+                <b><br /></b>
+              </div>
+              <div>
+                <ol>
+                  <li>item 1</li>
+                  <li>item 2</li>
+                </ol>
+                <div><br /></div>
+              </div>
+              <div>
+                <ul>
+                  <li>bullet 1</li>
+                  <li>bullet 2</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="listing-section">
+      <div class="listing-stepper">
+        <span> 4 </span>
+        <p>what are your goals?</p>
+      </div>
+      <div class="no-effect">
+        <app-milestones [(MilestoneArr)]="milestoneArr"></app-milestones>
+        <div class="form-item">
+          <div class="milestones-container">
+            <div
+              *ngFor="let milestone of milestoneArr; index as i"
+              class="milestones"
+            >
+              <div class="input-field-container">
+                <mat-form-field class="milestone-input">
+                  <mat-label>Milestone</mat-label>
+                  <input
+                    maxlength="50"
+                    matInput
+                    [(ngModel)]="milestone.description"
+                  />
+                  <mat-hint> {{ milestone.description.length }}/50 </mat-hint>
+                </mat-form-field>
+                <mat-form-field class="deadline-input">
+                  <mat-label>Deadline</mat-label>
+                  <input
+                    [(ngModel)]="milestone.date"
+                    matInput
+                    [matDatepicker]="DateOfBirthPicker"
+                    (ngModelChange)="sortMilestone()"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="DateOfBirthPicker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #DateOfBirthPicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <button
+                class="remove-milestone"
+                (click)="removeMilestone(i)"
+              ></button>
+            </div>
+
+            <button class="add-milestones" (click)="addMilestone()">
+              Add Milestone
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="listing-section">
+      <div class="listing-stepper">
+        <span> 5 </span>
+        <p>frequent asked questions</p>
+      </div>
+      <div class="listing-form">
+        <div class="form-item">
+          <!-- FAQ -->
+          <div class="faq-container">
+            <div *ngFor="let faq of faqArr; index as i" class="faq">
+              <div class="input-field-container">
+                <div class="form-item faq-input bg-colored">
+                  <textarea
+                    matInput
+                    placeholder="Question"
+                    cdkTextareaAutosize
+                    cdkAutosizeMinRows="2"
+                    [(ngModel)]="faq.questions"
+                    maxlength="200"
+                  ></textarea>
+                </div>
+                <div class="form-item faq-input">
+                  <textarea
+                    placeholder="Answers"
+                    matInput
+                    cdkTextareaAutosize
+                    cdkAutosizeMinRows="5"
+                    [(ngModel)]="faq.answer"
+                    maxlength="500"
+                  ></textarea>
+                  <span class="hint"> {{ faq.answer.length }} / 500 </span>
+                </div>
+              </div>
+              <button class="remove-faq" (click)="removeFAQ(i)"></button>
+            </div>
+
+            <button class="add-faq" (click)="addFAQ()">Add Question</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="listing-section">
+      <div class="listing-stepper">
+        <span> 6 </span>
+        <p>what skills are you looking for?</p>
+      </div>
+
+      <div class="listing-form">
+        <div class="form-item">
+          <!-- Looking for section -->
+          <div class="skills-container">
+            <div *ngFor="let item of lookingForArr; index as i" class="skills">
+              <div class="input-field-container">
+                <mat-form-field class="skills-input">
+                  <mat-label>Skills Required</mat-label>
+                  <mat-select [(ngModel)]="item.skills">
+                    <mat-optgroup
+                      *ngFor="let group of skillsets"
+                      [label]="group.name"
+                      [disabled]="group.disabled"
+                    >
+                      <mat-option
+                        *ngFor="let category of group.group"
+                        [value]="category.skill"
+                      >
+                        {{ category.skill }}
+                      </mat-option>
+                    </mat-optgroup>
+                  </mat-select>
+                </mat-form-field>
+
+                <textarea
+                  placeholder="Skills Description"
+                  matInput
+                  cdkTextareaAutosize
+                  cdkAutosizeMinRows="5"
+                  [(ngModel)]="item.description"
+                  maxlength="500"
+                ></textarea>
+                <span class="hint"> {{ item.description.length }} / 500 </span>
+              </div>
+              <button
+                class="remove-skills"
+                (click)="removeDescription(i)"
+              ></button>
+            </div>
+
+            <button class="add-skills" (click)="addDescription()">
+              Add Skills
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section>
+  <!-- Submit -->
+  <div class="listing-section floating-actions-container">
+    <div class="floating-actions">
+      <div class="container">
+        <div class="submit-btn">
+          <button class="btn yellow-btn" (click)="createListing()">
+            Create Initiative
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
