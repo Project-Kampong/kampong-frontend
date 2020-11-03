@@ -1,33 +1,168 @@
-<div class="search-bar container mb-3 mt-5">
-  <div class="back-btn" (click)="goBack()"></div>
-  <mat-form-field class="full-width search-input">
-    <input
-      matInput
-      placeholder="What are you looking for?"
-      [(ngModel)]="searchInput"
-      (keydown.enter)="searchInitiated()"
-    />
-  </mat-form-field>
-  <a class="search-btn ml-3" (click)="searchInitiated()"></a>
+<div>
+  <div>
+    <div class="container">
+      <div class="search-bar container mb-3 mt-5">
+        <div class="back-btn" (click)="goBack()"></div>
+        <mat-form-field class="full-width search-input">
+          <input
+            matInput
+            placeholder="What are you looking for?"
+            [(ngModel)]="searchInput"
+            (keydown.enter)="searchInitiated()"
+          />
+        </mat-form-field>
+        <a class="search-btn ml-3" (click)="searchInitiated()"></a>
+      </div>
+      <div class="expansion-div">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            Filters
+          </mat-expansion-panel-header>
+          <div class="container">
+            <form
+              [formGroup]="searchParams"
+            >
+              <div class="form-div">
+                <mat-form-field appearance="fill">
+                  <mat-label>Location</mat-label>
+                  <mat-select
+                    formControlName="locationParams"
+                    multiple
+                    disableOptionCentering
+                    >
+                    <mat-optgroup
+                      *ngFor="let group of locationList"
+                      [label]="group.name"
+                    >
+                      <mat-option
+                        *ngFor="let location of group.group"
+                        [value]="location"
+                      >
+                        {{ location }}
+                      </mat-option>
+                    </mat-optgroup>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="form-div">
+                <mat-form-field appearance="fill">
+                  <mat-label>Category</mat-label>
+                  <mat-select
+                    formControlName="categoryParams"
+                    multiple
+                    disableOptionCentering
+                  >
+                    <mat-optgroup
+                      *ngFor="let group of categoryList"
+                      [label]="group.name"
+                    >
+                      <mat-option
+                        *ngFor="let category of group.group"
+                        [value]="category"
+                      >
+                      {{ category }}
+                      </mat-option>
+                    </mat-optgroup>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </form>
+          </div>
+        </mat-expansion-panel>
+      </div>
+      <div class="container">
+        <div class="suggested-search">
+          <p class="label">Popular Searches</p>
+          <ul>
+            <li
+              *ngFor="let popular of popularSearchList"
+              (click)="popularSearchClicked(popular)"
+            >
+              {{ popular }}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="container">
+        <div>
+          <p class="result-text">
+            <b>{{ resultsCount }}</b> Initiatives found for <b>{{ resultsInputString }}</b>
+            <br>
+            Locations searched: <b>{{ resultsLocString }}</b>
+            <br>
+            Categories: <b> {{ resultsCatString }} </b>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="container" style="min-height: 100vh;">
+      <app-listing-cards [ListingData]="resultsArr"></app-listing-cards>
+    </div>
+  </div>
 </div>
-<div class="container">
-  <div class="suggested-search">
-    <p class="label">Popular Searches</p>
-    <ul>
-      <li
-        *ngFor="let popular of popularSearchList"
-        (click)="popularSearchClicked(popular)"
+
+<!--
+    <div class="sticky-filter-bar">
+    <div >
+      <form
+        [ngClass]="{'cb-vertival': !tmp }"
+        [formGroup]="searchParams"
       >
-        {{ popular }}
-      </li>
-    </ul>
+        <mat-form-field appearance="fill">
+          <mat-label>Location</mat-label>
+          <mat-select
+            formControlName="locationParams"
+            multiple
+            disableOptionCentering
+            >
+            <mat-optgroup
+              *ngFor="let group of locationList"
+              [label]="group.name"
+            >
+              <mat-option
+                *ngFor="let location of group.group"
+                [value]="location"
+              >
+                {{ location }}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Category</mat-label>
+          <mat-select
+            formControlName="categoryParams"
+            multiple
+            disableOptionCentering
+          >
+            <mat-optgroup
+              *ngFor="let group of categoryList"
+              [label]="group.name"
+            >
+              <mat-option
+                *ngFor="let category of group.group"
+                [value]="category"
+              >
+               {{ category }}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </div>
   </div>
-</div>
-<div class="container" style="min-height: 100vh">
-  <div *ngIf="resultsArr != null">
-    <p class="result-text">
-      <b>{{ resultsCount }}</b> Results found for <b>{{ resultsString }}</b>
-    </p>
-    <app-listing-cards [ListingData]="resultsArr"></app-listing-cards>
-  </div>
-</div>
+
+        <div class="container">
+        <div class="suggested-search">
+          <p class="label">Popular Searches</p>
+          <ul>
+            <li
+              *ngFor="let popular of popularSearchList"
+              (click)="popularSearchClicked(popular)"
+            >
+              {{ popular }}
+            </li>
+          </ul>
+        </div>
+      </div>
+-->

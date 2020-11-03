@@ -396,6 +396,10 @@
     <p class="popup-title">Enquire about {{ ListingData.title }}</p>
     <div class="fields-container">
       <mat-form-field class="full-width">
+        <mat-label>Your Topic</mat-label>
+        <input matInput [(ngModel)]="enquireTopic" />
+      </mat-form-field>
+      <mat-form-field class="full-width">
         <mat-label>Your Message</mat-label>
         <textarea
           matInput

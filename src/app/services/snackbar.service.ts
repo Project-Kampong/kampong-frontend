@@ -68,10 +68,10 @@ export class SnackbarService {
     setup_profile: {
       success: "Profile Setup Complete ",
       error: "Error, please try again later",
-      validation_error: "Plesae complete the setup",
+      validation_error: "Please complete the setup",
     },
     send_message: {
-      success: "Your message have been send",
+      success: "Your message has been sent!",
       error: "Failed to send message",
     },
     verify: {

@@ -461,6 +461,7 @@ export class ListingIndividualComponent implements OnInit {
   }
 
   enquireMessage: String = "";
+  enquireTopic: String = "";
   // Toggle Enquire popup
   togglePopup() {
     // Toggle popup
@@ -470,10 +471,30 @@ export class ListingIndividualComponent implements OnInit {
   sendMessage() {
     if (this.enquireMessage != "") {
       this.togglePopup();
-      this.SnackbarService.openSnackBar(
-        this.SnackbarService.DialogList.send_message.success,
-        true
-      );
+      this.ListingsService.sendEnquiry({
+        receiverEmail: this.ListingData.listing_email,
+        senderEmail: this.ListingData.listing_email,
+        subject: this.enquireTopic,
+        message: this.enquireMessage,
+      }).subscribe(
+        (data) => {
+          this.SnackbarService.openSnackBar(
+            this.SnackbarService.DialogList.send_message.success,
+            true
+          ),
+          (err) => {
+            this.SnackbarService.openSnackBar(
+              this.SnackbarService.DialogList.send_message.error,
+              false
+            )};
+        },
+        () => {
+          setTimeout(() => {
+            this.initiateSlick();
+          }, 500);
+        }
+      )
+
     }
   }
 
