@@ -36,6 +36,7 @@ import { SnackbarSuccessComponent } from "./components/snackbar-success/snackbar
 // Pages
 import { ListingHomeComponent } from "@app/pages/listing-home/listing-home.component";
 import { ListingIndividualComponent } from "@app/pages/listing-individual/listing-individual.component";
+import { OrganisationIndividualComponent } from "@app/pages/organisation-individual/organisation-individual.component";
 import { UserProfileComponent } from "@app/pages/user-profile/user-profile.component";
 import { LoginComponent } from "@app/pages/login/login.component";
 import { RegisterComponent } from "@app/pages/register/register.component";
@@ -54,6 +55,7 @@ import { OnboardingComponent } from "./pages/onboarding/onboarding.component";
     BannerComponent,
     ListingCardsComponent,
     ListingIndividualComponent,
+    OrganisationIndividualComponent,
     ImageCarouselComponent,
     UpdateCarouselComponent,
     MilestonesComponent,

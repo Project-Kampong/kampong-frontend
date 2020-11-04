@@ -8,6 +8,7 @@ import { ContentWrapperComponent } from "./layout/content-wrapper/content-wrappe
 // Import Components
 import { ListingHomeComponent } from "@app/pages/listing-home/listing-home.component";
 import { ListingIndividualComponent } from "@app/pages/listing-individual/listing-individual.component";
+import { OrganisationIndividualComponent } from "@app/pages/organisation-individual/organisation-individual.component";
 import { UserProfileComponent } from "@app/pages/user-profile/user-profile.component";
 import { PublicProfileComponent } from "@app/pages/public-profile/public-profile.component";
 import { LoginComponent } from "@app/pages/login/login.component";
@@ -30,6 +31,7 @@ const routes: Routes = [
       { path: "home", component: ListingHomeComponent },
       { path: "listing/:id", component: ListingIndividualComponent },
       { path: "createListing", component: CreateListingComponent },
+      { path: "organisation/:id", component: OrganisationIndividualComponent },
       { path: "createOrganisation", component: CreateOrganisationComponent },
       { path: "edit/:id", component: EditListingComponent },
       { path: "profile", component: UserProfileComponent },
