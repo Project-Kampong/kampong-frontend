@@ -139,25 +139,29 @@ export class CreateOrganisationComponent implements OnInit {
     }
     var routeTo;
     const organisationData = this.OrganisationForm.value;
-    var formdata = new FormData();
+    var formdata = { 
+      ...CreateOrganisation
+    }
     //LOOK HERE!!
-    formdata.append("name", organisationData.name);
+    formdata.name = organisationData.name
 
     if (organisationData.type == "Create a Type") {
-      formdata.append("type", organisationData.customType);
+      formdata.type = organisationData.customType;
     } else {
-      formdata.append("type", organisationData.type);
+      formdata.type = organisationData.type;
     }
-    formdata.append("about", organisationData.about);
-    formdata.append("website_url", "www.test.com");
-    formdata.append("handphone", organisationData.handphone);
-    formdata.append("email", organisationData.organisation_email);
+    formdata.about = organisationData.about;
+    formdata.website_url = "www.something.com";
+    formdata.handphone = organisationData.handphone;
+    formdata.email = organisationData.email;
     this.OrganisationsService.createOrganisation(formdata).subscribe(
       (res) => {
         console.log(res);
-        const organisation_id = res["data"][0]["organisation_id"];
+        const organisation_id = res["data"]["organisation_id"];
         routeTo = organisation_id;
         console.log(organisation_id);
+      }, (err) => { 
+        console.log(err);
       })
   }
 
