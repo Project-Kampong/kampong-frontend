@@ -49,6 +49,10 @@ export class SnackbarService {
       unliked: "Removed from your Liked Initative",
       error: "Error, please try again later",
     },
+    create_organisation : { 
+      success: "Organisation Successfully Created",
+      error: "Error, please try again later",
+    },
     create_listing: {
       success: "Initiative Successfully Created",
       error: "Error, please try again later",

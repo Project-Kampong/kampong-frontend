@@ -162,6 +162,12 @@ export class CreateOrganisationComponent implements OnInit {
         console.log(organisation_id);
       }, (err) => { 
         console.log(err);
+      }, () => {
+        this.SnackbarService.openSnackBar(
+          this.SnackbarService.DialogList.create_organisation.success,
+          true
+        );
+        this.router.navigate(["/organisation/" + routeTo]);
       })
   }
 
