@@ -16,6 +16,7 @@ import {
   ListingComments,
 } from "@app/interfaces/listing";
 import { Profile } from "@app/interfaces/profile";
+import { map } from "rxjs/operators";
 
 declare var $: any;
 
@@ -482,19 +483,19 @@ export class ListingIndividualComponent implements OnInit {
             this.SnackbarService.DialogList.send_message.success,
             true
           ),
-          (err) => {
-            this.SnackbarService.openSnackBar(
-              this.SnackbarService.DialogList.send_message.error,
-              false
-            )};
+            (err) => {
+              this.SnackbarService.openSnackBar(
+                this.SnackbarService.DialogList.send_message.error,
+                false
+              );
+            };
         },
         () => {
           setTimeout(() => {
             this.initiateSlick();
           }, 500);
         }
-      )
-
+      );
     }
   }
 
@@ -555,6 +556,50 @@ export class ListingIndividualComponent implements OnInit {
           console.log(this.CommentsArr);
         });
       });
+    }
+  }
+
+  applyJob(jobs) {
+    console.log;
+    if (this.AuthService.isLoggedIn) {
+      const subject = `Application for ${jobs.job_title}`;
+      // const user = this.AuthService.getUser();
+
+      // console.log(user);
+      // const message = `Hi there, an applicant named ${this.ProfileInfo.FirstName} has applied for this job. His contact info are ${this.ProfileInfo.}`;
+      console.log(jobs);
+      console.log(this.ProfileInfo);
+      // console.log(this.ListingData);
+      // this.ListingsService.sendEnquiry({
+      //   // receiverEmail: this.ListingData.listing_email,
+      //   // senderEmail: this.ListingData.listing_email,
+      //   receiverEmail: "ahliang51@gmail.com",
+      //   senderEmail: "ahliang51@gmail.com",
+      //   subject: "",
+      //   message: "Test",
+      // }).subscribe(
+      //   (data) => {
+      //     this.SnackbarService.openSnackBar(
+      //       this.SnackbarService.DialogList.send_message.success,
+      //       true
+      //     ),
+      //       (err) => {
+      //         console.log(err);
+      //         this.SnackbarService.openSnackBar(
+      //           this.SnackbarService.DialogList.send_message.error,
+      //           false
+      //         );
+      //       };
+      //   },
+      //   () => {
+      //     setTimeout(() => {
+      //       this.initiateSlick();
+      //     }, 500);
+      //   }
+      // );
+    } else {
+      this.SnackbarService.openSnackBar("Please login first", false);
+      this.router.navigate(["/login"]);
     }
   }
 }

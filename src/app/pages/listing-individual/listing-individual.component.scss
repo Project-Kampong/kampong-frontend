@@ -43,7 +43,8 @@
   }
 
   .child-container {
-    border-left: 1px solid black;
+    margin-left: 1.5rem;
+    border-left: 1px solid grey;
     padding-left: 5rem;
     @media (max-width: 991px) {
       padding-left: 2rem;
@@ -355,9 +356,8 @@ $primary: #4f8a8b;
 .owner-badge {
   font-weight: 400;
   font-size: 0.9rem;
-  // background-color: #088366;
-  background-color: #ffd461;
-  color: black;
+  background-color: #088366;
+  color: white;
   border-radius: 5px;
   padding: 0.25rem 0.5rem;
   text-transform: uppercase;
@@ -434,5 +434,9 @@ $primary: #4f8a8b;
     background: $grey;
     border-radius: 5px;
     white-space: pre-line;
+  }
+
+  .apply-button {
+    float: right;
   }
 }
