@@ -79,9 +79,9 @@ export class ListingsService {
   getSearchResult(keyword) {
     return this.httpClient.get<API>(
       this.url +
-        "api/listings/search-title?title=" +
+        "api/listings/search?keyword=" +
         keyword +
-        "&limit=25&sensitivity=50",
+        "limit=25",
       this.options
     );
   }
@@ -403,5 +403,13 @@ export class ListingsService {
       this.url + "api/listing-updates/" + update_id,
       this.AuthService.AuthOptions
     );
+  }
+
+  sendEnquiry(data) {
+    return this.httpClient.post<API>(
+      this.url + "api/send-email",
+      data,
+      this.options
+    )
   }
 }

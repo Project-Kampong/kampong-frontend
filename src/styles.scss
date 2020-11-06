@@ -1,6 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/theming';
+@include mat-core();
 
 $primary-yellow: #fed45f;
+/*
+$kampong-primary: mat-palette($mat-yellow);
+$kampong-accent: mat-palette($mat-orange);
+$kampong-theme: mat-light-theme($kampong-primary, $kampong-accent);
+@include angular-material-theme($kampong-theme);
+
+*/
 
 $primary: #4f8a8b;
 $action-yellow: #ffcb74;
@@ -737,17 +746,17 @@ body {
 .mat-expansion-panel {
   .mat-expansion-panel-header {
     font-size: 1rem;
-    background: #4e89ae !important;
+    background: #fed45f !important;
     &:hover {
-      background: #4e89ae !important;
+      background: #fed45f !important;
     }
   }
   .mat-expansion-panel-header-title {
-    color: white;
+    color: black;
     font-weight: bold;
   }
   .mat-expansion-indicator::after {
-    color: white;
+    color: black;
   }
   .mat-expansion-panel-body {
     padding-bottom: 3rem !important;
