@@ -1,0 +1,188 @@
+<section class="container block-content">
+  <div class="listing-creation">
+    <div class="listing-section">
+      <div class="listing-stepper">
+        <span> 1 </span>
+        <p>Organisation Information</p>
+      </div>
+      <div class="listing-form" [formGroup]="OrganisationForm">
+        <div class="form-item">
+          <label>Name Of Organisation *</label>
+          <input
+            placeholder="Give your organisation a name"
+            formControlName="name"
+          />
+          <div class="hint">{{ OrganisationForm.value.name.length }} / 50</div>
+
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="OrganisationForm.get('name').hasError('maxlength')"
+          >
+            Name must not be more than 50 characters long.
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="OrganisationForm.get('name').hasError('pattern')"
+          >
+            Special characters not allowed
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="
+              OrganisationForm.get('name').hasError('required') &&
+              OrganisationForm.controls['name']?.touched
+            "
+          >
+            Name is required
+          </span>
+          <!-- End of Errors Validation -->
+        </div>
+
+        <div class="form-item d-flex">
+          <mat-form-field appearance="fill">
+            <mat-label>Type</mat-label>
+            <mat-select required formControlName="type">
+              <mat-optgroup
+                *ngFor="let group of typeGroup"
+                [label]="group.name"
+                [disabled]="group.disabled"
+              >
+                <mat-option *ngFor="let type of group.group" [value]="type">
+                  {{ type }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+
+          <div
+            *ngIf="OrganisationForm.value.type == 'Create a Type'"
+            class="half-width px-3"
+          >
+            <label>Create a Type</label>
+            <input
+              matInput
+              formControlName="customType"
+              placeholder="Enter your organisation type"
+            />
+            <!-- Errors Validation -->
+            <span
+              class="error-hint"
+              *ngIf="OrganisationForm.get('customType').hasError('maxlength')"
+            >
+              Type must not be more than 25 characters long.
+            </span>
+            <!-- End of Errors Validation -->
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label>Contact Email *</label>
+          <input
+            placeholder="Give your organisation an email"
+            formControlName="email"
+          />
+
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="
+              OrganisationForm.get('email').hasError('required') &&
+              OrganisationForm.controls['email']?.touched
+            "
+          >
+            Email is required
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="OrganisationForm.get('email').hasError('email')"
+          >
+            Please Enter a Valid Email
+          </span>
+        </div>
+
+        <div class="form-item">
+          <label>About *</label>
+          <textarea
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="5"
+            placeholder="Tell us more about your organisation!"
+            formControlName="about"
+          >
+          </textarea>
+          <span class="hint">
+            {{ OrganisationForm.value.about.length }} / 500
+          </span>
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="
+              OrganisationForm.get('about').hasError('required') &&
+              OrganisationForm.controls['about']?.touched
+            "
+          >
+            About is required
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="OrganisationForm.get('about').hasError('maxlength')"
+          >
+            About Statement must not be more than 500 characters long.
+          </span>
+          <!-- End of Errors Validation -->
+        </div>
+
+        <div class="form-item">
+          <label>Contact Number *</label>
+          <input
+            placeholder="Enter a contact number for your organisation"
+            formControlName="handphone"
+          />
+          <div class="hint">
+            {{ OrganisationForm.value.handphone.length }} / 10
+          </div>
+
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="OrganisationForm.get('handphone').hasError('max')"
+          >
+            Contact Number must not be more than 8 characters long.
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="OrganisationForm.get('handphone').hasError('pattern')"
+          >
+            Special characters not allowed
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="
+              OrganisationForm.get('handphone').hasError('required') &&
+              OrganisationForm.controls['handphone']?.touched
+            "
+          >
+            Contact Number is required
+          </span>
+          <!-- End of Errors Validation -->
+        </div>
+
+        <!-- need to add WEBSITE_URL -->
+      </div>
+    </div>
+  </div>
+</section>
+<section>
+  <!-- Submit -->
+  <div class="listing-section floating-actions-container">
+    <div class="floating-actions">
+      <div class="container">
+        <div class="submit-btn">
+          <button class="btn yellow-btn" (click)="createOrganisation()">
+            Create Organisation
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

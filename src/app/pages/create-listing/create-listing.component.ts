@@ -161,6 +161,7 @@ export class CreateListingComponent implements OnInit {
         document.execCommand(cmd, false, null);
       }
     });
+    console.log(this.ListingForm);
   }
 
   // generateHTML() {
@@ -262,7 +263,6 @@ export class CreateListingComponent implements OnInit {
       ImageFd.append("pic" + (i + 1), this.fileArr[i].name);
       ImageFd.append("pics", this.fileArr[i]);
     }
-    console.log(ImageFd);
     this.ListingsService.createListing(ImageFd).subscribe(
       (res) => {
         console.log(res);

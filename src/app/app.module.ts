@@ -36,11 +36,13 @@ import { SnackbarSuccessComponent } from "./components/snackbar-success/snackbar
 // Pages
 import { ListingHomeComponent } from "@app/pages/listing-home/listing-home.component";
 import { ListingIndividualComponent } from "@app/pages/listing-individual/listing-individual.component";
+import { OrganisationIndividualComponent } from "@app/pages/organisation-individual/organisation-individual.component";
 import { UserProfileComponent } from "@app/pages/user-profile/user-profile.component";
 import { LoginComponent } from "@app/pages/login/login.component";
 import { RegisterComponent } from "@app/pages/register/register.component";
 import { EditProfileComponent } from "@app/pages/edit-profile/edit-profile.component";
 import { CreateListingComponent } from "@app/pages/create-listing/create-listing.component";
+import { CreateOrganisationComponent } from "@app/pages/create-organisation/create-organisation.component";
 import { PublicProfileComponent } from "@app/pages/public-profile/public-profile.component";
 import { EditListingComponent } from "@app/pages/edit-listing/edit-listing.component";
 import { SearchComponent } from "@app/pages/search/search.component";
@@ -53,6 +55,7 @@ import { OnboardingComponent } from "./pages/onboarding/onboarding.component";
     BannerComponent,
     ListingCardsComponent,
     ListingIndividualComponent,
+    OrganisationIndividualComponent,
     ImageCarouselComponent,
     UpdateCarouselComponent,
     MilestonesComponent,
@@ -62,6 +65,7 @@ import { OnboardingComponent } from "./pages/onboarding/onboarding.component";
     RegisterComponent,
     EditProfileComponent,
     CreateListingComponent,
+    CreateOrganisationComponent,
     PublicProfileComponent,
     EditListingCardsComponent,
     EditListingComponent,

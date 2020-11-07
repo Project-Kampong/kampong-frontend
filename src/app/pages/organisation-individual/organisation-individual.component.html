@@ -1,0 +1,48 @@
+<section class="bg-section" *ngIf="OrganisationData.organisation_id != null">
+  <div class="container">
+    <div class="col-12 text-center project-info-container">
+      <p class="primary-badge">
+        <!-- Type of organisation: {{ OrganisationData["organisation_type"] }} -->
+        Type of organisation: {{ "error in get request" }}
+      </p>
+      <p class="regular-l">
+        Name of organisation: {{ OrganisationData["name"] }}
+      </p>
+      <p class="regular-m">
+        About organisation: {{ OrganisationData["about"] }}
+      </p>
+      <p class="regular-m">
+        Email of organisation: {{ OrganisationData["email"] }}
+      </p>
+      <p class="regular-s">
+        Website URL of organisation: {{ OrganisationData["website_url"] }}
+      </p>
+    </div>
+    <div *ngIf="ProfileInfo" [ngStyle]="{ 'justify-content': 'center' }">
+      Creator of Organisation:
+      <div class="user-info" (click)="selectedProfile(ProfileInfo['user_id'])">
+        <div class="profile-image">
+          <img src="{{ ProfileInfo.profile_picture }}" />
+        </div>
+
+        <p class="username light-s">
+          {{ ProfileInfo["nickname"] }}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="navigation-container">
+  <div class="sticky-navigation">
+    <div class="container">
+      <ul class="navigation-tabs">
+        <li class="active" (click)="tabs_selected('story')">Story</li>
+        <li (click)="tabs_selected('FAQ')">FAQ</li>
+        <li (click)="tabs_selected('updates')">Updates</li>
+        <li (click)="tabs_selected('comments')">Comments</li>
+        <li (click)="tabs_selected('skills')">Looking For</li>
+      </ul>
+    </div>
+  </div>
+</section>
