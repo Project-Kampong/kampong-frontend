@@ -623,7 +623,7 @@ export class EditListingComponent implements OnInit {
 
   // Remove Listing
   removeListing() {
-    if (confirm("Are you sure to delete " + this.ListingForm.value.title)) {
+    if (confirm("Are you sure you want to delete " + this.ListingForm.value.title + "? This action is currently not reversible.")) {
       this.ListingsService.removeListing(this.listingId).subscribe(
         (data) => {
           console.log(data);

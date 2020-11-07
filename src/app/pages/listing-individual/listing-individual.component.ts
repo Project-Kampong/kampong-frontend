@@ -67,6 +67,11 @@ export class ListingIndividualComponent implements OnInit {
   fileCount = 0;
   updatesFormOpen = false;
   locationList = [];
+
+  // Email
+  enquireMessage: String = "";
+  enquireTopic: String = "";
+
   ngOnInit() {
     window.scroll(0, 0);
     this.listingId = this.route.snapshot.params["id"];
@@ -448,7 +453,7 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
-  tabs_selected(selected) {
+  tabs_selected(selected: string): void {
     $(".tabs-content").hide();
     $("#" + selected).show();
     if (selected == "updates") {
@@ -456,18 +461,21 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
-  selectedProfile(user_id) {
+  selectedProfile(user_id: string): void {
     this.router.navigate(["/profile/" + user_id]);
   }
 
-  enquireMessage: String = "";
-  enquireTopic: String = "";
+  editListing(listing_id: string): void {
+    this.router.navigate(["/edit/" + listing_id]);
+  }
+
   // Toggle Enquire popup
-  togglePopup() {
+  togglePopup() : void {
     // Toggle popup
     $(".popup-bg").toggleClass("active");
     $(".popup-box").toggleClass("active");
   }
+
   sendMessage() {
     if (this.enquireMessage != "") {
       this.togglePopup();
@@ -534,6 +542,7 @@ export class ListingIndividualComponent implements OnInit {
       });
     }
   }
+
   deleteComments(comment) {
     if (confirm("Are you sure to delete comment?")) {
       console.log(comment);

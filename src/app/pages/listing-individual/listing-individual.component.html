@@ -36,9 +36,19 @@
             </div>
 
             <div class="button-container">
-              <button class="primary-button" (click)="togglePopup()">
-                Enquire this project
-              </button>
+              <div *ngIf="
+                AuthService.isLoggedIn &&
+                ListingData.created_by == AuthService.LoggedInUserID;
+                else isNotOwner">
+                  <button class="primary-button" (click)="editListing(this.listingId)">
+                    Edit this listing
+                  </button>
+              </div>
+                <ng-template #isNotOwner>
+                  <button class="primary-button" (click)="togglePopup()">
+                    Enquire this project
+                  </button>
+                </ng-template>
             </div>
 
             <div>
