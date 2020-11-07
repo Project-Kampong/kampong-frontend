@@ -54,33 +54,28 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     this.searchInput = this.location.getState()["name"] ? this.location.getState()["name"] : "";
-    this.searchInitiated(true);
+    this.catInput = this.location.getState()["category"] ? this.location.getState()["category"] : [];
+    this.locInput = this.location.getState()["location"] ? this.location.getState()["location"] : [];
+    this.searchInput.trim();
+    this.search();
   }
 
-  /**
-   * Go back to main landing page
-   */
-  goBack() {
+  goBack(): void {
     this.location.back();
   }
 
-  /**
-   * Start searchin for listings
-   * 
-   * @param onStart Optional argument that states whether the search should set from location state or form group state
-   */
-  searchInitiated(onStart ?: boolean) {
-    
+  inputSearch(): void {
+    this.filterSearch();
+    this.search();
+  }
+
+  filterSearch(): void {
     this.searchInput.trim();
     this.catInput = this.searchParams.value.categoryParams ? this.searchParams.value.categoryParams : [];
     this.locInput = this.searchParams.value.locationParams ? this.searchParams.value.locationParams : [];
+  }
 
-    if (onStart) {
-      this.catInput = this.location.getState()["category"] ? this.location.getState()["category"] : [];
-      this.locInput = this.location.getState()["location"] ? this.location.getState()["location"] : [];
-      this.searchParams.value.categoryParams = this.catInput;
-    }
-
+  search(): void {
     if (this.searchInput.length > 0 || this.catInput.length > 0 || this.locInput.length > 0) {
       const keywords = this.concatKeywords();
       this.ListingsService.getSearchResult(keywords).subscribe(
@@ -102,10 +97,7 @@ export class SearchComponent implements OnInit {
     }
   }
   
-  /**
-   * Concatenate the keywords for the API GET route
-   */
-  concatKeywords() {
+  concatKeywords(): string {
     const searchArray = this.searchInput.split(' ').filter(e => e.length > 0);;
     const resultArr = this.catInput.concat(this.locInput).concat(searchArray);
     let result = '';
@@ -116,15 +108,12 @@ export class SearchComponent implements OnInit {
     return result;
   }
 
-  /**
-   * Search a specific value that is popular
-   * 
-   * @param value Popular search field
-   */
-  popularSearchClicked(value) {
+  popularSearchClicked(value: string): void {
+    this.searchParams.reset();
     this.searchInput = value;
     this.locInput = [];
     this.catInput = [];
-    this.searchInitiated();
+    this.search();
   }
+
 }
