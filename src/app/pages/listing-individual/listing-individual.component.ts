@@ -16,7 +16,7 @@ import {
   ListingComments,
 } from "@app/interfaces/listing";
 import { Profile } from "@app/interfaces/profile";
-import { map } from "rxjs/operators";
+import { UserData } from "@app/interfaces/user";
 
 declare var $: any;
 
@@ -472,6 +472,7 @@ export class ListingIndividualComponent implements OnInit {
   sendMessage() {
     if (this.enquireMessage != "") {
       this.togglePopup();
+      console.log(this.enquireMessage);
       this.ListingsService.sendEnquiry({
         receiverEmail: this.ListingData.listing_email,
         senderEmail: this.ListingData.listing_email,
@@ -560,43 +561,47 @@ export class ListingIndividualComponent implements OnInit {
   }
 
   applyJob(jobs) {
-    console.log;
     if (this.AuthService.isLoggedIn) {
       const subject = `Application for ${jobs.job_title}`;
-      // const user = this.AuthService.getUser();
-
-      // console.log(user);
-      // const message = `Hi there, an applicant named ${this.ProfileInfo.FirstName} has applied for this job. His contact info are ${this.ProfileInfo.}`;
-      console.log(jobs);
-      console.log(this.ProfileInfo);
-      // console.log(this.ListingData);
-      // this.ListingsService.sendEnquiry({
-      //   // receiverEmail: this.ListingData.listing_email,
-      //   // senderEmail: this.ListingData.listing_email,
-      //   receiverEmail: "ahliang51@gmail.com",
-      //   senderEmail: "ahliang51@gmail.com",
-      //   subject: "",
-      //   message: "Test",
-      // }).subscribe(
-      //   (data) => {
-      //     this.SnackbarService.openSnackBar(
-      //       this.SnackbarService.DialogList.send_message.success,
-      //       true
-      //     ),
-      //       (err) => {
-      //         console.log(err);
-      //         this.SnackbarService.openSnackBar(
-      //           this.SnackbarService.DialogList.send_message.error,
-      //           false
-      //         );
-      //       };
-      //   },
-      //   () => {
-      //     setTimeout(() => {
-      //       this.initiateSlick();
-      //     }, 500);
-      //   }
-      // );
+      this.ProfileService.getUserProfile(
+        this.AuthService.LoggedInUserID
+      ).subscribe((user) => {
+        /**
+         *
+         * Should do this on the backend
+         */
+        const message = `Hi there, an applicant named ${this.AuthService.UserData["first_name"]} has applied for this job. His contact info are  
+        \n Email :${this.AuthService.UserData["email"]} 
+        \n Contact Number : ${user.data.phone}`;
+        console.log(message);
+        this.ListingsService.sendEnquiry({
+          receiverEmail: this.ListingData.listing_email,
+          senderEmail: this.ListingData.listing_email,
+          // receiverEmail: "ahliang51@gmail.com",
+          // senderEmail: "ahliang51@gmail.com",
+          subject: `Applicant for ${jobs.job_title}`,
+          message: message,
+        }).subscribe(
+          (data) => {
+            this.SnackbarService.openSnackBar(
+              this.SnackbarService.DialogList.send_message.success,
+              true
+            ),
+              (err) => {
+                console.log(err);
+                this.SnackbarService.openSnackBar(
+                  this.SnackbarService.DialogList.send_message.error,
+                  false
+                );
+              };
+          },
+          () => {
+            setTimeout(() => {
+              this.initiateSlick();
+            }, 500);
+          }
+        );
+      });
     } else {
       this.SnackbarService.openSnackBar("Please login first", false);
       this.router.navigate(["/login"]);

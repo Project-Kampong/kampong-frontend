@@ -19,7 +19,7 @@ export class AuthService {
   public isLoggedIn = false;
   public is_activated = false;
   public AuthToken;
-  private UserData: UserData[];
+  public UserData: UserData[];
   public LoggedInUserID;
 
   // Headers
