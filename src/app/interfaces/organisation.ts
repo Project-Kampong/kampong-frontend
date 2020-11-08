@@ -13,7 +13,7 @@ export interface Organisation {
 
 // Validation
 const patternValidation = Validators.pattern(
-  "^[a-zA-Z0-9 \n .,'()\"$#%&-°*!']+$"
+  "^[a-zA-Z0-9 \n .,'()\"$#+%&-°*!']+$"
 );
 export const CreateOrganisation = {
   name: [
@@ -23,7 +23,7 @@ export const CreateOrganisation = {
   type: ["", [Validators.required, Validators.maxLength(25)]],
   about: ["", [Validators.required, Validators.maxLength(500)]],
   website_url: ["", [Validators.required, Validators.maxLength(100)]],
-  handphone: [0, [Validators.required, Validators.max(100000000), patternValidation]], //need better ones
+  handphone: ["", [Validators.required, Validators.maxLength(20), patternValidation]], //need better ones
   email: ["", [Validators.required, Validators.email]],
 };
 
