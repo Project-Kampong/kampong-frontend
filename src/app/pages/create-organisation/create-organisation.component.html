@@ -473,6 +473,49 @@
         </div>
       </div>
     </div>
+    <div class="listing-section">
+      <div class="listing-stepper">
+        <span> 4 </span>
+        <p>Upload Programmes</p>
+      </div>
+      <div class="listing-form">
+        <div class="form-item">
+          <div class="faq-container">
+            <div *ngFor="let pg of pgArr; index as i" class="faq">
+              <div class="input-field-container">
+                <div style="padding-bottom: 10px;">
+                  Programme {{i+1}}
+                </div>
+                <div class="form-item faq-input bg-colored">
+                  <textarea
+                    matInput
+                    placeholder="Title"
+                    cdkTextareaAutosize
+                    cdkAutosizeMinRows="2"
+                    [(ngModel)]="pg.title"
+                    maxlength="200"
+                  ></textarea>
+                  <span class="hint"> {{ pg.title.length }} / 200 </span>
+                </div>
+                <div class="form-item faq-input">
+                  <textarea
+                    placeholder="About"
+                    matInput
+                    cdkTextareaAutosize
+                    cdkAutosizeMinRows="5"
+                    [(ngModel)]="pg.about"
+                    maxlength="500"
+                  ></textarea>
+                  <span class="hint"> {{ pg.about.length }} / 500 </span>
+                </div>
+              </div>
+              <button class="remove-faq" (click)="removePg(i)"></button>
+            </div>
+            <button class="add-faq" (click)="addPg()">Add Programme</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 <section>

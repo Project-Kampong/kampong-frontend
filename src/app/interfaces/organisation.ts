@@ -26,6 +26,13 @@ export interface CreateOrganisation {
   story: string,
 }
 
+export interface CreateProgrammes {
+  organisation_id ?: string,
+  title: string,
+  about: string,
+  media_url: string[],
+}
+
 export const CreateOrganisationForm = {
 
   name: new FormControl("", [

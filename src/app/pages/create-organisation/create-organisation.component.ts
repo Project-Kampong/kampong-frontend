@@ -14,7 +14,7 @@ import { categoryListCustom } from "@app/util/categories";
 import { locationList } from '@app/util/locations';
 
 // Interfaces
-import { CreateOrganisationForm, CreateOrganisation } from "@app/interfaces/organisation";
+import { CreateOrganisationForm, CreateOrganisation, CreateProgrammes } from "@app/interfaces/organisation";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 
 declare var $: any;
@@ -30,6 +30,8 @@ export class CreateOrganisationComponent implements OnInit {
   typeGroup: Array<CategoryFilter>;
   locationGroup: Array<LocationFilter>;
   organisationForm: FormGroup;
+  programmesForm: FormGroup;
+  programmesData: CreateProgrammes;
   organisationData: CreateOrganisation;
   organisationId: string;
   headerPhoto: File;
@@ -38,6 +40,7 @@ export class CreateOrganisationComponent implements OnInit {
   displayPhotoDisplay: string;
   additionalPhotos: File[];
   additionalPhotosDisplay: string[];
+  pgArr: Array<CreateProgrammes>;
 
   constructor(
     private fb: FormBuilder,
@@ -48,7 +51,7 @@ export class CreateOrganisationComponent implements OnInit {
 
   ngOnInit() {
 
-    //initialize variable
+    //initialize variables
     this.typeGroup = categoryListCustom;
     this.locationGroup = locationList;
     this.organisationForm = this.fb.group(CreateOrganisationForm);
@@ -60,6 +63,7 @@ export class CreateOrganisationComponent implements OnInit {
     this.displayPhotoDisplay = "";
     this.additionalPhotos = [];
     this.additionalPhotosDisplay = [];
+    this.pgArr = [];
 
     // CMS
     $(".action-container .action-btn").on("click", function () {
@@ -153,6 +157,18 @@ export class CreateOrganisationComponent implements OnInit {
   removeAdditionalPhoto(i: number): void {
     this.additionalPhotos.splice(i, 1);
     this.additionalPhotosDisplay.splice(i, 1);
+  }
+
+  addPg(): void {
+    this.pgArr.push({
+      title: "",
+      about: "",
+      media_url: [],
+    })
+  }
+
+  removePg(i): void {
+    this.pgArr.splice(i, 1);
   }
 
   createOrganisation(): void {
