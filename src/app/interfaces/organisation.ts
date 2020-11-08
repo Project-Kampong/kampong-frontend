@@ -12,18 +12,18 @@ export interface Organisation {
 }
 
 // Validation
-const patternvalidation = Validators.pattern(
+const patternValidation = Validators.pattern(
   "^[a-zA-Z0-9 \n .,'()\"$#%&-°*!']+$"
 );
 export const CreateOrganisation = {
   name: [
     "",
-    [Validators.required, Validators.maxLength(50), patternvalidation],
+    [Validators.required, Validators.maxLength(50), patternValidation],
   ],
   type: ["", [Validators.required, Validators.maxLength(25)]],
   about: ["", [Validators.required, Validators.maxLength(500)]],
   website_url: "", //not sure here
-  handphone: [0, [Validators.required, Validators.max(100000000), patternvalidation]], //need better ones
+  handphone: ["", [Validators.required, Validators.maxLength(20), patternValidation]], //need better ones
   email: ["", [Validators.required, Validators.email]],
 };
 

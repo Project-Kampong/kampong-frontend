@@ -1,4 +1,6 @@
-export const locationList: Array<Object> = [
+import { LocationFilter } from '@app/interfaces/filters';
+
+export const locationList: Array<LocationFilter> = [
     {
       name: "North",
       group: [

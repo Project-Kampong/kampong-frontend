@@ -481,7 +481,6 @@ export class ListingIndividualComponent implements OnInit {
       this.togglePopup();
       this.ListingsService.sendEnquiry({
         receiverEmail: this.ListingData.listing_email,
-        senderEmail: this.ListingData.listing_email,
         subject: this.enquireTopic,
         message: this.enquireMessage,
       }).subscribe(

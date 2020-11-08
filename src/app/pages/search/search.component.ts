@@ -7,6 +7,7 @@ import { Listing } from "@app/interfaces/listing";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { locationList } from "@app/util/locations";
 import { categoryList } from "@app/util/categories";
+import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 declare var $: any;
 
 @Component({
@@ -18,19 +19,14 @@ declare var $: any;
 export class SearchComponent implements OnInit {
 
   searchParams: FormGroup;
-  locationList: Object[];
-  categoryList: Object[];
-  popularSearchList: string[] = [
-    "Project Kampong",
-    "Rebuilding Homes",
-    "YOUTH Mentorship Programme",
-    "CommStart 2020",
-  ]
-  resultsArr: Listing[];
+  locationList: Array<LocationFilter>;
+  categoryList: Array<CategoryFilter>;
+  popularSearchList: string[];
+  resultsArr: Array<Listing>;
   resultsCount: string;
-  resultsInputString: string = "Everything";
-  resultsCatString: string[] = ["All interests"];
-  resultsLocString: string[] = ["All locations"];
+  resultsInputString: string;
+  resultsCatString: string[];
+  resultsLocString: string[];
   searchInput: string;
   catInput: string[];
   locInput: string[];
@@ -42,17 +38,28 @@ export class SearchComponent implements OnInit {
     private fb: FormBuilder,
   ) {
 
-    this.locationList = locationList;
-    this.categoryList = categoryList;
     this.searchParams = this.fb.group({
       nameParams: new FormControl(""),
       locationParams: new FormControl([]),
       categoryParams: new FormControl([])
     })
 
+    this.popularSearchList = [
+      "Project Kampong",
+      "Rebuilding Homes",
+      "YOUTH Mentorship Programme",
+      "CommStart 2020",
+    ];
+
+    this.resultsInputString = "Everything";
+    this.resultsCatString = ["All interests"];
+    this.resultsLocString = ["All locations"];
+
   }
 
   ngOnInit() {
+    this.locationList = locationList;
+    this.categoryList = categoryList;
     this.searchInput = this.location.getState()["name"] ? this.location.getState()["name"] : "";
     this.catInput = this.location.getState()["category"] ? this.location.getState()["category"] : [];
     this.locInput = this.location.getState()["location"] ? this.location.getState()["location"] : [];

@@ -13,6 +13,7 @@ import { Router } from "@angular/router";
 import { OrganisationsService } from "@app/services/organisations.service";
 import { SnackbarService } from "@app/services/snackbar.service";
 import { AuthService } from "@app/services/auth.service";
+import { categoryListCustom } from "@app/util/categories";
 declare var $: any;
 
 // Interface
@@ -24,6 +25,7 @@ import { Organisation, CreateOrganisation } from "@app/interfaces/organisation";
   styleUrls: ["./create-organisation.component.scss"],
 })
 export class CreateOrganisationComponent implements OnInit {
+  
   OrganisationForm: FormGroup;
 
   constructor(
@@ -34,61 +36,7 @@ export class CreateOrganisationComponent implements OnInit {
     private AuthService: AuthService
   ) {}
 
-  typeGroup = [
-    {
-      name: "Social",
-      group: [
-        "Health",
-        "Marriage",
-        "Education",
-        "Mentorship",
-        "Retirement",
-        "Housing",
-        "Rental Flats",
-        "Family",
-        "Gender",
-        "Elderly",
-        "Youth",
-        "Youth At Risk",
-        "Pre-School",
-        "Race",
-        "Language",
-        "Science",
-        "Art",
-        "Sports",
-        "Poverty",
-        "Inequality",
-      ],
-    },
-    {
-      name: "Environment",
-      group: ["Recycling", "Green", "Water", "Waste", "Food", "Growing"],
-    },
-    {
-      name: "Economical",
-      group: [
-        "Finance",
-        "Jobs",
-        "Wage",
-        "Upskill",
-        "Technology ",
-        "IT",
-        "IoT 4.0",
-        "Information",
-        "Automation",
-        "Online",
-        "Digitalization",
-      ],
-    },
-    {
-      name: "Others",
-      group: ["Productivity", "Innovation", "Research", "Manpower", "Design"],
-    },
-    {
-      name: "Customise",
-      group: ["Create a Type"],
-    },
-  ];
+  typeGroup = categoryListCustom;
 
   ngOnInit() {
     this.OrganisationForm = this.fb.group({

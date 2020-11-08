@@ -12,29 +12,25 @@ import { Router, ActivatedRoute } from "@angular/router";
 
 import { ListingsService } from "@app/services/listings.service";
 import { SnackbarService } from "@app/services/snackbar.service";
+import { categoryListCustom } from "@app/util/categories";
 declare var $: any;
 
 // Interface
-import { Listing, CreateListing, ListingStory } from "@app/interfaces/listing";
+import { CreateListing, ListingStory } from "@app/interfaces/listing";
+import { CategoryFilter } from '@app/interfaces/filters';
 
 @Component({
   selector: "app-edit-listing",
   templateUrl: "./edit-listing.component.html",
   styleUrls: ["./edit-listing.component.scss"],
 })
+
 export class EditListingComponent implements OnInit {
+  
   listingId;
   selectedFile: File = null;
   ListingForm: FormGroup;
-
-  constructor(
-    private fb: FormBuilder,
-    public ListingsService: ListingsService,
-    private router: Router,
-    private route: ActivatedRoute,
-    public SnackbarService: SnackbarService
-  ) {}
-
+  categoryGroup: Array<CategoryFilter>;
   fileDisplayArr = [];
   fileArr = [];
   fileLimit = false;
@@ -42,61 +38,7 @@ export class EditListingComponent implements OnInit {
 
   milestoneArr = [];
   faqArr = [];
-  categoryGroup = [
-    {
-      name: "Social",
-      group: [
-        "Health",
-        "Marriage",
-        "Education",
-        "Mentorship",
-        "Retirement",
-        "Housing",
-        "Rental Flats",
-        "Family",
-        "Gender",
-        "Elderly",
-        "Youth",
-        "Youth At Risk",
-        "Pre-School",
-        "Race",
-        "Language",
-        "Science",
-        "Art",
-        "Sports",
-        "Poverty",
-        "Inequality",
-      ],
-    },
-    {
-      name: "Environment",
-      group: ["Recycling", "Green", "Water", "Waste", "Food", "Growing"],
-    },
-    {
-      name: "Economical",
-      group: [
-        "Finance",
-        "Jobs",
-        "Wage",
-        "Upskill",
-        "Technology",
-        "IT",
-        "IoT 4.0",
-        "Information",
-        "Automation",
-        "Online",
-        "Digitalization",
-      ],
-    },
-    {
-      name: "Others",
-      group: ["Productivity", "Innovation", "Research", "Manpower", "Design"],
-    },
-    {
-      name: "Customise",
-      group: ["Create a Category"],
-    },
-  ];
+
   skillsets = [
     {
       name: "Big Data Analysis",
@@ -119,11 +61,23 @@ export class EditListingComponent implements OnInit {
       group: [],
     },
   ];
+
   locationList = [];
   rawSkillsets = [];
   lookingForArr = [];
 
+  constructor(
+    private fb: FormBuilder,
+    public ListingsService: ListingsService,
+    private router: Router,
+    private route: ActivatedRoute,
+    public SnackbarService: SnackbarService
+  ) {}
+
   ngOnInit() {
+    
+    this.categoryGroup = categoryListCustom;
+
     window.scroll(0, 0);
 
     this.listingId = this.route.snapshot.params["id"];
@@ -168,6 +122,7 @@ export class EditListingComponent implements OnInit {
           });
         });
         if (!categoryFound) {
+          
           this.categoryGroup.map((x) => {
             if (x.name == "Customise") {
               x.group.push(currentCategory);

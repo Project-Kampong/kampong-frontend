@@ -139,7 +139,7 @@
             formControlName="handphone"
           />
           <div class="hint">
-            {{ OrganisationForm.value.handphone.length }} / 10
+            {{ OrganisationForm.value.handphone.length }} / 20
           </div>
 
           <!-- Errors Validation -->
@@ -147,7 +147,7 @@
             class="error-hint"
             *ngIf="OrganisationForm.get('handphone').hasError('max')"
           >
-            Contact Number must not be more than 8 characters long.
+            Contact Number is too long
           </span>
           <span
             class="error-hint"
