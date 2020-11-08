@@ -1,36 +1,30 @@
-import { Injectable, EventEmitter } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { Organisation, DefaultOrganisation } from "@app/interfaces/organisation";
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpEvent, HttpHeaders } from "@angular/common/http";
+import { CreateOrganisation, CreateProgrammes } from "@app/interfaces/organisation";
 import { API } from "@app/interfaces/api";
 
 // Services Import
 import { AuthService } from "@app/services/auth.service";
-import { title } from "process";
+import { Observable } from 'rxjs';
+
 @Injectable({
   providedIn: "root",
 })
 export class OrganisationsService {
+
   constructor(
     private httpClient: HttpClient,
     private AuthService: AuthService
   ) {}
 
-  // URL
-  url = this.AuthService.URL;
-
-  httpHeaders = new HttpHeaders({
+  url: string = this.AuthService.URL;
+  httpHeaders: HttpHeaders = new HttpHeaders({
     "Content-Type": "application/json",
   });
+
   options = {
     headers: this.httpHeaders,
   };
-
-  // Variables
-  OrganisationData: Organisation[];
-  tempOrganisationData: Organisation[] = [];
-  FeaturedOrganisationData: Organisation[];
 
   getOrganisations(page: number) {
     return this.httpClient.get<API>(
@@ -38,21 +32,8 @@ export class OrganisationsService {
       this.options
     );
   }
-//   not sure what this is for yet
-  getOrganisationsLoop(pagenum) {
-    this.getOrganisations(pagenum).subscribe((data) => {
-      this.tempOrganisationData.push(...data["data"]);
-      this.FeaturedOrganisationData = data["data"];
-      if (data["pagination"]["next"] != null) {
-        this.getOrganisationsLoop(data["pagination"]["next"]["page"]);
-      } else {
-        this.OrganisationData = this.tempOrganisationData;
-        this.tempOrganisationData = [];
-      }
-    });
-  }
 
-  getSearchResult(keyword) {
+  getSearchResult(keyword: string): Observable<API> {
     return this.httpClient.get<API>(
       this.url +
         "api/organisations/search-title?title=" +
@@ -62,14 +43,14 @@ export class OrganisationsService {
     );
   }
 
-  getSelectedOrganisation(organisationId) {
+  getSelectedOrganisation(organisationId: string): Observable<API> {
     return this.httpClient.get<API>(
       this.url + "api/organisations/" + organisationId,
       this.options
     );
   }
 
-  createOrganisation(data) {
+  createOrganisation(data: CreateOrganisation): Observable<HttpEvent<API>> {
     return this.httpClient.post<API>(
       this.url + "api/organisations",
       data,
@@ -77,7 +58,7 @@ export class OrganisationsService {
     );
   }
 
-  updateOrganisation(organisationId, data) {
+  updateOrganisation(organisationId: string, data: CreateOrganisation): Observable<HttpEvent<API>> {
     return this.httpClient.put<API>(
       this.url + "api/organisations/" + organisationId,
       data,
@@ -85,11 +66,46 @@ export class OrganisationsService {
     );
   }
 
-  removeOrganisation(organisationId) {
-    return this.httpClient.put<API>(
-      this.url + "api/organisations/" + organisationId + "/deactivate",
-      {},
-      this.AuthService.AuthOptions
+  removeOrganisation(organisationId: string): Observable<API> {
+    return this.httpClient.delete<API>(
+      this.url + "api/organisations/" + organisationId
     );
   }
+
+  getProgrammes(page: number): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/programmes?sort=created_on&page=" + page,
+      this.options
+    );
+  }
+
+  getSelectedProgramme(programmeId: number): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/organisations/" + programmeId,
+      this.options
+    );
+  }
+
+  createProgrammes(data: CreateProgrammes): Observable<HttpEvent<API>> {
+    return this.httpClient.post<API>(
+      this.url + "api/programmes",
+      data,
+      this.AuthService.OnlyAuthHttpHeaders, 
+    );
+  }
+
+  updateProgrammes(programmeId: number, data: CreateProgrammes): Observable<HttpEvent<API>> {
+    return this.httpClient.put<API>(
+      this.url + "api/programmes/" + programmeId,
+      data,
+      this.AuthService.OnlyAuthHttpHeaders
+    );
+  }
+
+  removeProgrammes(programmeId: number): Observable<API>  {
+    return this.httpClient.delete<API>(
+      this.url + "api/programmes/" + programmeId
+    );
+  }
+
 }

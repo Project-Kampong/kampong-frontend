@@ -53,6 +53,10 @@ export class SnackbarService {
       success: "Organisation Successfully Created",
       error: "Error, please try again later",
     },
+    create_programme : {
+      success: "Programme Successfully Created",
+      error: "Error in creating programme"
+    },
     create_listing: {
       success: "Initiative Successfully Created",
       error: "Error, please try again later",

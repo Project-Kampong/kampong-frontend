@@ -16,6 +16,7 @@ import { locationList } from '@app/util/locations';
 // Interfaces
 import { CreateOrganisationForm, CreateOrganisation, CreateProgrammes } from "@app/interfaces/organisation";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
+import { throwToolbarMixedModesError } from '@angular/material';
 
 declare var $: any;
 
@@ -202,6 +203,32 @@ export class CreateOrganisationComponent implements OnInit {
     this.OrganisationsService.createOrganisation(this.organisationData).subscribe(
       (res) => {
         this.organisationId = res["data"]["organisation_id"];
+        this.pgArr.forEach(pg => {
+
+          const organisation_id = this.organisationId;
+          const title: string = pg.title;
+          const about: string = pg.about;
+          const media_url: string[] = pg.media_url;
+
+          const pgData: CreateProgrammes = {
+            organisation_id,
+            title,
+            about,
+            media_url
+          }
+
+          this.OrganisationsService.createProgrammes(pgData).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+              this.SnackbarService.openSnackBar(
+                this.SnackbarService.DialogList.create_programme.error,
+                false
+              );
+            }
+          )
+
+        });
       },
       (err) => {
         console.log(err);
