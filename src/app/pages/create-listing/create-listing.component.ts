@@ -13,12 +13,16 @@ import { Router } from "@angular/router";
 import { ListingsService } from "@app/services/listings.service";
 import { SnackbarService } from "@app/services/snackbar.service";
 import { AuthService } from "@app/services/auth.service";
-import { categoryListCustom } from "@app/util/categories";
+
 declare var $: any;
 
 // Interface
 import { Listing, CreateListing, ListingStory } from "@app/interfaces/listing";
-import { CategoryFilter } from '@app/interfaces/filters';
+import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
+
+// Util
+import { locationList } from '@app/util/locations';
+import { categoryListCustom } from "@app/util/categories";
 
 @Component({
   selector: "app-create-listing",
@@ -34,6 +38,7 @@ export class CreateListingComponent implements OnInit {
   fileLimit = false;
   fileCount = 0;
   categoryGroup: Array<CategoryFilter>;
+  locationGroup: Array<LocationFilter>;
 
   milestoneArr = [{ description: "", date: new Date() }];
   faqArr = [
@@ -75,12 +80,12 @@ export class CreateListingComponent implements OnInit {
     public ListingsService: ListingsService,
     private router: Router,
     public SnackbarService: SnackbarService,
-    private AuthService: AuthService
   ) {}
 
   ngOnInit() {
 
     this.categoryGroup = categoryListCustom;
+    this.locationGroup = locationList;
 
     this.ListingForm = this.fb.group({
       ...CreateListing,

@@ -1,37 +1,85 @@
-import { Validators } from "@angular/forms";
+import { FormControl, Validators } from "@angular/forms";
 
-export interface Organisation {
-  organisation_id: String;
-  created_by: String;
-  name: String;
-  type: String;
-  about: String;
-  website_url: String;
-  handphone: String;
-  email: String;
-}
-
-// Validation
-const patternValidation = Validators.pattern(
+const ORG_VALIDATION_PATTERN = Validators.pattern(
   "^[a-zA-Z0-9 \n .,'()\"$#+%&-°*!']+$"
 );
-export const CreateOrganisation = {
-  name: [
-    "",
-    [Validators.required, Validators.maxLength(50), patternValidation],
-  ],
-  type: ["", [Validators.required, Validators.maxLength(25)]],
-  about: ["", [Validators.required, Validators.maxLength(500)]],
-  website_url: ["", [Validators.required, Validators.maxLength(100)]],
-  handphone: ["", [Validators.required, Validators.maxLength(20), patternValidation]], //need better ones
-  email: ["", [Validators.required, Validators.email]],
+
+export interface Organisation {
+  organisation_id: string;
+  created_by: string;
+  name: string;
+  organisation_type: string;
+  about: string;
+  website_url: string;
+  handphone: string;
+  email: string;
+}
+
+export interface CreateOrganisation {
+  name: string,
+  organisation_type: string,
+  about: string,
+  website_url: string,
+  phone: string,
+  email: string,
+  locations: string[],
+  story: string,
+}
+
+export const CreateOrganisationForm = {
+
+  name: new FormControl("", [
+    Validators.required, 
+    Validators.maxLength(50), 
+    ORG_VALIDATION_PATTERN
+  ]),
+
+  organisation_type: new FormControl("", [
+    Validators.required, 
+    Validators.maxLength(25)
+  ]),
+
+  about: new FormControl("", [
+    Validators.required, 
+    Validators.maxLength(500)
+  ]),
+
+  website_url: new FormControl("", [
+    Validators.required,
+    Validators.maxLength(100)
+  ]),
+
+  handphone: new FormControl("", [
+    Validators.required,
+    Validators.maxLength(20), 
+    ORG_VALIDATION_PATTERN
+  ]),
+
+  email: new FormControl("", [
+    Validators.required, 
+    Validators.email,
+    Validators.maxLength(320),
+  ]),
+
+  locations: new FormControl([]),
+
+  address: new FormControl("", [
+    Validators.required,
+  ]),
+
+  story: new FormControl(""),
+
+  customType: new FormControl("", [
+    Validators.maxLength(25)
+  ]),
+
 };
 
 export const DefaultOrganisation = {
   organisation_id: "default",
   created_by: "default",
   name: "default",
-  type: "default",
+  organisation_type: "default",
   about: "default",
   website_url: "default",
   handphone: "default",

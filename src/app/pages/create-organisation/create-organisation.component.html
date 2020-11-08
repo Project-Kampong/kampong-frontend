@@ -5,33 +5,33 @@
         <span> 1 </span>
         <p>Organisation Information</p>
       </div>
-      <div class="listing-form" [formGroup]="OrganisationForm">
+      <div class="listing-form" [formGroup]="organisationForm">
         <div class="form-item">
           <label>Name Of Organisation *</label>
           <input
             placeholder="Give your organisation a name"
             formControlName="name"
           />
-          <div class="hint">{{ OrganisationForm.value.name.length }} / 50</div>
+          <div class="hint">{{ organisationForm.value.name.length }} / 50</div>
 
           <!-- Errors Validation -->
           <span
             class="error-hint"
-            *ngIf="OrganisationForm.get('name').hasError('maxlength')"
+            *ngIf="organisationForm.get('name').hasError('maxlength')"
           >
             Name must not be more than 50 characters long.
           </span>
           <span
             class="error-hint"
-            *ngIf="OrganisationForm.get('name').hasError('pattern')"
+            *ngIf="organisationForm.get('name').hasError('pattern')"
           >
             Special characters not allowed
           </span>
           <span
             class="error-hint"
             *ngIf="
-              OrganisationForm.get('name').hasError('required') &&
-              OrganisationForm.controls['name']?.touched
+              organisationForm.get('name').hasError('required') &&
+              organisationForm.controls['name']?.touched
             "
           >
             Name is required
@@ -42,7 +42,7 @@
         <div class="form-item d-flex">
           <mat-form-field appearance="fill">
             <mat-label>Type</mat-label>
-            <mat-select required formControlName="type">
+            <mat-select required formControlName="organisation_type">
               <mat-optgroup
                 *ngFor="let group of typeGroup"
                 [label]="group.name"
@@ -56,7 +56,7 @@
           </mat-form-field>
 
           <div
-            *ngIf="OrganisationForm.value.type == 'Create a Type'"
+            *ngIf="organisationForm.value.organisation_type == 'Create a Type'"
             class="half-width px-3"
           >
             <label>Create a Type</label>
@@ -68,7 +68,7 @@
             <!-- Errors Validation -->
             <span
               class="error-hint"
-              *ngIf="OrganisationForm.get('customType').hasError('maxlength')"
+              *ngIf="organisationForm.get('customType').hasError('maxlength')"
             >
               Type must not be more than 25 characters long.
             </span>
@@ -82,54 +82,26 @@
             placeholder="Give your organisation an email"
             formControlName="email"
           />
+          <div class="hint">
+            {{ organisationForm.value.email.length }} / 320
+          </div>
 
           <!-- Errors Validation -->
           <span
             class="error-hint"
             *ngIf="
-              OrganisationForm.get('email').hasError('required') &&
-              OrganisationForm.controls['email']?.touched
+              organisationForm.get('email').hasError('required') &&
+              organisationForm.controls['email']?.touched
             "
           >
             Email is required
           </span>
           <span
             class="error-hint"
-            *ngIf="OrganisationForm.get('email').hasError('email')"
+            *ngIf="organisationForm.get('email').hasError('email')"
           >
             Please Enter a Valid Email
           </span>
-        </div>
-
-        <div class="form-item">
-          <label>About *</label>
-          <textarea
-            cdkTextareaAutosize
-            cdkAutosizeMinRows="5"
-            placeholder="Tell us more about your organisation!"
-            formControlName="about"
-          >
-          </textarea>
-          <span class="hint">
-            {{ OrganisationForm.value.about.length }} / 500
-          </span>
-          <!-- Errors Validation -->
-          <span
-            class="error-hint"
-            *ngIf="
-              OrganisationForm.get('about').hasError('required') &&
-              OrganisationForm.controls['about']?.touched
-            "
-          >
-            About is required
-          </span>
-          <span
-            class="error-hint"
-            *ngIf="OrganisationForm.get('about').hasError('maxlength')"
-          >
-            About Statement must not be more than 500 characters long.
-          </span>
-          <!-- End of Errors Validation -->
         </div>
 
         <div class="form-item">
@@ -139,27 +111,27 @@
             formControlName="handphone"
           />
           <div class="hint">
-            {{ OrganisationForm.value.handphone.length }} / 20
+            {{ organisationForm.value.handphone.length }} / 20
           </div>
 
           <!-- Errors Validation -->
           <span
             class="error-hint"
-            *ngIf="OrganisationForm.get('handphone').hasError('max')"
+            *ngIf="organisationForm.get('handphone').hasError('max')"
           >
             Contact Number is too long
           </span>
           <span
             class="error-hint"
-            *ngIf="OrganisationForm.get('handphone').hasError('pattern')"
+            *ngIf="organisationForm.get('handphone').hasError('pattern')"
           >
             Special characters not allowed
           </span>
           <span
             class="error-hint"
             *ngIf="
-              OrganisationForm.get('handphone').hasError('required') &&
-              OrganisationForm.controls['handphone']?.touched
+              organisationForm.get('handphone').hasError('required') &&
+              organisationForm.controls['handphone']?.touched
             "
           >
             Contact Number is required
@@ -174,27 +146,246 @@
             formControlName="website_url"
           />
           <div class="hint">
-            {{ OrganisationForm.value.website_url.length }} / 100
+            {{ organisationForm.value.website_url.length }} / 100
           </div>
 
           <!-- Errors Validation -->
           <span
             class="error-hint"
-            *ngIf="OrganisationForm.get('website_url').hasError('max')"
+            *ngIf="organisationForm.get('website_url').hasError('max')"
           >
             Website URL must not be more than 100 characters long.
           </span>
           <span
             class="error-hint"
             *ngIf="
-              OrganisationForm.get('website_url').hasError('required') &&
-              OrganisationForm.controls['website_url']?.touched
+              organisationForm.get('website_url').hasError('required') &&
+              organisationForm.controls['website_url']?.touched
             "
           >
             Website URL is required
           </span>
           <!-- End of Errors Validation -->
         </div>
+
+        <div class="listing-stepper">
+          <p>Location</p>
+        </div>
+
+        <div class="form-item">
+          <div [formGroup]="organisationForm">
+            <mat-form-field appearance="fill">
+              <mat-label>Area *</mat-label>
+              <mat-select formControlName="locations" multiple>
+                <mat-optgroup
+                  *ngFor="let group of locationGroup"
+                  [label]="group.name"
+                  [disabled]="group.disabled"
+                >
+                <mat-option *ngFor="let location of group.group" [value]="location">
+                  {{ location }}
+                </mat-option>
+              </mat-optgroup>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label>Address *</label>
+          <input
+            placeholder="Enter the address for your organisation"
+            formControlName="address"
+          />
+
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="
+              organisationForm.get('address').hasError('required') &&
+              organisationForm.controls['address']?.touched
+            "
+          >
+            Address is required
+          </span>
+          <!-- End of Errors Validation -->
+        </div>
+
+      </div>
+    </div>
+    <div class="listing-section">
+      <div class="listing-stepper">
+        <span> 2 </span>
+        <p>Tell us more about your Organisation</p>
+      </div>
+      <div class="listing-form" [formGroup]="organisationForm">
+        <div class="form-item">
+          <label>About *</label>
+          <textarea
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="5"
+            placeholder="Write a short intro about your organisation here!"
+            formControlName="about"
+          >
+          </textarea>
+          <span class="hint">
+            {{ organisationForm.value.about.length }} / 500
+          </span>
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="
+              organisationForm.get('about').hasError('required') &&
+              organisationForm.controls['about']?.touched
+            "
+          >
+            About is required
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="organisationForm.get('about').hasError('maxlength')"
+          >
+            About Statement must not be more than 500 characters long.
+          </span>
+          <!-- End of Errors Validation -->
+        </div>
+
+        <div class="form-item">
+          <label>Story *</label>
+          <div class="CMS-editor editing-active">
+            <div class="action-container">
+              <ul>
+                <li>
+                  <button
+                    type="button"
+                    data-command="justifyLeft"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-align-left"></i>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-command="justifyCenter"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-align-center"></i>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-command="justifyRight"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-align-right"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button type="button" data-command="bold" class="action-btn">
+                    <i class="fas fa-bold"></i>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    data-command="underline"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-underline"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="insertOrderedList"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-list-ol"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="insertUnorderedList"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-list-ul"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="createlink"
+                    class="action-btn"
+                  >
+                    <i class="fas fa-link"></i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="formatBlock"
+                    data-size="H1"
+                    class="action-btn"
+                  >
+                    <i>H1</i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="formatBlock"
+                    data-size="H2"
+                    class="action-btn"
+                  >
+                    <i>H2</i>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    type="button"
+                    data-command="formatBlock"
+                    data-size="H3"
+                    class="action-btn"
+                  >
+                    <i>H3</i>
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div contenteditable="true" id="output">
+              <b
+                >Write about the story behind your organisation! This text block is editable.</b
+              >
+              <div>
+                <b><br /></b>
+              </div>
+              <div>
+                <ol>
+                  <li>item 1</li>
+                  <li>item 2</li>
+                </ol>
+                <div><br /></div>
+              </div>
+              <div>
+                <ul>
+                  <li>bullet 1</li>
+                  <li>bullet 2</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>

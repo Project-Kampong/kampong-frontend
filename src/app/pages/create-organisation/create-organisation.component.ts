@@ -1,49 +1,49 @@
 import { Component, OnInit } from "@angular/core";
 import { COMMA, ENTER, SPACE } from "@angular/cdk/keycodes";
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  ValidationErrors,
-} from "@angular/forms";
+import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
+
 import { MatChipInputEvent } from "@angular/material/chips";
 
 import { Router } from "@angular/router";
 
 import { OrganisationsService } from "@app/services/organisations.service";
-import { SnackbarService } from "@app/services/snackbar.service";
-import { AuthService } from "@app/services/auth.service";
+import { SnackbarService } from "@app/services/snackbar.service"
 import { categoryListCustom } from "@app/util/categories";
-declare var $: any;
+import { locationList } from '@app/util/locations';
 
 // Interface
-import { Organisation, CreateOrganisation } from "@app/interfaces/organisation";
+import { CreateOrganisationForm, CreateOrganisation } from "@app/interfaces/organisation";
+import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
+
+declare var $: any;
 
 @Component({
   selector: "app-create-organisation",
   templateUrl: "./create-organisation.component.html",
   styleUrls: ["./create-organisation.component.scss"],
 })
+
 export class CreateOrganisationComponent implements OnInit {
   
-  OrganisationForm: FormGroup;
+  typeGroup: Array<CategoryFilter>;
+  locationGroup: Array<LocationFilter>;
+  organisationForm: FormGroup;
+  organisationData: CreateOrganisation;
+  organisation_id: string;
 
   constructor(
     private fb: FormBuilder,
     public OrganisationsService: OrganisationsService,
     private router: Router,
     public SnackbarService: SnackbarService,
-    private AuthService: AuthService
   ) {}
 
-  typeGroup = categoryListCustom;
-
   ngOnInit() {
-    this.OrganisationForm = this.fb.group({
-      ...CreateOrganisation,
-      customType: ["", [Validators.maxLength(25)]],
-    });
-    console.log(this.OrganisationForm);
+
+    this.typeGroup = categoryListCustom;
+    this.locationGroup = locationList;
+    this.organisationForm = this.fb.group(CreateOrganisationForm);
+    this.organisationData = null;
 
     // CMS
     $(".action-container .action-btn").on("click", function () {
@@ -61,42 +61,94 @@ export class CreateOrganisationComponent implements OnInit {
     });
   }
 
-  getFormValidationErrors() {
-    var error = false;
-    Object.keys(this.OrganisationForm.controls).forEach((key) => {
-      const controlErrors: ValidationErrors = this.OrganisationForm.get(key).errors;
+  getFormValidationErrors(): boolean {
+
+    Object.keys(this.organisationForm.controls).forEach((key) => {
+      const controlErrors: ValidationErrors = this.organisationForm.get(key).errors;
       if (controlErrors != null) {
-        Object.keys(controlErrors).forEach((keyError) => {
-          error = true;
-        });
+        return true;
       }
     });
+
     if (
-      this.OrganisationForm.value.type == "Create a Type" &&
-      this.OrganisationForm.value.customType == ""
+      this.organisationForm.value.organisation_type == "Create a Category" &&
+      this.organisationForm.value.customType == ""
     ) {
-      error = true;
+      return true;
     }
-    return error;
+    return false;
   }
 
+  createOrganisation(): void {
+    if (this.getFormValidationErrors()) {
+      this.SnackbarService.openSnackBar("Please complete the form", false);
+      return;
+    }
+
+    const name: string = this.organisationForm.value.name;
+    const organisation_type: string = this.organisationForm.value.organisation_type === "Create a Category" 
+      ? this.organisationForm.value.customType
+      : this.organisationForm.value.organisation_type;
+    const about: string = this.organisationForm.value.about;
+    const website_url: string = this.organisationForm.value.website_url;
+    const phone: string = this.organisationForm.value.handphone;
+    const email: string = this.organisationForm.value.email;
+    const locations: string[] = this.organisationForm.value.locations;
+    const story: string = this.organisationForm.value.story;
+
+    this.organisationData = {
+      name,
+      organisation_type,
+      about,
+      website_url,
+      phone,
+      email,
+      locations,
+      story
+    };
+
+    this.OrganisationsService.createOrganisation(this.organisationData).subscribe(
+      (res) => {
+        this.organisation_id = res["data"]["organisation_id"];
+      },
+      (err) => {
+        console.log(err);
+        this.SnackbarService.openSnackBar(
+          this.SnackbarService.DialogList.create_organisation.error,
+          false
+        );
+      },
+      () => {
+        this.SnackbarService.openSnackBar(
+          this.SnackbarService.DialogList.create_organisation.success,
+          true
+        );
+        this.organisationForm.reset();
+        this.router.navigate(["/organisation/" + this.organisation_id])
+      } 
+    )
+
+  }
+
+  /*
   createOrganisation() {
     if (this.getFormValidationErrors() == true) {
       this.SnackbarService.openSnackBar("Please complete the form", false);
       return;
     }
+
     var routeTo;
-    const organisationData = this.OrganisationForm.value;
+    const organisationData = this.organisationForm.value;
     var formdata = { 
-      ...CreateOrganisation
+      ...CreateOrganisationForm
     }
     //LOOK HERE!!
     formdata.name = organisationData.name
 
-    if (organisationData.type == "Create a Type") {
-      formdata.type = organisationData.customType;
+    if (organisationData.organisation_type == "Create a Type") {
+      formdata.organisation_type = organisationData.customType;
     } else {
-      formdata.type = organisationData.type;
+      formdata.organisation_type = organisationData.organisation_type;
     }
     formdata.about = organisationData.about;
     formdata.website_url = organisationData.website_url;
@@ -144,4 +196,5 @@ export class CreateOrganisationComponent implements OnInit {
       }
     }
   }
+  */
 }

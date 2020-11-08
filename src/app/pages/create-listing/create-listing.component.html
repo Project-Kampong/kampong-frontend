@@ -182,7 +182,7 @@
       </div>
       <div class="no-effect">
         <div class="listing-stepper">
-          <p>additional information</p>
+          <p>Additional information</p>
         </div>
 
         <div class="form-item">
@@ -190,12 +190,15 @@
             <mat-form-field appearance="fill">
               <mat-label>Project Location</mat-label>
               <mat-select formControlName="LocationsList" multiple>
-                <mat-option
-                  *ngFor="let location of locationList"
-                  [value]="location.location_id"
+                <mat-optgroup
+                  *ngFor="let group of locationGroup"
+                  [label]="group.name"
+                  [disabled]="group.disabled"
                 >
-                  {{ location.location }}
+                <mat-option *ngFor="let location of group.group" [value]="location">
+                  {{ location }}
                 </mat-option>
+              </mat-optgroup>
               </mat-select>
             </mat-form-field>
           </div>
