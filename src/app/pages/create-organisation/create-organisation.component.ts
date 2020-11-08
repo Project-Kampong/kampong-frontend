@@ -1,17 +1,19 @@
+// Angular Imports
 import { Component, OnInit } from "@angular/core";
-import { COMMA, ENTER, SPACE } from "@angular/cdk/keycodes";
 import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
 
-import { MatChipInputEvent } from "@angular/material/chips";
-
+// Router
 import { Router } from "@angular/router";
 
+// Services
 import { OrganisationsService } from "@app/services/organisations.service";
 import { SnackbarService } from "@app/services/snackbar.service"
+
+// Util
 import { categoryListCustom } from "@app/util/categories";
 import { locationList } from '@app/util/locations';
 
-// Interface
+// Interfaces
 import { CreateOrganisationForm, CreateOrganisation } from "@app/interfaces/organisation";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 
@@ -29,7 +31,13 @@ export class CreateOrganisationComponent implements OnInit {
   locationGroup: Array<LocationFilter>;
   organisationForm: FormGroup;
   organisationData: CreateOrganisation;
-  organisation_id: string;
+  organisationId: string;
+  headerPhoto: File;
+  headerPhotoDisplay: string;
+  displayPhoto: File;
+  displayPhotoDisplay: string;
+  additionalPhotos: File[];
+  additionalPhotosDisplay: string[];
 
   constructor(
     private fb: FormBuilder,
@@ -40,11 +48,18 @@ export class CreateOrganisationComponent implements OnInit {
 
   ngOnInit() {
 
+    //initialize variable
     this.typeGroup = categoryListCustom;
     this.locationGroup = locationList;
     this.organisationForm = this.fb.group(CreateOrganisationForm);
     this.organisationData = null;
-    this.organisation_id = "";
+    this.organisationId = "";
+    this.headerPhoto = null;
+    this.headerPhotoDisplay = "";
+    this.displayPhoto = null;
+    this.displayPhotoDisplay = "";
+    this.additionalPhotos = [];
+    this.additionalPhotosDisplay = [];
 
     // CMS
     $(".action-container .action-btn").on("click", function () {
@@ -80,6 +95,66 @@ export class CreateOrganisationComponent implements OnInit {
     return false;
   }
 
+  uploadHeaderPhoto(event: Event): void {
+    const reader: FileReader = new FileReader();
+    reader.onload = (e) => {
+      this.headerPhotoDisplay = reader.result.toString();
+    }
+    try {
+      reader.readAsDataURL((event.target as HTMLInputElement).files[0]);
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+    this.headerPhoto = <File>(event.target as HTMLInputElement).files[0];
+  }
+
+  removeHeaderPhoto(): void {
+    this.headerPhoto = null;
+    this.headerPhotoDisplay = "";
+  }
+
+  uploadDisplayPhoto(event: Event): void {
+    const reader: FileReader = new FileReader();
+    reader.onload = (e) => {
+      this.displayPhotoDisplay = reader.result.toString();
+    }
+    try {
+      reader.readAsDataURL((event.target as HTMLInputElement).files[0]);
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+    this.displayPhoto = <File>(event.target as HTMLInputElement).files[0];
+  }
+
+  removeDisplayPhoto(): void {
+    this.displayPhoto = null;
+    this.displayPhotoDisplay = "";
+  }
+
+  uploadAdditionalPhoto(event: Event): void {
+    if (this.additionalPhotos.length === 5 && this.additionalPhotosDisplay.length === 5) {
+      return;
+    }
+    const reader: FileReader = new FileReader();
+    reader.onload = (e) => {
+      this.additionalPhotosDisplay.push(reader.result.toString());
+    }
+    try {
+      reader.readAsDataURL((event.target as HTMLInputElement).files[0]);
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+    this.additionalPhotos.push(<File>(event.target as HTMLInputElement).files[0]);
+  }
+
+  removeAdditionalPhoto(i: number): void {
+    this.additionalPhotos.splice(i, 1);
+    this.additionalPhotosDisplay.splice(i, 1);
+  }
+
   createOrganisation(): void {
     if (this.getFormValidationErrors()) {
       this.SnackbarService.openSnackBar("Please complete the form", false);
@@ -110,7 +185,7 @@ export class CreateOrganisationComponent implements OnInit {
 
     this.OrganisationsService.createOrganisation(this.organisationData).subscribe(
       (res) => {
-        this.organisation_id = res["data"]["organisation_id"];
+        this.organisationId = res["data"]["organisation_id"];
       },
       (err) => {
         console.log(err);
@@ -125,7 +200,7 @@ export class CreateOrganisationComponent implements OnInit {
           true
         );
         this.organisationForm.reset();
-        this.router.navigate(["/organisation/" + this.organisation_id])
+        this.router.navigate(["/organisation/" + this.organisationId])
       } 
     )
 

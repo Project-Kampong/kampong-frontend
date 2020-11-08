@@ -142,7 +142,7 @@ export class CreateListingComponent implements OnInit {
     var reader: FileReader = new FileReader();
     reader.onload = (e) => {
       this.fileDisplayArr.push(reader.result.toString());
-    };
+    }
     reader.readAsDataURL(event.target.files[0]);
     this.fileLimitChecker(true);
     this.fileArr.push(this.selectedFile);

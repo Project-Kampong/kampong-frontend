@@ -388,6 +388,91 @@
 
       </div>
     </div>
+    <div class="listing-section">
+      <div class="listing-stepper">
+        <span> 3 </span>
+        <p>Upload Photos</p>
+      </div>
+      <div class="form-item">
+        <div class="custom-input col-lg-12">
+          <label>Upload your header photo here!</label>
+          <div class="d-flex flex-wrap align-items-start mt-2 image-output">
+            <div
+              *ngIf="headerPhoto !== null"
+              class="image-container"
+              (click)="removeHeaderPhoto()"
+            >
+              <img src="{{headerPhotoDisplay}}" />
+            </div>
+            <div
+              *ngIf="headerPhoto === null"
+              class="custom-file-upload-container"
+            >
+              <label for="header-upload" class="custom-file-upload"> </label>
+              <input
+                type="file"
+                accept="image/*"
+                id="header-upload"
+                (change)="uploadHeaderPhoto($event)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-item">
+        <div class="custom-input col-lg-12">
+          <label>Upload your display photo here!</label>
+          <div class="d-flex flex-wrap align-items-start mt-2 image-output">
+            <div
+              *ngIf="displayPhoto !== null"
+              class="image-container"
+              (click)="removeDisplayPhoto()"
+            >
+              <img src="{{displayPhotoDisplay}}" />
+            </div>
+            <div
+              *ngIf="displayPhoto === null"
+              class="custom-file-upload-container"
+            >
+              <label for="display-upload" class="custom-file-upload"> </label>
+              <input
+                type="file"
+                accept="image/*"
+                id="display-upload"
+                (change)="uploadDisplayPhoto($event)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-item">
+        <div class="custom-input col-lg-12">
+          <label>Upload images of your organisation here* (Maximum of 5)</label>
+          <div class="d-flex flex-wrap align-items-start mt-2 image-output">
+            <div
+              *ngFor="let img of additionalPhotosDisplay; index as i"
+              class="image-container"
+              (click)="removeAdditionalPhoto(i)"
+            >
+              <img src="{{ img }}" />
+            </div>
+
+            <div
+              *ngIf="additionalPhotosDisplay.length < 5 && additionalPhotos.length < 5"
+              class="custom-file-upload-container"
+            >
+              <label for="additional-upload" class="custom-file-upload"> </label>
+              <input
+                type="file"
+                accept="image/*"
+                id="additional-upload"
+                (change)="uploadAdditionalPhoto($event)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 <section>
