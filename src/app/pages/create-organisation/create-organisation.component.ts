@@ -99,7 +99,7 @@ export class CreateOrganisationComponent implements OnInit {
       formdata.type = organisationData.type;
     }
     formdata.about = organisationData.about;
-    formdata.website_url = "www.something.com";
+    formdata.website_url = organisationData.website_url;
     formdata.handphone = organisationData.handphone;
     formdata.email = organisationData.email;
     this.OrganisationsService.createOrganisation(formdata).subscribe(

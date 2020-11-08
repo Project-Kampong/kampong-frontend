@@ -22,8 +22,8 @@ export const CreateOrganisation = {
   ],
   type: ["", [Validators.required, Validators.maxLength(25)]],
   about: ["", [Validators.required, Validators.maxLength(500)]],
-  website_url: "", //not sure here
-  handphone: ["", [Validators.required, Validators.maxLength(20), patternValidation]], //need better ones
+  website_url: ["", [Validators.required, Validators.maxLength(100)]],
+  handphone: [0, [Validators.required, Validators.max(100000000), patternValidation]], //need better ones
   email: ["", [Validators.required, Validators.email]],
 };
 

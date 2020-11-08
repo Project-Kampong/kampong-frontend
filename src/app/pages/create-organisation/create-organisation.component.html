@@ -167,7 +167,34 @@
           <!-- End of Errors Validation -->
         </div>
 
-        <!-- need to add WEBSITE_URL -->
+        <div class="form-item">
+          <label>Website URL *</label>
+          <input
+            placeholder="Enter a website URL for your organisation"
+            formControlName="website_url"
+          />
+          <div class="hint">
+            {{ OrganisationForm.value.website_url.length }} / 100
+          </div>
+
+          <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="OrganisationForm.get('website_url').hasError('max')"
+          >
+            Website URL must not be more than 100 characters long.
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="
+              OrganisationForm.get('website_url').hasError('required') &&
+              OrganisationForm.controls['website_url']?.touched
+            "
+          >
+            Website URL is required
+          </span>
+          <!-- End of Errors Validation -->
+        </div>
       </div>
     </div>
   </div>
