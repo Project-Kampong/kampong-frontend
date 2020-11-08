@@ -44,6 +44,7 @@ export class CreateOrganisationComponent implements OnInit {
     this.locationGroup = locationList;
     this.organisationForm = this.fb.group(CreateOrganisationForm);
     this.organisationData = null;
+    this.organisation_id = "";
 
     // CMS
     $(".action-container .action-btn").on("click", function () {
@@ -94,7 +95,7 @@ export class CreateOrganisationComponent implements OnInit {
     const phone: string = this.organisationForm.value.handphone;
     const email: string = this.organisationForm.value.email;
     const locations: string[] = this.organisationForm.value.locations;
-    const story: string = this.organisationForm.value.story;
+    const story: string = $("#output").html();
 
     this.organisationData = {
       name,
@@ -130,71 +131,4 @@ export class CreateOrganisationComponent implements OnInit {
 
   }
 
-  /*
-  createOrganisation() {
-    if (this.getFormValidationErrors() == true) {
-      this.SnackbarService.openSnackBar("Please complete the form", false);
-      return;
-    }
-
-    var routeTo;
-    const organisationData = this.organisationForm.value;
-    var formdata = { 
-      ...CreateOrganisationForm
-    }
-    //LOOK HERE!!
-    formdata.name = organisationData.name
-
-    if (organisationData.organisation_type == "Create a Type") {
-      formdata.organisation_type = organisationData.customType;
-    } else {
-      formdata.organisation_type = organisationData.organisation_type;
-    }
-    formdata.about = organisationData.about;
-    formdata.website_url = organisationData.website_url;
-    formdata.handphone = organisationData.handphone;
-    formdata.email = organisationData.email;
-    this.OrganisationsService.createOrganisation(formdata).subscribe(
-      (res) => {
-        console.log(res);
-        const organisation_id = res["data"]["organisation_id"];
-        routeTo = organisation_id;
-        console.log(organisation_id);
-      }, (err) => { 
-        console.log(err);
-      }, () => {
-        this.SnackbarService.openSnackBar(
-          this.SnackbarService.DialogList.create_organisation.success,
-          true
-        );
-        this.router.navigate(["/organisation/" + routeTo]);
-      })
-  }
-
-  // Chips UI and Data
-  visible = true;
-  selectable = false;
-  removable = true;
-  addOnBlur = true;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
-  hashtags = [];
-  hashtagsError = false;
-  add(event: MatChipInputEvent): void {
-    const value =
-      "#" + event.value.replace(/[&\/\\#,+()$~%. '":*?<>\[\]{}]/g, "");
-    if (this.hashtags.length == 3) {
-      this.hashtagsError = true;
-    } else if (value != "#") {
-      this.hashtagsError = false;
-      const input = event.input;
-      console.log(value);
-      if ((value || "").trim()) {
-        this.hashtags.push(value.trim());
-      }
-      if (input) {
-        input.value = "";
-      }
-    }
-  }
-  */
 }
