@@ -32,6 +32,7 @@ import { ContentWrapperComponent } from "./layout/content-wrapper/content-wrappe
 import { EditListingCardsComponent } from "./components/edit-listing-cards/edit-listing-cards.component";
 import { SnackbarErrorComponent } from "./components/snackbar-error/snackbar-error.component";
 import { SnackbarSuccessComponent } from "./components/snackbar-success/snackbar-success.component";
+import { OrganisationCardsComponent } from "./components/organisation-cards/organisation-cards.component";
 
 // Pages
 import { ListingHomeComponent } from "@app/pages/listing-home/listing-home.component";
@@ -74,6 +75,7 @@ import { OnboardingComponent } from "./pages/onboarding/onboarding.component";
     SnackbarSuccessComponent,
     OnboardingComponent,
     MainSearchComponent,
+    OrganisationCardsComponent,
   ],
   imports: [
     BrowserModule,

@@ -15,7 +15,7 @@
     </p>
     <div class="category-selection">
       <select class="outline-select" placeholder="category">
-        <optgroup *ngFor="let data of categoryGroup" label="{{ data.name }}">
+        <optgroup *ngFor="let data of categoryList" label="{{ data.name }}">
           <option *ngFor="let cat of data.group" value="cat">{{ cat }}</option>
         </optgroup>
       </select>
@@ -55,4 +55,15 @@
     [ListingData]="ListingsService.ListingData"
     [ColNum]="4"
   ></app-listing-cards>
+  <div class="category-section">
+    <p class="section-title light-xl">Organisations</p>
+    <p class="section-description light-s">
+      Discover organisations and their programmes and listings!
+    </p>
+  </div>
+  <app-organisation-cards
+    *ngIf="organisationList"
+    [OrganisationData]="organisationList"
+    [ColNum]="4"
+  ></app-organisation-cards>
 </section>
