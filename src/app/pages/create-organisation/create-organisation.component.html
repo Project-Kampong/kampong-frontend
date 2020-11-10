@@ -508,6 +508,33 @@
                   ></textarea>
                   <span class="hint"> {{ pg.about.length }} / 500 </span>
                 </div>
+                <div class="form-item">
+                  <div class="custom-input col-lg-12">
+                    <label>Upload images of your programme here* (Maximum of 5)</label>
+                    <div class="d-flex flex-wrap align-items-start mt-2 image-output">
+                      <div
+                        *ngFor="let img of programmePhotosDisplay[i]; index as j"
+                        class="image-container"
+                        (click)="removeProgrammePhoto(j, i)"
+                      >
+                        <img src="{{ img }}" />
+                      </div>
+          
+                      <div
+                        *ngIf="programmePhotosDisplay[i].length < 5 && programmePhotos[i].length < 5"
+                        class="custom-file-upload-container"
+                      >
+                        <label for="programme-upload-{{ i }}" class="custom-file-upload"> </label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          id="programme-upload-{{ i }}"
+                          (change)="uploadProgrammePhoto($event, i)"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <button class="remove-faq" (click)="removePg(i)"></button>
             </div>

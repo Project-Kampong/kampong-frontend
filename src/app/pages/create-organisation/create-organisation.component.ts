@@ -39,6 +39,10 @@ export class CreateOrganisationComponent implements OnInit {
   additionalPhotos: File[];
   additionalPhotosDisplay: string[];
   pgArr: Array<CreateProgrammes>;
+  programmePhotos: File[][];
+  programmePhotosDisplay: string[][];
+  mediaArr: string[][];
+
 
   constructor(
     private fb: FormBuilder,
@@ -62,6 +66,8 @@ export class CreateOrganisationComponent implements OnInit {
     this.additionalPhotos = [];
     this.additionalPhotosDisplay = [];
     this.pgArr = [];
+    this.programmePhotos = [];
+    this.programmePhotosDisplay = [];
 
     // CMS
     $(".action-container .action-btn").on("click", function () {
@@ -77,6 +83,7 @@ export class CreateOrganisationComponent implements OnInit {
         document.execCommand(cmd, false, null);
       }
     });
+
   }
 
   getFormValidationErrors(): boolean {
@@ -164,10 +171,36 @@ export class CreateOrganisationComponent implements OnInit {
       media_url: [],
     }
     this.pgArr.push(blankProgramme);
+    this.programmePhotos.push([]);
+    this.programmePhotosDisplay.push([]);
   }
 
   removePg(i): void {
     this.pgArr.splice(i, 1);
+    this.programmePhotos.splice(i, 1);
+    this.programmePhotosDisplay.splice(i, 1);
+  }
+
+  uploadProgrammePhoto(event: Event, idx: number): void {
+    if (this.programmePhotos[idx].length === 5 && this.programmePhotosDisplay[idx].length === 5) {
+      return;
+    }
+    const reader: FileReader = new FileReader();
+    reader.onload = (e) => {
+      this.programmePhotosDisplay[idx].push(reader.result.toString());
+    }
+    try {
+      reader.readAsDataURL((event.target as HTMLInputElement).files[0]);
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+    this.programmePhotos[idx].push(<File>(event.target as HTMLInputElement).files[0]);
+  }
+
+  removeProgrammePhoto(i: number, idx: number): void {
+    this.programmePhotos[idx].splice(i, 1);
+    this.programmePhotosDisplay[idx].splice(i,1);
   }
 
   createOrganisation(): void {
