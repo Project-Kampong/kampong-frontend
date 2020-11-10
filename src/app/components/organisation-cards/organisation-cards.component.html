@@ -7,7 +7,7 @@
         <!-- <img src="{{ orgData.pic1 }}" /> -->
         <div class="listing-card-body">
           <div>
-            <p class="small-badge">{{ orgData.organisation_type }}</p>
+            <p class="small-badge" *ngIf="orgData.organisation_type">{{ orgData.organisation_type }}</p>
             <p class="title medium-s">{{ orgData.name }}</p>
             <p class="tagline light-xs">{{ orgData.about }}</p>
           </div>

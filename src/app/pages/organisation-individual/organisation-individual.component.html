@@ -1,9 +1,9 @@
 <section class="bg-section" *ngIf="OrganisationData.organisation_id != null">
   <div class="container">
     <div class="col-12 text-center project-info-container">
-      <p class="primary-badge">
+      <p class="primary-badge" *ngIf="OrganisationData['organisation_type']">
         <!-- Type of organisation: {{ OrganisationData["organisation_type"] }} -->
-        Type of organisation: {{ "error in get request" }}
+        Type of organisation: {{ OrganisationData["organisation_type"] }}
       </p>
       <p class="regular-l">
         Name of organisation: {{ OrganisationData["name"] }}
