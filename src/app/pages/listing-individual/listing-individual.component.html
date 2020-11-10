@@ -100,10 +100,22 @@
           </p>
           <p class="job-description light-s">
             {{ skills.job_description }}
-            <button (click)="applyJob(skills)" class="apply-button primary-button">
+
+            <button (click)="toggleEmailPopup()" class="apply-button primary-button">
               Apply
             </button>
+
+            
+
+            <!-- <button (click)="applyJob(skills)" class="apply-button primary-button">
+              Apply
+            </button> -->
           </p>
+          <div class="popup-email">
+            <div class="close-btn" (click)="toggleEmailPopup()"></div>
+            <p class="popup-title">Are you sure you want to apply ?</p>
+            <a class="btn yellow-btn mt-5" (click)="applyJob(skills)">Confirm</a>
+          </div>
 
         </div>
       </div>
@@ -415,4 +427,6 @@
     </div>
     <a class="btn yellow-btn mt-5" (click)="sendMessage()">Send Message</a>
   </div>
+
+
 </section>

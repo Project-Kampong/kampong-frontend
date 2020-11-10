@@ -68,6 +68,8 @@ export class ListingIndividualComponent implements OnInit {
   fileCount = 0;
   updatesFormOpen = false;
   locationList = [];
+
+  jobs;
   ngOnInit() {
     window.scroll(0, 0);
     this.listingId = this.route.snapshot.params["id"];
@@ -79,6 +81,8 @@ export class ListingIndividualComponent implements OnInit {
       $(this).addClass("active");
     });
     this.tabs_selected("story");
+
+    // $(".popup-email").toggleClass("active");
   }
 
   getInitData() {
@@ -469,6 +473,12 @@ export class ListingIndividualComponent implements OnInit {
     $(".popup-bg").toggleClass("active");
     $(".popup-box").toggleClass("active");
   }
+
+  toggleEmailPopup() {
+    // Toggle popup
+    $(".popup-bg").toggleClass("active");
+    $(".popup-email").toggleClass("active");
+  }
   sendMessage() {
     if (this.enquireMessage != "") {
       this.togglePopup();
@@ -561,6 +571,7 @@ export class ListingIndividualComponent implements OnInit {
   }
 
   applyJob(jobs) {
+    this.toggleEmailPopup();
     if (this.AuthService.isLoggedIn) {
       const subject = `Application for ${jobs.job_title}`;
       this.ProfileService.getUserProfile(
@@ -570,15 +581,15 @@ export class ListingIndividualComponent implements OnInit {
          *
          * Should do this on the backend
          */
-        const message = `Hi there, an applicant named ${this.AuthService.UserData["first_name"]} has applied for this job. His contact info are  
-        \n Email :${this.AuthService.UserData["email"]} 
+        const message = `Hi there, an applicant named ${this.AuthService.UserData["first_name"]} has applied for this job. His contact info are
+        \n Email :${this.AuthService.UserData["email"]}
         \n Contact Number : ${user.data.phone}`;
         console.log(message);
         this.ListingsService.sendEnquiry({
-          receiverEmail: this.ListingData.listing_email,
-          senderEmail: this.ListingData.listing_email,
-          // receiverEmail: "ahliang51@gmail.com",
-          // senderEmail: "ahliang51@gmail.com",
+          // receiverEmail: this.ListingData.listing_email,
+          // senderEmail: this.ListingData.listing_email,
+          receiverEmail: "ahliang51@gmail.com",
+          senderEmail: "ahliang51@gmail.com",
           subject: `Applicant for ${jobs.job_title}`,
           message: message,
         }).subscribe(
