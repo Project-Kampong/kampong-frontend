@@ -14,7 +14,7 @@ import { categoryListCustom } from "@app/util/categories";
 import { locationList } from '@app/util/locations';
 
 // Interfaces
-import { CreateOrganisationForm, CreateOrganisation, CreateProgrammes } from "@app/interfaces/organisation";
+import { CreateOrganisationForm, CreateOrganisation, CreateProgrammes, Programmes } from "@app/interfaces/organisation";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 
 declare var $: any;
@@ -30,8 +30,6 @@ export class CreateOrganisationComponent implements OnInit {
   typeGroup: Array<CategoryFilter>;
   locationGroup: Array<LocationFilter>;
   organisationForm: FormGroup;
-  programmesForm: FormGroup;
-  programmesData: CreateProgrammes;
   organisationData: CreateOrganisation;
   organisationId: string;
   headerPhoto: File;
@@ -160,11 +158,12 @@ export class CreateOrganisationComponent implements OnInit {
   }
 
   addPg(): void {
-    this.pgArr.push({
+    const blankProgramme: CreateProgrammes = {
       title: "",
       about: "",
       media_url: [],
-    })
+    }
+    this.pgArr.push(blankProgramme);
   }
 
   removePg(i): void {
@@ -209,7 +208,7 @@ export class CreateOrganisationComponent implements OnInit {
           const about: string = pg.about;
           const media_url: string[] = pg.media_url;
 
-          const pgData: CreateProgrammes = {
+          const pgData: Programmes = {
             organisation_id,
             title,
             about,

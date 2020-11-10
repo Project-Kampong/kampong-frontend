@@ -26,8 +26,14 @@ export interface CreateOrganisation {
   story: string,
 }
 
+export interface Programmes {
+  organisation_id : string,
+  title: string,
+  about: string,
+  media_url: string[],
+}
+
 export interface CreateProgrammes {
-  organisation_id ?: string,
   title: string,
   about: string,
   media_url: string[],

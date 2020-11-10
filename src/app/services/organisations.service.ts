@@ -26,7 +26,7 @@ export class OrganisationsService {
     headers: this.httpHeaders,
   };
 
-  getOrganisations(page: number) {
+  getOrganisations(page: number): Observable<API> {
     return this.httpClient.get<API>(
       this.url + "api/organisations?sort=created_on&page=" + page,
       this.options
