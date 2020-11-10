@@ -16,7 +16,6 @@ import { locationList } from '@app/util/locations';
 // Interfaces
 import { CreateOrganisationForm, CreateOrganisation, CreateProgrammes } from "@app/interfaces/organisation";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
-import { throwToolbarMixedModesError } from '@angular/material';
 
 declare var $: any;
 
