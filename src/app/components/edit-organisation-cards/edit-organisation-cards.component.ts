@@ -2,11 +2,11 @@ import { Component, Input } from "@angular/core";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: "app-organisation-cards",
-  templateUrl: "./organisation-cards.component.html",
-  styleUrls: ["./organisation-cards.component.scss"],
+  selector: "app-edit-organisation-cards",
+  templateUrl: "./edit-organisation-cards.component.html",
+  styleUrls: ["./edit-organisation-cards.component.scss"],
 })
-export class OrganisationCardsComponent{
+export class EditOrganisationCardsComponent{
   
   constructor(private router: Router) {
   }

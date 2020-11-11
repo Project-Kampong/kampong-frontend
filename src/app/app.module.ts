@@ -48,6 +48,7 @@ import { PublicProfileComponent } from "@app/pages/public-profile/public-profile
 import { EditListingComponent } from "@app/pages/edit-listing/edit-listing.component";
 import { SearchComponent } from "@app/pages/search/search.component";
 import { OnboardingComponent } from "./pages/onboarding/onboarding.component";
+import { EditOrganisationCardsComponent } from './components/edit-organisation-cards/edit-organisation-cards.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { OnboardingComponent } from "./pages/onboarding/onboarding.component";
     PublicProfileComponent,
     EditListingCardsComponent,
     EditListingComponent,
+    EditOrganisationCardsComponent,
     SearchComponent,
     SnackbarErrorComponent,
     SnackbarSuccessComponent,

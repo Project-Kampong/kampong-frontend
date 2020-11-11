@@ -16,7 +16,7 @@ import { categoryListCustom } from "@app/util/categories";
 declare var $: any;
 
 // Interface
-import { CreateListing, ListingStory } from "@app/interfaces/listing";
+import { CreateListingForm, CreateListingStoryForm } from "@app/interfaces/listing";
 import { CategoryFilter } from '@app/interfaces/filters';
 
 @Component({
@@ -82,8 +82,8 @@ export class EditListingComponent implements OnInit {
 
     this.listingId = this.route.snapshot.params["id"];
     this.ListingForm = this.fb.group({
-      ...CreateListing,
-      ...ListingStory,
+      ...CreateListingForm,
+      ...CreateListingStoryForm,
       LocationsList: [],
       customCategory: ["", [Validators.maxLength(25)]],
     });

@@ -1,0 +1,28 @@
+<div class="d-flex flex-wrap listing-card-wrapper">
+  <div [className]="'px-2 col-lg-' + ColNum" *ngFor="let orgData of OrganisationData">
+    <div (click)="selectedCard(orgData)" class="listing-card">
+      <!-- <img src="{{ orgData.pic1 }}" /> -->
+      <div class="listing-card-body">
+        <div>
+          <p class="small-badge" *ngIf="orgData.organisation_type">{{ orgData.organisation_type }}</p>
+          <p class="title medium-s">{{ orgData.name }}</p>
+          <p class="tagline light-xs">{{ orgData.about }}</p>
+        </div>
+
+        <div *ngIf="orgData.locations">
+          <div class="locationtags-list">
+            <div class="location-icon"></div>
+            <ul>
+            <li class="light-xs" *ngFor="let location of orgData.locations">
+              {{ location }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <button class="edit-btn">
+      Edit Organisation
+    </button>
+    </div>
+  </div>
+</div>

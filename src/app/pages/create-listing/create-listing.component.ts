@@ -1,28 +1,24 @@
+// Angular Imports
 import { Component, OnInit } from "@angular/core";
 import { COMMA, ENTER, SPACE } from "@angular/cdk/keycodes";
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  ValidationErrors,
-} from "@angular/forms";
+import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
 import { MatChipInputEvent } from "@angular/material/chips";
-
 import { Router } from "@angular/router";
 
+// Services
 import { ListingsService } from "@app/services/listings.service";
 import { SnackbarService } from "@app/services/snackbar.service";
-import { AuthService } from "@app/services/auth.service";
-
-declare var $: any;
-
-// Interface
-import { Listing, CreateListing, ListingStory } from "@app/interfaces/listing";
-import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 
 // Util
 import { locationList } from '@app/util/locations';
-import { categoryListCustom } from "@app/util/categories";
+import { categoryList } from "@app/util/categories";
+
+// Interfaces
+import { CreateListingForm, CreateListingStoryForm, CreateListingFAQ, 
+  CreateListingJobs, CreateListingMilestones, CreateListing } from "@app/interfaces/listing";
+import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
+
+declare var $: any;
 
 @Component({
   selector: "app-create-listing",
@@ -31,23 +27,20 @@ import { categoryListCustom } from "@app/util/categories";
 })
 export class CreateListingComponent implements OnInit {
   
-  selectedFile: File = null;
-  ListingForm: FormGroup;
-  fileDisplayArr = [];
-  fileArr = [];
-  fileLimit = false;
-  fileCount = 0;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
+  listingForm: FormGroup;
+  listingData: CreateListing;
+  listingId: string;
   categoryGroup: Array<CategoryFilter>;
   locationGroup: Array<LocationFilter>;
+  listingImages: File[];
+  listingImagesDisplay: string[];
+  hashtags: string[];
+  milestoneArr: Array<CreateListingMilestones>;
+  lookingForArr: Array<CreateListingJobs>
+  faqArr: Array<CreateListingFAQ>;
+  rawSkillsets: any[]; // to delete
 
-  milestoneArr = [{ description: "", date: new Date() }];
-  faqArr = [
-    {
-      questions: "",
-      answer: "",
-    },
-  ];
-  
   skillsets = [
     {
       name: "Big Data Analysis",
@@ -71,34 +64,36 @@ export class CreateListingComponent implements OnInit {
     },
   ];
 
-  locationList = [];
-
-  rawSkillsets = [];
-
   constructor(
     private fb: FormBuilder,
-    public ListingsService: ListingsService,
+    public listingsService: ListingsService,
     private router: Router,
-    public SnackbarService: SnackbarService,
-  ) {}
-
+    public snackbarService: SnackbarService,
+  ) {
+    
+    this.rawSkillsets = [];
+    this.listingImages = [];
+    this.listingImagesDisplay = [];
+    this.hashtags = [];
+    this.milestoneArr = [{ description: "", date: new Date() }];
+    this.lookingForArr = [];
+    this.faqArr = [];
+    this.listingId = "";
+  }
+  
   ngOnInit() {
 
-    this.categoryGroup = categoryListCustom;
+    this.categoryGroup = categoryList;
     this.locationGroup = locationList;
 
-    this.ListingForm = this.fb.group({
-      ...CreateListing,
-      ...ListingStory,
-      SkillsList: [],
+    this.listingForm = this.fb.group({
+      ...CreateListingForm,
+      ...CreateListingStoryForm,
       LocationsList: [],
-      customCategory: ["", [Validators.maxLength(25)]],
+      //customCategory: ["", [Validators.maxLength(25)]],
     });
-    this.paginationSkillsets();
-    this.ListingsService.getAllLocations().subscribe((data) => {
-      console.log(data);
-      this.locationList = data["data"];
-    });
+
+    this.paginationSkillsets(); // to be replaced
 
     // CMS
     $(".action-container .action-btn").on("click", function () {
@@ -114,16 +109,11 @@ export class CreateListingComponent implements OnInit {
         document.execCommand(cmd, false, null);
       }
     });
-    console.log(this.ListingForm);
   }
 
-  // generateHTML() {
-  //   document.getElementById("result").textContent = this.output.innerHTML;
-  // }
-
-  // Get Skillsets
-  paginationSkillsets() {
-    this.ListingsService.getAllSkillsets().subscribe((data) => {
+  // to delete
+  paginationSkillsets(): void {
+    this.listingsService.getAllSkillsets().subscribe((data) => {
       this.rawSkillsets.push(...data["data"]);
       // Sort Skills
       for (var i = 0; i < this.skillsets.length; i++) {
@@ -136,109 +126,151 @@ export class CreateListingComponent implements OnInit {
     });
   }
 
-  uploadFile(event) {
-    this.selectedFile = <File>event.target.files[0];
-    // Display Image
-    var reader: FileReader = new FileReader();
-    reader.onload = (e) => {
-      this.fileDisplayArr.push(reader.result.toString());
-    }
-    reader.readAsDataURL(event.target.files[0]);
-    this.fileLimitChecker(true);
-    this.fileArr.push(this.selectedFile);
-    console.log(this.fileArr);
-  }
-
-  removeFile(i) {
-    this.fileDisplayArr.splice(i, 1);
-    this.fileArr.splice(i, 1);
-    this.fileLimitChecker(false);
-  }
-
-  fileLimitChecker(increase) {
-    const maxFile = 5;
-    if (increase) {
-      this.fileCount = this.fileCount + 1;
-      if (this.fileCount == maxFile) {
-        this.fileLimit = true;
-      }
-    } else {
-      this.fileCount = this.fileCount - 1;
-      if (this.fileCount != maxFile) {
-        this.fileLimit = false;
-      }
-    }
-  }
-
-  getFormValidationErrors() {
-    var error = false;
-    Object.keys(this.ListingForm.controls).forEach((key) => {
-      const controlErrors: ValidationErrors = this.ListingForm.get(key).errors;
-      if (controlErrors != null) {
-        Object.keys(controlErrors).forEach((keyError) => {
-          error = true;
-        });
-      }
-    });
-    if (this.fileCount == 0) {
-      error = true;
-    }
-    if (
-      this.ListingForm.value.category == "Create a Category" &&
-      this.ListingForm.value.customCategory == ""
-    ) {
-      error = true;
-    }
-    return error;
-  }
-
-  createListing() {
-    if (this.getFormValidationErrors() == true) {
-      this.SnackbarService.openSnackBar("Please complete the form", false);
+  addHashtag(event: MatChipInputEvent): void {
+    const value = ("#" + event.value.replace(/[&\/\\#,+()$~%. '":*?<>\[\]{}]/g, "")).trim();
+    if (this.hashtags.length === 3 || value === "#") {
       return;
     }
-    var routeTo;
-    const listingData = this.ListingForm.value;
-    var ImageFd = new FormData();
-    ImageFd.append("title", listingData.title);
+    this.hashtags.push(value);
+    event.input.value = "";
+  }
 
-    if (listingData.category == "Create a Category") {
-      ImageFd.append("category", listingData.customCategory);
-    } else {
-      ImageFd.append("category", listingData.category);
+  removeHashtag(tag: string): void {
+    this.hashtags.splice(this.hashtags.indexOf(tag), 1);
+  }
+
+  uploadImage(event: Event): void {
+    if (this.listingImagesDisplay.length === 5 && this.listingImages.length === 5 ) {
+      return;
     }
-    ImageFd.append("tagline", listingData.tagline);
-    ImageFd.append("mission", listingData.mission);
-    ImageFd.append("listing_url", "www.test.com");
-    ImageFd.append("listing_email", listingData.listing_email);
-    ImageFd.append("listing_status", "ongoing");
-    for (var i = 0; i < this.fileArr.length; i++) {
-      ImageFd.append("pic" + (i + 1), this.fileArr[i].name);
-      ImageFd.append("pics", this.fileArr[i]);
+    const reader: FileReader = new FileReader();
+    reader.onload = (e) => {
+      this.listingImagesDisplay.push(reader.result.toString());
     }
-    this.ListingsService.createListing(ImageFd).subscribe(
+    try {
+      reader.readAsDataURL((event.target as HTMLInputElement).files[0]);
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+    this.listingImages.push(<File>(event.target as HTMLInputElement).files[0]);
+  }
+
+  removeImage(i: number): void {
+    this.listingImagesDisplay.splice(i, 1);
+    this.listingImages.splice(i, 1);
+  }
+
+  addMilestone(): void {
+    this.milestoneArr.push({ description: "", date: new Date() });
+    this.milestoneArr.sort((a, b) => {
+      const result: number = (new Date(a.date)).valueOf() - (new Date(b.date)).valueOf();
+      return result;
+    });
+  }
+
+  sortMilestone(): void {
+    this.milestoneArr = this.milestoneArr.sort((a, b) => {
+      const result: number = (new Date(a.date)).valueOf() - (new Date(b.date)).valueOf();
+      return result;
+    });
+  }
+
+  removeMilestone(i: number): void {
+    this.milestoneArr.splice(i, 1);
+  }
+
+  addFAQ(): void {
+    this.faqArr.push({
+      question: "",
+      answer: "",
+    });
+  }
+  removeFAQ(i: number): void {
+    this.faqArr.splice(i, 1);
+  }
+
+  addDescription(): void {
+    this.lookingForArr.push({ skills: "", description: "" });
+  }
+
+  removeDescription(i: number): void {
+    this.lookingForArr.splice(i, 1);
+  }
+
+  getFormValidationErrors(): boolean {
+    Object.keys(this.listingForm.controls).forEach((key) => {
+      const controlErrors: ValidationErrors = this.listingForm.get(key).errors;
+      if (controlErrors != null) {
+        return true;
+      }
+    });
+    return false;
+  }
+
+  createListing(): void {
+    if (this.getFormValidationErrors() === true) {
+      this.snackbarService.openSnackBar("Please complete the form", false);
+      return;
+    }
+
+    const title: string = this.listingForm.value.title;
+    const category: string = this.listingForm.value.category;
+    const tagline: string = this.listingForm.value.tagline;
+    const mission: string = this.listingForm.value.mission;
+    const listing_url: string = this.listingForm.value.listing_url;
+    const listing_email: string = this.listingForm.value.listing_email;
+    const listing_status: string = "ongoing";
+    const locations: string[] = this.listingForm.value.locations;
+
+    // To replace with 2 step FE approach
+    const pic1: string = this.listingImages[0] ? this.listingImages[0].name: null;
+    const pic2: string = this.listingImages[1] ? this.listingImages[1].name: null;
+    const pic3: string = this.listingImages[2] ? this.listingImages[2].name: null;
+    const pic4: string = this.listingImages[3] ? this.listingImages[3].name: null;
+    const pic5: string = this.listingImages[4] ? this.listingImages[4].name: null;
+
+    this.listingData = {
+      title,
+      category,
+      tagline,
+      mission,
+      listing_url,
+      listing_email,
+      listing_status,
+      pic1,
+      pic2,
+      pic3,
+      pic4,
+      pic5,
+      locations
+    };
+
+    this.listingsService.createListing(this.listingData).subscribe(
       (res) => {
-        console.log(res);
-        const listing_id = res["data"][0]["listing_id"];
-        routeTo = listing_id;
-        console.log(listing_id);
-        // Handle Stories
-        this.ListingsService.UpdateListingStory(listing_id, {
+        this.listingId = res["data"][0]["listing_id"]; //to change
+
+        // Handle Stories (To change)
+        this.listingsService.UpdateListingStory(this.listingId, {
           overview: $("#output").html(),
           problem: "test",
           solution: "test",
           outcome: "test",
-        }).subscribe((data) => {
-          console.log(data);
-        });
+        }).subscribe(
+          (res) => {},
+          (err) => {
+            console.log(err);
+          }
+        );
+
         // Handle Milestones
         for (var i = 0; i < this.milestoneArr.length; i++) {
           if (
             this.milestoneArr[i].description != "" &&
             this.milestoneArr[i].date != null
           ) {
-            this.ListingsService.createListingMilestones({
-              listing_id: listing_id,
+            this.listingsService.createListingMilestones({
+              listing_id: this.listingId,
               description: this.milestoneArr[i].description,
               date: this.milestoneArr[i].date,
             }).subscribe((data) => {
@@ -246,25 +278,27 @@ export class CreateListingComponent implements OnInit {
             });
           }
         }
+
         // Handle Hashtags
         if (this.hashtags.length >= 1) {
           for (var i = 0; i < this.hashtags.length; i++) {
-            this.ListingsService.createListingHashtags({
-              listing_id: listing_id,
+            this.listingsService.createListingHashtags({
+              listing_id: this.listingId,
               tag: this.hashtags[i],
             }).subscribe((data) => {
               console.log(data);
             });
           }
         }
+
         // Handle Skills/ Jobs
         for (var i = 0; i < this.lookingForArr.length; i++) {
           if (
             this.lookingForArr[i]["skill_id"] != "" &&
             this.lookingForArr[i]["description"] != ""
           ) {
-            this.ListingsService.createListingJobs({
-              listing_id: listing_id,
+            this.listingsService.createListingJobs({
+              listing_id: this.listingId,
               job_title: this.lookingForArr[i].skills,
               job_description: this.lookingForArr[i].description,
             }).subscribe((data) => {});
@@ -273,10 +307,10 @@ export class CreateListingComponent implements OnInit {
 
         // Handle FAQs
         for (var i = 0; i < this.faqArr.length; i++) {
-          if (this.faqArr[i].questions != "" && this.faqArr[i].answer != "") {
-            this.ListingsService.createListingFAQ({
-              listing_id: listing_id,
-              question: this.faqArr[i].questions,
+          if (this.faqArr[i].question != "" && this.faqArr[i].answer != "") {
+            this.listingsService.createListingFAQ({
+              listing_id: this.listingId,
+              question: this.faqArr[i].question,
               answer: this.faqArr[i].answer,
             }).subscribe((data) => {
               console.log(data);
@@ -284,111 +318,32 @@ export class CreateListingComponent implements OnInit {
           }
         }
 
-        // Handle Location
-        if (listingData.LocationsList != null) {
-          for (var i = 0; i < listingData.LocationsList.length; i++) {
-            this.ListingsService.createListingLocation({
-              listing_id: listing_id,
-              location_id: listingData.LocationsList[i],
+        // Handle Location (placeholder)
+        if (this.listingData.locations != null) {
+          for (var i = 0; i < this.listingData.locations.length; i++) {
+            this.listingsService.createListingLocation({
+              listing_id: this.listingId,
+              location_id: 1,
             }).subscribe();
           }
         }
       },
       (err) => {
         console.log(err);
-        this.SnackbarService.openSnackBar(
-          this.SnackbarService.DialogList.create_listing.error,
+        this.snackbarService.openSnackBar(
+          this.snackbarService.DialogList.create_listing.error,
           false
         );
         this.router.navigate(["/home"]);
       },
       () => {
-        this.SnackbarService.openSnackBar(
-          this.SnackbarService.DialogList.create_listing.success,
+        this.snackbarService.openSnackBar(
+          this.snackbarService.DialogList.create_listing.success,
           true
         );
-        this.router.navigate(["/listing/" + routeTo]);
+        this.router.navigate(["/listing/" + this.listingId]);
       }
     );
   }
 
-  // Chips UI and Data
-  visible = true;
-  selectable = false;
-  removable = true;
-  addOnBlur = true;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
-  hashtags = [];
-  hashtagsError = false;
-  add(event: MatChipInputEvent): void {
-    const value =
-      "#" + event.value.replace(/[&\/\\#,+()$~%. '":*?<>\[\]{}]/g, "");
-    if (this.hashtags.length == 3) {
-      this.hashtagsError = true;
-    } else if (value != "#") {
-      this.hashtagsError = false;
-      const input = event.input;
-      console.log(value);
-      if ((value || "").trim()) {
-        this.hashtags.push(value.trim());
-      }
-      if (input) {
-        input.value = "";
-      }
-    }
-  }
-
-  remove(data): void {
-    const index = this.hashtags.indexOf(data);
-    if (index >= 0) {
-      this.hashtags.splice(index, 1);
-
-      if (this.hashtags.length == 3) {
-        this.hashtagsError = true;
-      } else {
-        this.hashtagsError = false;
-      }
-    }
-  }
-
-  // Milestones and FAQ UI
-  addMilestone() {
-    this.milestoneArr.push({ description: "", date: new Date() });
-    console.log(this.milestoneArr);
-    this.milestoneArr.sort((a, b) => {
-      return <any>new Date(a.date) - <any>new Date(b.date);
-    });
-  }
-  sortMilestone() {
-    this.milestoneArr = this.milestoneArr.sort((a, b) => {
-      return <any>new Date(a.date) - <any>new Date(b.date);
-    });
-  }
-  removeMilestone(i) {
-    console.log(i);
-    this.milestoneArr.splice(i, 1);
-  }
-
-  addFAQ() {
-    this.faqArr.push({
-      questions: "",
-      answer: "",
-    });
-  }
-  removeFAQ(i) {
-    this.faqArr.splice(i, 1);
-  }
-
-  // Looking for
-  lookingForArr = [{ skills: "", description: "" }];
-  addDescription() {
-    this.lookingForArr.push({ skills: "", description: "" });
-    console.log(this.lookingForArr);
-  }
-  removeDescription(index) {
-    this.lookingForArr.splice(index, 1);
-    if (this.lookingForArr.length == 0) {
-      this.lookingForArr.push({ skills: "", description: "" });
-    }
-  }
 }

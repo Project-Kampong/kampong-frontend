@@ -1,13 +1,19 @@
+// Angular Imports
 import { Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
-
-import { ListingsService } from "@app/services/listings.service";
-import { AuthService } from "@app/services/auth.service";
-import { Listing } from "@app/interfaces/listing";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+
+// Services
+import { ListingsService } from "@app/services/listings.service";
+
+// Util
 import { locationList } from "@app/util/locations";
 import { categoryList } from "@app/util/categories";
+
+// Interfaces
+import { Listing } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
+
 declare var $: any;
 
 @Component({
@@ -32,8 +38,7 @@ export class SearchComponent implements OnInit {
   locInput: string[];
 
   constructor(
-    public ListingsService: ListingsService,
-    public AuthService: AuthService,
+    public listingsService: ListingsService,
     private location: Location,
     private fb: FormBuilder,
   ) {
@@ -85,7 +90,7 @@ export class SearchComponent implements OnInit {
   search(): void {
     if (this.searchInput.length > 0 || this.catInput.length > 0 || this.locInput.length > 0) {
       const keywords = this.concatKeywords();
-      this.ListingsService.getSearchResult(keywords).subscribe(
+      this.listingsService.getSearchResult(keywords).subscribe(
         (data) => {
           this.resultsArr = data["data"];
           this.resultsCount = data["data"].length;
@@ -95,7 +100,7 @@ export class SearchComponent implements OnInit {
         }
       );
     } else {
-      this.ListingsService.getListings(1).subscribe((data) => {
+      this.listingsService.getListings(1).subscribe((data) => {
         this.resultsArr = data["data"];
         this.resultsInputString = "Everything";
         this.resultsLocString = ["All locations"];
@@ -105,12 +110,11 @@ export class SearchComponent implements OnInit {
   }
   
   concatKeywords(): string {
-    const searchArray = this.searchInput.split(' ').filter(e => e.length > 0);;
-    const resultArr = this.catInput.concat(this.locInput).concat(searchArray);
-    let result = '';
-    for (let i = 0; i < resultArr.length; i++) {
-      result += resultArr[i];
-      result += '&'
+    const searchArray: string[] = this.searchInput.split(' ').filter(e => e.length > 0);;
+    const resultArr: string[] = this.catInput.concat(this.locInput).concat(searchArray);
+    let result: string = '';
+    for (let i: number = 0; i < resultArr.length; i++) {
+      result += (resultArr[i] + '&');
     }
     return result;
   }

@@ -1,8 +1,6 @@
 // Angular Imports
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
-
-// Router
 import { Router } from "@angular/router";
 
 // Services
@@ -46,9 +44,9 @@ export class CreateOrganisationComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    public OrganisationsService: OrganisationsService,
+    public organisationsService: OrganisationsService,
     private router: Router,
-    public SnackbarService: SnackbarService,
+    public snackbarService: SnackbarService,
   ) {}
 
   ngOnInit() {
@@ -205,7 +203,7 @@ export class CreateOrganisationComponent implements OnInit {
 
   createOrganisation(): void {
     if (this.getFormValidationErrors()) {
-      this.SnackbarService.openSnackBar("Please complete the form", false);
+      this.snackbarService.openSnackBar("Please complete the form", false);
       return;
     }
 
@@ -231,7 +229,7 @@ export class CreateOrganisationComponent implements OnInit {
       story
     };
 
-    this.OrganisationsService.createOrganisation(this.organisationData).subscribe(
+    this.organisationsService.createOrganisation(this.organisationData).subscribe(
       (res) => {
         this.organisationId = res["data"]["organisation_id"];
         this.pgArr.forEach(pg => {
@@ -248,12 +246,12 @@ export class CreateOrganisationComponent implements OnInit {
             media_url
           }
 
-          this.OrganisationsService.createProgrammes(pgData).subscribe(
+          this.organisationsService.createProgrammes(pgData).subscribe(
             (res) => {},
             (err) => {
               console.log(err);
-              this.SnackbarService.openSnackBar(
-                this.SnackbarService.DialogList.create_programme.error,
+              this.snackbarService.openSnackBar(
+                this.snackbarService.DialogList.create_programme.error,
                 false
               );
             }
@@ -263,14 +261,14 @@ export class CreateOrganisationComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-        this.SnackbarService.openSnackBar(
-          this.SnackbarService.DialogList.create_organisation.error,
+        this.snackbarService.openSnackBar(
+          this.snackbarService.DialogList.create_organisation.error,
           false
         );
       },
       () => {
-        this.SnackbarService.openSnackBar(
-          this.SnackbarService.DialogList.create_organisation.success,
+        this.snackbarService.openSnackBar(
+          this.snackbarService.DialogList.create_organisation.success,
           true
         );
         this.organisationForm.reset();
