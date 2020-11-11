@@ -31,6 +31,7 @@ export class CreateListingComponent implements OnInit {
   listingForm: FormGroup;
   listingData: CreateListing;
   listingId: string;
+  removable: boolean;
   categoryGroup: Array<CategoryFilter>;
   locationGroup: Array<LocationFilter>;
   listingImages: File[];
@@ -79,6 +80,7 @@ export class CreateListingComponent implements OnInit {
     this.lookingForArr = [];
     this.faqArr = [];
     this.listingId = "";
+    this.removable = true;
   }
   
   ngOnInit() {
