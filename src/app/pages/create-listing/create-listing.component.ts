@@ -99,13 +99,12 @@ export class CreateListingComponent implements OnInit {
 
     // CMS
     $(".action-container .action-btn").on("click", function () {
-      let cmd = $(this).data("command");
-      console.log(cmd);
+      const cmd = $(this).data("command");
       if (cmd == "createlink") {
-        let url = prompt("Enter the link here: ", "https://");
+        const url = prompt("Enter the link here: ", "https://");
         document.execCommand(cmd, false, url);
       } else if (cmd == "formatBlock") {
-        let size = $(this).data("size");
+        const size = $(this).data("size");
         document.execCommand(cmd, false, size);
       } else {
         document.execCommand(cmd, false, null);
@@ -193,7 +192,7 @@ export class CreateListingComponent implements OnInit {
   }
 
   addDescription(): void {
-    this.lookingForArr.push({ skills: "", description: "" });
+    this.lookingForArr.push({ title: "", description: "" });
   }
 
   removeDescription(i: number): void {
@@ -250,14 +249,14 @@ export class CreateListingComponent implements OnInit {
 
     this.listingsService.createListing(this.listingData).subscribe(
       (res) => {
-        this.listingId = res["data"][0]["listing_id"]; //to change
+        this.listingId = res["data"][0]["listing_id"];
 
         // Handle Stories (To change)
         this.listingsService.UpdateListingStory(this.listingId, {
-          overview: $("#output").html(),
-          problem: "test",
-          solution: "test",
-          outcome: "test",
+          overview: $("#overview").html(),
+          problem: $("#problem").html(),
+          solution: $("#solution").html(),
+          outcome: $("#outcome").html(),
         }).subscribe(
           (res) => {},
           (err) => {
@@ -265,60 +264,62 @@ export class CreateListingComponent implements OnInit {
           }
         );
 
-        // Handle Milestones
-        for (var i = 0; i < this.milestoneArr.length; i++) {
-          if (
-            this.milestoneArr[i].description != "" &&
-            this.milestoneArr[i].date != null
-          ) {
+        this.milestoneArr.forEach((val, idx) => {
+          if (val.description != "" && val.date != null) {
             this.listingsService.createListingMilestones({
               listing_id: this.listingId,
-              description: this.milestoneArr[i].description,
-              date: this.milestoneArr[i].date,
-            }).subscribe((data) => {
-              console.log(data);
-            });
+              description: val.description,
+              date: val.date,
+            }).subscribe(
+              (res) => {},
+              (err) => {
+                console.log(err);
+              }
+            );
           }
-        }
+        })
 
-        // Handle Hashtags
-        if (this.hashtags.length >= 1) {
-          for (var i = 0; i < this.hashtags.length; i++) {
-            this.listingsService.createListingHashtags({
-              listing_id: this.listingId,
-              tag: this.hashtags[i],
-            }).subscribe((data) => {
-              console.log(data);
-            });
-          }
-        }
+        this.hashtags.forEach((val, idx) => {
+          this.listingsService.createListingMilestones({
+            listing_id: this.listingId,
+            tag: val,
+          }).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+            }
+          );
+        })
 
-        // Handle Skills/ Jobs
-        for (var i = 0; i < this.lookingForArr.length; i++) {
-          if (
-            this.lookingForArr[i]["skill_id"] != "" &&
-            this.lookingForArr[i]["description"] != ""
-          ) {
+        this.lookingForArr.forEach((val, idx) => {
+          if (val.title != "" && val.description != "") {
             this.listingsService.createListingJobs({
               listing_id: this.listingId,
-              job_title: this.lookingForArr[i].skills,
-              job_description: this.lookingForArr[i].description,
-            }).subscribe((data) => {});
+              job_title: val.title,
+              job_description: val.description,
+            }).subscribe(
+              (res) => {},
+              (err) => {
+                console.log(err);
+              }
+            )
           }
-        }
+        });
 
-        // Handle FAQs
-        for (var i = 0; i < this.faqArr.length; i++) {
-          if (this.faqArr[i].question != "" && this.faqArr[i].answer != "") {
-            this.listingsService.createListingFAQ({
+        this.faqArr.forEach((val, idx) => {
+          if (val.question != "" && val.answer != "") {
+            this.listingsService.createListingJobs({
               listing_id: this.listingId,
-              question: this.faqArr[i].question,
-              answer: this.faqArr[i].answer,
-            }).subscribe((data) => {
-              console.log(data);
-            });
+              question: val.question,
+              answer: val.answer,
+            }).subscribe(
+              (res) => {},
+              (err) => {
+                console.log(err);
+              }
+            )
           }
-        }
+        });
 
         // Handle Location (placeholder)
         if (this.listingData.locations != null) {
@@ -330,6 +331,7 @@ export class CreateListingComponent implements OnInit {
           }
         }
       },
+      
       (err) => {
         console.log(err);
         this.snackbarService.openSnackBar(

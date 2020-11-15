@@ -296,140 +296,568 @@
       </div>
       <div class="listing-form" [formGroup]="listingForm">
         <div class="form-item">
-          <label>Story Block *</label>
-          <div class="CMS-editor editing-active">
-            <div class="action-container">
-              <ul>
-                <li>
-                  <button
-                    type="button"
-                    data-command="justifyLeft"
-                    class="action-btn"
-                  >
-                    <i class="fas fa-align-left"></i>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    data-command="justifyCenter"
-                    class="action-btn"
-                  >
-                    <i class="fas fa-align-center"></i>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    data-command="justifyRight"
-                    class="action-btn"
-                  >
-                    <i class="fas fa-align-right"></i>
-                  </button>
-                </li>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            Listing Overview
+          </mat-expansion-panel-header>
+          <mat-panel-description>
+              <div class="CMS-editor editing-active">
+                <div class="action-container">
+                  <ul>
+                    <li>
+                      <button
+                        type="button"
+                        data-command="justifyLeft"
+                        class="action-btn"
+                      >
+                        <i class="fas fa-align-left"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        data-command="justifyCenter"
+                        class="action-btn"
+                      >
+                        <i class="fas fa-align-center"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        data-command="justifyRight"
+                        class="action-btn"
+                      >
+                        <i class="fas fa-align-right"></i>
+                      </button>
+                    </li>
 
-                <li>
-                  <button type="button" data-command="bold" class="action-btn">
-                    <i class="fas fa-bold"></i>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    data-command="underline"
-                    class="action-btn"
-                  >
-                    <i class="fas fa-underline"></i>
-                  </button>
-                </li>
+                    <li>
+                      <button type="button" data-command="bold" class="action-btn">
+                        <i class="fas fa-bold"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        data-command="underline"
+                        class="action-btn"
+                      >
+                        <i class="fas fa-underline"></i>
+                      </button>
+                    </li>
 
-                <li>
-                  <button
-                    type="button"
-                    data-command="insertOrderedList"
-                    class="action-btn"
-                  >
-                    <i class="fas fa-list-ol"></i>
-                  </button>
-                </li>
+                    <li>
+                      <button
+                        type="button"
+                        data-command="insertOrderedList"
+                        class="action-btn"
+                      >
+                        <i class="fas fa-list-ol"></i>
+                      </button>
+                    </li>
 
-                <li>
-                  <button
-                    type="button"
-                    data-command="insertUnorderedList"
-                    class="action-btn"
-                  >
-                    <i class="fas fa-list-ul"></i>
-                  </button>
-                </li>
+                    <li>
+                      <button
+                        type="button"
+                        data-command="insertUnorderedList"
+                        class="action-btn"
+                      >
+                        <i class="fas fa-list-ul"></i>
+                      </button>
+                    </li>
 
-                <li>
-                  <button
-                    type="button"
-                    data-command="createlink"
-                    class="action-btn"
-                  >
-                    <i class="fas fa-link"></i>
-                  </button>
-                </li>
+                    <li>
+                      <button
+                        type="button"
+                        data-command="createlink"
+                        class="action-btn"
+                      >
+                        <i class="fas fa-link"></i>
+                      </button>
+                    </li>
 
-                <li>
-                  <button
-                    type="button"
-                    data-command="formatBlock"
-                    data-size="H1"
-                    class="action-btn"
-                  >
-                    <i>H1</i>
-                  </button>
-                </li>
+                    <li>
+                      <button
+                        type="button"
+                        data-command="formatBlock"
+                        data-size="H1"
+                        class="action-btn"
+                      >
+                        <i>H1</i>
+                      </button>
+                    </li>
 
-                <li>
-                  <button
-                    type="button"
-                    data-command="formatBlock"
-                    data-size="H2"
-                    class="action-btn"
-                  >
-                    <i>H2</i>
-                  </button>
-                </li>
+                    <li>
+                      <button
+                        type="button"
+                        data-command="formatBlock"
+                        data-size="H2"
+                        class="action-btn"
+                      >
+                        <i>H2</i>
+                      </button>
+                    </li>
 
-                <li>
-                  <button
-                    type="button"
-                    data-command="formatBlock"
-                    data-size="H3"
-                    class="action-btn"
+                    <li>
+                      <button
+                        type="button"
+                        data-command="formatBlock"
+                        data-size="H3"
+                        class="action-btn"
+                      >
+                        <i>H3</i>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+                <div contenteditable="true" id="overview">
+                  <b
+                    >Write about your listing here!</b
                   >
-                    <i>H3</i>
-                  </button>
-                </li>
-              </ul>
-            </div>
-            <div contenteditable="true" id="output">
-              <b
-                >This is a paragraph. It is editable. Try to change this
-                text.</b
-              >
-              <div>
-                <b><br /></b>
+                  <div>
+                    <b><br /></b>
+                  </div>
+                  <div>
+                    <ol>
+                      <li>item 1</li>
+                      <li>item 2</li>
+                    </ol>
+                    <div><br /></div>
+                  </div>
+                  <div>
+                    <ul>
+                      <li>bullet 1</li>
+                      <li>bullet 2</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
-              <div>
-                <ol>
-                  <li>item 1</li>
-                  <li>item 2</li>
-                </ol>
-                <div><br /></div>
-              </div>
-              <div>
+          </mat-panel-description>
+        </mat-expansion-panel>
+      </div>
+      <div class="form-item">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            Problem Statement
+          </mat-expansion-panel-header>
+          <mat-panel-description>
+            <div class="CMS-editor editing-active">
+              <div class="action-container">
                 <ul>
-                  <li>bullet 1</li>
-                  <li>bullet 2</li>
+                  <li>
+                    <button
+                      type="button"
+                      data-command="justifyLeft"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-align-left"></i>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      data-command="justifyCenter"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-align-center"></i>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      data-command="justifyRight"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-align-right"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button type="button" data-command="bold" class="action-btn">
+                      <i class="fas fa-bold"></i>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      data-command="underline"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-underline"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="insertOrderedList"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-list-ol"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="insertUnorderedList"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-list-ul"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="createlink"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-link"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="formatBlock"
+                      data-size="H1"
+                      class="action-btn"
+                    >
+                      <i>H1</i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="formatBlock"
+                      data-size="H2"
+                      class="action-btn"
+                    >
+                      <i>H2</i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="formatBlock"
+                      data-size="H3"
+                      class="action-btn"
+                    >
+                      <i>H3</i>
+                    </button>
+                  </li>
                 </ul>
               </div>
+              <div contenteditable="true" id="problem">
+                <b
+                  >What problem are you trying to solve?</b
+                >
+                <div>
+                  <b><br /></b>
+                </div>
+                <div>
+                  <ol>
+                    <li>item 1</li>
+                    <li>item 2</li>
+                  </ol>
+                  <div><br /></div>
+                </div>
+                <div>
+                  <ul>
+                    <li>bullet 1</li>
+                    <li>bullet 2</li>
+                  </ul>
+                </div>
+              </div>
             </div>
-          </div>
+          </mat-panel-description>
+        </mat-expansion-panel>
+      </div>
+      <div class="form-item">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            Solution
+          </mat-expansion-panel-header>
+          <mat-panel-description>
+            <div class="CMS-editor editing-active">
+              <div class="action-container">
+                <ul>
+                  <li>
+                    <button
+                      type="button"
+                      data-command="justifyLeft"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-align-left"></i>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      data-command="justifyCenter"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-align-center"></i>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      data-command="justifyRight"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-align-right"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button type="button" data-command="bold" class="action-btn">
+                      <i class="fas fa-bold"></i>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      data-command="underline"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-underline"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="insertOrderedList"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-list-ol"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="insertUnorderedList"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-list-ul"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="createlink"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-link"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="formatBlock"
+                      data-size="H1"
+                      class="action-btn"
+                    >
+                      <i>H1</i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="formatBlock"
+                      data-size="H2"
+                      class="action-btn"
+                    >
+                      <i>H2</i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="formatBlock"
+                      data-size="H3"
+                      class="action-btn"
+                    >
+                      <i>H3</i>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div contenteditable="true" id="solution">
+                <b
+                  >What is your proposed solution?
+                </b>
+                <div>
+                  <b><br /></b>
+                </div>
+                <div>
+                  <ol>
+                    <li>item 1</li>
+                    <li>item 2</li>
+                  </ol>
+                  <div><br /></div>
+                </div>
+                <div>
+                  <ul>
+                    <li>bullet 1</li>
+                    <li>bullet 2</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </mat-panel-description>
+        </mat-expansion-panel>
+      </div>
+      <div class="form-item">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            Outcome
+          </mat-expansion-panel-header>
+          <mat-panel-description>
+            <div class="CMS-editor editing-active">
+              <div class="action-container">
+                <ul>
+                  <li>
+                    <button
+                      type="button"
+                      data-command="justifyLeft"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-align-left"></i>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      data-command="justifyCenter"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-align-center"></i>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      data-command="justifyRight"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-align-right"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button type="button" data-command="bold" class="action-btn">
+                      <i class="fas fa-bold"></i>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      data-command="underline"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-underline"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="insertOrderedList"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-list-ol"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="insertUnorderedList"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-list-ul"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="createlink"
+                      class="action-btn"
+                    >
+                      <i class="fas fa-link"></i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="formatBlock"
+                      data-size="H1"
+                      class="action-btn"
+                    >
+                      <i>H1</i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="formatBlock"
+                      data-size="H2"
+                      class="action-btn"
+                    >
+                      <i>H2</i>
+                    </button>
+                  </li>
+
+                  <li>
+                    <button
+                      type="button"
+                      data-command="formatBlock"
+                      data-size="H3"
+                      class="action-btn"
+                    >
+                      <i>H3</i>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div contenteditable="true" id="outcome">
+                <b
+                  >What do you hope to achieve?
+                </b>
+                <div>
+                  <b><br /></b>
+                </div>
+                <div>
+                  <ol>
+                    <li>item 1</li>
+                    <li>item 2</li>
+                  </ol>
+                  <div><br /></div>
+                </div>
+                <div>
+                  <ul>
+                    <li>bullet 1</li>
+                    <li>bullet 2</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </mat-panel-description>
+        </mat-expansion-panel>
         </div>
       </div>
     </div>
@@ -544,7 +972,7 @@
               <div class="input-field-container">
                 <mat-form-field class="skills-input">
                   <mat-label>Skills Required</mat-label>
-                  <mat-select [(ngModel)]="item.skills">
+                  <mat-select [(ngModel)]="item.title">
                     <mat-optgroup
                       *ngFor="let group of skillsets"
                       [label]="group.name"

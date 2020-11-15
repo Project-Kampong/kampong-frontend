@@ -64,7 +64,7 @@ export interface CreateListingMilestones {
 }
 
 export interface CreateListingJobs {
-  skills: string,
+  title: string,
   description: string,
 }
 
