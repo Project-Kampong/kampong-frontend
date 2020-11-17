@@ -114,11 +114,11 @@
       <div class="listing-form" [formGroup]="listingForm">
 
         <div class="form-item">
-          <label>Slogan *</label>
+          <label>Tagline/Slogan *</label>
           <textarea
             cdkTextareaAutosize
             cdkAutosizeMinRows="5"
-            placeholder="Give your initiative a name"
+            placeholder="Give your initiative a nice tagline"
             formControlName="tagline"
           >
           </textarea>
@@ -133,13 +133,13 @@
               listingForm.controls['tagline']?.touched
             "
           >
-            Slogan is required
+            Tagline/Slogan is required
           </span>
           <span
             class="error-hint"
             *ngIf="listingForm.get('tagline').hasError('maxlength')"
           >
-            Slogan must not be more than 100 characters long.
+            Tagline/Slogan must not be more than 100 characters long.
           </span>
           <span
             class="error-hint"
@@ -155,7 +155,7 @@
           <textarea
             cdkTextareaAutosize
             cdkAutosizeMinRows="5"
-            placeholder="Give your initiative a name"
+            placeholder="What's the goal of your initiative?"
             formControlName="mission"
           >
           </textarea>
@@ -189,7 +189,7 @@
         <div class="form-item">
           <label>Contact Email *</label>
           <input
-            placeholder="Give your initiative a name"
+            placeholder="e.g. kampong@gmail.com"
             formControlName="listing_email"
           />
 
@@ -216,7 +216,7 @@
         <div class="form-item">
           <label>Listing URL</label>
           <input
-            placeholder="Do you already have a website?"
+            placeholder="e.g. www.kampong.app"
             formControlName="listing_url"
           />
 
@@ -933,7 +933,7 @@
                     placeholder="Question"
                     cdkTextareaAutosize
                     cdkAutosizeMinRows="2"
-                    [(ngModel)]="faq.questions"
+                    [(ngModel)]="faq.question"
                     maxlength="200"
                   ></textarea>
                 </div>

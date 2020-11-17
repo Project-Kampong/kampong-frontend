@@ -93,13 +93,12 @@ export const CreateListingForm = {
   
   title: new FormControl("", [
     Validators.required,
-    Validators.maxLength(25),
+    Validators.maxLength(50),
     LISTING_VALIDATION_PATTERN
   ]),
 
   category: new FormControl("", [
     Validators.required,
-    Validators.maxLength(25)
   ]),
 
   about: new FormControl(""),

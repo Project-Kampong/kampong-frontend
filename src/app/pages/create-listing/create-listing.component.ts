@@ -17,6 +17,7 @@ import { categoryList } from "@app/util/categories";
 import { CreateListingForm, CreateListingStoryForm, CreateListingFAQ, 
   CreateListingJobs, CreateListingMilestones, CreateListing } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
+import { resolve } from 'url';
 
 declare var $: any;
 
@@ -209,7 +210,7 @@ export class CreateListingComponent implements OnInit {
     return false;
   }
 
-  createListing(): void {
+  async createListing(): Promise<void> {
     if (this.getFormValidationErrors() === true) {
       this.snackbarService.openSnackBar("Please complete the form", false);
       return;
@@ -223,13 +224,11 @@ export class CreateListingComponent implements OnInit {
     const listing_email: string = this.listingForm.value.listing_email;
     const listing_status: string = "ongoing";
     const locations: string[] = this.listingForm.value.locations;
-
-    // To replace with 2 step FE approach
-    const pic1: string = this.listingImages[0] ? this.listingImages[0].name: null;
-    const pic2: string = this.listingImages[1] ? this.listingImages[1].name: null;
-    const pic3: string = this.listingImages[2] ? this.listingImages[2].name: null;
-    const pic4: string = this.listingImages[3] ? this.listingImages[3].name: null;
-    const pic5: string = this.listingImages[4] ? this.listingImages[4].name: null;
+    const pic1: string = null;
+    const pic2: string = null;
+    const pic3: string = null;
+    const pic4: string = null;
+    const pic5: string = null;
 
     this.listingData = {
       title,
@@ -247,11 +246,9 @@ export class CreateListingComponent implements OnInit {
       locations
     };
 
-    this.listingsService.createListing(this.listingData).subscribe(
+    (await this.listingsService.createListing(this.listingData, this.listingImages)).subscribe(
       (res) => {
         this.listingId = res["data"][0]["listing_id"];
-
-        // Handle Stories (To change)
         this.listingsService.UpdateListingStory(this.listingId, {
           overview: $("#overview").html(),
           problem: $("#problem").html(),
@@ -280,7 +277,7 @@ export class CreateListingComponent implements OnInit {
         })
 
         this.hashtags.forEach((val, idx) => {
-          this.listingsService.createListingMilestones({
+          this.listingsService.createListingHashtags({
             listing_id: this.listingId,
             tag: val,
           }).subscribe(
@@ -308,7 +305,7 @@ export class CreateListingComponent implements OnInit {
 
         this.faqArr.forEach((val, idx) => {
           if (val.question != "" && val.answer != "") {
-            this.listingsService.createListingJobs({
+            this.listingsService.createListingFAQ({
               listing_id: this.listingId,
               question: val.question,
               answer: val.answer,
@@ -321,15 +318,18 @@ export class CreateListingComponent implements OnInit {
           }
         });
 
-        // Handle Location (placeholder)
-        if (this.listingData.locations != null) {
-          for (var i = 0; i < this.listingData.locations.length; i++) {
-            this.listingsService.createListingLocation({
-              listing_id: this.listingId,
-              location_id: 1,
-            }).subscribe();
-          }
-        }
+        this.listingData.locations.forEach((val, idx) => {
+          this.listingsService.createListingLocation({
+            listing_id: this.listingId,
+            location_id: 1,
+          }).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+            }
+          );
+        })
+
       },
       
       (err) => {
@@ -338,8 +338,9 @@ export class CreateListingComponent implements OnInit {
           this.snackbarService.DialogList.create_listing.error,
           false
         );
-        this.router.navigate(["/home"]);
+        this.listingForm.reset();
       },
+
       () => {
         this.snackbarService.openSnackBar(
           this.snackbarService.DialogList.create_listing.success,
