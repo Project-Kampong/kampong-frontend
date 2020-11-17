@@ -28,7 +28,7 @@ $(document).ready(function () {
         $(".sticky-profile-container").offset().top +
         $(".sticky-profile-container").height() -
         $(".sticky-profile").height();
-      console.log(st, totalStickyHeight);
+      //console.log(st, totalStickyHeight);
       if (st > startSticky && st < totalStickyHeight) {
         $(".sticky-profile").addClass("sticky-active");
       } else if (st > totalStickyHeight) {

@@ -4,7 +4,7 @@
     *ngFor="let ListingData of ListingData"
   >
     <div (click)="selectedCard(ListingData)" class="listing-card">
-      <img src="{{ ListingData.pic1 }}" />
+      <img src="{{ ListingData.pics[0] }}" />
       <div class="listing-card-body">
         <div>
           <p class="small-badge">{{ ListingData.category }}</p>

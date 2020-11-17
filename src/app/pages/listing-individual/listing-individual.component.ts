@@ -67,6 +67,11 @@ export class ListingIndividualComponent implements OnInit {
   fileCount = 0;
   updatesFormOpen = false;
   locationList = [];
+
+  // Email
+  enquireMessage: String = "";
+  enquireTopic: String = "";
+
   ngOnInit() {
     window.scroll(0, 0);
     this.listingId = this.route.snapshot.params["id"];
@@ -91,13 +96,7 @@ export class ListingIndividualComponent implements OnInit {
     this.ListingsService.getSelectedListing(this.listingId).subscribe(
       (data) => {
         this.ListingData = data["data"];
-        this.SliderImageArr.push(
-          this.ListingData["pic1"],
-          this.ListingData["pic2"],
-          this.ListingData["pic3"],
-          this.ListingData["pic4"],
-          this.ListingData["pic5"]
-        );
+        this.SliderImageArr = this.ListingData['pics'];
         console.log(this.ListingData);
         console.log(this.SliderImageArr);
         this.ProfileService.getUserProfile(
@@ -177,8 +176,20 @@ export class ListingIndividualComponent implements OnInit {
           this.Stories.overview = data["data"].overview
             .replace(/&lt;/g, "<")
             .replace(/<a/g, "<a target='_blank'");
+          this.Stories.problem = data["data"].problem
+          .replace(/&lt;/g, "<")
+          .replace(/<a/g, "<a target='_blank'");
+          this.Stories.solution = data["data"].solution
+          .replace(/&lt;/g, "<")
+          .replace(/<a/g, "<a target='_blank'");
+          this.Stories.outcome = data["data"].outcome
+          .replace(/&lt;/g, "<")
+          .replace(/<a/g, "<a target='_blank'");
 
-          $("#result-output").html(this.Stories.overview);
+          $("#result-overview").html(this.Stories.overview);
+          $("#result-problem").html(this.Stories.problem);
+          $("#result-solution").html(this.Stories.solution);
+          $("#result-outcome").html(this.Stories.outcome);
         });
 
         // Get Comments
@@ -448,7 +459,7 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
-  tabs_selected(selected) {
+  tabs_selected(selected: string): void {
     $(".tabs-content").hide();
     $("#" + selected).show();
     if (selected == "updates") {
@@ -456,24 +467,26 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
-  selectedProfile(user_id) {
+  selectedProfile(user_id: string): void {
     this.router.navigate(["/profile/" + user_id]);
   }
 
-  enquireMessage: String = "";
-  enquireTopic: String = "";
+  editListing(listing_id: string): void {
+    this.router.navigate(["/edit/" + listing_id]);
+  }
+
   // Toggle Enquire popup
-  togglePopup() {
+  togglePopup() : void {
     // Toggle popup
     $(".popup-bg").toggleClass("active");
     $(".popup-box").toggleClass("active");
   }
+
   sendMessage() {
     if (this.enquireMessage != "") {
       this.togglePopup();
       this.ListingsService.sendEnquiry({
         receiverEmail: this.ListingData.listing_email,
-        senderEmail: this.ListingData.listing_email,
         subject: this.enquireTopic,
         message: this.enquireMessage,
       }).subscribe(
@@ -534,6 +547,7 @@ export class ListingIndividualComponent implements OnInit {
       });
     }
   }
+
   deleteComments(comment) {
     if (confirm("Are you sure to delete comment?")) {
       console.log(comment);

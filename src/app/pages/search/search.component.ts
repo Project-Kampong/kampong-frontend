@@ -1,12 +1,19 @@
+// Angular Imports
 import { Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
-
-import { ListingsService } from "@app/services/listings.service";
-import { AuthService } from "@app/services/auth.service";
-import { Listing } from "@app/interfaces/listing";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+
+// Services
+import { ListingsService } from "@app/services/listings.service";
+
+// Util
 import { locationList } from "@app/util/locations";
 import { categoryList } from "@app/util/categories";
+
+// Interfaces
+import { Listing } from "@app/interfaces/listing";
+import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
+
 declare var $: any;
 
 @Component({
@@ -18,72 +25,72 @@ declare var $: any;
 export class SearchComponent implements OnInit {
 
   searchParams: FormGroup;
-  locationList: Object[];
-  categoryList: Object[];
-  popularSearchList: string[] = [
-    "Project Kampong",
-    "Rebuilding Homes",
-    "YOUTH Mentorship Programme",
-    "CommStart 2020",
-  ]
-  resultsArr: Listing[];
+  locationList: Array<LocationFilter>;
+  categoryList: Array<CategoryFilter>;
+  popularSearchList: string[];
+  resultsArr: Array<Listing>;
   resultsCount: string;
-  resultsInputString: string = "Everything";
-  resultsCatString: string[] = ["All interests"];
-  resultsLocString: string[] = ["All locations"];
+  resultsInputString: string;
+  resultsCatString: string[];
+  resultsLocString: string[];
   searchInput: string;
   catInput: string[];
   locInput: string[];
 
   constructor(
-    public ListingsService: ListingsService,
-    public AuthService: AuthService,
+    public listingsService: ListingsService,
     private location: Location,
     private fb: FormBuilder,
   ) {
 
-    this.locationList = locationList;
-    this.categoryList = categoryList;
     this.searchParams = this.fb.group({
       nameParams: new FormControl(""),
       locationParams: new FormControl([]),
       categoryParams: new FormControl([])
     })
 
+    this.popularSearchList = [
+      "Project Kampong",
+      "Rebuilding Homes",
+      "YOUTH Mentorship Programme",
+      "CommStart 2020",
+    ];
+
+    this.resultsInputString = "Everything";
+    this.resultsCatString = ["All interests"];
+    this.resultsLocString = ["All locations"];
+
   }
 
   ngOnInit() {
+    this.locationList = locationList;
+    this.categoryList = categoryList;
     this.searchInput = this.location.getState()["name"] ? this.location.getState()["name"] : "";
-    this.searchInitiated(true);
+    this.catInput = this.location.getState()["category"] ? this.location.getState()["category"] : [];
+    this.locInput = this.location.getState()["location"] ? this.location.getState()["location"] : [];
+    this.searchInput.trim();
+    this.search();
   }
 
-  /**
-   * Go back to main landing page
-   */
-  goBack() {
+  goBack(): void {
     this.location.back();
   }
 
-  /**
-   * Start searchin for listings
-   * 
-   * @param onStart Optional argument that states whether the search should set from location state or form group state
-   */
-  searchInitiated(onStart ?: boolean) {
-    
+  inputSearch(): void {
+    this.filterSearch();
+    this.search();
+  }
+
+  filterSearch(): void {
     this.searchInput.trim();
     this.catInput = this.searchParams.value.categoryParams ? this.searchParams.value.categoryParams : [];
     this.locInput = this.searchParams.value.locationParams ? this.searchParams.value.locationParams : [];
+  }
 
-    if (onStart) {
-      this.catInput = this.location.getState()["category"] ? this.location.getState()["category"] : [];
-      this.locInput = this.location.getState()["location"] ? this.location.getState()["location"] : [];
-      this.searchParams.value.categoryParams = this.catInput;
-    }
-
+  search(): void {
     if (this.searchInput.length > 0 || this.catInput.length > 0 || this.locInput.length > 0) {
       const keywords = this.concatKeywords();
-      this.ListingsService.getSearchResult(keywords).subscribe(
+      this.listingsService.getSearchResult(keywords).subscribe(
         (data) => {
           this.resultsArr = data["data"];
           this.resultsCount = data["data"].length;
@@ -93,7 +100,7 @@ export class SearchComponent implements OnInit {
         }
       );
     } else {
-      this.ListingsService.getListings(1).subscribe((data) => {
+      this.listingsService.getListings(1).subscribe((data) => {
         this.resultsArr = data["data"];
         this.resultsInputString = "Everything";
         this.resultsLocString = ["All locations"];
@@ -102,29 +109,22 @@ export class SearchComponent implements OnInit {
     }
   }
   
-  /**
-   * Concatenate the keywords for the API GET route
-   */
-  concatKeywords() {
-    const searchArray = this.searchInput.split(' ').filter(e => e.length > 0);;
-    const resultArr = this.catInput.concat(this.locInput).concat(searchArray);
-    let result = '';
-    for (let i = 0; i < resultArr.length; i++) {
-      result += resultArr[i];
-      result += '&'
+  concatKeywords(): string {
+    const searchArray: string[] = this.searchInput.split(' ').filter(e => e.length > 0);;
+    const resultArr: string[] = this.catInput.concat(this.locInput).concat(searchArray);
+    let result: string = '';
+    for (let i: number = 0; i < resultArr.length; i++) {
+      result += (resultArr[i] + '&');
     }
     return result;
   }
 
-  /**
-   * Search a specific value that is popular
-   * 
-   * @param value Popular search field
-   */
-  popularSearchClicked(value) {
+  popularSearchClicked(value: string): void {
+    this.searchParams.reset();
     this.searchInput = value;
     this.locInput = [];
     this.catInput = [];
-    this.searchInitiated();
+    this.search();
   }
+
 }

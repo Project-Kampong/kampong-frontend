@@ -36,9 +36,19 @@
             </div>
 
             <div class="button-container">
-              <button class="primary-button" (click)="togglePopup()">
-                Enquire this project
-              </button>
+              <div *ngIf="
+                AuthService.isLoggedIn &&
+                ListingData.created_by == AuthService.LoggedInUserID;
+                else isNotOwner">
+                  <button class="primary-button" (click)="editListing(this.listingId)">
+                    Edit this listing
+                  </button>
+              </div>
+                <ng-template #isNotOwner>
+                  <button class="primary-button" (click)="togglePopup()">
+                    Enquire this project
+                  </button>
+                </ng-template>
             </div>
 
             <div>
@@ -66,11 +76,13 @@
       </div>
     </div>
   </div>
-  <div class="milestone-timeline container">
-    <app-milestones
-      *ngIf="MilestoneArr != []"
-      [MilestoneArr]="MilestoneArr"
-    ></app-milestones>
+  <div *ngIf="MilestoneArr.length > 0">
+    <div class="milestone-timeline container">
+      <app-milestones
+        *ngIf="MilestoneArr"
+        [MilestoneArr]="MilestoneArr"
+      ></app-milestones>
+    </div>
   </div>
 </section>
 
@@ -82,7 +94,7 @@
         <li (click)="tabs_selected('FAQ')">FAQ</li>
         <li (click)="tabs_selected('updates')">Updates</li>
         <li (click)="tabs_selected('comments')">Comments</li>
-        <li (click)="tabs_selected('skills')">Looking For</li>
+        <li (click)="tabs_selected('skills')">Opportunities</li>
       </ul>
     </div>
   </div>
@@ -106,9 +118,28 @@
     </div>
     <!-- Story -->
     <div class="tabs-content" id="story">
-      <div *ngIf="Stories">
+      <h3 class="primary-badge">Overview</h3>
+      <div *ngIf="Stories" style="margin-bottom: 20px;">
         <div class="CMS-editor">
-          <div id="result-output"></div>
+          <div id="result-overview"></div>
+        </div>
+      </div>
+      <h3 class="primary-badge">Problem</h3>
+      <div *ngIf="Stories" style="margin-bottom: 20px;">
+        <div class="CMS-editor">
+          <div id="result-problem"></div>
+        </div>
+      </div>
+      <h3 class="primary-badge"> Solution</h3>
+      <div *ngIf="Stories" style="margin-bottom: 20px;">
+        <div class="CMS-editor">
+          <div id="result-solution"></div>
+        </div>
+      </div>
+      <h3 class="primary-badge">Outcome</h3>
+      <div *ngIf="Stories" style="margin-bottom: 20px;">
+        <div class="CMS-editor">
+          <div id="#result-outcome"></div>
         </div>
       </div>
     </div>

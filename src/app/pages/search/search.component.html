@@ -8,10 +8,10 @@
             matInput
             placeholder="What are you looking for?"
             [(ngModel)]="searchInput"
-            (keydown.enter)="searchInitiated()"
+            (keydown.enter)="inputSearch()"
           />
         </mat-form-field>
-        <a class="search-btn ml-3" (click)="searchInitiated()"></a>
+        <a class="search-btn ml-3" (click)="inputSearch()"></a>
       </div>
       <div class="expansion-div">
         <mat-expansion-panel>
