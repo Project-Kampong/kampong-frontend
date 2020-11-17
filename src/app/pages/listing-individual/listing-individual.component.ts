@@ -176,8 +176,20 @@ export class ListingIndividualComponent implements OnInit {
           this.Stories.overview = data["data"].overview
             .replace(/&lt;/g, "<")
             .replace(/<a/g, "<a target='_blank'");
+          this.Stories.problem = data["data"].problem
+          .replace(/&lt;/g, "<")
+          .replace(/<a/g, "<a target='_blank'");
+          this.Stories.solution = data["data"].solution
+          .replace(/&lt;/g, "<")
+          .replace(/<a/g, "<a target='_blank'");
+          this.Stories.outcome = data["data"].outcome
+          .replace(/&lt;/g, "<")
+          .replace(/<a/g, "<a target='_blank'");
 
-          $("#result-output").html(this.Stories.overview);
+          $("#result-overview").html(this.Stories.overview);
+          $("#result-problem").html(this.Stories.problem);
+          $("#result-solution").html(this.Stories.solution);
+          $("#result-outcome").html(this.Stories.outcome);
         });
 
         // Get Comments
