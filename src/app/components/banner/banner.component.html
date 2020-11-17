@@ -5,7 +5,7 @@
     routerLink="/listing/{{ listing.listing_id }}"
   >
     <span *ngIf="i == featuredData.length - 1">{{ sliderSlickInit() }}</span>
-    <img src="{{ listing.pic1 }}" />
+    <img src="{{ listing.pics[0] }}" />
     <div class="banner-overlay">
       <div class="info-box">
         <div>

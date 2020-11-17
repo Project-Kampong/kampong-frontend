@@ -89,7 +89,6 @@ export class EditListingComponent implements OnInit {
     });
 
     // Grab Skillsets
-    this.paginationSkillsets();
     this.ListingsService.getAllLocations().subscribe((data) => {
       console.log(data);
       this.locationList = data["data"];

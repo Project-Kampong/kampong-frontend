@@ -96,13 +96,7 @@ export class ListingIndividualComponent implements OnInit {
     this.ListingsService.getSelectedListing(this.listingId).subscribe(
       (data) => {
         this.ListingData = data["data"];
-        this.SliderImageArr.push(
-          this.ListingData["pic1"],
-          this.ListingData["pic2"],
-          this.ListingData["pic3"],
-          this.ListingData["pic4"],
-          this.ListingData["pic5"]
-        );
+        this.SliderImageArr = this.ListingData['pics'];
         console.log(this.ListingData);
         console.log(this.SliderImageArr);
         this.ProfileService.getUserProfile(

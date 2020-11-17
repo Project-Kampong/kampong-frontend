@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Router } from "@angular/router";
 
 @Component({
@@ -6,15 +6,13 @@ import { Router } from "@angular/router";
   templateUrl: "./listing-cards.component.html",
   styleUrls: ["./listing-cards.component.scss"],
 })
-export class ListingCardsComponent implements OnInit {
+export class ListingCardsComponent {
+  
   constructor(private router: Router) {}
 
   @Input() ListingData;
   @Input() ColNum;
 
-  ngOnInit() {
-    console.log(this.ListingData);
-  }
   selectedCard(data) {
     console.log(data);
     this.router.navigate(["/listing/" + data.listing_id]);

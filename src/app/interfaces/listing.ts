@@ -4,6 +4,10 @@ const LISTING_VALIDATION_PATTERN = Validators.pattern(
   "^[a-zA-Z0-9 \n .,'()\"$#%&-°*!']+$"
 );
 
+const URL_VALIDATION_PATTERN = Validators.pattern(
+  '((http|ftp|https):\\/\\/)?[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?'
+);
+
 export interface Listing {
   listing_id: string;
   organisation_id: string;
@@ -14,11 +18,7 @@ export interface Listing {
   tagline: string;
   mission: string;
   listing_url: string;
-  pic1: string;
-  pic2: string;
-  pic3: string;
-  pic4: string;
-  pic5: string;
+  pics: string[];
   listing_email: string;
 }
 
@@ -81,11 +81,7 @@ export interface CreateListing {
   listing_url: string,
   listing_email: string,
   listing_status: string,
-  pic1: string,
-  pic2: string,
-  pic3: string,
-  pic4: string,
-  pic5: string,
+  pics: string[],
   locations: string[],
 }
 
@@ -120,7 +116,9 @@ export const CreateListingForm = {
     Validators.email
   ]),
 
-  listing_url: new FormControl(""),
+  listing_url: new FormControl("", [
+    URL_VALIDATION_PATTERN,
+  ]),
 
   locations: new FormControl([]),
 
@@ -147,10 +145,6 @@ export const DefaultListing = {
   tagline: "default",
   mission: "default",
   listing_url: "default",
-  pic1: "default",
-  pic2: "default",
-  pic3: "default",
-  pic4: "default",
-  pic5: "default",
+  pics: ["default"],
   listing_email: "default",
 };

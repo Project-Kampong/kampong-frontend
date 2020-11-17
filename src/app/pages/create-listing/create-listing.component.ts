@@ -17,7 +17,6 @@ import { categoryList } from "@app/util/categories";
 import { CreateListingForm, CreateListingStoryForm, CreateListingFAQ, 
   CreateListingJobs, CreateListingMilestones, CreateListing } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
-import { resolve } from 'url';
 
 declare var $: any;
 
@@ -39,32 +38,8 @@ export class CreateListingComponent implements OnInit {
   listingImagesDisplay: string[];
   hashtags: string[];
   milestoneArr: Array<CreateListingMilestones>;
-  lookingForArr: Array<CreateListingJobs>
+  jobArr: Array<CreateListingJobs>
   faqArr: Array<CreateListingFAQ>;
-  rawSkillsets: any[]; // to delete
-
-  skillsets = [
-    {
-      name: "Big Data Analysis",
-      group: [],
-    },
-    {
-      name: "Coding and Programming",
-      group: [],
-    },
-    {
-      name: "Project Management",
-      group: [],
-    },
-    {
-      name: "Social Media Experience",
-      group: [],
-    },
-    {
-      name: "Writing",
-      group: [],
-    },
-  ];
 
   constructor(
     private fb: FormBuilder,
@@ -73,12 +48,11 @@ export class CreateListingComponent implements OnInit {
     public snackbarService: SnackbarService,
   ) {
     
-    this.rawSkillsets = [];
     this.listingImages = [];
     this.listingImagesDisplay = [];
     this.hashtags = [];
     this.milestoneArr = [{ description: "", date: new Date() }];
-    this.lookingForArr = [];
+    this.jobArr = [];
     this.faqArr = [];
     this.listingId = "";
     this.removable = true;
@@ -92,11 +66,7 @@ export class CreateListingComponent implements OnInit {
     this.listingForm = this.fb.group({
       ...CreateListingForm,
       ...CreateListingStoryForm,
-      LocationsList: [],
-      //customCategory: ["", [Validators.maxLength(25)]],
     });
-
-    this.paginationSkillsets(); // to be replaced
 
     // CMS
     $(".action-container .action-btn").on("click", function () {
@@ -113,24 +83,9 @@ export class CreateListingComponent implements OnInit {
     });
   }
 
-  // to delete
-  paginationSkillsets(): void {
-    this.listingsService.getAllSkillsets().subscribe((data) => {
-      this.rawSkillsets.push(...data["data"]);
-      // Sort Skills
-      for (var i = 0; i < this.skillsets.length; i++) {
-        this.rawSkillsets.map((x) => {
-          if (x.skill_group == this.skillsets[i].name) {
-            this.skillsets[i].group.push(x);
-          }
-        });
-      }
-    });
-  }
-
   addHashtag(event: MatChipInputEvent): void {
     const value = ("#" + event.value.replace(/[&\/\\#,+()$~%. '":*?<>\[\]{}]/g, "")).trim();
-    if (this.hashtags.length === 3 || value === "#") {
+    if (this.hashtags.length === 3 || value === "#" || event.value.length < 3) {
       return;
     }
     this.hashtags.push(value);
@@ -193,11 +148,11 @@ export class CreateListingComponent implements OnInit {
   }
 
   addDescription(): void {
-    this.lookingForArr.push({ title: "", description: "" });
+    this.jobArr.push({ title: "", description: "" });
   }
 
   removeDescription(i: number): void {
-    this.lookingForArr.splice(i, 1);
+    this.jobArr.splice(i, 1);
   }
 
   getFormValidationErrors(): boolean {
@@ -224,11 +179,7 @@ export class CreateListingComponent implements OnInit {
     const listing_email: string = this.listingForm.value.listing_email;
     const listing_status: string = "ongoing";
     const locations: string[] = this.listingForm.value.locations;
-    const pic1: string = null;
-    const pic2: string = null;
-    const pic3: string = null;
-    const pic4: string = null;
-    const pic5: string = null;
+    const pics: string[] = [null, null, null, null, null];
 
     this.listingData = {
       title,
@@ -238,11 +189,7 @@ export class CreateListingComponent implements OnInit {
       listing_url,
       listing_email,
       listing_status,
-      pic1,
-      pic2,
-      pic3,
-      pic4,
-      pic5,
+      pics,
       locations
     };
 
@@ -262,7 +209,7 @@ export class CreateListingComponent implements OnInit {
         );
 
         this.milestoneArr.forEach((val, idx) => {
-          if (val.description != "" && val.date != null) {
+          if (val.description != "" || val.date != null) {
             this.listingsService.createListingMilestones({
               listing_id: this.listingId,
               description: val.description,
@@ -288,7 +235,7 @@ export class CreateListingComponent implements OnInit {
           );
         })
 
-        this.lookingForArr.forEach((val, idx) => {
+        this.jobArr.forEach((val, idx) => {
           if (val.title != "" && val.description != "") {
             this.listingsService.createListingJobs({
               listing_id: this.listingId,

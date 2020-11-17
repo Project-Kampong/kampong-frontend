@@ -224,11 +224,7 @@ export class ListingsService {
     return new Promise<Observable<HttpEvent<API>>>((resolve, reject) => {
       this.uploadFiles(imageFd).subscribe(
         (res) => {
-          data.pic1 = res["data"][0] ? res["data"][0] : null;
-          data.pic2 = res["data"][1] ? res["data"][1] : null;
-          data.pic3 = res["data"][2] ? res["data"][2] : null;
-          data.pic4 = res["data"][3] ? res["data"][3] : null;
-          data.pic5 = res["data"][4] ? res["data"][4] : null;
+          data.pics = res["data"] ? res["data"] : null;
         },
         (err) => {
           console.log(err);

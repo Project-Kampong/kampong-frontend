@@ -220,6 +220,13 @@
             formControlName="listing_url"
           />
 
+          <span
+          class="error-hint"
+          *ngIf="listingForm.get('listing_url').hasError('pattern')"
+        >
+          Website URL must be valid
+        </span>
+
         </div>
 
       </div>
@@ -255,7 +262,7 @@
     <div class="listing-section">
       <div class="listing-stepper">
         <span> 2 </span>
-        <p>Upload your images</p>
+        <p>Upload Images of Your Project</p>
       </div>
       <div class="listing-form" [formGroup]="listingForm">
         <div class="form-item">
@@ -919,7 +926,7 @@
     <div class="listing-section">
       <div class="listing-stepper">
         <span> 5 </span>
-        <p>frequent asked questions</p>
+        <p>frequently asked questions</p>
       </div>
       <div class="listing-form">
         <div class="form-item">
@@ -927,7 +934,7 @@
           <div class="faq-container">
             <div *ngFor="let faq of faqArr; index as i" class="faq">
               <div class="input-field-container">
-                <div class="form-item faq-input bg-colored">
+                <div class="form-item faq-input">
                   <textarea
                     matInput
                     placeholder="Question"
@@ -939,7 +946,7 @@
                 </div>
                 <div class="form-item faq-input">
                   <textarea
-                    placeholder="Answers"
+                    placeholder="Answer"
                     matInput
                     cdkTextareaAutosize
                     cdkAutosizeMinRows="5"
@@ -961,42 +968,36 @@
     <div class="listing-section">
       <div class="listing-stepper">
         <span> 6 </span>
-        <p>what skills are you looking for?</p>
+        <p>Are you offering any job/volunteer opportunities?</p>
       </div>
 
       <div class="listing-form">
         <div class="form-item">
           <!-- Looking for section -->
           <div class="skills-container">
-            <div *ngFor="let item of lookingForArr; index as i" class="skills">
+            <div *ngFor="let job of jobArr; index as i" class="skills">
               <div class="input-field-container">
-                <mat-form-field class="skills-input">
-                  <mat-label>Skills Required</mat-label>
-                  <mat-select [(ngModel)]="item.title">
-                    <mat-optgroup
-                      *ngFor="let group of skillsets"
-                      [label]="group.name"
-                      [disabled]="group.disabled"
-                    >
-                      <mat-option
-                        *ngFor="let category of group.group"
-                        [value]="category.skill"
-                      >
-                        {{ category.skill }}
-                      </mat-option>
-                    </mat-optgroup>
-                  </mat-select>
-                </mat-form-field>
-
-                <textarea
-                  placeholder="Skills Description"
+                <div class="form-item skill-input">
+                  <textarea
                   matInput
+                  placeholder="Job Title"
                   cdkTextareaAutosize
-                  cdkAutosizeMinRows="5"
-                  [(ngModel)]="item.description"
-                  maxlength="500"
+                  cdkAutosizeMinRows="2"
+                  [(ngModel)]="job.title"
+                  maxlength="200"
                 ></textarea>
-                <span class="hint"> {{ item.description.length }} / 500 </span>
+                </div>
+                <div>
+                  <textarea
+                    placeholder="Job Description"
+                    matInput
+                    cdkTextareaAutosize
+                    cdkAutosizeMinRows="5"
+                    [(ngModel)]="job.description"
+                    maxlength="500"
+                  ></textarea>
+                </div>
+                <span class="hint"> {{ job.description.length }} / 500 </span>
               </div>
               <button
                 class="remove-skills"
@@ -1005,7 +1006,7 @@
             </div>
 
             <button class="add-skills" (click)="addDescription()">
-              Add Skills
+              Add Job/Volunteer Opportunity
             </button>
           </div>
         </div>
