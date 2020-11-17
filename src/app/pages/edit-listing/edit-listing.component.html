@@ -67,9 +67,9 @@
               *ngFor="let hashtag of hashtags"
               [selectable]="true"
               [removable]="removable"
-              (removed)="removeHashtag(hashtag)"
+              (removed)="removeHashtag(hashtag.tag)"
             >
-              {{ hashtag }}
+              {{ hashtag.tag }}
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
             </mat-chip>
             <input
@@ -1001,7 +1001,7 @@
           <button class="btn red-btn" (click)="removeListing()">
             Delete Initiative
           </button>
-          <button class="btn yellow-btn ml-3" (click)="saveListing()">
+          <button class="btn yellow-btn ml-3" (click)="updateListing()">
             Save Initiative
           </button>
         </div>

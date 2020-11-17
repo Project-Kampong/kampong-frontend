@@ -12,10 +12,11 @@ import { SnackbarService } from "@app/services/snackbar.service";
 // Util
 import { locationList } from '@app/util/locations';
 import { categoryList } from "@app/util/categories";
+import cloneDeep from 'lodash';
 
 // Interfaces
-import { CreateListingForm, CreateListingStoryForm, CreateListingFAQ, 
-  CreateListingJobs, CreateListingMilestones, CreateListing, OriginalImagesCheck } from "@app/interfaces/listing";
+import { EditListingForm, EditListingStoryForm, EditListingFAQ, 
+  EditListingJobs, EditListingMilestones, EditListing, OriginalImagesCheck, EditListingHashtags } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 
 declare var $: any;
@@ -29,7 +30,7 @@ export class EditListingComponent implements OnInit {
   
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
   listingForm: FormGroup;
-  listingData: CreateListing;
+  listingData: EditListing;
   listingId: string;
   removable: boolean;
   categoryGroup: Array<CategoryFilter>;
@@ -37,10 +38,11 @@ export class EditListingComponent implements OnInit {
   listingImages: File[];
   listingImagesDisplay: string[];
   originalImages: OriginalImagesCheck[];
-  hashtags: string[];
-  milestoneArr: Array<CreateListingMilestones>;
-  jobArr: Array<CreateListingJobs>
-  faqArr: Array<CreateListingFAQ>;
+  hashtags: Array<EditListingHashtags>;
+  originalHashtags: Array<EditListingHashtags>;
+  milestoneArr: Array<EditListingMilestones>;
+  jobArr: Array<EditListingJobs>
+  faqArr: Array<EditListingFAQ>;
 
   constructor(
     private fb: FormBuilder,
@@ -53,12 +55,13 @@ export class EditListingComponent implements OnInit {
     this.listingImages = [];
     this.listingImagesDisplay = [];
     this.hashtags = [];
-    this.milestoneArr = [{ description: "", date: new Date() }];
+    this.milestoneArr = [];
     this.jobArr = [];
     this.faqArr = [];
     this.listingId = "";
     this.removable = true;
     this.originalImages = [];
+    this.originalHashtags = [];
   }
   
   ngOnInit() {
@@ -67,8 +70,8 @@ export class EditListingComponent implements OnInit {
     this.locationGroup = locationList;
     this.listingId = this.route.snapshot.params["id"];
     this.listingForm = this.fb.group({
-      ...CreateListingForm,
-      ...CreateListingStoryForm,
+      ...EditListingForm,
+      ...EditListingStoryForm,
     });
 
     this.listingsService.getSelectedListing(this.listingId).subscribe(
@@ -76,24 +79,101 @@ export class EditListingComponent implements OnInit {
         this.listingForm.patchValue(res["data"]);
         this.listingImagesDisplay = res["data"].pics;
         this.listingImages = Array(this.listingImagesDisplay.length).fill(null);
-        this.listingImagesDisplay.forEach((val, idx) => {
+        this.listingImagesDisplay.forEach((val) => {
           this.originalImages.push({ image: val, check: true})
         });
+      },
+      (err) => {
+        console.log(err);
       }
     );
 
     this.listingsService.getSelectedListingHashtags(this.listingId).subscribe(
       (res) => {
-        const hashtagsData: string[] = res["data"].map((data) => data.tag);
+        const hashtagsData: Array<any> = res.data.map((data) => {
+          return {
+            hashtag_id: data.hashtag_id,
+            tag: data.tag,
+          }
+        });
         this.hashtags = hashtagsData;
+        this.originalHashtags = res.data.map((data) => data.hashtag_id);
+        console.log(this.originalHashtags);
+      },
+      (err) => {
+        console.log(err);
       }
     );
 
+    this.listingsService.getSelectedListingStories(this.listingId).subscribe(
+      (res) => {
+        const storyData: any = res.data;
+        $("#overview").html(storyData.overview);
+        $("#problem").html(storyData.problem);
+        $("#solution").html(storyData.solution);
+        $("#outcome").html(storyData.outcome);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    this.listingsService.getSelectedListingMilestones(this.listingId).subscribe(
+      (res) => {
+        const milestonesData: Array<any> = res.data;
+        milestonesData.forEach((val) => {
+          this.milestoneArr.push({
+            milestone_id: val.milestone_id,
+            description: val.description,
+            date: val.date,
+          })
+        })
+      },
+      (err) => {
+        console.log(err);
+      }
+    )
+
+    this.listingsService.getSelectedListingFAQ(this.listingId).subscribe(
+      (res) => {
+        const faqData: Array<any> = res.data;
+        faqData.forEach((val) => {
+          this.faqArr.push({
+            faq_id: val.faq_id,
+            question: val.question,
+            answer: val.answer,
+          })
+        })
+      },
+      (err) => {
+        console.log(err);
+      }
+    )
+
+    this.listingsService.getSelectedListingJobs(this.listingId).subscribe(
+      (res) => {
+        const jobData: Array<any> = res.data;
+        jobData.forEach((val) => {
+          this.jobArr.push({
+            job_id: val.job_id,
+            title: val.job_title,
+            description: val.job_description,
+          })
+        })
+      },
+      (err) => {
+        console.log(err);
+      }
+    )
+
     // CMS
-    $(".action-container .action-btn").on("click", function () {
+    $(".action-container .action-btn").on("click", function() {
       const cmd = $(this).data("command");
       if (cmd == "createlink") {
-        const url = prompt("Enter the link here: ", "https://");
+        const url = prompt("Enter the link here: ");
+        if (url === null) {
+          return;
+        }
         document.execCommand(cmd, false, url);
       } else if (cmd == "formatBlock") {
         const size = $(this).data("size");
@@ -110,12 +190,16 @@ export class EditListingComponent implements OnInit {
     if (this.hashtags.length === 3 || value === "#" || event.value.length < 3) {
       return;
     }
-    this.hashtags.push(value);
+    this.hashtags.push({
+      hashtag_id: null,
+      tag: value,
+    });
     event.input.value = "";
   }
 
   removeHashtag(tag: string): void {
-    this.hashtags.splice(this.hashtags.indexOf(tag), 1);
+    const removeIndex = this.hashtags.map((e) => e.tag).indexOf(tag);
+    this.hashtags.splice(removeIndex, 1);
   }
 
   uploadImage(event: Event): void {
@@ -148,7 +232,11 @@ export class EditListingComponent implements OnInit {
   }
 
   addMilestone(): void {
-    this.milestoneArr.push({ description: "", date: new Date() });
+    this.milestoneArr.push({
+      milestone_id: null,
+      description: "",
+      date: new Date(),
+    });
     this.milestoneArr.sort((a, b) => {
       const result: number = (new Date(a.date)).valueOf() - (new Date(b.date)).valueOf();
       return result;
@@ -168,6 +256,7 @@ export class EditListingComponent implements OnInit {
 
   addFAQ(): void {
     this.faqArr.push({
+      faq_id: null,
       question: "",
       answer: "",
     });
@@ -177,7 +266,11 @@ export class EditListingComponent implements OnInit {
   }
 
   addDescription(): void {
-    this.jobArr.push({ title: "", description: "" });
+    this.jobArr.push({ 
+      job_id: null, 
+      title: "", 
+      description: "",
+    });
   }
 
   removeDescription(i: number): void {
@@ -194,7 +287,7 @@ export class EditListingComponent implements OnInit {
     return false;
   }
 
-  async createListing(): Promise<void> {
+  async updateListing(): Promise<void> {
     if (this.getFormValidationErrors() === true) {
       this.snackbarService.openSnackBar("Please complete the form", false);
       return;
@@ -222,9 +315,9 @@ export class EditListingComponent implements OnInit {
       locations
     };
 
-    (await this.listingsService.createListing(this.listingData, this.listingImages)).subscribe(
+    (await this.listingsService.updateListing(this.listingId, this.listingData, this.listingImages, this.originalImages)).subscribe(
       (res) => {
-        this.listingId = res["data"][0]["listing_id"];
+
         this.listingsService.UpdateListingStory(this.listingId, {
           overview: $("#overview").html(),
           problem: $("#problem").html(),
@@ -237,8 +330,8 @@ export class EditListingComponent implements OnInit {
           }
         );
 
-        this.milestoneArr.forEach((val, idx) => {
-          if (val.description != "" || val.date != null) {
+        this.milestoneArr.forEach((val) => {
+          if (val.milestone_id == null && val.date != null && val.description != "") {
             this.listingsService.createListingMilestones({
               listing_id: this.listingId,
               description: val.description,
@@ -248,26 +341,63 @@ export class EditListingComponent implements OnInit {
               (err) => {
                 console.log(err);
               }
-            );
+            )
+          } else if (val.milestone_id && val.date != null && val.description != "") {
+            this.listingsService.updateMilestone(val.milestone_id, {
+              description: val.description,
+              date: val.date,
+            }).subscribe(
+              (res) => {},
+              (err) => {
+                console.log(err);
+              }
+            )
           }
         })
 
-        this.hashtags.forEach((val, idx) => {
-          this.listingsService.createListingHashtags({
-            listing_id: this.listingId,
-            tag: val,
-          }).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-            }
-          );
-        })
+        const removeHashtagPromises: Promise<any>[] = [];
 
-        this.jobArr.forEach((val, idx) => {
-          if (val.title != "" && val.description != "") {
+        this.originalHashtags.forEach((val) => {
+          removeHashtagPromises.push(new Promise((resolve, reject) => {
+            this.listingsService.removeHashtags(val).subscribe(
+              (res) => {
+                resolve();
+              },
+              (err) => {
+                reject();
+              }
+            );
+          }))
+        });
+
+        Promise.all(removeHashtagPromises).then(() =>{
+          this.hashtags.forEach((val) => {
+            this.listingsService.createListingHashtags({
+              listing_id: this.listingId,
+              tag: val.tag,
+            }).subscribe(
+              (res) => {},
+              (err) => {
+                console.log(err);
+              }
+            );
+          })
+        });
+
+        this.jobArr.forEach((val) => {
+          if (val.job_id == null && val.title != "" && val.description != "") {
             this.listingsService.createListingJobs({
               listing_id: this.listingId,
+              job_title: val.title,
+              job_description: val.description,              
+            }).subscribe(
+              (res) => {},
+              (err) => {
+                console.log(err);
+              }
+            )
+          } else if (val.job_id && val.title != "" && val.description != "") {
+            this.listingsService.updateJobs(val.job_id, {
               job_title: val.title,
               job_description: val.description,
             }).subscribe(
@@ -277,12 +407,22 @@ export class EditListingComponent implements OnInit {
               }
             )
           }
-        });
+        })
 
-        this.faqArr.forEach((val, idx) => {
-          if (val.question != "" && val.answer != "") {
+        this.faqArr.forEach((val) => {
+          if (val.faq_id == null && val.question != "" && val.answer != "") {
             this.listingsService.createListingFAQ({
               listing_id: this.listingId,
+              question: val.question,
+              answer: val.answer,              
+            }).subscribe(
+              (res) => {},
+              (err) => {
+                console.log(err);
+              }
+            )
+          } else if (val.faq_id && val.answer != "" && val.question != "") {
+            this.listingsService.updateFAQ(val.faq_id, {
               question: val.question,
               answer: val.answer,
             }).subscribe(
@@ -292,7 +432,24 @@ export class EditListingComponent implements OnInit {
               }
             )
           }
+        })
+
+        /*
+        // To change, await for new listing/categories to be updated before changing
+        const removeLocationPromises: Promise<any>[] = [];
+        const removeLocationArr: number[] = this.listingData.locations.map((x) => x.hashtag_id);
+        removeHashtagArr.forEach((val) => {
+          removeHashtagPromises.push(new Promise((resolve, reject) => {
+            this.listingsService.removeHashtags(val);
+            resolve();
+          }))
         });
+        Promise.all(removeHashtagPromises).then(() =>{
+          this.hashtags.forEach((val) => {
+            this.listingsService.createListingHashtags(val.tag);
+          })
+        });
+
 
         this.listingData.locations.forEach((val, idx) => {
           this.listingsService.createListingLocation({
@@ -305,26 +462,49 @@ export class EditListingComponent implements OnInit {
             }
           );
         })
+        */
 
       },
       
       (err) => {
         console.log(err);
         this.snackbarService.openSnackBar(
-          this.snackbarService.DialogList.create_listing.error,
+          this.snackbarService.DialogList.update_listing.error,
           false
         );
-        this.listingForm.reset();
+        return;
       },
 
       () => {
         this.snackbarService.openSnackBar(
-          this.snackbarService.DialogList.create_listing.success,
+          this.snackbarService.DialogList.update_listing.success,
           true
         );
         this.router.navigate(["/listing/" + this.listingId]);
       }
     );
+  }
+
+  removeListing(): void {
+    if (confirm("Are you sure you want to delete " + this.listingForm.value.title + "? This action is currently not reversible.")) {
+      this.listingsService.removeListing(this.listingId).subscribe(
+        (data) => {
+          console.log(data);
+          this.snackbarService.openSnackBar(
+            this.snackbarService.DialogList.delete_listing.success,
+            true
+          );
+          this.router.navigate(["/profile"]);
+        },
+        (err) => {
+          this.snackbarService.openSnackBar(
+            this.snackbarService.DialogList.delete_listing.error,
+            false
+          );
+          this.router.navigate(["/profile"]);
+        }
+      );
+    }
   }
 
 }

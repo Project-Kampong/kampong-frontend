@@ -63,7 +63,7 @@ export class ListingsService {
 
   getFeaturedListings() {
     return this.httpClient.get<API>(
-      this.url + "api/featured-listings",
+      this.url + "api/listings/featured",
       this.options
     );
   }
@@ -219,7 +219,9 @@ export class ListingsService {
   createListing(data: CreateListing, images: File[]): Promise<Observable<HttpEvent<API>>> {
     const imageFd = new FormData();
     images.forEach((val, idx) => {
-      imageFd.append('files', val);
+      if (val) {
+        imageFd.append('files', val);
+      }
     })
     return new Promise<Observable<HttpEvent<API>>>((resolve, reject) => {
       this.uploadFiles(imageFd).subscribe(
@@ -346,7 +348,7 @@ export class ListingsService {
   updateListing(listingId: string, data: CreateListing, images: File[], originalImages: OriginalImagesCheck[]): Promise<Observable<HttpEvent<API>>> {
     const imageFd = new FormData();
     images.forEach((val, idx) => {
-      if (val != null) {
+      if (val) {
         imageFd.append('files', val);
       }
     })

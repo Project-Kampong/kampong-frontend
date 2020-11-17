@@ -1,4 +1,4 @@
-<div class="slick-belt" *ngIf="featuredData != []">
+<div class="slick-belt" *ngIf="featuredData && featuredData?.length > 0">
   <div
     *ngFor="let listing of featuredData; let i = index"
     class="banner"
@@ -15,7 +15,7 @@
             {{ listing.tagline }}
           </p>
         </div>
-        <div *ngIf="listing.locations.length > 0">
+        <div *ngIf="listing.locations?.length > 0 && listing.locations">
           <div class="locationtags-list">
             <div class="location-icon"></div>
             <ul>

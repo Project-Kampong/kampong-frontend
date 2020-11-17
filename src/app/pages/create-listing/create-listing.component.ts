@@ -69,10 +69,13 @@ export class CreateListingComponent implements OnInit {
     });
 
     // CMS
-    $(".action-container .action-btn").on("click", function () {
+    $(".action-container .action-btn").on("click", function() {
       const cmd = $(this).data("command");
       if (cmd == "createlink") {
-        const url = prompt("Enter the link here: ", "https://");
+        const url = prompt("Enter the link here: ");
+        if (url === null) {
+          return;
+        }
         document.execCommand(cmd, false, url);
       } else if (cmd == "formatBlock") {
         const size = $(this).data("size");
@@ -208,7 +211,7 @@ export class CreateListingComponent implements OnInit {
           }
         );
 
-        this.milestoneArr.forEach((val, idx) => {
+        this.milestoneArr.forEach((val) => {
           if (val.description != "" || val.date != null) {
             this.listingsService.createListingMilestones({
               listing_id: this.listingId,
@@ -223,7 +226,7 @@ export class CreateListingComponent implements OnInit {
           }
         })
 
-        this.hashtags.forEach((val, idx) => {
+        this.hashtags.forEach((val) => {
           this.listingsService.createListingHashtags({
             listing_id: this.listingId,
             tag: val,
@@ -235,7 +238,7 @@ export class CreateListingComponent implements OnInit {
           );
         })
 
-        this.jobArr.forEach((val, idx) => {
+        this.jobArr.forEach((val) => {
           if (val.title != "" && val.description != "") {
             this.listingsService.createListingJobs({
               listing_id: this.listingId,
@@ -250,7 +253,7 @@ export class CreateListingComponent implements OnInit {
           }
         });
 
-        this.faqArr.forEach((val, idx) => {
+        this.faqArr.forEach((val) => {
           if (val.question != "" && val.answer != "") {
             this.listingsService.createListingFAQ({
               listing_id: this.listingId,
@@ -265,7 +268,7 @@ export class CreateListingComponent implements OnInit {
           }
         });
 
-        this.listingData.locations.forEach((val, idx) => {
+        this.listingData.locations.forEach((val) => {
           this.listingsService.createListingLocation({
             listing_id: this.listingId,
             location_id: 1,

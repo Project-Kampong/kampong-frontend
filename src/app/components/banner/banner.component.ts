@@ -8,27 +8,23 @@ import { ListingsService } from "@app/services/listings.service";
   styleUrls: ["./banner.component.scss"],
 })
 export class BannerComponent implements OnInit {
-  constructor(public ListingsService: ListingsService) {}
+
   featuredData = [];
   slickInitiated = false;
-  numtoget = 0;
+  numtoget: number;
+
+  constructor(public ListingsService: ListingsService) {
+    this.numtoget = 0;
+  }
+
   ngOnInit() {
     this.ListingsService.getFeaturedListings().subscribe((data) => {
-      console.log(data);
-      const tempFeatured = data["data"];
-      this.numtoget = data["count"];
-      tempFeatured.map((x) => {
-        this.ListingsService.getSelectedListing(x.listing_id).subscribe(
-          (item) => {
-            console.log(item["data"]);
-            this.featuredData.push(item["data"]);
-          }
-        );
-      });
+      this.featuredData = data.data;
+      this.numtoget = this.featuredData.length;
     });
   }
 
-  sliderSlickInit() {
+  sliderSlickInit(): void {
     if (this.slickInitiated) {
       return;
     } else if (this.featuredData.length == this.numtoget) {
