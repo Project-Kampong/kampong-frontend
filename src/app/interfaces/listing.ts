@@ -148,3 +148,8 @@ export const DefaultListing = {
   pics: ["default"],
   listing_email: "default",
 };
+
+export interface OriginalImagesCheck {
+  image: string,
+  check: boolean,
+}

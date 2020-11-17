@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpEvent } from "@angular/common/http";
-import { Listing, CreateListing } from "@app/interfaces/listing";
+import { Listing, CreateListing, OriginalImagesCheck } from "@app/interfaces/listing";
 import { API } from "@app/interfaces/api";
 import { Observable } from 'rxjs';
 // Services Import
@@ -343,13 +343,38 @@ export class ListingsService {
   }
 
   // UPDATE LISTING INFO SECTION
-  updateListing(listingId, data) {
-    return this.httpClient.put<API>(
-      this.url + "api/listings/" + listingId,
-      data,
-      this.AuthService.OnlyAuthHttpHeaders
-    );
+  updateListing(listingId: string, data: CreateListing, images: File[], originalImages: OriginalImagesCheck[]): Promise<Observable<HttpEvent<API>>> {
+    const imageFd = new FormData();
+    images.forEach((val, idx) => {
+      if (val != null) {
+        imageFd.append('files', val);
+      }
+    })
+    return new Promise<Observable<HttpEvent<API>>>((resolve, reject) => {
+      this.uploadFiles(imageFd).subscribe(
+        (res) => {
+          data.pics = res["data"] ? res["data"] : null;
+          originalImages.forEach((val) => {
+            if (val.check) {
+              data.pics.push(val.image);
+            }
+          });
+        },
+        (err) => {
+          console.log(err);
+          reject("Photos failed to upload");
+        },
+        () => {
+          resolve(this.httpClient.put<API>(
+            this.url + "api/listings/" + listingId,
+            data,
+            this.AuthService.OnlyAuthHttpHeaders
+          ));
+        }
+      )
+    })
   }
+
 
   updateMilestone(milestone_id, data) {
     return this.httpClient.put<API>(

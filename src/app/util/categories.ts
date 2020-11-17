@@ -37,7 +37,7 @@ export const categoryList: Array<CategoryFilter> = [
       "Jobs",
       "Wage",
       "Upskill",
-      "Technology ",
+      "Technology",
       "IT",
       "IoT 4.0",
       "Information",
