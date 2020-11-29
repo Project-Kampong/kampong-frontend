@@ -470,7 +470,7 @@ export class ListingsService {
 
   sendEnquiry(data) {
     return this.httpClient.post<API>(
-      this.url + "api/send-email",
+      this.url + "api/mailer/send",
       data,
       this.options
     );
