@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import {
   FormGroup,
   FormBuilder,
-  Validators,
   ValidationErrors,
 } from "@angular/forms";
 import { Router } from "@angular/router";

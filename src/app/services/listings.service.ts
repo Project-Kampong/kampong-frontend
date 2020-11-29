@@ -1,8 +1,12 @@
 import { Injectable, EventEmitter } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpEvent } from "@angular/common/http";
-import { Listing, CreateListing, OriginalImagesCheck } from "@app/interfaces/listing";
+import {
+  Listing,
+  CreateListing,
+  OriginalImagesCheck,
+} from "@app/interfaces/listing";
 import { API } from "@app/interfaces/api";
-import { Observable } from 'rxjs';
+import { Observable } from "rxjs";
 // Services Import
 import { AuthService } from "@app/services/auth.service";
 
@@ -15,7 +19,6 @@ interface OptionObject {
   providedIn: "root",
 })
 export class ListingsService {
-
   url: string;
   options: OptionObject;
   optionsMulti: OptionObject;
@@ -29,13 +32,13 @@ export class ListingsService {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
       }),
-    }
+    };
     this.optionsMulti = {
       headers: new HttpHeaders({
         //"Content-Type": "multipart/form-data",
-        "authorization": "Bearer " + this.AuthService.AuthToken,
+        authorization: "Bearer " + this.AuthService.AuthToken,
       }),
-    }
+    };
   }
 
   // Variables
@@ -90,10 +93,7 @@ export class ListingsService {
 
   getSearchResult(keyword) {
     return this.httpClient.get<API>(
-      this.url +
-        "api/listings/search?keyword=" +
-        keyword +
-        "limit=25",
+      this.url + "api/listings/search?keyword=" + keyword + "limit=25",
       this.options
     );
   }
@@ -131,14 +131,6 @@ export class ListingsService {
   getSelectedListingSkills(listingId) {
     return this.httpClient.get<API>(
       this.url + "api/listings/" + listingId + "/listing-skills",
-      this.options
-    );
-  }
-
-  // Listing Stories
-  getSelectedListingStories(listingId) {
-    return this.httpClient.get<API>(
-      this.url + "api/listings/" + listingId + "/stories",
       this.options
     );
   }
@@ -216,40 +208,38 @@ export class ListingsService {
     );
   }
 
-  createListing(data: CreateListing, images: File[]): Promise<Observable<HttpEvent<API>>> {
+  createListing(
+    data: CreateListing,
+    images: File[]
+  ): Promise<Observable<HttpEvent<API>>> {
     const imageFd = new FormData();
     images.forEach((val, idx) => {
       if (val) {
-        imageFd.append('files', val);
+        imageFd.append("uploads", val);
       }
-    })
+    });
     return new Promise<Observable<HttpEvent<API>>>((resolve, reject) => {
       this.uploadFiles(imageFd).subscribe(
         (res) => {
-          data.pics = res["data"] ? res["data"] : null;
+          data.pics = res["data"]
+            ? res["data"].map(({ location }) => location)
+            : null;
         },
         (err) => {
           console.log(err);
           reject("Photos failed to upload");
         },
         () => {
-          resolve(this.httpClient.post<API>(
-            this.url + "api/listings",
-            data,
-            this.AuthService.OnlyAuthHttpHeaders
-          ));
+          resolve(
+            this.httpClient.post<API>(
+              this.url + "api/listings",
+              data,
+              this.AuthService.OnlyAuthHttpHeaders
+            )
+          );
         }
-      )
-    })
-
-  }
-
-  UpdateListingStory(listingId, data) {
-    return this.httpClient.put<API>(
-      this.url + "api/listings/" + listingId + "/stories",
-      data,
-      this.AuthService.AuthOptions
-    );
+      );
+    });
   }
 
   createListingMilestones(data) {
@@ -345,17 +335,24 @@ export class ListingsService {
   }
 
   // UPDATE LISTING INFO SECTION
-  updateListing(listingId: string, data: CreateListing, images: File[], originalImages: OriginalImagesCheck[]): Promise<Observable<HttpEvent<API>>> {
+  updateListing(
+    listingId: string,
+    data: CreateListing,
+    images: File[],
+    originalImages: OriginalImagesCheck[]
+  ): Promise<Observable<HttpEvent<API>>> {
     const imageFd = new FormData();
     images.forEach((val, idx) => {
       if (val) {
-        imageFd.append('files', val);
+        imageFd.append("uploads", val);
       }
-    })
+    });
     return new Promise<Observable<HttpEvent<API>>>((resolve, reject) => {
       this.uploadFiles(imageFd).subscribe(
         (res) => {
-          data.pics = res["data"] ? res["data"] : null;
+          data.pics = res["data"]
+            ? res["data"].map(({ location }) => location)
+            : null;
           originalImages.forEach((val) => {
             if (val.check) {
               data.pics.push(val.image);
@@ -367,16 +364,17 @@ export class ListingsService {
           reject("Photos failed to upload");
         },
         () => {
-          resolve(this.httpClient.put<API>(
-            this.url + "api/listings/" + listingId,
-            data,
-            this.AuthService.OnlyAuthHttpHeaders
-          ));
+          resolve(
+            this.httpClient.put<API>(
+              this.url + "api/listings/" + listingId,
+              data,
+              this.AuthService.OnlyAuthHttpHeaders
+            )
+          );
         }
-      )
-    })
+      );
+    });
   }
-
 
   updateMilestone(milestone_id, data) {
     return this.httpClient.put<API>(
@@ -472,9 +470,9 @@ export class ListingsService {
 
   sendEnquiry(data) {
     return this.httpClient.post<API>(
-      this.url + "api/send-email",
+      this.url + "api/mailer/send",
       data,
       this.options
-    )
+    );
   }
 }
