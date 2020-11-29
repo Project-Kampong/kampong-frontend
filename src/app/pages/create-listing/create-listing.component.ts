@@ -14,7 +14,7 @@ import { locationList } from '@app/util/locations';
 import { categoryList } from "@app/util/categories";
 
 // Interfaces
-import { CreateListingForm, CreateListingStoryForm, CreateListingFAQ, 
+import { CreateListingForm, CreateListingFAQ, 
   CreateListingJobs, CreateListingMilestones, CreateListing } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 
@@ -65,7 +65,6 @@ export class CreateListingComponent implements OnInit {
 
     this.listingForm = this.fb.group({
       ...CreateListingForm,
-      ...CreateListingStoryForm,
     });
 
     // CMS
@@ -178,6 +177,10 @@ export class CreateListingComponent implements OnInit {
     const category: string = this.listingForm.value.category;
     const tagline: string = this.listingForm.value.tagline;
     const mission: string = this.listingForm.value.mission;
+    const overview: string = this.listingForm.value.overview;
+    const problem: string = this.listingForm.value.problem;
+    const outcome: string = this.listingForm.value.outcome;
+    const solution: string = this.listingForm.value.solution;
     const listing_url: string = this.listingForm.value.listing_url;
     const listing_email: string = this.listingForm.value.listing_email;
     const listing_status: string = "ongoing";
@@ -189,6 +192,10 @@ export class CreateListingComponent implements OnInit {
       category,
       tagline,
       mission,
+      overview,
+      problem,
+      outcome,
+      solution,
       listing_url,
       listing_email,
       listing_status,
@@ -199,17 +206,6 @@ export class CreateListingComponent implements OnInit {
     (await this.listingsService.createListing(this.listingData, this.listingImages)).subscribe(
       (res) => {
         this.listingId = res["data"][0]["listing_id"];
-        this.listingsService.UpdateListingStory(this.listingId, {
-          overview: $("#overview").html(),
-          problem: $("#problem").html(),
-          solution: $("#solution").html(),
-          outcome: $("#outcome").html(),
-        }).subscribe(
-          (res) => {},
-          (err) => {
-            console.log(err);
-          }
-        );
 
         this.milestoneArr.forEach((val) => {
           if (val.description != "" || val.date != null) {

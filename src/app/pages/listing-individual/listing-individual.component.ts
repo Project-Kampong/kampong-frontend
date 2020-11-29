@@ -12,7 +12,6 @@ import {
   DefaultListing,
   ListingFAQ,
   ListingSkills,
-  ListingStories,
   ListingComments,
 } from "@app/interfaces/listing";
 import { Profile } from "@app/interfaces/profile";
@@ -41,8 +40,6 @@ export class ListingIndividualComponent implements OnInit {
   ListingData: Listing = <Listing>{};
   ProfileInfo: Profile = <Profile>{};
   Hashtags = [];
-  // Stories
-  Stories: ListingStories = <ListingStories>{};
   SkillsList: ListingSkills[] = [];
   MilestoneArr = [];
   // Faq
@@ -96,7 +93,24 @@ export class ListingIndividualComponent implements OnInit {
     this.ListingsService.getSelectedListing(this.listingId).subscribe(
       (data) => {
         this.ListingData = data["data"];
-        this.SliderImageArr = this.ListingData['pics'];
+        this.SliderImageArr = this.ListingData["pics"];
+        this.ListingData.overview = this.ListingData["overview"]
+          .replace(/&lt;/g, "<")
+          .replace(/<a/g, "<a target='_blank'");
+        this.ListingData.problem = this.ListingData["problem"]
+          .replace(/&lt;/g, "<")
+          .replace(/<a/g, "<a target='_blank'");
+        this.ListingData.solution = this.ListingData["solution"]
+          .replace(/&lt;/g, "<")
+          .replace(/<a/g, "<a target='_blank'");
+        this.ListingData.outcome = this.ListingData["outcome"]
+          .replace(/&lt;/g, "<")
+          .replace(/<a/g, "<a target='_blank'");
+
+        $("#result-overview").html(this.ListingData.overview);
+        $("#result-problem").html(this.ListingData.problem);
+        $("#result-solution").html(this.ListingData.solution);
+        $("#result-outcome").html(this.ListingData.outcome);
         console.log(this.ListingData);
         console.log(this.SliderImageArr);
         this.ProfileService.getUserProfile(
@@ -140,13 +154,6 @@ export class ListingIndividualComponent implements OnInit {
           }
         );
 
-        // Get Skills
-        // this.ListingsService.getSelectedListingSkills(this.listingId).subscribe(
-        //   (data) => {
-        //     this.SkillsList = data["data"];
-        //     console.log(this.SkillsList);
-        //   }
-        // );
         this.ListingsService.getSelectedListingJobs(this.listingId).subscribe(
           (data) => {
             this.SkillsList = data["data"];
@@ -166,30 +173,6 @@ export class ListingIndividualComponent implements OnInit {
           this.listingId
         ).subscribe((data) => {
           this.ListingLocation = data["data"];
-        });
-
-        // Get Stories
-        this.ListingsService.getSelectedListingStories(
-          this.listingId
-        ).subscribe((data) => {
-          this.Stories = data["data"];
-          this.Stories.overview = data["data"].overview
-            .replace(/&lt;/g, "<")
-            .replace(/<a/g, "<a target='_blank'");
-          this.Stories.problem = data["data"].problem
-          .replace(/&lt;/g, "<")
-          .replace(/<a/g, "<a target='_blank'");
-          this.Stories.solution = data["data"].solution
-          .replace(/&lt;/g, "<")
-          .replace(/<a/g, "<a target='_blank'");
-          this.Stories.outcome = data["data"].outcome
-          .replace(/&lt;/g, "<")
-          .replace(/<a/g, "<a target='_blank'");
-
-          $("#result-overview").html(this.Stories.overview);
-          $("#result-problem").html(this.Stories.problem);
-          $("#result-solution").html(this.Stories.solution);
-          $("#result-outcome").html(this.Stories.outcome);
         });
 
         // Get Comments
@@ -234,7 +217,7 @@ export class ListingIndividualComponent implements OnInit {
   uploadFile(event) {
     this.selectedFile = <File>event.target.files[0];
     // Display Image
-    var reader: FileReader = new FileReader();
+    const reader = new FileReader();
     reader.onload = (e) => {
       this.fileDisplayArr.push(reader.result.toString());
     };
@@ -476,7 +459,7 @@ export class ListingIndividualComponent implements OnInit {
   }
 
   // Toggle Enquire popup
-  togglePopup() : void {
+  togglePopup(): void {
     // Toggle popup
     $(".popup-bg").toggleClass("active");
     $(".popup-box").toggleClass("active");
@@ -495,19 +478,19 @@ export class ListingIndividualComponent implements OnInit {
             this.SnackbarService.DialogList.send_message.success,
             true
           ),
-          (err) => {
-            this.SnackbarService.openSnackBar(
-              this.SnackbarService.DialogList.send_message.error,
-              false
-            )};
+            (err) => {
+              this.SnackbarService.openSnackBar(
+                this.SnackbarService.DialogList.send_message.error,
+                false
+              );
+            };
         },
         () => {
           setTimeout(() => {
             this.initiateSlick();
           }, 500);
         }
-      )
-
+      );
     }
   }
 

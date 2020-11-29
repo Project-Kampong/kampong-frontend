@@ -17,6 +17,10 @@ export interface Listing {
   about: string;
   tagline: string;
   mission: string;
+  outcome: string;
+  overview: string;
+  problem: string;
+  solution: string;
   listing_url: string;
   pics: string[];
   listing_email: string;
@@ -46,13 +50,6 @@ export interface ListingComments {
   nickname: string;
 }
 
-export interface ListingStories {
-  outcome: string;
-  overview: string;
-  problem: string;
-  solution: string;
-}
-
 export interface ListingHashtags {
   listing_id: string;
   tag: string;
@@ -80,6 +77,10 @@ export interface CreateListing {
   category: string;
   tagline: string;
   mission: string;
+  outcome: string;
+  overview: string;
+  problem: string;
+  solution: string;
   listing_url: string;
   listing_email: string;
   listing_status: string;
@@ -115,6 +116,10 @@ export interface EditListing {
   category: string;
   tagline: string;
   mission: string;
+  outcome: string;
+  overview: string;
+  problem: string;
+  solution: string;
   listing_url: string;
   listing_email: string;
   listing_status: string;
@@ -147,6 +152,14 @@ export const CreateListingForm = {
     Validators.maxLength(150),
     LISTING_VALIDATION_PATTERN
   ]),
+
+  overview: new FormControl(""),
+
+  problem: new FormControl(""),
+
+  solution: new FormControl(""),
+
+  outcome: new FormControl(""),
 
   listing_email: new FormControl("", [
     Validators.required,
@@ -187,6 +200,14 @@ export const EditListingForm = {
     LISTING_VALIDATION_PATTERN
   ]),
 
+  overview: new FormControl(""),
+
+  problem: new FormControl(""),
+
+  solution: new FormControl(""),
+
+  outcome: new FormControl(""),
+
   listing_email: new FormControl("", [
     Validators.required,
     Validators.email
@@ -200,28 +221,6 @@ export const EditListingForm = {
 
 };
 
-export const CreateListingStoryForm = {
-  
-  overview: new FormControl(""),
-
-  problem: new FormControl(""),
-
-  solution: new FormControl(""),
-
-  outcome: new FormControl(""),
-}
-
-export const EditListingStoryForm = {
-  
-  overview: new FormControl(""),
-
-  problem: new FormControl(""),
-
-  solution: new FormControl(""),
-
-  outcome: new FormControl(""),
-}
-
 export const DefaultListing = {
   listing_id: "default",
   organisation_id: "default",
@@ -231,6 +230,10 @@ export const DefaultListing = {
   about: "default",
   tagline: "default",
   mission: "default",
+  overview: "default",
+  problem: "default",
+  solution: "default",
+  outcome: "default",
   listing_url: "default",
   pics: ["default"],
   listing_email: "default",
