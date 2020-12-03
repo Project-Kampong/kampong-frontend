@@ -177,15 +177,17 @@ export class CreateListingComponent implements OnInit {
     const category: string = this.listingForm.value.category;
     const tagline: string = this.listingForm.value.tagline;
     const mission: string = this.listingForm.value.mission;
-    const overview: string = this.listingForm.value.overview;
-    const problem: string = this.listingForm.value.problem;
-    const outcome: string = this.listingForm.value.outcome;
-    const solution: string = this.listingForm.value.solution;
     const listing_url: string = this.listingForm.value.listing_url;
     const listing_email: string = this.listingForm.value.listing_email;
     const listing_status: string = "ongoing";
     const locations: string[] = this.listingForm.value.locations;
     const pics: string[] = [null, null, null, null, null];
+
+    //CMS
+    const overview: string = $("#overview").html();
+    const problem: string = $("#problem").html();
+    const outcome: string = $("#outcome").html();
+    const solution: string = $("#solution").html();
 
     this.listingData = {
       title,
