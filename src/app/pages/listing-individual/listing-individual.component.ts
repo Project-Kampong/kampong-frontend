@@ -1,5 +1,8 @@
-import { Component, OnInit, Inject } from "@angular/core";
+// Angular Imports
+import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
+
+// Services
 
 import { ListingsService } from "@app/services/listings.service";
 import { ProfileService } from "@app/services/profile.service";
@@ -9,7 +12,7 @@ import { SnackbarService } from "@app/services/snackbar.service";
 // Interface
 import {
   Listing,
-  DefaultListing,
+  defaultListing,
   ListingFAQ,
   ListingSkills,
   ListingComments,

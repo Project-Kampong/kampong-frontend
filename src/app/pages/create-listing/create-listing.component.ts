@@ -14,7 +14,7 @@ import { locationList } from '@app/util/locations';
 import { categoryList } from "@app/util/categories";
 
 // Interfaces
-import { CreateListingForm, CreateListingFAQ, 
+import { createListingForm, CreateListingFAQ, 
   CreateListingJobs, CreateListingMilestones, CreateListing } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 
@@ -64,7 +64,7 @@ export class CreateListingComponent implements OnInit {
     this.locationGroup = locationList;
 
     this.listingForm = this.fb.group({
-      ...CreateListingForm,
+      ...createListingForm,
     });
 
     // CMS

@@ -127,7 +127,7 @@ export interface EditListing {
   locations: string[];
 }
 
-export const CreateListingForm = {
+export const createListingForm = {
   
   title: new FormControl("", [
     Validators.required,
@@ -174,7 +174,7 @@ export const CreateListingForm = {
 
 };
 
-export const EditListingForm = {
+export const editListingForm = {
   
   title: new FormControl("", [
     Validators.required,
@@ -221,7 +221,7 @@ export const EditListingForm = {
 
 };
 
-export const DefaultListing = {
+export const defaultListing = {
   listing_id: "default",
   organisation_id: "default",
   created_by: "default",
@@ -239,7 +239,7 @@ export const DefaultListing = {
   listing_email: "default",
 };
 
-export interface OriginalImagesCheck {
+export interface originalImagesCheck {
   image: string;
   check: boolean;
 }

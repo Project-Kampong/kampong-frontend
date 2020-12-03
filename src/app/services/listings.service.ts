@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpEvent } from "@angular/common/http";
 import {
   Listing,
   CreateListing,
-  OriginalImagesCheck,
+  originalImagesCheck,
 } from "@app/interfaces/listing";
 import { API } from "@app/interfaces/api";
 import { Observable } from "rxjs";
@@ -339,7 +339,7 @@ export class ListingsService {
     listingId: string,
     data: CreateListing,
     images: File[],
-    originalImages: OriginalImagesCheck[]
+    originalImages: originalImagesCheck[]
   ): Promise<Observable<HttpEvent<API>>> {
     const imageFd = new FormData();
     images.forEach((val, idx) => {
