@@ -85,6 +85,9 @@ export class SnackbarService {
     verify: {
       msg: "PLease verify your email",
     },
+    generic_error: {
+      error: "Error, please try again later",
+    }
   };
 
   horizontalPosition: MatSnackBarHorizontalPosition = "right";

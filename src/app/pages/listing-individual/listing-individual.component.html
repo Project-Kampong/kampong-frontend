@@ -1,15 +1,15 @@
-<section class="bg-section" *ngIf="ListingData.listing_id != null">
+<section class="bg-section" *ngIf="listingData.listing_id != null">
   <div class="container">
     <div class="col-12 text-center project-info-container">
-      <p class="primary-badge">{{ ListingData["category"] }}</p>
-      <p class="regular-l">{{ ListingData["title"] }}</p>
-      <p class="light-m mission">{{ ListingData["mission"] }}</p>
+      <p class="primary-badge">{{ category }}</p>
+      <p class="regular-l">{{ title }}</p>
+      <p class="light-m mission">{{ mission }}</p>
     </div>
     <div class="d-flex flex-wrap">
       <div class="col-lg-8">
         <app-image-carousel
-          *ngIf="SliderImageArr"
-          [SliderImages]="SliderImageArr"
+          *ngIf="pics && pics.length > 0"
+          [SliderImages]="pics"
         ></app-image-carousel>
       </div>
       <div class="col-lg-4">
@@ -18,27 +18,27 @@
             <div class="project-status-container">
               <p class="project-status project-open bold-xs">Project Ongoing</p>
             </div>
-            <p class="light-m">{{ ListingData["tagline"] }}</p>
+            <p class="light-m">{{ tagline }}</p>
             <div class="hashtags-list">
-              <ul *ngIf="Hashtags">
-                <li *ngFor="let data of Hashtags" class="light-xs">
-                  {{ data.tag }}
+              <ul *ngIf="tagsArr && tagsArr.length > 0">
+                <li *ngFor="let tag of tagsArr" class="light-xs">
+                  {{ tag }}
                 </li>
               </ul>
             </div>
-            <div *ngIf="ListingLocation.length > 0" class="locationtags-list">
+            <div *ngIf="locationsArr && locationsArr.length > 0" class="locationtags-list">
               <div class="location-icon"></div>
               <ul>
-                <li class="light-xs" *ngFor="let location of ListingLocation">
-                  {{ location.location }}
+                <li class="light-xs" *ngFor="let location of locationsArr">
+                  {{ location }}
                 </li>
               </ul>
             </div>
 
             <div class="button-container">
               <div *ngIf="
-                AuthService.isLoggedIn &&
-                ListingData.created_by == AuthService.LoggedInUserID;
+                authService.isLoggedIn &&
+                createdBy == authService.LoggedInUserID;
                 else isNotOwner">
                   <button class="primary-button" (click)="editListing(this.listingId)">
                     Edit this listing
@@ -53,22 +53,22 @@
 
             <div>
               <p (click)="liked_clicked()" class="light-xs like-btn">
-                {{ listingLikes }} Likes
+                {{ likesArr.length }} Likes
               </p>
             </div>
           </div>
 
-          <div *ngIf="ProfileInfo">
+          <div *ngIf="listingData">
             <div
               class="user-info"
-              (click)="selectedProfile(ProfileInfo['user_id'])"
+              (click)="selectedProfile(createdBy)"
             >
               <div class="profile-image">
-                <img src="{{ ProfileInfo.profile_picture }}" />
+                <img src="{{ profilePicture }}" />
               </div>
 
               <p class="username light-s">
-                {{ ProfileInfo["nickname"] }}
+                {{ nickname }}
               </p>
             </div>
           </div>
@@ -76,11 +76,11 @@
       </div>
     </div>
   </div>
-  <div *ngIf="MilestoneArr.length > 0">
+  <div *ngIf="milestoneArr && milestoneArr.length > 0">
     <div class="milestone-timeline container">
       <app-milestones
-        *ngIf="MilestoneArr"
-        [MilestoneArr]="MilestoneArr"
+        *ngIf="milestoneArr"
+        [MilestoneArr]="milestoneArr"
       ></app-milestones>
     </div>
   </div>
@@ -105,13 +105,13 @@
     <!-- Tab Navigation Content -->
     <!-- Skills -->
     <div class="tabs-content" id="skills">
-      <div *ngIf="SkillsList.length > 0">
-        <div class="skills-item" *ngFor="let skills of SkillsList">
+      <div *ngIf="jobsArr && jobsArr.length > 0">
+        <div class="skills-item" *ngFor="let job of jobsArr">
           <p class="job-title medium-s">
-            {{ skills.job_title }}
+            {{ job.job_title }}
           </p>
           <p class="job-description light-s">
-            {{ skills.job_description }}
+            {{ job.job_description }}
           </p>
         </div>
       </div>
@@ -119,25 +119,25 @@
     <!-- Story -->
     <div class="tabs-content" id="story">
       <h3 class="primary-badge">Overview</h3>
-      <div *ngIf="ListingData" style="margin-bottom: 20px;">
+      <div *ngIf="listingData" style="margin-bottom: 20px;">
         <div class="CMS-editor">
           <div id="result-overview"></div>
         </div>
       </div>
       <h3 class="primary-badge">Problem</h3>
-      <div *ngIf="ListingData" style="margin-bottom: 20px;">
+      <div *ngIf="listingData" style="margin-bottom: 20px;">
         <div class="CMS-editor">
           <div id="result-problem"></div>
         </div>
       </div>
       <h3 class="primary-badge"> Solution</h3>
-      <div *ngIf="ListingData" style="margin-bottom: 20px;">
+      <div *ngIf="listingData" style="margin-bottom: 20px;">
         <div class="CMS-editor">
           <div id="result-solution"></div>
         </div>
       </div>
       <h3 class="primary-badge">Outcome</h3>
-      <div *ngIf="ListingData" style="margin-bottom: 20px;">
+      <div *ngIf="listingData" style="margin-bottom: 20px;">
         <div class="CMS-editor">
           <div id="result-outcome"></div>
         </div>
@@ -145,8 +145,8 @@
     </div>
     <!-- FAQ -->
     <div class="tabs-content" id="FAQ">
-      <div *ngIf="FAQList != []" class="faq-container">
-        <div *ngFor="let faq of FAQList" class="faq-item">
+      <div *ngIf="faqArr && faqArr.length > 0" class="faq-container">
+        <div *ngFor="let faq of faqArr" class="faq-item">
           <b class="regular-s">
             {{ faq.question }}
           </b>
@@ -160,20 +160,20 @@
     <div class="tabs-content" id="updates">
       <div
         *ngIf="
-          AuthService.isLoggedIn == true &&
-          ListingData.created_by == AuthService.LoggedInUserID
+          authService.isLoggedIn &&
+          createdBy == authService.LoggedInUserID
         "
         class="updates-input"
       >
         <div class="d-flex justify-content-end">
           <button
             class="outline-btn btn"
-            (click)="updatesFormOpen = updatesFormOpen ? false : true"
+            (click)="updatesFormOpen = !updatesFormOpen"
           >
             Post Update
           </button>
         </div>
-        <div *ngIf="updatesFormOpen == true" style="padding: 1rem">
+        <div *ngIf="updatesFormOpen" style="padding: 1rem">
           <div class="custom-input">
             <label class="input-label">Images (Maximum of 5)</label>
             <div class="d-flex flex-wrap align-items-start mt-2 image-output">
@@ -215,18 +215,18 @@
         </div>
       </div>
 
-      <div *ngIf="UpdatesArr != [] && ProfileInfo != null">
+      <div *ngIf="updatesArr && updatesArr.length > 0">
         <div
-          *ngFor="let updates of UpdatesArr; let i = index"
+          *ngFor="let updates of updatesArr; let i = index"
           class="update-card"
         >
           <div class="card-head">
             <div class="d-flex align-items-center updates-user-info">
               <div class="profile-image">
-                <img src="{{ ProfileInfo.profile_picture }}" />
+                <img src="{{ profile_picture }}" />
               </div>
               <div class="ml-3">
-                <p class="user regular-s">by {{ ProfileInfo["nickname"] }}</p>
+                <p class="user regular-s">by {{ nickname }}</p>
                 <p class="datetime light-xs">
                   {{ updates.updated_on | date: "d MMM y" }}
                 </p>
@@ -256,8 +256,8 @@
           </div>
           <div
             *ngIf="
-              AuthService.isLoggedIn == true &&
-              ListingData.created_by == AuthService.LoggedInUserID
+              authService.isLoggedIn == true &&
+              createdBy == authService.LoggedInUserID
             "
             class="d-flex justify-content-end p-1"
           >
@@ -270,7 +270,7 @@
     </div>
     <!-- Comments -->
     <div class="tabs-content" id="comments">
-      <div *ngIf="AuthService.isLoggedIn == true" class="comments-input">
+      <div *ngIf="authService.isLoggedIn == true" class="comments-input">
         <mat-form-field class="full-width">
           <mat-label>Comments</mat-label>
           <textarea
@@ -307,7 +307,7 @@
                     class="username medium-s"
                   >
                     <span
-                      *ngIf="comments.user_id == ListingData.created_by"
+                      *ngIf="comments.user_id == listingData.created_by"
                       class="owner-badge"
                       >Project Owner</span
                     >
@@ -328,7 +328,7 @@
                 Reply
               </button>
               <button
-                *ngIf="comments.user_id == AuthService.LoggedInUserID"
+                *ngIf="comments.user_id == authService.LoggedInUserID"
                 class="delete-btn btn"
                 (click)="deleteComments(comments)"
               >
@@ -336,7 +336,7 @@
               </button>
               <div
                 *ngIf="
-                  AuthService.isLoggedIn == true && comments.openbox == true
+                  authService.isLoggedIn == true && comments.openbox == true
                 "
                 class="comments-input reply-input mt-2"
               >
@@ -389,7 +389,7 @@
                         (click)="selectedProfile(reply.user_id)"
                       >
                         <span
-                          *ngIf="reply.user_id == ListingData.created_by"
+                          *ngIf="reply.user_id == listingData.created_by"
                           class="owner-badge"
                           >Project Owner</span
                         >
@@ -405,7 +405,7 @@
                     </p>
                   </div>
                   <button
-                    *ngIf="reply.user_id == AuthService.LoggedInUserID"
+                    *ngIf="reply.user_id == authService.LoggedInUserID"
                     class="delete-btn btn"
                     (click)="deleteComments(reply)"
                   >
@@ -424,7 +424,7 @@
   <div class="popup-bg"></div>
   <div class="popup-box">
     <div class="close-btn" (click)="togglePopup()"></div>
-    <p class="popup-title">Enquire about {{ ListingData.title }}</p>
+    <p class="popup-title">Enquire about {{ title }}</p>
     <div class="fields-container">
       <mat-form-field class="full-width">
         <mat-label>Your Topic</mat-label>

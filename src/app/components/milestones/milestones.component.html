@@ -2,8 +2,8 @@
   <div class="milestone-container">
     <div *ngFor="let milestone of MilestoneArr" class="milestone-item">
       <div *ngIf="!isDateBeforeToday(milestone.date)" class="milestone-content">
-        <p class="date">{{ milestone.date | date: "d MMM y" }}</p>
-        <p class="milestone">{{ milestone.description }}</p>
+        <p class="date">{{ milestones.date | date: "d MMM y" }}</p>
+        <p class="milestone">{{ milestone.milestone_description }}</p>
         <span class="milestone-dot"></span>
       </div>
       <div
@@ -11,7 +11,7 @@
         class="milestone-content active"
       >
         <p class="date">{{ milestone.date | date: "d MMM y" }}</p>
-        <p class="milestone">{{ milestone.description }}</p>
+        <p class="milestone">{{ milestone.milestone_description }}</p>
         <span class="milestone-dot"></span>
       </div>
     </div>
