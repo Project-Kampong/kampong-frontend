@@ -392,6 +392,7 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
+  /*
   liked_clicked() {
     if (!this.authService.isLoggedIn) {
       this.snackbarService.openSnackBar("Please login to like", true);
@@ -422,6 +423,7 @@ export class ListingIndividualComponent implements OnInit {
       }
     }
   }
+  */
 
   tabs_selected(selected: string): void {
     $(".tabs-content").hide();
