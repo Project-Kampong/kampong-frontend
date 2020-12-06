@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpEvent } from "@angular/common/http";
 import {
   Listing,
   CreateListing,
+  CreateListingUpdates,
   originalImagesCheck,
 } from "@app/interfaces/listing";
 import { API } from "@app/interfaces/api";
@@ -219,7 +220,7 @@ export class ListingsService {
     data: CreateListing,
     images: File[]
   ): Promise<Observable<HttpEvent<API>>> {
-    const imageFd = new FormData();
+    const imageFd: FormData = new FormData();
     images.forEach((val, idx) => {
       if (val) {
         imageFd.append("uploads", val);
@@ -241,6 +242,40 @@ export class ListingsService {
             this.httpClient.post<API>(
               this.url + "api/listings",
               data,
+              this.AuthService.OnlyAuthHttpHeaders
+            )
+          );
+        }
+      );
+    });
+  }
+
+  createListingUpdates(
+    data: CreateListingUpdates,
+    images: File[]
+  ): Promise<Observable<HttpEvent<API>>> {
+    const imageFd: FormData = new FormData();
+    images.forEach((val, idx) => {
+      if (val) {
+        imageFd.append("uploads", val);
+      }
+    });
+    return new Promise<Observable<HttpEvent<API>>>((resolve, reject) => {
+      this.uploadFiles(imageFd).subscribe(
+        (res) => {
+          data.pics = res["data"]
+          ? res["data"].map(({ location }) => location)
+          : null;
+        },
+        (err) => {
+          console.log(err);
+          reject("Photos failed to upload");
+        },
+        () => {
+          resolve(
+            this.httpClient.post<API>(
+              this.url + "api/listing-updates",
+              data, 
               this.AuthService.OnlyAuthHttpHeaders
             )
           );
@@ -313,15 +348,6 @@ export class ListingsService {
       this.url + "api/listing-comments",
       data,
       this.AuthService.AuthOptions
-    );
-  }
-
-  // Updates
-  CreateListingUpdates(data) {
-    return this.httpClient.post<API>(
-      this.url + "api/listing-updates",
-      data,
-      this.AuthService.OnlyAuthHttpHeaders
     );
   }
 

@@ -99,7 +99,7 @@ export class CreateListingComponent implements OnInit {
   }
 
   uploadImage(event: Event): void {
-    if (this.listingImagesDisplay.length === 5 && this.listingImages.length === 5 ) {
+    if (this.listingImagesDisplay.length === 5 && this.listingImages.length === 5) {
       return;
     }
     const reader: FileReader = new FileReader();

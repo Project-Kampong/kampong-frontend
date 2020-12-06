@@ -184,9 +184,9 @@
             <label class="input-label">Images (Maximum of 5)</label>
             <div class="d-flex flex-wrap align-items-start mt-2 image-output">
               <div
-                *ngFor="let file of fileDisplayArr; index as i"
+                *ngFor="let file of updateImagesDisplay; index as i"
                 class="image-container"
-                (click)="removeFile(i)"
+                (click)="removeImage(i)"
               >
                 <img src="{{ file }}" />
               </div>
@@ -200,7 +200,7 @@
                   type="file"
                   accept="image/*"
                   id="file-upload"
-                  (change)="uploadFile($event)"
+                  (change)="uploadImage($event)"
                 />
               </div>
             </div>
@@ -212,18 +212,18 @@
               matInput
               cdkTextareaAutosize
               cdkAutosizeMinRows="3"
-              [(ngModel)]="updatesDescription"
+              [(ngModel)]="updateInput"
             ></textarea>
           </mat-form-field>
           <div class="d-flex justify-content-end">
-            <button class="yellow-btn" (click)="submitUpdates()">Submit</button>
+            <button class="yellow-btn" (click)="postUpdate()">Submit</button>
           </div>
         </div>
       </div>
 
       <div *ngIf="updatesArr && updatesArr.length > 0">
         <div
-          *ngFor="let updates of updatesArr; let i = index"
+          *ngFor="let update of updatesArr; let i = index"
           class="update-card"
         >
           <div class="card-head">
@@ -234,29 +234,23 @@
               <div class="ml-3">
                 <p class="user regular-s">by {{ nickname }}</p>
                 <p class="datetime light-xs">
-                  {{ updates.updated_on | date: "d MMM y" }}
+                  {{ update.updated_on | date: "d MMM y" }}
                 </p>
               </div>
             </div>
             <div>
               <p class="datetime light-xs">
-                {{ getDiffInTime(updates.updated_on) }}
+                {{ getDiffInTime(update.updated_on) }}
               </p>
             </div>
           </div>
           <div class="card-content">
             <app-update-carousel
-              [SliderImages]="[
-                updates.pic1,
-                updates.pic2,
-                updates.pic3,
-                updates.pic4,
-                updates.pic5
-              ]"
+              [SliderImages]="update.pics"
             ></app-update-carousel>
             <div class="text-content">
               <p class="light-s">
-                {{ updates.description }}
+                {{ update.description }}
               </p>
             </div>
           </div>
@@ -267,7 +261,7 @@
             "
             class="d-flex justify-content-end p-1"
           >
-            <button (click)="deleteUpdate(updates)" class="red-btn btn">
+            <button (click)="deleteUpdate(update)" class="red-btn btn">
               Delete Update
             </button>
           </div>

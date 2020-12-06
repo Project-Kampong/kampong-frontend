@@ -68,6 +68,7 @@ export interface ListingJobs {
 }
 
 export interface ListingUpdates {
+  listing_update_id: string;
   pics: string[];
   created_on: string;
   updated_on: string;
@@ -118,6 +119,12 @@ export interface CreateListingFAQ {
   answer: string;
 }
 
+export interface CreateListingUpdates {
+  listing_id: string;
+  description: string;
+  pics ?: string[];
+}
+
 export interface CreateListing {
   title: string;
   category: string;
@@ -130,7 +137,7 @@ export interface CreateListing {
   listing_url: string;
   listing_email: string;
   listing_status: string;
-  pics: string[];
+  pics ?: string[];
   locations: string[];
 }
 

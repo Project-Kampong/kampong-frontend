@@ -52,9 +52,12 @@ export class ListingIndividualComponent implements OnInit {
   likeId: string;
   commentInput: string;
   replyInput: string;
+  updateImages: File[]
+  updateImagesDisplay: string[];
+  updateInput: string;
 
   constructor( private router: Router, private route: ActivatedRoute, private listingsService: ListingsService,
-    private profileService: ProfileService, public authService: AuthService, public snackbarService: SnackbarService
+    public authService: AuthService, public snackbarService: SnackbarService
   ) {
     this.listingId = "";
     this.createdBy = "";
@@ -84,6 +87,8 @@ export class ListingIndividualComponent implements OnInit {
     this.pics = [];
     this.isLiked = false;
     this.likeId = "";
+    this.updateImages = [];
+    this.updateImagesDisplay = [];
   }
 
   hashID;
@@ -202,6 +207,28 @@ export class ListingIndividualComponent implements OnInit {
     return result;
   }
 
+  uploadImage(event: Event): void {
+    if (this.updateImagesDisplay.length === 5 && this.updateImages.length === 5) {
+      return;
+    }
+    const reader: FileReader = new FileReader();
+    reader.onload = (e) => {
+      this.updateImagesDisplay.push(reader.result.toString());
+    }
+    try {
+      reader.readAsDataURL((event.target as HTMLInputElement).files[0]);
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+    this.updateImages.push(<File>(event.target as HTMLInputElement).files[0]);
+  }
+
+  removeImage(i: number): void {
+    this.updateImages.splice(i, 1);
+    this.updateImagesDisplay.splice(i, 1);
+  }
+
   // File Upload
   selectedFile: File = null;
   updatesDescription;
@@ -239,50 +266,69 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
-  postUpdate(): void {
+  async postUpdate(): Promise<void> {
+    (await this.listingsService.createListingUpdates(
+      {
+        description: this.updateInput,
+        listing_id: this.listingId
+      },
+      this.updateImages
+    )).subscribe(
+      (data) => {
+        this.updateImages = [];
+        this.updateImagesDisplay = [];
+        this.updateInput = "";
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_updates.success, true);
+        this.router.navigate(["/listing/" + this.listingId]);
+      },
+      (err) => {
+        console.log(err);
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_updates.error, false);
+      },
+      () => {
+        setTimeout(() => {
+          this.initiateSlick();
+        }, 500);
+      }
+    )
 
   }
 
-  submitUpdates() {
-    var updatesFd = new FormData();
-    updatesFd.append("description", this.updatesDescription);
-    updatesFd.append("listing_id", this.listingId);
-    for (var i = 0; i < this.fileArr.length; i++) {
-      updatesFd.append("pic" + (i + 1), this.fileArr[i].name);
-      updatesFd.append("pics", this.fileArr[i]);
-      console.log("pic" + (i + 1));
+  //to refactor
+  deleteUpdate(updates): void {
+    if (confirm("Are you sure to delete update?")) {
+      console.log(updates);
+      this.listingsService.removeListingUpdates(
+        updates.listing_update_id
+      ).subscribe(() => {
+        // Get Updates
+        this.listingsService.getSelectedListingUpdates(
+          this.listingId
+        ).subscribe(
+          (data) => {
+            this.snackbarService.openSnackBar(
+              this.snackbarService.DialogList.delete_updates.success,
+              true
+            );
+            this.updatesArr = data["data"];
+            this.updatesArr.sort((a, b) => {
+              return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+            });
+          },
+          (err) => {
+            this.snackbarService.openSnackBar(
+              this.snackbarService.DialogList.delete_updates.error,
+              false
+            );
+          },
+          () => {
+            setTimeout(() => {
+              this.initiateSlick();
+            }, 500);
+          }
+        );
+      });
     }
-    this.listingsService.CreateListingUpdates(updatesFd).subscribe((data) => {
-      console.log(data);
-      this.fileArr = [];
-      this.fileDisplayArr = [];
-      this.updatesDescription = "";
-      this.fileCount = 0;
-      // Get Updates
-      this.listingsService.getSelectedListingUpdates(this.listingId).subscribe(
-        (data) => {
-          this.snackbarService.openSnackBar(
-            this.snackbarService.DialogList.upload_updates.success,
-            true
-          );
-          this.updatesArr = data["data"];
-          this.updatesArr.sort((a, b) => {
-            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-          });
-        },
-        (err) => {
-          this.snackbarService.openSnackBar(
-            this.snackbarService.DialogList.upload_updates.error,
-            false
-          );
-        },
-        () => {
-          setTimeout(() => {
-            this.initiateSlick();
-          }, 500);
-        }
-      );
-    });
   }
 
   // Updates
@@ -386,8 +432,7 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
-  UpdateSlicked = false;
-  initiateSlick() {
+  initiateSlick(): void {
     if (!$(".update-image-slider").hasClass("slick-initialized")) {
       $(".update-image-slider").slick({
         slidesToShow: 2,
@@ -501,41 +546,5 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
-  // Delete
-  deleteUpdate(updates) {
-    if (confirm("Are you sure to delete update?")) {
-      console.log(updates);
-      this.listingsService.removeListingUpdates(
-        updates.listing_update_id
-      ).subscribe(() => {
-        // Get Updates
-        this.listingsService.getSelectedListingUpdates(
-          this.listingId
-        ).subscribe(
-          (data) => {
-            this.snackbarService.openSnackBar(
-              this.snackbarService.DialogList.delete_updates.success,
-              true
-            );
-            this.updatesArr = data["data"];
-            this.updatesArr.sort((a, b) => {
-              return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-            });
-          },
-          (err) => {
-            this.snackbarService.openSnackBar(
-              this.snackbarService.DialogList.delete_updates.error,
-              false
-            );
-          },
-          () => {
-            setTimeout(() => {
-              this.initiateSlick();
-            }, 500);
-          }
-        );
-      });
-    }
-  }
 
 }
