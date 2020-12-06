@@ -283,24 +283,24 @@
             matInput
             cdkTextareaAutosize
             cdkAutosizeMinRows="3"
-            [(ngModel)]="comments"
+            [(ngModel)]="commentInput"
           ></textarea>
         </mat-form-field>
         <div class="d-flex justify-content-end">
-          <button class="yellow-btn" (click)="submitComments()">Submit</button>
+          <button class="yellow-btn" (click)="postComment()">Submit</button>
         </div>
       </div>
       <div *ngIf="commentsArr != []" class="comments-container">
-        <div *ngFor="let comments of commentsArr; index as i">
-          <div *ngIf="comments.reply_to_id == null" class="comments-card">
+        <div *ngFor="let comment of commentsArr; index as i">
+          <div *ngIf="comment.reply_to_id == null" class="comments-card">
             <div class="avatar-container updates-user-info">
               <div class="profile-image">
                 <img
-                  *ngIf="comments.profile_picture != null"
-                  src="{{ comments.profile_picture }}"
+                  *ngIf="comment.profile_picture != null"
+                  src="{{ comment.profile_picture }}"
                 />
                 <img
-                  *ngIf="comments.profile_picture == null"
+                  *ngIf="comment.profile_picture == null"
                   src="https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png"
                 />
               </div>
@@ -309,40 +309,40 @@
               <div class="comments-info">
                 <div class="d-flex justify-content-between mb-2">
                   <p
-                    (click)="clickOnProfile(comments.user_id)"
+                    (click)="clickOnProfile(comment.user_id)"
                     class="username medium-s"
                   >
                     <span
-                      *ngIf="comments.user_id == listingData.created_by"
+                      *ngIf="comment.user_id == listingData.created_by"
                       class="owner-badge"
                       >Project Owner</span
                     >
-                    {{ comments.nickname }}
+                    {{ comment.nickname }}
                   </p>
                   <p class="time light-xs">
-                    {{ comments.updated_on | date: "d MMM y" }}
+                    {{ comment.updated_on | date: "d MMM y" }}
                   </p>
                 </div>
                 <p class="comments light-s">
-                  {{ comments.comment }}
+                  {{ comment.comment }}
                 </p>
               </div>
               <button
                 class="reply-btn btn"
-                (click)="comments.openbox = comments.openbox ? false : true"
+                (click)="comment.openbox = !comment.openbox"
               >
                 Reply
               </button>
               <button
-                *ngIf="comments.user_id == authService.LoggedInUserID"
+                *ngIf="comment.user_id == authService.LoggedInUserID"
                 class="delete-btn btn"
-                (click)="deleteComments(comments)"
+                (click)="deleteComments(comment)"
               >
                 Delete
               </button>
               <div
                 *ngIf="
-                  authService.isLoggedIn == true && comments.openbox == true
+                  authService.isLoggedIn == true && comment.openbox == true
                 "
                 class="comments-input reply-input mt-2"
               >
@@ -352,14 +352,14 @@
                     matInput
                     cdkTextareaAutosize
                     cdkAutosizeMinRows="3"
-                    [(ngModel)]="comments.replyToComments"
+                    [(ngModel)]="replyInput"
                   ></textarea>
                 </mat-form-field>
                 <div class="d-flex justify-content-end">
                   <button
                     class="yellow-btn"
                     (click)="
-                      replyComments(comments); comments.replyToComments = ''
+                      replyComment(comment);
                     "
                   >
                     Submit
@@ -372,7 +372,7 @@
           <div *ngFor="let reply of commentsArr">
             <div
               class="child-container"
-              *ngIf="reply.reply_to_id == comments.listing_comment_id"
+              *ngIf="reply.reply_to_id == comment.listing_comment_id"
             >
               <div class="comments-card">
                 <div class="avatar-container updates-user-info">
@@ -413,7 +413,7 @@
                   <button
                     *ngIf="reply.user_id == authService.LoggedInUserID"
                     class="delete-btn btn"
-                    (click)="deleteComments(reply)"
+                    (click)="deleteComment(reply)"
                   >
                     Delete
                   </button>

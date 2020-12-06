@@ -50,6 +50,8 @@ export class ListingIndividualComponent implements OnInit {
   commentsArr: ListingComments[];
   isLiked: boolean;
   likeId: string;
+  commentInput: string;
+  replyInput: string;
 
   constructor( private router: Router, private route: ActivatedRoute, private listingsService: ListingsService,
     private profileService: ProfileService, public authService: AuthService, public snackbarService: SnackbarService
@@ -171,8 +173,9 @@ export class ListingIndividualComponent implements OnInit {
     this.listingsService.getSelectedListingComments(this.listingId).subscribe(
       (data) => {
         this.commentsArr = data["data"];
-        this.commentsArr.sort((a, b) => {
-          const result: number = (new Date(a.created_on)).valueOf() - (new Date(b.created_on)).valueOf();
+        console.log(this.commentsArr);
+        this.commentsArr = this.commentsArr.sort((a, b) => {
+          const result: number = (new Date(b.created_on)).valueOf() - (new Date(a.created_on)).valueOf();
           return result;
         })
       }, 
@@ -326,63 +329,62 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
-  comments;
-  // Comments
-
-
-
-
-
-  submitComments() {
-    console.log(this.comments);
+  postComment(): void {
     this.listingsService.createListingComments({
       listing_id: this.listingId,
-      comment: this.comments,
-    }).subscribe((data) => {
-      this.comments = "";
-      console.log(data);
-      // Get Comments
-      this.listingsService.getSelectedListingComments(this.listingId).subscribe(
-        (data) => {
-          this.snackbarService.openSnackBar(
-            this.snackbarService.DialogList.upload_comments.success,
-            true
-          );
-          this.commentsArr = data["data"];
-          this.commentsArr.sort((a, b) => {
-            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-          });
-          console.log(this.commentsArr);
-        }
-      );
-    });
-  }
-  replyComments(data) {
-    console.log(data);
-    this.listingsService.createListingComments({
-      listing_id: this.listingId,
-      comment: data.replyToComments,
-      reply_to_id: data.listing_comment_id,
-    }).subscribe((data) => {
-      console.log(data);
-      // Get Comments
-      this.listingsService.getSelectedListingComments(this.listingId).subscribe(
-        (data) => {
-          this.snackbarService.openSnackBar(
-            this.snackbarService.DialogList.upload_comments.success,
-            true
-          );
-          this.commentsArr = data["data"];
-          this.commentsArr.sort((a, b) => {
-            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-          });
-          console.log(this.commentsArr);
-        }
-      );
-    });
+      comment: this.commentInput
+    }).subscribe(
+      (data) => {
+        this.commentInput = "";
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_comments.success, true);
+      },
+      (err) => {
+        console.log(err);
+        this.commentInput = "";
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_comments.error, false);
+      },
+      () => {
+        this.loadComments();
+      }
+    )
   }
 
-  // UI Components
+  replyComment(comment: ListingComments): void {
+    this.listingsService.createListingComments({
+      listing_id: this.listingId,
+      comment: this.replyInput,
+      reply_to_id: comment.listing_comment_id,
+    }).subscribe(
+      (data) => {
+        this.replyInput = "";
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_comments.success, true);
+      },
+      (err) => {
+        console.log(err);
+        this.replyInput = "";
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_comments.error, false);
+      },
+      () => {
+        this.loadComments();
+      }
+    )
+  }
+
+  deleteComment(comment: ListingComments) {
+    if (confirm("Delete comment?")) {
+      this.listingsService.removeListingComments(comment.listing_comment_id).subscribe(
+        (data) => {
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_comments.success, true);
+        },
+        (err) => {
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_comments.error, false);
+        },
+        () => {
+          this.loadComments();
+        }
+      )
+    }
+  }
 
   UpdateSlicked = false;
   initiateSlick() {
@@ -465,9 +467,7 @@ export class ListingIndividualComponent implements OnInit {
     this.router.navigate(["/edit/" + listing_id]);
   }
 
-  // Toggle Enquire popup
   togglePopup(): void {
-    // Toggle popup
     $(".popup-bg").toggleClass("active");
     $(".popup-box").toggleClass("active");
   }
@@ -538,27 +538,4 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
-  deleteComments(comment) {
-    if (confirm("Are you sure to delete comment?")) {
-      console.log(comment);
-      this.listingsService.removeListingComments(
-        comment.listing_comment_id
-      ).subscribe(() => {
-        this.snackbarService.openSnackBar(
-          this.snackbarService.DialogList.delete_comments.success,
-          true
-        );
-        // Get Comments
-        this.listingsService.getSelectedListingComments(
-          this.listingId
-        ).subscribe((data) => {
-          this.commentsArr = data["data"];
-          this.commentsArr.sort((a, b) => {
-            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-          });
-          console.log(this.commentsArr);
-        });
-      });
-    }
-  }
 }

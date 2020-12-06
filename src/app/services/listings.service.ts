@@ -143,6 +143,13 @@ export class ListingsService {
     );
   }
 
+  getSelectedCommentChildren(commentId) {
+    return this.httpClient.get<API>(
+      this.url + "api/listing-comments/" + commentId + "/children",
+      this.options
+    );
+  }
+
   // Updates
   getSelectedListingUpdates(listingId) {
     return this.httpClient.get<API>(
