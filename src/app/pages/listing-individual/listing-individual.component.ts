@@ -11,6 +11,7 @@ import { SnackbarService } from "@app/services/snackbar.service";
 // Interfaces
 import { Listing, ListingIndividual, ListingFAQ, ListingSkills, ListingComments, ListingJobs, ListingUpdates, ListingMilestones } from "@app/interfaces/listing";
 import { Profile } from "@app/interfaces/profile";
+import { P } from '@angular/cdk/keycodes';
 
 declare var $: any;
 
@@ -47,6 +48,8 @@ export class ListingIndividualComponent implements OnInit {
   tagline: string;
   updatedOn: string;
   commentsArr: ListingComments[];
+  isLiked: boolean;
+  likeId: string;
 
   constructor( private router: Router, private route: ActivatedRoute, private listingsService: ListingsService,
     private profileService: ProfileService, public authService: AuthService, public snackbarService: SnackbarService
@@ -77,6 +80,8 @@ export class ListingIndividualComponent implements OnInit {
     this.updatedOn = "";
     this.commentsArr = [];
     this.pics = [];
+    this.isLiked = false;
+    this.likeId = "";
   }
 
   hashID;
@@ -115,7 +120,6 @@ export class ListingIndividualComponent implements OnInit {
         this.listingData = data["data"];
         this.imageArr = this.listingData["pics"];
         this.likesArr = this.listingData["user_likes"];
-        this.likesArr = [];
         this.faqArr = this.listingData["faqs"];
         this.jobsArr = this.listingData["jobs"];
         this.tagsArr = this.listingData["tags"];
@@ -179,8 +183,11 @@ export class ListingIndividualComponent implements OnInit {
   }
 
   checkIsLiked(): void {
-    if (this.likesArr.includes(this.authService.LoggedInUserID)) {
+    if (this.authService.LoggedInUserID && this.likesArr.includes(this.authService.LoggedInUserID)) {
+      this.isLiked = true;
+      console.log("Hi")
       $(".like-btn").addClass("liked");
+      $(".like-btn").toggleClass("liked");
     }
   }
 
@@ -227,6 +234,10 @@ export class ListingIndividualComponent implements OnInit {
         this.fileLimit = false;
       }
     }
+  }
+
+  postUpdate(): void {
+
   }
 
   submitUpdates() {
@@ -317,9 +328,14 @@ export class ListingIndividualComponent implements OnInit {
 
   comments;
   // Comments
+
+
+
+
+
   submitComments() {
     console.log(this.comments);
-    this.listingsService.CreateListingComments({
+    this.listingsService.createListingComments({
       listing_id: this.listingId,
       comment: this.comments,
     }).subscribe((data) => {
@@ -343,7 +359,7 @@ export class ListingIndividualComponent implements OnInit {
   }
   replyComments(data) {
     console.log(data);
-    this.listingsService.CreateListingComments({
+    this.listingsService.createListingComments({
       listing_id: this.listingId,
       comment: data.replyToComments,
       reply_to_id: data.listing_comment_id,
@@ -392,48 +408,56 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
-  /*
-  liked_clicked() {
+  handle_like(): void {
     if (!this.authService.isLoggedIn) {
-      this.snackbarService.openSnackBar("Please login to like", true);
+      this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.unauthorized, false);
       return;
-    } else {
-      if (this.userLikedID == "") {
-        this.listingsService.LikedListing(this.listingId).subscribe((data) => {
-          this.snackbarService.openSnackBar(
-            this.snackbarService.DialogList.liked_listing.liked,
-            true
-          );
-          $(".like-btn").toggleClass("liked");
-          this.listingLikes = this.listingLikes + 1;
-          this.userLikedID = data["data"]["like_id"];
-        });
-      } else {
-        this.listingsService.UnLikedListing(this.userLikedID).subscribe(
-          (data) => {
-            this.snackbarService.openSnackBar(
-              this.snackbarService.DialogList.liked_listing.unliked,
-              true
-            );
-            this.userLikedID = "";
-            $(".like-btn").toggleClass("liked");
-            this.listingLikes = this.listingLikes - 1;
-          }
-        );
-      }
     }
+    if (!this.isLiked) {
+      this.listingsService.likeListing(this.listingId).subscribe(
+        (data) => {
+          this.likesArr.push(data["data"]["user_id"]);
+          this.isLiked = true;
+          this.likeId = data["data"]["like_id"]; //to change
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.liked, true);
+        },
+        (err) => {
+          console.log(err);
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.error, false);
+          return;
+        }
+      )
+    } else {
+      this.listingsService.unlikeListing(this.likeId).subscribe(
+        (data) => {
+          this.likesArr.splice(this.likesArr.indexOf(this.authService.LoggedInUserID), 1);
+          this.isLiked = false;
+          this.likeId = "";
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.unliked, true);
+        },
+        (err) => {
+          console.log(err);
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.error, false);
+          return;
+        }
+      )
+    }
+
   }
-  */
 
   tabs_selected(selected: string): void {
     $(".tabs-content").hide();
-    $("#" + selected).show();
-    if (selected == "updates") {
-      this.initiateSlick();
+    switch(selected) {
+      case "updates":
+        this.initiateSlick();
+        break;
+      case "comments":
+        this.loadComments();
     }
+    $("#" + selected).show();
   }
 
-  selectedProfile(user_id: string): void {
+  clickOnProfile(user_id: string): void {
     this.router.navigate(["/profile/" + user_id]);
   }
 

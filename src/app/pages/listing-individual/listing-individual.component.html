@@ -51,17 +51,23 @@
                 </ng-template>
             </div>
 
-            <div>
-              <p (click)="liked_clicked()" class="light-xs like-btn">
+            <div *ngIf="isLiked">
+              <p (click)="handle_like()" class="light-xs like-btn liked">
                 {{ likesArr.length }} Likes
               </p>
             </div>
+            <div *ngIf="!isLiked">
+              <p (click)="handle_like()" class="light-xs like-btn">
+                {{ likesArr.length }} Likes
+              </p>
+            </div>
+
           </div>
 
           <div *ngIf="listingData">
             <div
               class="user-info"
-              (click)="selectedProfile(createdBy)"
+              (click)="clickOnProfile(createdBy)"
             >
               <div class="profile-image">
                 <img src="{{ profilePicture }}" />
@@ -284,8 +290,8 @@
           <button class="yellow-btn" (click)="submitComments()">Submit</button>
         </div>
       </div>
-      <div *ngIf="CommentsArr != []" class="comments-container">
-        <div *ngFor="let comments of CommentsArr; index as i">
+      <div *ngIf="commentsArr != []" class="comments-container">
+        <div *ngFor="let comments of commentsArr; index as i">
           <div *ngIf="comments.reply_to_id == null" class="comments-card">
             <div class="avatar-container updates-user-info">
               <div class="profile-image">
@@ -303,7 +309,7 @@
               <div class="comments-info">
                 <div class="d-flex justify-content-between mb-2">
                   <p
-                    (click)="selectedProfile(comments.user_id)"
+                    (click)="clickOnProfile(comments.user_id)"
                     class="username medium-s"
                   >
                     <span
@@ -363,7 +369,7 @@
             </div>
           </div>
           <!-- Child Comments -->
-          <div *ngFor="let reply of CommentsArr">
+          <div *ngFor="let reply of commentsArr">
             <div
               class="child-container"
               *ngIf="reply.reply_to_id == comments.listing_comment_id"
@@ -386,7 +392,7 @@
                     <div class="d-flex justify-content-between mb-2">
                       <p
                         class="username medium-s"
-                        (click)="selectedProfile(reply.user_id)"
+                        (click)="clickOnProfile(reply.user_id)"
                       >
                         <span
                           *ngIf="reply.user_id == listingData.created_by"

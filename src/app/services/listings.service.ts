@@ -301,7 +301,7 @@ export class ListingsService {
   }
 
   // Comments
-  CreateListingComments(data) {
+  createListingComments(data) {
     return this.httpClient.post<API>(
       this.url + "api/listing-comments",
       data,
@@ -319,7 +319,7 @@ export class ListingsService {
   }
 
   // Like A Listing
-  LikedListing(listing_id) {
+  likeListing(listing_id) {
     return this.httpClient.post<API>(
       this.url + "api/likes",
       { listing_id: listing_id },
@@ -327,7 +327,7 @@ export class ListingsService {
     );
   }
 
-  UnLikedListing(like_id) {
+  unlikeListing(like_id) {
     return this.httpClient.delete<API>(
       this.url + "api/likes/" + like_id,
       this.AuthService.AuthOptions
