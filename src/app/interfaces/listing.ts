@@ -57,6 +57,11 @@ export interface ListingIndividual {
   updated_on: string;
 }
 
+export interface ListingLikes {
+  like_id: string;
+  user_id: string;
+}
+
 export interface ListingFAQ {
   question: string;
   answer: string;
@@ -92,6 +97,7 @@ export interface ListingComments {
   deleted_on: string,
   nickname: string;
   profile_picture: string;
+  replies?: ListingComments[];
 }
 
 export interface ListingMilestones {

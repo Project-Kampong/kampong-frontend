@@ -4,14 +4,15 @@ import { Router, ActivatedRoute } from "@angular/router";
 
 // Services
 import { ListingsService } from "@app/services/listings.service";
-import { ProfileService } from "@app/services/profile.service";
 import { AuthService } from "@app/services/auth.service";
 import { SnackbarService } from "@app/services/snackbar.service";
 
 // Interfaces
-import { Listing, ListingIndividual, ListingFAQ, ListingSkills, ListingComments, ListingJobs, ListingUpdates, ListingMilestones } from "@app/interfaces/listing";
-import { Profile } from "@app/interfaces/profile";
-import { P } from '@angular/cdk/keycodes';
+import { ListingIndividual, ListingFAQ, ListingComments, 
+  ListingJobs, ListingUpdates, ListingMilestones,
+  ListingLikes } from "@app/interfaces/listing";
+
+import { groupBy } from "lodash";
 
 declare var $: any;
 
@@ -22,93 +23,47 @@ declare var $: any;
 })
 export class ListingIndividualComponent implements OnInit {
 
-  listingId: string;
-  pics: string[];
-  createdBy: string;
-  listingData: ListingIndividual;
-  likesArr: string[];
-  imageArr: string[];
-  faqArr: ListingFAQ[];
-  jobsArr: ListingJobs[];
-  tagsArr: string[];
-  locationsArr: string[];
-  updatesArr: ListingUpdates[];
-  milestoneArr: ListingMilestones[];
-  category: string;
-  title: string;
-  createdOn: string;
-  isPublished: boolean;
-  isVerified: boolean;
-  email: string;
-  status: string;
-  url: string;
-  mission: string;
-  nickname: string;
-  profilePicture: string;
-  tagline: string;
-  updatedOn: string;
-  commentsArr: ListingComments[];
-  isLiked: boolean;
-  likeId: string;
-  commentInput: string;
-  replyInput: string;
-  updateImages: File[]
-  updateImagesDisplay: string[];
-  updateInput: string;
+  listingId: string = "";
+  pics: string[] = [];
+  createdBy: string = "";
+  listingData: ListingIndividual = <ListingIndividual>{};
+  likesArr: ListingLikes[] = [];
+  imageArr: string[] = [];
+  faqArr: ListingFAQ[] = [];
+  jobsArr: ListingJobs[] = [];
+  tagsArr: string[] = [];
+  locationsArr: string[] = [];
+  updatesArr: ListingUpdates[] = [];
+  milestoneArr: ListingMilestones[] = [];
+  category: string  = "";
+  title: string = "";
+  createdOn: string  = "";
+  isPublished: boolean = false;
+  isVerified: boolean = false;
+  email: string = "";
+  status: string = "";
+  url: string = "";
+  mission: string = "";
+  nickname: string = "";
+  profilePicture: string = "";
+  tagline: string = "";
+  updatedOn: string = "";
+  commentsArr: ListingComments[] = [];
+  isLiked: boolean = false;
+  likeId: string = "";
+  commentInput: string = "";
+  replyInput: string = "";
+  updateImages: File[] = [];
+  updateImagesDisplay: string[] = [];
+  updateInput: string = "";
+  updatesFormOpen: boolean = false;
+  currentDate: Date = new Date();
+  enquireMessage: string = "";
+  enquireTopic: string = "";
 
   constructor( private router: Router, private route: ActivatedRoute, private listingsService: ListingsService,
     public authService: AuthService, public snackbarService: SnackbarService
-  ) {
-    this.listingId = "";
-    this.createdBy = "";
-    this.listingData = <ListingIndividual>{};
-    this.likesArr = [];
-    this.imageArr = [];
-    this.faqArr = [];
-    this.jobsArr = [];
-    this.tagsArr = [];
-    this.locationsArr = [];
-    this.updatesArr = [];
-    this.milestoneArr = [];
-    this.category = "";
-    this.title = "";
-    this.createdOn = "";
-    this.isPublished = false;
-    this.isVerified = false;
-    this.email = "";
-    this.status = "";
-    this.url = "";
-    this.mission = "";
-    this.nickname = "";
-    this.profilePicture = "";
-    this.tagline = "";
-    this.updatedOn = "";
-    this.commentsArr = [];
-    this.pics = [];
-    this.isLiked = false;
-    this.likeId = "";
-    this.updateImages = [];
-    this.updateImagesDisplay = [];
-  }
-
-  hashID;
-
-  SkillsList: ListingSkills[] = [];
-  MilestoneArr = [];
-
-  currentDate = new Date();
-
-  // Updates
-  fileDisplayArr = [];
-  fileArr = [];
-  fileLimit = false;
-  fileCount = 0;
-  updatesFormOpen = false;
-  locationList = [];
-
-  // Email
-  enquireMessage: String = "";
-  enquireTopic: String = "";
+  ) {}
 
   ngOnInit() {
 
@@ -132,7 +87,6 @@ export class ListingIndividualComponent implements OnInit {
         this.tagsArr = this.listingData["tags"];
         this.locationsArr = this.listingData["locations"];
         this.updatesArr = this.listingData["listing_updates"];
-        this.updatesArr = [];
         this.milestoneArr = this.listingData["milestones"];
         this.category = this.listingData["category"];
         this.title = this.listingData["title"];
@@ -155,7 +109,7 @@ export class ListingIndividualComponent implements OnInit {
         });
 
         this.updatesArr = this.updatesArr.sort((a, b) => {
-          const result: number = (new Date(a.updated_on)).valueOf() - (new Date(b.updated_on)).valueOf();
+          const result: number = (new Date(b.updated_on)).valueOf() - (new Date(a.updated_on)).valueOf();
           return result;
         });
 
@@ -178,7 +132,6 @@ export class ListingIndividualComponent implements OnInit {
     this.listingsService.getSelectedListingComments(this.listingId).subscribe(
       (data) => {
         this.commentsArr = data["data"];
-        console.log(this.commentsArr);
         this.commentsArr = this.commentsArr.sort((a, b) => {
           const result: number = (new Date(b.created_on)).valueOf() - (new Date(a.created_on)).valueOf();
           return result;
@@ -190,13 +143,24 @@ export class ListingIndividualComponent implements OnInit {
     })
   }
 
+  //To think through the fastest way
+  groupComments(commentsArr: ListingComments[]): any {
+    const result = commentsArr.filter(comment => comment.reply_to_id === null);
+    commentsArr.forEach((val) => {
+      if (val.reply_to_id) { //it is a reply
+        console.log(val)
+      }
+    })
+  }
+
   checkIsLiked(): void {
-    if (this.authService.LoggedInUserID && this.likesArr.includes(this.authService.LoggedInUserID)) {
-      this.isLiked = true;
-      console.log("Hi")
-      $(".like-btn").addClass("liked");
-      $(".like-btn").toggleClass("liked");
-    }
+    this.likesArr.forEach((val) => {
+      if (this.authService.LoggedInUserID && val["user_id"] === this.authService.LoggedInUserID) {
+        this.isLiked = true;
+        this.likeId = val["like_id"];
+        $(".like-btn").addClass("liked");
+      }
+    })
   }
 
   parseStory(story: string): string {
@@ -229,43 +193,6 @@ export class ListingIndividualComponent implements OnInit {
     this.updateImagesDisplay.splice(i, 1);
   }
 
-  // File Upload
-  selectedFile: File = null;
-  updatesDescription;
-  uploadFile(event) {
-    this.selectedFile = <File>event.target.files[0];
-    // Display Image
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.fileDisplayArr.push(reader.result.toString());
-    };
-    reader.readAsDataURL(event.target.files[0]);
-    this.fileLimitChecker(true);
-    this.fileArr.push(this.selectedFile);
-    console.log(this.fileArr);
-  }
-
-  removeFile(i) {
-    this.fileDisplayArr.splice(i, 1);
-    this.fileArr.splice(i, 1);
-    this.fileLimitChecker(false);
-  }
-
-  fileLimitChecker(increase) {
-    const maxFile = 5;
-    if (increase) {
-      this.fileCount = this.fileCount + 1;
-      if (this.fileCount == maxFile) {
-        this.fileLimit = true;
-      }
-    } else {
-      this.fileCount = this.fileCount - 1;
-      if (this.fileCount != maxFile) {
-        this.fileLimit = false;
-      }
-    }
-  }
-
   async postUpdate(): Promise<void> {
     (await this.listingsService.createListingUpdates(
       {
@@ -279,7 +206,7 @@ export class ListingIndividualComponent implements OnInit {
         this.updateImagesDisplay = [];
         this.updateInput = "";
         this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_updates.success, true);
-        this.router.navigate(["/listing/" + this.listingId]);
+        
       },
       (err) => {
         console.log(err);
@@ -289,60 +216,39 @@ export class ListingIndividualComponent implements OnInit {
         setTimeout(() => {
           this.initiateSlick();
         }, 500);
+        this.reloadCurrentRoute();
       }
     )
-
   }
 
-  //to refactor
-  deleteUpdate(updates): void {
-    if (confirm("Are you sure to delete update?")) {
-      console.log(updates);
-      this.listingsService.removeListingUpdates(
-        updates.listing_update_id
-      ).subscribe(() => {
-        // Get Updates
-        this.listingsService.getSelectedListingUpdates(
-          this.listingId
-        ).subscribe(
-          (data) => {
-            this.snackbarService.openSnackBar(
-              this.snackbarService.DialogList.delete_updates.success,
-              true
-            );
-            this.updatesArr = data["data"];
-            this.updatesArr.sort((a, b) => {
-              return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-            });
-          },
-          (err) => {
-            this.snackbarService.openSnackBar(
-              this.snackbarService.DialogList.delete_updates.error,
-              false
-            );
-          },
-          () => {
-            setTimeout(() => {
-              this.initiateSlick();
-            }, 500);
-          }
-        );
-      });
+  deleteUpdate(updates: ListingUpdates): void {
+    if (confirm("Delete update?")) {
+      this.listingsService.removeListingUpdates(updates.listing_update_id).subscribe(
+        (data) => {
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_updates.success, true);
+        },
+        (err) => {
+          console.log(err);
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_updates.error, false);
+        },
+        () => {
+          setTimeout(() => {
+            this.initiateSlick();
+          }, 500);
+          this.reloadCurrentRoute();
+        }
+      )
     }
   }
 
-  // Updates
-  getDiffInTime(time) {
-    const newTime = new Date(time);
-    var diff = this.currentDate.getTime() - newTime.getTime();
-    diff /= 1000;
-
-    var hh = Math.floor(diff / (60 * 60));
-    var dd = Math.floor(diff / (60 * 60 * 24));
-    var mm = Math.floor(diff / (60 * 60 * 24 * 30));
-    var yy = Math.floor(diff / (60 * 60 * 24 * 30 * 12));
+  // To refactor
+  getDiffInTime(time: string): string {
+    const diff = (this.currentDate.getTime() - (new Date(time)).getTime()) / 1000;
+    const hh = Math.floor(diff / (60 * 60));
+    const dd = Math.floor(diff / (60 * 60 * 24));
+    const mm = Math.floor(diff / (60 * 60 * 24 * 30));
+    const yy = Math.floor(diff / (60 * 60 * 24 * 30 * 12));
     if (hh > 24) {
-      // retun day
       if (dd > 30) {
         if (mm > 12) {
           if (yy > 1) {
@@ -463,9 +369,9 @@ export class ListingIndividualComponent implements OnInit {
     if (!this.isLiked) {
       this.listingsService.likeListing(this.listingId).subscribe(
         (data) => {
-          this.likesArr.push(data["data"]["user_id"]);
+          this.likesArr.push({ like_id: data["data"]["like_id"], user_id: data["data"]["user_id"]});
           this.isLiked = true;
-          this.likeId = data["data"]["like_id"]; //to change
+          this.likeId = data["data"]["like_id"];
           this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.liked, true);
         },
         (err) => {
@@ -477,7 +383,7 @@ export class ListingIndividualComponent implements OnInit {
     } else {
       this.listingsService.unlikeListing(this.likeId).subscribe(
         (data) => {
-          this.likesArr.splice(this.likesArr.indexOf(this.authService.LoggedInUserID), 1);
+          this.likesArr.splice(this.likesArr.map(like => like["user_id"]).indexOf(this.authService.LoggedInUserID), 1);
           this.isLiked = false;
           this.likeId = "";
           this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.unliked, true);
@@ -490,6 +396,13 @@ export class ListingIndividualComponent implements OnInit {
       )
     }
 
+  }
+
+  reloadCurrentRoute(): void {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
   }
 
   tabs_selected(selected: string): void {

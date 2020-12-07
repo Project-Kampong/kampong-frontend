@@ -21,8 +21,8 @@
             <p class="light-m">{{ tagline }}</p>
             <div class="hashtags-list">
               <ul *ngIf="tagsArr && tagsArr.length > 0">
-                <li *ngFor="let tag of tagsArr" class="light-xs">
-                  {{ tag }}
+                <li *ngFor="let tagObj of tagsArr" class="light-xs">
+                  {{ tagObj.tag }}
                 </li>
               </ul>
             </div>

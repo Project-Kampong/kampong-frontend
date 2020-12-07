@@ -34,7 +34,7 @@ export class AuthService {
   // Containers only token - No content type
   OnlyAuthHttpHeaders;
 
-  Dialogmessage: String = "";
+  Dialogmessage: string = "";
 
   constructor(
     private httpClient: HttpClient,
