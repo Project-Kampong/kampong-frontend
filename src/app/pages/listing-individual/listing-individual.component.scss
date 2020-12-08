@@ -1,3 +1,7 @@
+.empty-placeholder {
+  margin: 10px 0;
+}
+
 // Comments
 .comments-container {
   .comments-card {
@@ -102,8 +106,8 @@
       position: relative;
       cursor: pointer;
       &:after {
-        content: "\f067";
-        font-family: "Font Awesome\ 5 Free";
+        content: '\f067';
+        font-family: 'Font Awesome\ 5 Free';
         font-size: 2rem;
         position: absolute;
         left: 50%;
@@ -136,8 +140,8 @@
     &:hover {
       &:after {
         cursor: pointer;
-        content: "\f068";
-        font-family: "Font Awesome\ 5 Free";
+        content: '\f068';
+        font-family: 'Font Awesome\ 5 Free';
         font-weight: 900;
         font-size: 2rem;
         display: flex;
@@ -195,8 +199,8 @@
     transform: translateX(-100%);
     cursor: pointer;
     &:after {
-      content: "\f00d";
-      font-family: "Font Awesome\ 5 Free";
+      content: '\f00d';
+      font-family: 'Font Awesome\ 5 Free';
       font-weight: 900;
       font-size: 1.5rem;
     }
@@ -229,8 +233,8 @@
     transform: translateX(-100%);
     cursor: pointer;
     &:after {
-      content: "\f00d";
-      font-family: "Font Awesome\ 5 Free";
+      content: '\f00d';
+      font-family: 'Font Awesome\ 5 Free';
       font-weight: 900;
       font-size: 1.5rem;
     }
@@ -295,8 +299,8 @@ $primary: #4f8a8b;
   .like-btn {
     cursor: pointer;
     &:before {
-      content: "\f004";
-      font-family: "Font Awesome\ 5 Free";
+      content: '\f004';
+      font-family: 'Font Awesome\ 5 Free';
       font-weight: 400;
       padding-right: 0.5rem;
       color: $primary;
@@ -322,8 +326,8 @@ $primary: #4f8a8b;
   color: white;
   margin-bottom: 1rem;
   &:before {
-    content: "\f017";
-    font-family: "Font Awesome\ 5 Free";
+    content: '\f017';
+    font-family: 'Font Awesome\ 5 Free';
     font-weight: 400;
     margin-right: 0.5rem;
   }
@@ -447,8 +451,8 @@ $primary: #4f8a8b;
     border-bottom-right-radius: 5px;
     z-index: 1;
     &:before {
-      content: "\f0eb";
-      font-family: "Font Awesome\ 5 Free";
+      content: '\f0eb';
+      font-family: 'Font Awesome\ 5 Free';
       font-weight: 400;
       font-size: 1.5rem;
       color: white;

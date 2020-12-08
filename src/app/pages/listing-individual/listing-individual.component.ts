@@ -68,6 +68,9 @@ export class ListingIndividualComponent implements OnInit {
     window.scroll(0, 0);
     this.listingId = this.route.snapshot.params['id'];
     this.getInitData();
+    console.log('init');
+    console.log(this.ListingData);
+    console.log('hi');
 
     // UI Components
     $('.navigation-tabs li').on('click', function () {
@@ -91,17 +94,23 @@ export class ListingIndividualComponent implements OnInit {
       (data) => {
         this.ListingData = data['data'];
         this.SliderImageArr = this.ListingData['pics'];
-        this.ListingData.overview = this.ListingData['overview'].replace(/&lt;/g, '<').replace(/<a/g, "<a target='_blank'");
-        this.ListingData.problem = this.ListingData['problem'].replace(/&lt;/g, '<').replace(/<a/g, "<a target='_blank'");
-        this.ListingData.solution = this.ListingData['solution'].replace(/&lt;/g, '<').replace(/<a/g, "<a target='_blank'");
-        this.ListingData.outcome = this.ListingData['outcome'].replace(/&lt;/g, '<').replace(/<a/g, "<a target='_blank'");
 
+        this.ListingData.overview =
+          this.ListingData['overview'] != null ? this.ListingData['overview'].replace(/&lt;/g, '<').replace(/<a/g, "<a target='_blank'") : null;
+        this.ListingData.problem =
+          this.ListingData['problem'] != null ? this.ListingData['problem'].replace(/&lt;/g, '<').replace(/<a/g, "<a target='_blank'") : null;
+        this.ListingData.solution =
+          this.ListingData['solution'] != null ? this.ListingData['solution'].replace(/&lt;/g, '<').replace(/<a/g, "<a target='_blank'") : null;
+        this.ListingData.outcome =
+          this.ListingData['outcome'] != null ? this.ListingData['outcome'].replace(/&lt;/g, '<').replace(/<a/g, "<a target='_blank'") : null;
+
+        console.log('sdadada');
+        console.log(this.ListingData);
+        console.log('hi');
         $('#result-overview').html(this.ListingData.overview);
         $('#result-problem').html(this.ListingData.problem);
         $('#result-solution').html(this.ListingData.solution);
         $('#result-outcome').html(this.ListingData.outcome);
-        console.log(this.ListingData);
-        console.log(this.SliderImageArr);
         this.ProfileService.getUserProfile(this.ListingData['created_by']).subscribe((profile) => {
           this.ProfileInfo = profile['data'];
           if (this.ProfileInfo.profile_picture == null) {
@@ -523,5 +532,9 @@ export class ListingIndividualComponent implements OnInit {
       this.SnackbarService.openSnackBar('Please login first', false);
       this.router.navigate(['/login']);
     }
+  }
+
+  isEmptyObject(obj) {
+    return obj && Object.keys(obj).length === 0;
   }
 }
