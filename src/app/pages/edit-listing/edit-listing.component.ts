@@ -36,18 +36,18 @@ export class EditListingComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
   listingForm: FormGroup;
   listingData: EditListing;
-  listingId: string;
-  removable: boolean;
+  listingId: string = "";
+  removable: boolean = true;
   categoryGroup: Array<CategoryFilter>;
   locationGroup: Array<LocationFilter>;
-  listingImages: File[];
-  listingImagesDisplay: string[];
-  originalImages: originalImagesCheck[];
-  hashtags: Array<EditListingHashtags>;
-  originalHashtags: Array<EditListingHashtags>;
-  milestoneArr: Array<EditListingMilestones>;
-  jobArr: Array<EditListingJobs>;
-  faqArr: Array<EditListingFAQ>;
+  listingImages: File[] = [];
+  listingImagesDisplay: string[] = [];
+  originalImages: originalImagesCheck[] = [];
+  hashtags: EditListingHashtags[] = [];
+  originalHashtags: EditListingHashtags[] = [];
+  milestoneArr: EditListingMilestones[] = [];
+  jobArr: EditListingJobs[] = [];
+  faqArr: EditListingFAQ[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -55,18 +55,7 @@ export class EditListingComponent implements OnInit {
     private router: Router,
     public snackbarService: SnackbarService,
     private route: ActivatedRoute
-  ) {
-    this.listingImages = [];
-    this.listingImagesDisplay = [];
-    this.hashtags = [];
-    this.milestoneArr = [];
-    this.jobArr = [];
-    this.faqArr = [];
-    this.listingId = "";
-    this.removable = true;
-    this.originalImages = [];
-    this.originalHashtags = [];
-  }
+  ) {}
 
   ngOnInit() {
     this.categoryGroup = categoryList;
@@ -78,16 +67,23 @@ export class EditListingComponent implements OnInit {
 
     this.listingsService.getSelectedListing(this.listingId).subscribe(
       (res) => {
-        this.listingForm.patchValue(res["data"]);
-        $("#overview").html(this.parseStory(res["data"]["overview"]));
-        $("#problem").html(this.parseStory(res["data"]["problem"]));
-        $("#solution").html(this.parseStory(res["data"]["solution"]));
-        $("#outcome").html(this.parseStory(res["data"]["outcome"]));
-        this.listingImagesDisplay = res["data"].pics;
+        const listingData = res["data"];
+        this.listingForm.patchValue(listingData);
+        this.jobArr = listingData["jobs"];
+        this.faqArr = listingData["faqs"];
+        //this.milestoneArr = listingData["milestones"];
+        this.hashtags = listingData["tags"];
+        this.listingImagesDisplay = listingData["pics"];
         this.listingImages = Array(this.listingImagesDisplay.length).fill(null);
         this.listingImagesDisplay.forEach((val) => {
           this.originalImages.push({ image: val, check: true });
         });
+
+        $("#overview").html(this.parseStory(listingData["overview"]));
+        $("#problem").html(this.parseStory(listingData["problem"]));
+        $("#solution").html(this.parseStory(listingData["solution"]));
+        $("#outcome").html(this.parseStory(listingData["outcome"]));
+
       },
       (err) => {
         console.log(err);

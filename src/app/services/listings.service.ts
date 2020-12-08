@@ -36,8 +36,9 @@ export class ListingsService {
     };
     this.optionsMulti = {
       headers: new HttpHeaders({
+        'Accept': 'application/json',
         "Content-Type": "multipart/form-data",
-        authorization: "Bearer " + this.AuthService.AuthToken,
+        'Authorization': "Bearer " + this.AuthService.AuthToken,
       }),
     };
   }
@@ -260,7 +261,6 @@ export class ListingsService {
         imageFd.append("uploads", val);
       }
     });
-    console.log(imageFd.getAll('uploads'));
     return new Promise<Observable<HttpEvent<API>>>((resolve, reject) => {
       this.uploadFiles(imageFd).subscribe(
         (res) => {
