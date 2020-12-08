@@ -1,11 +1,11 @@
-<div class="slick-belt" *ngIf="featuredData != []">
+<div class="slick-belt" *ngIf="featuredData && featuredData?.length > 0">
   <div
     *ngFor="let listing of featuredData; let i = index"
     class="banner"
     routerLink="/listing/{{ listing.listing_id }}"
   >
     <span *ngIf="i == featuredData.length - 1">{{ sliderSlickInit() }}</span>
-    <img src="{{ listing.pic1 }}" />
+    <img src="{{ listing.pics[0] }}" />
     <div class="banner-overlay">
       <div class="info-box">
         <div>
@@ -15,7 +15,7 @@
             {{ listing.tagline }}
           </p>
         </div>
-        <div *ngIf="listing.locations.length > 0">
+        <div *ngIf="listing.locations?.length > 0 && listing.locations">
           <div class="locationtags-list">
             <div class="location-icon"></div>
             <ul>

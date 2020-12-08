@@ -1,29 +1,22 @@
-import { Component, OnInit, Inject } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Component, OnInit, Inject } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { ListingsService } from "@app/services/listings.service";
-import { ProfileService } from "@app/services/profile.service";
-import { AuthService } from "@app/services/auth.service";
-import { SnackbarService } from "@app/services/snackbar.service";
+import { ListingsService } from '@app/services/listings.service';
+import { ProfileService } from '@app/services/profile.service';
+import { AuthService } from '@app/services/auth.service';
+import { SnackbarService } from '@app/services/snackbar.service';
 
 // Interface
-import {
-  Listing,
-  DefaultListing,
-  ListingFAQ,
-  ListingSkills,
-  ListingStories,
-  ListingComments,
-} from "@app/interfaces/listing";
-import { Profile } from "@app/interfaces/profile";
-import { UserData } from "@app/interfaces/user";
+import { Listing, DefaultListing, ListingFAQ, ListingSkills, ListingComments } from '@app/interfaces/listing';
+import { Profile } from '@app/interfaces/profile';
+import { UserData } from '@app/interfaces/user';
 
 declare var $: any;
 
 @Component({
-  selector: "app-listing-individual",
-  templateUrl: "./listing-individual.component.html",
-  styleUrls: ["./listing-individual.component.scss"],
+  selector: 'app-listing-individual',
+  templateUrl: './listing-individual.component.html',
+  styleUrls: ['./listing-individual.component.scss'],
 })
 export class ListingIndividualComponent implements OnInit {
   constructor(
@@ -32,7 +25,7 @@ export class ListingIndividualComponent implements OnInit {
     private ListingsService: ListingsService,
     private ProfileService: ProfileService,
     public AuthService: AuthService,
-    public SnackbarService: SnackbarService
+    public SnackbarService: SnackbarService,
   ) {}
 
   listingId;
@@ -42,8 +35,6 @@ export class ListingIndividualComponent implements OnInit {
   ListingData: Listing = <Listing>{};
   ProfileInfo: Profile = <Profile>{};
   Hashtags = [];
-  // Stories
-  Stories: ListingStories = <ListingStories>{};
   SkillsList: ListingSkills[] = [];
   MilestoneArr = [];
   // Faq
@@ -58,7 +49,7 @@ export class ListingIndividualComponent implements OnInit {
   // UI
   SliderImageArr = [];
   listingLikes;
-  userLikedID = "";
+  userLikedID = '';
   currentDate = new Date();
 
   // Updates
@@ -69,18 +60,21 @@ export class ListingIndividualComponent implements OnInit {
   updatesFormOpen = false;
   locationList = [];
 
+  enquireMessage: String = '';
+  enquireTopic: String = '';
+
   jobs;
   ngOnInit() {
     window.scroll(0, 0);
-    this.listingId = this.route.snapshot.params["id"];
+    this.listingId = this.route.snapshot.params['id'];
     this.getInitData();
 
     // UI Components
-    $(".navigation-tabs li").on("click", function () {
-      $(".navigation-tabs li").removeClass("active");
-      $(this).addClass("active");
+    $('.navigation-tabs li').on('click', function () {
+      $('.navigation-tabs li').removeClass('active');
+      $(this).addClass('active');
     });
-    this.tabs_selected("story");
+    this.tabs_selected('story');
 
     // $(".popup-email").toggleClass("active");
   }
@@ -89,118 +83,85 @@ export class ListingIndividualComponent implements OnInit {
     // Static
     this.ListingsService.getAllLocations().subscribe((data) => {
       console.log(data);
-      this.locationList = data["data"];
+      this.locationList = data['data'];
     });
 
     // Get Listing Info
     this.ListingsService.getSelectedListing(this.listingId).subscribe(
       (data) => {
-        this.ListingData = data["data"];
-        this.SliderImageArr.push(
-          this.ListingData["pic1"],
-          this.ListingData["pic2"],
-          this.ListingData["pic3"],
-          this.ListingData["pic4"],
-          this.ListingData["pic5"]
-        );
+        this.ListingData = data['data'];
+        this.SliderImageArr = this.ListingData['pics'];
+        this.ListingData.overview = this.ListingData['overview'].replace(/&lt;/g, '<').replace(/<a/g, "<a target='_blank'");
+        this.ListingData.problem = this.ListingData['problem'].replace(/&lt;/g, '<').replace(/<a/g, "<a target='_blank'");
+        this.ListingData.solution = this.ListingData['solution'].replace(/&lt;/g, '<').replace(/<a/g, "<a target='_blank'");
+        this.ListingData.outcome = this.ListingData['outcome'].replace(/&lt;/g, '<').replace(/<a/g, "<a target='_blank'");
+
+        $('#result-overview').html(this.ListingData.overview);
+        $('#result-problem').html(this.ListingData.problem);
+        $('#result-solution').html(this.ListingData.solution);
+        $('#result-outcome').html(this.ListingData.outcome);
         console.log(this.ListingData);
         console.log(this.SliderImageArr);
-        this.ProfileService.getUserProfile(
-          this.ListingData["created_by"]
-        ).subscribe((profile) => {
-          this.ProfileInfo = profile["data"];
+        this.ProfileService.getUserProfile(this.ListingData['created_by']).subscribe((profile) => {
+          this.ProfileInfo = profile['data'];
           if (this.ProfileInfo.profile_picture == null) {
-            this.ProfileInfo.profile_picture =
-              "https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png";
+            this.ProfileInfo.profile_picture = 'https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png';
           }
         });
 
         if (this.AuthService.isLoggedIn) {
           // Check User Liked List
           this.ListingsService.getLikedListing().subscribe((data) => {
-            const likedArr = data["data"];
+            const likedArr = data['data'];
             for (var i = 0; i < likedArr.length; i++) {
               if (likedArr[i].listing_id == this.listingId) {
                 this.userLikedID = likedArr[i].like_id;
-                $(".like-btn").addClass("liked");
+                $('.like-btn').addClass('liked');
               }
             }
           });
         }
       },
       (err) => {
-        this.router.navigate(["/home"]);
+        this.router.navigate(['/home']);
       },
       () => {
         // Public Data
         // Get Num of Likes
-        this.ListingsService.getSelectedListingLikes(this.listingId).subscribe(
-          (data) => {
-            this.listingLikes = data["count"];
-          }
-        );
+        this.ListingsService.getSelectedListingLikes(this.listingId).subscribe((data) => {
+          this.listingLikes = data['count'];
+        });
         // Get FAQ Info
-        this.ListingsService.getSelectedListingFAQ(this.listingId).subscribe(
-          (data) => {
-            this.FAQList = data["data"];
-          }
-        );
+        this.ListingsService.getSelectedListingFAQ(this.listingId).subscribe((data) => {
+          this.FAQList = data['data'];
+        });
 
-        // Get Skills
-        // this.ListingsService.getSelectedListingSkills(this.listingId).subscribe(
-        //   (data) => {
-        //     this.SkillsList = data["data"];
-        //     console.log(this.SkillsList);
-        //   }
-        // );
-        this.ListingsService.getSelectedListingJobs(this.listingId).subscribe(
-          (data) => {
-            this.SkillsList = data["data"];
-            console.log(this.SkillsList);
-          }
-        );
+        this.ListingsService.getSelectedListingJobs(this.listingId).subscribe((data) => {
+          this.SkillsList = data['data'];
+          console.log(this.SkillsList);
+        });
 
         // Get Hashtags
-        this.ListingsService.getSelectedListingHashtags(
-          this.listingId
-        ).subscribe((data) => {
-          this.Hashtags = data["data"];
+        this.ListingsService.getSelectedListingHashtags(this.listingId).subscribe((data) => {
+          this.Hashtags = data['data'];
         });
 
         // Get Location
-        this.ListingsService.getSelectedListingLocations(
-          this.listingId
-        ).subscribe((data) => {
-          this.ListingLocation = data["data"];
-        });
-
-        // Get Stories
-        this.ListingsService.getSelectedListingStories(
-          this.listingId
-        ).subscribe((data) => {
-          this.Stories = data["data"];
-          this.Stories.overview = data["data"].overview
-            .replace(/&lt;/g, "<")
-            .replace(/<a/g, "<a target='_blank'");
-
-          $("#result-output").html(this.Stories.overview);
+        this.ListingsService.getSelectedListingLocations(this.listingId).subscribe((data) => {
+          this.ListingLocation = data['data'];
         });
 
         // Get Comments
-        this.ListingsService.getSelectedListingComments(
-          this.listingId
-        ).subscribe((data) => {
-          this.CommentsArr = data["data"];
+        this.ListingsService.getSelectedListingComments(this.listingId).subscribe((data) => {
+          this.CommentsArr = data['data'];
           this.CommentsArr.sort((a, b) => {
             return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
           });
         });
 
         // Get Updates
-        this.ListingsService.getSelectedListingUpdates(
-          this.listingId
-        ).subscribe((data) => {
-          this.UpdatesArr = data["data"];
+        this.ListingsService.getSelectedListingUpdates(this.listingId).subscribe((data) => {
+          this.UpdatesArr = data['data'];
           this.UpdatesArr.sort((a, b) => {
             return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
           });
@@ -208,17 +169,15 @@ export class ListingIndividualComponent implements OnInit {
         });
 
         // Get Milestones
-        this.ListingsService.getSelectedListingMilestones(
-          this.listingId
-        ).subscribe((data) => {
-          this.MilestoneArr = data["data"];
+        this.ListingsService.getSelectedListingMilestones(this.listingId).subscribe((data) => {
+          this.MilestoneArr = data['data'];
           this.MilestoneArr.sort((a, b) => {
             return <any>new Date(a.date) - <any>new Date(b.date);
           });
         });
 
         // End of Data Retrive
-      }
+      },
     );
   }
 
@@ -228,7 +187,7 @@ export class ListingIndividualComponent implements OnInit {
   uploadFile(event) {
     this.selectedFile = <File>event.target.files[0];
     // Display Image
-    var reader: FileReader = new FileReader();
+    const reader = new FileReader();
     reader.onload = (e) => {
       this.fileDisplayArr.push(reader.result.toString());
     };
@@ -261,42 +220,36 @@ export class ListingIndividualComponent implements OnInit {
 
   submitUpdates() {
     var updatesFd = new FormData();
-    updatesFd.append("description", this.updatesDescription);
-    updatesFd.append("listing_id", this.listingId);
+    updatesFd.append('description', this.updatesDescription);
+    updatesFd.append('listing_id', this.listingId);
     for (var i = 0; i < this.fileArr.length; i++) {
-      updatesFd.append("pic" + (i + 1), this.fileArr[i].name);
-      updatesFd.append("pics", this.fileArr[i]);
-      console.log("pic" + (i + 1));
+      updatesFd.append('pic' + (i + 1), this.fileArr[i].name);
+      updatesFd.append('pics', this.fileArr[i]);
+      console.log('pic' + (i + 1));
     }
     this.ListingsService.CreateListingUpdates(updatesFd).subscribe((data) => {
       console.log(data);
       this.fileArr = [];
       this.fileDisplayArr = [];
-      this.updatesDescription = "";
+      this.updatesDescription = '';
       this.fileCount = 0;
       // Get Updates
       this.ListingsService.getSelectedListingUpdates(this.listingId).subscribe(
         (data) => {
-          this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.upload_updates.success,
-            true
-          );
-          this.UpdatesArr = data["data"];
+          this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.upload_updates.success, true);
+          this.UpdatesArr = data['data'];
           this.UpdatesArr.sort((a, b) => {
             return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
           });
         },
         (err) => {
-          this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.upload_updates.error,
-            false
-          );
+          this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.upload_updates.error, false);
         },
         () => {
           setTimeout(() => {
             this.initiateSlick();
           }, 500);
-        }
+        },
       );
     });
   }
@@ -316,31 +269,31 @@ export class ListingIndividualComponent implements OnInit {
       if (dd > 30) {
         if (mm > 12) {
           if (yy > 1) {
-            return yy + " Years ago";
+            return yy + ' Years ago';
           } else {
-            return yy + " Year ago";
+            return yy + ' Year ago';
           }
         } else {
           if (mm > 1) {
-            return mm + " Months ago";
+            return mm + ' Months ago';
           } else {
-            return mm + " Month ago";
+            return mm + ' Month ago';
           }
         }
       } else {
         if (dd > 1) {
-          return dd + " Days ago";
+          return dd + ' Days ago';
         } else {
-          return dd + " Day ago";
+          return dd + ' Day ago';
         }
       }
     } else if (hh < 1) {
-      return "Less than 1 Hour ago";
+      return 'Less than 1 Hour ago';
     } else {
       if (hh > 1) {
-        return hh + " Hours ago";
+        return hh + ' Hours ago';
       } else {
-        return hh + " Hour ago";
+        return hh + ' Hour ago';
       }
     }
   }
@@ -353,22 +306,17 @@ export class ListingIndividualComponent implements OnInit {
       listing_id: this.listingId,
       comment: this.comments,
     }).subscribe((data) => {
-      this.comments = "";
+      this.comments = '';
       console.log(data);
       // Get Comments
-      this.ListingsService.getSelectedListingComments(this.listingId).subscribe(
-        (data) => {
-          this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.upload_comments.success,
-            true
-          );
-          this.CommentsArr = data["data"];
-          this.CommentsArr.sort((a, b) => {
-            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-          });
-          console.log(this.CommentsArr);
-        }
-      );
+      this.ListingsService.getSelectedListingComments(this.listingId).subscribe((data) => {
+        this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.upload_comments.success, true);
+        this.CommentsArr = data['data'];
+        this.CommentsArr.sort((a, b) => {
+          return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+        });
+        console.log(this.CommentsArr);
+      });
     });
   }
   replyComments(data) {
@@ -380,19 +328,14 @@ export class ListingIndividualComponent implements OnInit {
     }).subscribe((data) => {
       console.log(data);
       // Get Comments
-      this.ListingsService.getSelectedListingComments(this.listingId).subscribe(
-        (data) => {
-          this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.upload_comments.success,
-            true
-          );
-          this.CommentsArr = data["data"];
-          this.CommentsArr.sort((a, b) => {
-            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-          });
-          console.log(this.CommentsArr);
-        }
-      );
+      this.ListingsService.getSelectedListingComments(this.listingId).subscribe((data) => {
+        this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.upload_comments.success, true);
+        this.CommentsArr = data['data'];
+        this.CommentsArr.sort((a, b) => {
+          return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
+        });
+        console.log(this.CommentsArr);
+      });
     });
   }
 
@@ -400,8 +343,8 @@ export class ListingIndividualComponent implements OnInit {
 
   UpdateSlicked = false;
   initiateSlick() {
-    if (!$(".update-image-slider").hasClass("slick-initialized")) {
-      $(".update-image-slider").slick({
+    if (!$('.update-image-slider').hasClass('slick-initialized')) {
+      $('.update-image-slider').slick({
         slidesToShow: 2,
         slidesToScroll: 1,
         dots: true,
@@ -417,150 +360,121 @@ export class ListingIndividualComponent implements OnInit {
         ],
       });
     } else {
-      $(".update-image-slider").slick("unslick");
+      $('.update-image-slider').slick('unslick');
       this.initiateSlick();
     }
   }
 
   liked_clicked() {
     if (!this.AuthService.isLoggedIn) {
-      this.SnackbarService.openSnackBar("Please login to like", true);
+      this.SnackbarService.openSnackBar('Please login to like', true);
       return;
     } else {
-      if (this.userLikedID == "") {
+      if (this.userLikedID == '') {
         this.ListingsService.LikedListing(this.listingId).subscribe((data) => {
-          this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.liked_listing.liked,
-            true
-          );
-          $(".like-btn").toggleClass("liked");
+          this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.liked_listing.liked, true);
+          $('.like-btn').toggleClass('liked');
           this.listingLikes = this.listingLikes + 1;
-          this.userLikedID = data["data"]["like_id"];
+          this.userLikedID = data['data']['like_id'];
         });
       } else {
-        this.ListingsService.UnLikedListing(this.userLikedID).subscribe(
-          (data) => {
-            this.SnackbarService.openSnackBar(
-              this.SnackbarService.DialogList.liked_listing.unliked,
-              true
-            );
-            this.userLikedID = "";
-            $(".like-btn").toggleClass("liked");
-            this.listingLikes = this.listingLikes - 1;
-          }
-        );
+        this.ListingsService.UnLikedListing(this.userLikedID).subscribe((data) => {
+          this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.liked_listing.unliked, true);
+          this.userLikedID = '';
+          $('.like-btn').toggleClass('liked');
+          this.listingLikes = this.listingLikes - 1;
+        });
       }
     }
   }
 
-  tabs_selected(selected) {
-    $(".tabs-content").hide();
-    $("#" + selected).show();
-    if (selected == "updates") {
+  tabs_selected(selected: string): void {
+    $('.tabs-content').hide();
+    $('#' + selected).show();
+    if (selected == 'updates') {
       this.initiateSlick();
     }
   }
 
-  selectedProfile(user_id) {
-    this.router.navigate(["/profile/" + user_id]);
+  selectedProfile(user_id: string): void {
+    this.router.navigate(['/profile/' + user_id]);
   }
 
-  enquireMessage: String = "";
-  enquireTopic: String = "";
+  editListing(listing_id: string): void {
+    this.router.navigate(['/edit/' + listing_id]);
+  }
+
   // Toggle Enquire popup
-  togglePopup() {
+  togglePopup(): void {
     // Toggle popup
-    $(".popup-bg").toggleClass("active");
-    $(".popup-box").toggleClass("active");
+    $('.popup-bg').toggleClass('active');
+    $('.popup-box').toggleClass('active');
   }
 
   toggleEmailPopup() {
     // Toggle popup
-    $(".popup-bg").toggleClass("active");
-    $(".popup-email").toggleClass("active");
+    $('.popup-bg').toggleClass('active');
+    $('.popup-email').toggleClass('active');
   }
   sendMessage() {
-    if (this.enquireMessage != "") {
+    if (this.enquireMessage != '') {
       this.togglePopup();
       console.log(this.enquireMessage);
       this.ListingsService.sendEnquiry({
         receiverEmail: this.ListingData.listing_email,
-        senderEmail: this.ListingData.listing_email,
         subject: this.enquireTopic,
         message: this.enquireMessage,
       }).subscribe(
         (data) => {
-          this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.send_message.success,
-            true
-          ),
+          this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.send_message.success, true),
             (err) => {
-              this.SnackbarService.openSnackBar(
-                this.SnackbarService.DialogList.send_message.error,
-                false
-              );
+              this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.send_message.error, false);
             };
         },
         () => {
           setTimeout(() => {
             this.initiateSlick();
           }, 500);
-        }
+        },
       );
     }
   }
 
   // Delete
   deleteUpdate(updates) {
-    if (confirm("Are you sure to delete update?")) {
+    if (confirm('Are you sure to delete update?')) {
       console.log(updates);
-      this.ListingsService.removeListingUpdates(
-        updates.listing_update_id
-      ).subscribe(() => {
+      this.ListingsService.removeListingUpdates(updates.listing_update_id).subscribe(() => {
         // Get Updates
-        this.ListingsService.getSelectedListingUpdates(
-          this.listingId
-        ).subscribe(
+        this.ListingsService.getSelectedListingUpdates(this.listingId).subscribe(
           (data) => {
-            this.SnackbarService.openSnackBar(
-              this.SnackbarService.DialogList.delete_updates.success,
-              true
-            );
-            this.UpdatesArr = data["data"];
+            this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.delete_updates.success, true);
+            this.UpdatesArr = data['data'];
             this.UpdatesArr.sort((a, b) => {
               return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
             });
           },
           (err) => {
-            this.SnackbarService.openSnackBar(
-              this.SnackbarService.DialogList.delete_updates.error,
-              false
-            );
+            this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.delete_updates.error, false);
           },
           () => {
             setTimeout(() => {
               this.initiateSlick();
             }, 500);
-          }
+          },
         );
       });
     }
   }
+
   deleteComments(comment) {
-    if (confirm("Are you sure to delete comment?")) {
+    if (confirm('Are you sure to delete comment?')) {
       console.log(comment);
-      this.ListingsService.removeListingComments(
-        comment.listing_comment_id
-      ).subscribe(() => {
-        this.SnackbarService.openSnackBar(
-          this.SnackbarService.DialogList.delete_comments.success,
-          true
-        );
+      this.ListingsService.removeListingComments(comment.listing_comment_id).subscribe(() => {
+        this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.delete_comments.success, true);
         // Get Comments
-        this.ListingsService.getSelectedListingComments(
-          this.listingId
-        ).subscribe((data) => {
-          this.CommentsArr = data["data"];
+        this.ListingsService.getSelectedListingComments(this.listingId).subscribe((data) => {
+          this.CommentsArr = data['data'];
           this.CommentsArr.sort((a, b) => {
             return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
           });
@@ -574,48 +488,40 @@ export class ListingIndividualComponent implements OnInit {
     this.toggleEmailPopup();
     if (this.AuthService.isLoggedIn) {
       const subject = `Application for ${jobs.job_title}`;
-      this.ProfileService.getUserProfile(
-        this.AuthService.LoggedInUserID
-      ).subscribe((user) => {
+      this.ProfileService.getUserProfile(this.AuthService.LoggedInUserID).subscribe((user) => {
         /**
          *
          * Should do this on the backend
          */
-        const message = `Hi there, an applicant named ${this.AuthService.UserData["first_name"]} has applied for this job. His contact info are
-        \n Email :${this.AuthService.UserData["email"]}
+        const message = `Hi there, an applicant named ${this.AuthService.UserData['first_name']} has applied for this job. His contact info are
+        \n Email :${this.AuthService.UserData['email']}
         \n Contact Number : ${user.data.phone}`;
         console.log(message);
         this.ListingsService.sendEnquiry({
           // receiverEmail: this.ListingData.listing_email,
           // senderEmail: this.ListingData.listing_email,
-          receiverEmail: "ahliang51@gmail.com",
-          senderEmail: "ahliang51@gmail.com",
+          receiverEmail: 'ahliang51@gmail.com',
+          senderEmail: 'ahliang51@gmail.com',
           subject: `Applicant for ${jobs.job_title}`,
           message: message,
         }).subscribe(
           (data) => {
-            this.SnackbarService.openSnackBar(
-              this.SnackbarService.DialogList.send_message.success,
-              true
-            ),
+            this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.send_message.success, true),
               (err) => {
                 console.log(err);
-                this.SnackbarService.openSnackBar(
-                  this.SnackbarService.DialogList.send_message.error,
-                  false
-                );
+                this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.send_message.error, false);
               };
           },
           () => {
             setTimeout(() => {
               this.initiateSlick();
             }, 500);
-          }
+          },
         );
       });
     } else {
-      this.SnackbarService.openSnackBar("Please login first", false);
-      this.router.navigate(["/login"]);
+      this.SnackbarService.openSnackBar('Please login first', false);
+      this.router.navigate(['/login']);
     }
   }
 }

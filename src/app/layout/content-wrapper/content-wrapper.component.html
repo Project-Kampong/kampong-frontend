@@ -46,7 +46,13 @@
       <div class="close-menu-btn"></div>
       <a
         *ngIf="AuthService.isLoggedIn"
-        routerLink="/create"
+        routerLink="/createOrganisation"
+        class="btn yellow-btn"
+        >Start an Organisation</a
+      >
+      <a
+        *ngIf="AuthService.isLoggedIn"
+        routerLink="/createListing"
         class="btn yellow-btn"
         >Start an Initiative</a
       >

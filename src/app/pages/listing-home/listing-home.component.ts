@@ -1,7 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { ListingsService } from "@app/services/listings.service";
 import { AuthService } from "@app/services/auth.service";
-import { Listing } from "@app/interfaces/listing";
+import { OrganisationsService } from '@app/services/organisations.service';
+import { CategoryFilter } from '@app/interfaces/filters';
+import { Organisation } from '@app/interfaces/organisation';
+import { categoryList } from "@app/util/categories";
 declare var $: any;
 
 @Component({
@@ -10,73 +13,39 @@ declare var $: any;
   styleUrls: ["./listing-home.component.scss"],
 })
 export class ListingHomeComponent implements OnInit {
+
+  categoryList: Array<CategoryFilter>;
+  organisationList: Array<Organisation>;
+
   constructor(
     public ListingsService: ListingsService,
+    public OrganisationService: OrganisationsService,
     public AuthService: AuthService
-  ) {}
-  categoryGroup = [
-    {
-      name: "Social",
-      group: [
-        "Health",
-        "Marriage",
-        "Education",
-        "Mentorship",
-        "Retirement",
-        "Housing",
-        "Rental Flats",
-        "Family",
-        "Gender",
-        "Elderly",
-        "Youth",
-        "Youth At Risk",
-        "Pre-School",
-        "Race",
-        "Language",
-        "Science",
-        "Art",
-        "Sports",
-        "Poverty",
-        "Inequality",
-      ],
-    },
-    {
-      name: "Environment",
-      group: ["Recycling", "Green", "Water", "Waste", "Food", "Growing"],
-    },
-    {
-      name: "Economical",
-      group: [
-        "Finance",
-        "Jobs",
-        "Wage",
-        "Upskill",
-        "Technology ",
-        "IT",
-        "IoT 4.0",
-        "Information",
-        "Automation",
-        "Online",
-        "Digitalization",
-      ],
-    },
-    {
-      name: "Others",
-      group: ["Productivity", "Innovation", "Research", "Manpower", "Design"],
-    },
-  ];
+  ) {
+    this.organisationList = [];
+  }
 
   ngOnInit() {
     window.scroll(0, 0);
-
     $(".category-list ul li").on("click", function () {
       $(this).toggleClass("active");
     });
-    // Get Public Listing
-    this.ListingsService.getListingLoop(1);
 
     $(".category-filter ul li .outline").on("click", function () {
       $(this).toggleClass("active");
     });
+
+    this.categoryList = categoryList;
+    this.ListingsService.getListingLoop(1);
+
+    this.OrganisationService.getOrganisations(1).subscribe(
+      (res) => {
+        this.organisationList = res["data"];
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+    
   }
 }
