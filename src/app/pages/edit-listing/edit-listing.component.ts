@@ -213,7 +213,7 @@ export class EditListingComponent implements OnInit {
   addDescription(): void {
     this.jobArr.push({
       job_id: null,
-      title: "",
+      job_title: "",
       job_description: "",
     });
   }
@@ -231,6 +231,8 @@ export class EditListingComponent implements OnInit {
     });
     return false;
   }
+
+
 
   updateMilestones(): Promise<void>[] {
     const checkMilestones: number[] = [];
