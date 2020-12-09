@@ -867,9 +867,9 @@
                   <input
                     maxlength="50"
                     matInput
-                    [(ngModel)]="milestone.description"
+                    [(ngModel)]="milestone.milestone_description"
                   />
-                  <mat-hint> {{ milestone.description.length }}/50 </mat-hint>
+                  <mat-hint> {{ milestone.milestone_description.length }}/50 </mat-hint>
                 </mat-form-field>
                 <mat-form-field class="deadline-input">
                   <mat-label>Deadline</mat-label>
@@ -961,7 +961,7 @@
                   placeholder="Job Title"
                   cdkTextareaAutosize
                   cdkAutosizeMinRows="2"
-                  [(ngModel)]="job.title"
+                  [(ngModel)]="job.job_title"
                   maxlength="200"
                 ></textarea>
                 </div>
@@ -971,11 +971,11 @@
                     matInput
                     cdkTextareaAutosize
                     cdkAutosizeMinRows="5"
-                    [(ngModel)]="job.description"
+                    [(ngModel)]="job.job_description"
                     maxlength="500"
                   ></textarea>
                 </div>
-                <span class="hint"> {{ job.description.length }} / 500 </span>
+                <span class="hint"> {{ job.job_description.length }} / 500 </span>
               </div>
               <button
                 class="remove-skills"

@@ -154,18 +154,18 @@ export interface EditListingHashtags {
 
 export interface EditListingMilestones {
   milestone_id: number;
-  description: string;
+  milestone_description: string;
   date: Date;
 }
 
 export interface EditListingJobs {
   job_id: number;
-  title: string;
-  description: string;
+  job_title: string;
+  job_description: string;
 }
 
 export interface EditListingFAQ {
-  faq_id: string;
+  faq_id: number;
   question: string;
   answer: string;
 }

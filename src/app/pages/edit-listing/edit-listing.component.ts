@@ -24,6 +24,7 @@ import {
   EditListingHashtags,
 } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from "@app/interfaces/filters";
+import { forkJoin } from 'rxjs';
 
 declare var $: any;
 
@@ -44,10 +45,13 @@ export class EditListingComponent implements OnInit {
   listingImagesDisplay: string[] = [];
   originalImages: originalImagesCheck[] = [];
   hashtags: EditListingHashtags[] = [];
-  originalHashtags: EditListingHashtags[] = [];
+  originalHashtags: number[] = [];
   milestoneArr: EditListingMilestones[] = [];
+  originalMilestoneIds: number[] = [];
   jobArr: EditListingJobs[] = [];
+  originalJobIds: number[] = [];
   faqArr: EditListingFAQ[] = [];
+  originalFaqIds: number[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -67,88 +71,31 @@ export class EditListingComponent implements OnInit {
 
     this.listingsService.getSelectedListing(this.listingId).subscribe(
       (res) => {
+        //Setup
         const listingData = res["data"];
         this.listingForm.patchValue(listingData);
         this.jobArr = listingData["jobs"];
+        this.originalJobIds = this.jobArr.map((val) => val.job_id);
         this.faqArr = listingData["faqs"];
-        //this.milestoneArr = listingData["milestones"];
+        this.originalFaqIds = this.faqArr.map((val) => val.faq_id);
+        this.milestoneArr = listingData["milestones"];
+        this.originalMilestoneIds = this.milestoneArr.map((val) => val.milestone_id);
         this.hashtags = listingData["tags"];
+        this.originalHashtags = this.hashtags.map((val) => val.hashtag_id);
         this.listingImagesDisplay = listingData["pics"];
         this.listingImages = Array(this.listingImagesDisplay.length).fill(null);
+
         this.listingImagesDisplay.forEach((val) => {
           this.originalImages.push({ image: val, check: true });
         });
+
+        this.sortMilestone();
 
         $("#overview").html(this.parseStory(listingData["overview"]));
         $("#problem").html(this.parseStory(listingData["problem"]));
         $("#solution").html(this.parseStory(listingData["solution"]));
         $("#outcome").html(this.parseStory(listingData["outcome"]));
 
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-
-    this.listingsService.getSelectedListingHashtags(this.listingId).subscribe(
-      (res) => {
-        const hashtagsData: Array<any> = res.data.map((data) => {
-          return {
-            hashtag_id: data.hashtag_id,
-            tag: data.tag,
-          };
-        });
-        this.hashtags = hashtagsData;
-        this.originalHashtags = res.data.map((data) => data.hashtag_id);
-        console.log(this.originalHashtags);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-
-    this.listingsService.getSelectedListingMilestones(this.listingId).subscribe(
-      (res) => {
-        const milestonesData: Array<any> = res.data;
-        milestonesData.forEach((val) => {
-          this.milestoneArr.push({
-            milestone_id: val.milestone_id,
-            description: val.description,
-            date: val.date,
-          });
-        });
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-
-    this.listingsService.getSelectedListingFAQ(this.listingId).subscribe(
-      (res) => {
-        const faqData: Array<any> = res.data;
-        faqData.forEach((val) => {
-          this.faqArr.push({
-            faq_id: val.faq_id,
-            question: val.question,
-            answer: val.answer,
-          });
-        });
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-
-    this.listingsService.getSelectedListingJobs(this.listingId).subscribe(
-      (res) => {
-        const jobData: Array<any> = res.data;
-        jobData.forEach((val) => {
-          this.jobArr.push({
-            job_id: val.job_id,
-            title: val.job_title,
-            description: val.job_description,
-          });
-        });
       },
       (err) => {
         console.log(err);
@@ -231,12 +178,11 @@ export class EditListingComponent implements OnInit {
   addMilestone(): void {
     this.milestoneArr.push({
       milestone_id: null,
-      description: "",
+      milestone_description: "",
       date: new Date(),
     });
     this.milestoneArr.sort((a, b) => {
-      const result: number =
-        new Date(a.date).valueOf() - new Date(b.date).valueOf();
+      const result: number = new Date(a.date).valueOf() - new Date(b.date).valueOf();
       return result;
     });
   }
@@ -268,7 +214,7 @@ export class EditListingComponent implements OnInit {
     this.jobArr.push({
       job_id: null,
       title: "",
-      description: "",
+      job_description: "",
     });
   }
 
@@ -284,6 +230,211 @@ export class EditListingComponent implements OnInit {
       }
     });
     return false;
+  }
+
+  updateMilestones(): Promise<void>[] {
+    const checkMilestones: number[] = [];
+    const milestoneEditPromises: Promise<void>[] = [];
+    this.milestoneArr.forEach((val) => {
+      if (val.milestone_id === null && val.milestone_description !== "" && val.date !== null) {
+        milestoneEditPromises.push(new Promise((resolve, reject) => {
+          this.listingsService.createListingMilestones({
+            listing_id: this.listingId,
+            description: val.milestone_description,
+            date: val.date,
+          }).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+              reject();
+            }
+          )
+          resolve();
+        }))
+      } else if (val.milestone_id && val.date !== null && val.milestone_description !== "") {
+        checkMilestones.push(val.milestone_id);
+        milestoneEditPromises.push(new Promise((resolve, reject) => {
+          this.listingsService.updateMilestone(val.milestone_id, {
+            description: val.milestone_description,
+            date: val.date,
+          }).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+              reject();
+            }
+          )
+          resolve();
+        }))
+      }
+    })
+    
+    this.originalMilestoneIds.forEach((val) => {
+      if (!checkMilestones.includes(val)) {
+        milestoneEditPromises.push(new Promise((resolve, reject) => {
+          this.listingsService.removeMilestone(val).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+              reject();
+            }
+          );
+          resolve();
+        }))
+      }
+    })
+    return milestoneEditPromises;
+  }
+
+  updateHashtags(): Promise<void>[] {
+    const checkHashtags: number[] = [];
+    const hashtagEditPromises: Promise<void>[] = [];
+    this.hashtags.forEach((val) => {
+      if (val.hashtag_id === null) {
+        hashtagEditPromises.push(new Promise((resolve, reject) => {
+          this.listingsService.createListingHashtags({
+            listing_id: this.listingId,
+            tag: val.tag,
+          }).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+              reject();
+            }
+          )
+          resolve();
+        }))
+      } else {
+        checkHashtags.push(val.hashtag_id);
+      }
+    })
+
+    this.originalHashtags.forEach((val) => {
+      if (!checkHashtags.includes(val)) {
+        hashtagEditPromises.push(new Promise((resolve, reject) => {
+          this.listingsService.removeHashtags(val).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+              reject();
+            }
+          );
+          resolve();
+        }))
+      }
+    })
+    return hashtagEditPromises;
+  }
+
+  updateJobs(): Promise<void>[] {
+    const checkJobs: number[] = [];
+    const jobEditPromises: Promise<void>[] = [];
+    this.jobArr.forEach((val) => {
+      console.log(val);
+      if (val.job_id === null && val.job_title !== "" && val.job_description !== "") {
+        jobEditPromises.push(new Promise((resolve, reject) => {
+          this.listingsService.createListingJobs({
+            listing_id: this.listingId,
+            job_title: val.job_title,
+            job_description: val.job_description,
+          }).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+              reject();
+            }
+          )
+          resolve();
+        }))
+      } else if (val.job_id && val.job_title !== "" && val.job_description !== "") {
+        checkJobs.push(val.job_id);
+        jobEditPromises.push(new Promise((resolve, reject) => {
+          this.listingsService.updateJobs(val.job_id, {
+            job_title: val.job_title,
+            job_description: val.job_description
+          }).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+              reject();
+            }
+          )
+          resolve();
+        }))
+      }
+    })
+
+    this.originalJobIds.forEach((val) => {
+      if (!checkJobs.includes(val)) {
+        jobEditPromises.push(new Promise((resolve, reject) => {
+          this.listingsService.removeListingJobs(val).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+              reject();
+            }
+          );
+          resolve();
+        }))
+      }
+    })
+    return jobEditPromises;
+  }
+
+  updateFaqs(): Promise<void>[] {
+    const checkFaqs: number[] = [];
+    const faqEditPromises: Promise<void>[] = [];
+    this.faqArr.forEach((val) => {
+      console.log(val);
+      if (val.faq_id === null && val.question !== "" && val.answer !== "") {
+        faqEditPromises.push(new Promise((resolve, reject) => {
+          this.listingsService.createListingFAQ({
+            listing_id: this.listingId,
+            question: val.question,
+            answer: val.answer,
+          }).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+              reject();
+            }
+          )
+          resolve();
+        }))
+      } else if (val.faq_id && val.question !== "" && val.answer !== "") {
+        checkFaqs.push(val.faq_id);
+        faqEditPromises.push(new Promise((resolve, reject) => {
+          this.listingsService.updateFAQ(val.faq_id, {
+            question: val.question,
+            answer: val.answer,
+          }).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+              reject();
+            }
+          )
+          resolve();
+        }))
+      }
+    })
+
+
+    this.originalFaqIds.forEach((val) => {
+      if (!checkFaqs.includes(val)) {
+        faqEditPromises.push(new Promise((resolve, reject) => {
+          this.listingsService.removeFAQ(val).subscribe(
+            (res) => {},
+            (err) => {
+              console.log(err);
+              reject();
+            }
+          );
+          resolve();
+        }))
+      }
+    })
+    return faqEditPromises;
   }
 
   async updateListing(): Promise<void> {
@@ -308,169 +459,20 @@ export class EditListingComponent implements OnInit {
     const solution: string = $("#solution").html();
 
 
-    this.listingData = {
-      title,
-      category,
-      tagline,
-      mission,
-      overview,
-      problem,
-      outcome,
-      solution,
-      listing_url,
-      listing_email,
-      listing_status,
-      pics,
-      locations,
+    this.listingData = { title, category, tagline, mission, overview,
+      problem, outcome, solution, listing_url, listing_email, 
+      listing_status, pics, locations,
     };
+
+    const updatePromises: Promise<void>[] = [];
 
     (await this.listingsService.updateListing(this.listingId, this.listingData, this.listingImages, this.originalImages)).subscribe(
       (res) => {
-        this.milestoneArr.forEach((val) => {
-          if (val.milestone_id == null && val.date != null && val.description != "") {
-            this.listingsService.createListingMilestones({
-              listing_id: this.listingId,
-              description: val.description,
-              date: val.date,
-            }).subscribe(
-              (res) => {},
-              (err) => {
-                console.log(err);
-              }
-            )
-          } else if (val.milestone_id && val.date != null && val.description != "") {
-            this.listingsService.updateMilestone(val.milestone_id, {
-              description: val.description,
-              date: val.date,
-            }).subscribe(
-              (res) => {},
-              (err) => {
-                console.log(err);
-              }
-              );
-          }
-        });
-
-        const removeHashtagPromises: Promise<any>[] = [];
-
-        this.originalHashtags.forEach((val) => {
-          removeHashtagPromises.push(new Promise((resolve, reject) => {
-            this.listingsService.removeHashtags(val).subscribe(
-              (res) => {
-                resolve();
-              },
-              (err) => {
-                reject();
-              }
-            );
-            })
-          );
-        });
-
-        Promise.all(removeHashtagPromises).then(() => {
-          this.hashtags.forEach((val) => {
-            this.listingsService
-              .createListingHashtags({
-                listing_id: this.listingId,
-                tag: val.tag,
-              })
-              .subscribe(
-                (res) => {},
-                (err) => {
-                  console.log(err);
-                }
-              );
-          });
-        });
-
-        this.jobArr.forEach((val) => {
-          if (val.job_id == null && val.title != "" && val.description != "") {
-            this.listingsService.createListingJobs({
-              listing_id: this.listingId,
-              job_title: val.title,
-                job_description: val.description,
-              })
-              .subscribe(
-                (res) => {},
-                (err) => {
-                  console.log(err);
-                }
-              );
-          } else if (val.job_id && val.title != "" && val.description != "") {
-            this.listingsService
-              .updateJobs(val.job_id, {
-                job_title: val.title,
-                job_description: val.description,
-              })
-              .subscribe(
-                (res) => {},
-                (err) => {
-                  console.log(err);
-                }
-              );
-          }
-        });
-
-        this.faqArr.forEach((val) => {
-          if (val.faq_id == null && val.question != "" && val.answer != "") {
-            this.listingsService
-              .createListingFAQ({
-                listing_id: this.listingId,
-                question: val.question,
-                answer: val.answer,      
-              })
-              .subscribe(
-                (res) => {},
-                (err) => {
-                  console.log(err);
-                }
-              );
-          } else if (val.faq_id && val.answer != "" && val.question != "") {
-            this.listingsService
-              .updateFAQ(val.faq_id, {
-                question: val.question,
-                answer: val.answer,
-              })
-              .subscribe(
-                (res) => {},
-                (err) => {
-                  console.log(err);
-                }
-              );
-          }
-        });
-
-        /*
-        // To change, await for new listing/categories to be updated before changing
-        const removeLocationPromises: Promise<any>[] = [];
-        const removeLocationArr: number[] = this.listingData.locations.map((x) => x.hashtag_id);
-        removeHashtagArr.forEach((val) => {
-          removeHashtagPromises.push(new Promise((resolve, reject) => {
-            this.listingsService.removeHashtags(val);
-            resolve();
-          }))
-        });
-        Promise.all(removeHashtagPromises).then(() =>{
-          this.hashtags.forEach((val) => {
-            this.listingsService.createListingHashtags(val.tag);
-          })
-        });
-
-
-        this.listingData.locations.forEach((val, idx) => {
-          this.listingsService.createListingLocation({
-            listing_id: this.listingId,
-            location_id: 1,
-          }).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-            }
-          );
-        })
-        */
+        this.updateHashtags().forEach((val) => updatePromises.push(val));
+        this.updateMilestones().forEach((val) => updatePromises.push(val));
+        this.updateJobs().forEach((val) => updatePromises.push(val));
+        this.updateFaqs().forEach((val) => updatePromises.push(val));
       },
-
       (err) => {
         console.log(err);
         this.snackbarService.openSnackBar(
@@ -479,13 +481,25 @@ export class EditListingComponent implements OnInit {
         );
         return;
       },
-
       () => {
         this.snackbarService.openSnackBar(
           this.snackbarService.DialogList.update_listing.success,
           true
         );
-        this.router.navigate(["/listing/" + this.listingId]);
+        Promise.all(updatePromises).then(() => {
+          this.router.navigate(["/listing/" + this.listingId]).catch((err) => {
+            console.log(err);
+            this.snackbarService.openSnackBar(
+              this.snackbarService.DialogList.generic_error.error,
+              false
+            )
+          });
+        }).catch(() => {
+          this.snackbarService.openSnackBar(
+            this.snackbarService.DialogList.update_listing.error,
+            false
+          );
+        })
       }
     );
   }
