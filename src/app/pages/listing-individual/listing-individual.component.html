@@ -229,7 +229,7 @@
           <div class="card-head">
             <div class="d-flex align-items-center updates-user-info">
               <div class="profile-image">
-                <img src="{{ profile_picture }}" />
+                <img src="{{ profilePicture }}" />
               </div>
               <div class="ml-3">
                 <p class="user regular-s">by {{ nickname }}</p>
@@ -330,7 +330,7 @@
               <button
                 *ngIf="comment.user_id == authService.LoggedInUserID"
                 class="delete-btn btn"
-                (click)="deleteComment(comment)"
+                (click)="deleteComments(comment)"
               >
                 Delete
               </button>
