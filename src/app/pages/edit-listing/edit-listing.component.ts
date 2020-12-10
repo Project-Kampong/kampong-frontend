@@ -1,6 +1,6 @@
 // Angular Imports
 import { Component, OnInit } from "@angular/core";
-import { COMMA, ENTER, SPACE } from "@angular/cdk/keycodes";
+import { COMMA, ENTER, QUESTION_MARK, SPACE } from "@angular/cdk/keycodes";
 import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -24,7 +24,8 @@ import {
   EditListingHashtags,
 } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from "@app/interfaces/filters";
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 declare var $: any;
 
@@ -232,6 +233,187 @@ export class EditListingComponent implements OnInit {
     return false;
   }
 
+  updateMilestones(): Observable<any[]> {
+    const checkMilestones: number[] = [];
+    const milestoneEditObservables: Observable<any>[] = [];
+    this.milestoneArr.forEach((val) => {
+      if (val.milestone_id === null && val.milestone_description !== "" && val.date !== null) {
+        milestoneEditObservables.push(this.listingsService.createListingMilestones({
+          listing_id: this.listingId,
+          description: val.milestone_description,
+          date: val.date
+        }).pipe(catchError(error => of(error))));
+      } else if (val.milestone_id && val.date !== null && val.milestone_description !== "") {
+        checkMilestones.push(val.milestone_id);
+        milestoneEditObservables.push(this.listingsService.updateMilestone(val.milestone_id, {
+          description: val.milestone_description,
+          date: val.date,
+        }).pipe(catchError(error => of(error))));
+      }
+    })
+    this.originalMilestoneIds.forEach((val) => {
+      if (!checkMilestones.includes(val)) {
+        milestoneEditObservables.push(this.listingsService.removeMilestone(val).pipe(catchError(error => of(error))));
+      }
+    })
+    return forkJoin(milestoneEditObservables);
+  }
+
+  updateHashtags(): Observable<any[]> {
+    const checkHashtags: number[] = [];
+    const hashtagsEditObservables: Observable<any>[] = [];
+    this.hashtags.forEach((val) => {
+      if (val.hashtag_id === null) {
+        hashtagsEditObservables.push(this.listingsService.createListingHashtags({
+          listing_id: this.listingId,
+          tag: val.tag,
+        }).pipe(catchError(error => of(error))));
+      } else {
+        checkHashtags.push(val.hashtag_id);
+      }
+    })
+    this.originalHashtags.forEach((val) => {
+      if (!checkHashtags.includes(val)) {
+        hashtagsEditObservables.push(this.listingsService.removeHashtags(val).pipe(catchError(error => of(error))));
+      }
+    })
+    return forkJoin(hashtagsEditObservables);
+  }
+
+  updateJobs(): Observable<any[]> {
+    const checkJobs: number[] = [];
+    const jobEditObservables: Observable<any>[] = [];
+    this.jobArr.forEach((val) => {
+      if (val.job_id === null && val.job_title !== "" && val.job_description !== "") {
+        jobEditObservables.push(this.listingsService.createListingJobs({
+          listing_id: this.listingId,
+          job_title: val.job_title,
+          job_description: val.job_description,
+        }).pipe(catchError(error => of(error))));
+      } else if (val.job_id && val.job_title !== "" && val.job_description !== "") {
+        checkJobs.push(val.job_id);
+        jobEditObservables.push(this.listingsService.updateJobs(val.job_id, {
+          job_title: val.job_title,
+          job_description: val.job_description
+        }).pipe(catchError(error => of(error))));
+      }
+    })
+    this.originalJobIds.forEach((val) => {
+      if (!checkJobs.includes(val)) {
+        jobEditObservables.push(this.listingsService.removeListingJobs(val).pipe(catchError(error => of(error))));
+      }
+    })
+    return forkJoin(jobEditObservables);
+  }
+
+  updateFaqs(): Observable<any[]> {
+    const checkFaqs: number[] = [];
+    const faqEditObservables: Observable<any>[] = [];
+    this.faqArr.forEach((val) => {
+      if (val.faq_id === null && val.question !== "" && val.answer !== "") {
+        faqEditObservables.push(this.listingsService.createListingFAQ({
+          listing_id: this.listingId,
+          question: val.question,
+          answer: val.answer,
+        }).pipe(catchError(error => of(error))));
+      } else if (val.faq_id && val.question !== "" && val.answer !== "") {
+        checkFaqs.push(val.faq_id);
+        faqEditObservables.push(this.listingsService.updateFAQ(val.faq_id, {
+          question: val.question,
+          answer: val.answer,
+        }).pipe(catchError(error => of(error))));
+      }
+    })
+    this.originalFaqIds.forEach((val) => {
+      if (!checkFaqs.includes(val)) {
+        faqEditObservables.push(this.listingsService.removeFAQ(val).pipe(catchError(error => of(error))));
+      }
+    })
+    return forkJoin(faqEditObservables);
+  }
+
+  async updateListing(): Promise<void> {
+    if (this.getFormValidationErrors() === true) {
+      this.snackbarService.openSnackBar("Please complete the form", false);
+      return;
+    }
+
+    const title: string = this.listingForm.value.title;
+    const category: string = this.listingForm.value.category;
+    const tagline: string = this.listingForm.value.tagline;
+    const mission: string = this.listingForm.value.mission;
+    const listing_url: string = this.listingForm.value.listing_url;
+    const listing_email: string = this.listingForm.value.listing_email;
+    const listing_status: string = "ongoing";
+    const locations: string[] = this.listingForm.value.locations;
+    const pics: string[] = [null, null, null, null, null];
+
+    const overview: string = $("#overview").html();
+    const problem: string = $("#problem").html();
+    const outcome: string = $("#outcome").html();
+    const solution: string = $("#solution").html();
+
+    this.listingData = { title, category, tagline, mission, overview,
+      problem, outcome, solution, listing_url, listing_email, 
+      listing_status, pics, locations,
+    };
+
+    (await this.listingsService.updateListing(this.listingId, this.listingData, this.listingImages, this.originalImages)).subscribe(
+      (res) => {},
+      (err) => {
+        console.log(err);
+        this.snackbarService.openSnackBar(
+          this.snackbarService.DialogList.update_listing.error,
+          false
+        );
+        return;
+      },
+      () => {
+        this.snackbarService.openSnackBar(
+          this.snackbarService.DialogList.update_listing.success,
+          true
+        );
+        const combinedObservables = forkJoin([this.updateHashtags(), this.updateJobs(), this.updateMilestones(), this.updateFaqs()]);
+        combinedObservables.subscribe({
+          next: res => console.log(res),
+          error: err => {
+            console.log(err);
+            this.snackbarService.openSnackBar(
+              this.snackbarService.DialogList.update_listing.error,
+              false
+            );
+          },
+          complete: () => this.router.navigate(["/listing/" + this.listingId])
+        });
+
+      }
+    );
+  }
+
+  removeListing(): void {
+    if (confirm("Are you sure you want to delete " + this.listingForm.value.title + "? This action is currently not reversible.")) {
+      this.listingsService.removeListing(this.listingId).subscribe(
+        (data) => {
+          console.log(data);
+          this.snackbarService.openSnackBar(
+            this.snackbarService.DialogList.delete_listing.success,
+            true
+          );
+          this.router.navigate(["/profile"]);
+        },
+        (err) => {
+          this.snackbarService.openSnackBar(
+            this.snackbarService.DialogList.delete_listing.error,
+            false
+          );
+          this.router.navigate(["/profile"]);
+        }
+      );
+    }
+  }
+}
+
+/*
 
 
   updateMilestones(): Promise<void>[] {
@@ -288,7 +470,7 @@ export class EditListingComponent implements OnInit {
     return milestoneEditPromises;
   }
 
-  updateHashtags(): Promise<void>[] {
+    updateHashtags(): Promise<void>[] {
     const checkHashtags: number[] = [];
     const hashtagEditPromises: Promise<void>[] = [];
     this.hashtags.forEach((val) => {
@@ -328,7 +510,7 @@ export class EditListingComponent implements OnInit {
     return hashtagEditPromises;
   }
 
-  updateJobs(): Promise<void>[] {
+    updateJobs(): Promise<void>[] {
     const checkJobs: number[] = [];
     const jobEditPromises: Promise<void>[] = [];
     this.jobArr.forEach((val) => {
@@ -383,7 +565,7 @@ export class EditListingComponent implements OnInit {
     return jobEditPromises;
   }
 
-  updateFaqs(): Promise<void>[] {
+    updateFaqs(): Promise<void>[] {
     const checkFaqs: number[] = [];
     const faqEditPromises: Promise<void>[] = [];
     this.faqArr.forEach((val) => {
@@ -438,93 +620,4 @@ export class EditListingComponent implements OnInit {
     })
     return faqEditPromises;
   }
-
-  async updateListing(): Promise<void> {
-    if (this.getFormValidationErrors() === true) {
-      this.snackbarService.openSnackBar("Please complete the form", false);
-      return;
-    }
-
-    const title: string = this.listingForm.value.title;
-    const category: string = this.listingForm.value.category;
-    const tagline: string = this.listingForm.value.tagline;
-    const mission: string = this.listingForm.value.mission;
-    const listing_url: string = this.listingForm.value.listing_url;
-    const listing_email: string = this.listingForm.value.listing_email;
-    const listing_status: string = "ongoing";
-    const locations: string[] = this.listingForm.value.locations;
-    const pics: string[] = [null, null, null, null, null];
-
-    const overview: string = $("#overview").html();
-    const problem: string = $("#problem").html();
-    const outcome: string = $("#outcome").html();
-    const solution: string = $("#solution").html();
-
-
-    this.listingData = { title, category, tagline, mission, overview,
-      problem, outcome, solution, listing_url, listing_email, 
-      listing_status, pics, locations,
-    };
-
-    const updatePromises: Promise<void>[] = [];
-
-    (await this.listingsService.updateListing(this.listingId, this.listingData, this.listingImages, this.originalImages)).subscribe(
-      (res) => {
-        this.updateHashtags().forEach((val) => updatePromises.push(val));
-        this.updateMilestones().forEach((val) => updatePromises.push(val));
-        this.updateJobs().forEach((val) => updatePromises.push(val));
-        this.updateFaqs().forEach((val) => updatePromises.push(val));
-      },
-      (err) => {
-        console.log(err);
-        this.snackbarService.openSnackBar(
-          this.snackbarService.DialogList.update_listing.error,
-          false
-        );
-        return;
-      },
-      () => {
-        this.snackbarService.openSnackBar(
-          this.snackbarService.DialogList.update_listing.success,
-          true
-        );
-        Promise.all(updatePromises).then(() => {
-          this.router.navigate(["/listing/" + this.listingId]).catch((err) => {
-            console.log(err);
-            this.snackbarService.openSnackBar(
-              this.snackbarService.DialogList.generic_error.error,
-              false
-            )
-          });
-        }).catch(() => {
-          this.snackbarService.openSnackBar(
-            this.snackbarService.DialogList.update_listing.error,
-            false
-          );
-        })
-      }
-    );
-  }
-
-  removeListing(): void {
-    if (confirm("Are you sure you want to delete " + this.listingForm.value.title + "? This action is currently not reversible.")) {
-      this.listingsService.removeListing(this.listingId).subscribe(
-        (data) => {
-          console.log(data);
-          this.snackbarService.openSnackBar(
-            this.snackbarService.DialogList.delete_listing.success,
-            true
-          );
-          this.router.navigate(["/profile"]);
-        },
-        (err) => {
-          this.snackbarService.openSnackBar(
-            this.snackbarService.DialogList.delete_listing.error,
-            false
-          );
-          this.router.navigate(["/profile"]);
-        }
-      );
-    }
-  }
-}
+*/
