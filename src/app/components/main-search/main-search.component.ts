@@ -2,9 +2,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { locationList } from '@app/util/locations';
-import { categoryList } from '@app/util/categories';
-import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 import { locationsStore } from '@app/store/locations-store';
 import { categoriesStore } from '@app/store/categories-store';
 declare var $: any;
@@ -16,14 +13,12 @@ declare var $: any;
 })
 export class MainSearchComponent implements OnInit {
   searchParams: FormGroup;
-  // locationList: Array<LocationFilter>;
   locationsStore = locationsStore;
   categoriesStore = categoriesStore;
 
   constructor(private fb: FormBuilder, private router: Router) {}
 
   ngOnInit() {
-    // this.locationList = locationList;
     this.searchParams = this.fb.group({
       nameParams: new FormControl(''),
       locationParams: new FormControl([]),

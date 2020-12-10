@@ -4,40 +4,21 @@
       <div class="search-bar container mb-3 mt-5">
         <div class="back-btn" (click)="goBack()"></div>
         <mat-form-field class="full-width search-input">
-          <input
-            matInput
-            placeholder="What are you looking for?"
-            [(ngModel)]="searchInput"
-            (keydown.enter)="inputSearch()"
-          />
+          <input matInput placeholder="What are you looking for?" [(ngModel)]="searchInput" (keydown.enter)="inputSearch()" />
         </mat-form-field>
         <a class="search-btn ml-3" (click)="inputSearch()"></a>
       </div>
       <div class="expansion-div">
         <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            Filters
-          </mat-expansion-panel-header>
+          <mat-expansion-panel-header> Filters </mat-expansion-panel-header>
           <div class="container">
-            <form
-              [formGroup]="searchParams"
-            >
+            <form [formGroup]="searchParams">
               <div class="form-div">
                 <mat-form-field appearance="fill">
                   <mat-label>Location</mat-label>
-                  <mat-select
-                    formControlName="locationParams"
-                    multiple
-                    disableOptionCentering
-                    >
-                    <mat-optgroup
-                      *ngFor="let group of locationList"
-                      [label]="group.name"
-                    >
-                      <mat-option
-                        *ngFor="let location of group.group"
-                        [value]="location"
-                      >
+                  <mat-select formControlName="locationParams" multiple disableOptionCentering>
+                    <mat-optgroup *ngFor="let group of locationsStore.locations" [label]="group.name">
+                      <mat-option *ngFor="let location of group.group" [value]="location">
                         {{ location }}
                       </mat-option>
                     </mat-optgroup>
@@ -47,20 +28,10 @@
               <div class="form-div">
                 <mat-form-field appearance="fill">
                   <mat-label>Category</mat-label>
-                  <mat-select
-                    formControlName="categoryParams"
-                    multiple
-                    disableOptionCentering
-                  >
-                    <mat-optgroup
-                      *ngFor="let group of categoryList"
-                      [label]="group.name"
-                    >
-                      <mat-option
-                        *ngFor="let category of group.group"
-                        [value]="category"
-                      >
-                      {{ category }}
+                  <mat-select formControlName="categoryParams" multiple disableOptionCentering>
+                    <mat-optgroup *ngFor="let group of categoriesStore.categories" [label]="group.name">
+                      <mat-option *ngFor="let category of group.group" [value]="category">
+                        {{ category }}
                       </mat-option>
                     </mat-optgroup>
                   </mat-select>
@@ -74,10 +45,7 @@
         <div class="suggested-search">
           <p class="label">Popular Searches</p>
           <ul>
-            <li
-              *ngFor="let popular of popularSearchList"
-              (click)="popularSearchClicked(popular)"
-            >
+            <li *ngFor="let popular of popularSearchList" (click)="popularSearchClicked(popular)">
               {{ popular }}
             </li>
           </ul>
@@ -87,15 +55,15 @@
         <div>
           <p class="result-text">
             <b>{{ resultsCount }}</b> Initiatives found for <b>{{ resultsInputString }}</b>
-            <br>
+            <br />
             Locations searched: <b>{{ resultsLocString }}</b>
-            <br>
+            <br />
             Categories: <b> {{ resultsCatString }} </b>
           </p>
         </div>
       </div>
     </div>
-    <div class="container" style="min-height: 100vh;">
+    <div class="container" style="min-height: 100vh">
       <app-listing-cards [ListingData]="resultsArr"></app-listing-cards>
     </div>
   </div>

@@ -1,17 +1,13 @@
 // Angular Imports
-import { Component, OnInit } from "@angular/core";
-import { COMMA, ENTER, SPACE } from "@angular/cdk/keycodes";
-import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
-import { MatChipInputEvent } from "@angular/material/chips";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
+import { FormGroup, FormBuilder, ValidationErrors } from '@angular/forms';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { Router, ActivatedRoute } from '@angular/router';
 
 // Services
-import { ListingsService } from "@app/services/listings.service";
-import { SnackbarService } from "@app/services/snackbar.service";
-
-// Util
-import { locationList } from "@app/util/locations";
-import { categoryList } from "@app/util/categories";
+import { ListingsService } from '@app/services/listings.service';
+import { SnackbarService } from '@app/services/snackbar.service';
 
 // Interfaces
 import {
@@ -22,15 +18,18 @@ import {
   EditListing,
   OriginalImagesCheck,
   EditListingHashtags,
-} from "@app/interfaces/listing";
-import { CategoryFilter, LocationFilter } from "@app/interfaces/filters";
+} from '@app/interfaces/listing';
+
+// Stores
+import { categoriesStore } from '@app/store/categories-store';
+import { locationsStore } from '@app/store/locations-store';
 
 declare var $: any;
 
 @Component({
-  selector: "app-edit-listing",
-  templateUrl: "./edit-listing.component.html",
-  styleUrls: ["./edit-listing.component.scss"],
+  selector: 'app-edit-listing',
+  templateUrl: './edit-listing.component.html',
+  styleUrls: ['./edit-listing.component.scss'],
 })
 export class EditListingComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
@@ -38,8 +37,8 @@ export class EditListingComponent implements OnInit {
   listingData: EditListing;
   listingId: string;
   removable: boolean;
-  categoryGroup: Array<CategoryFilter>;
-  locationGroup: Array<LocationFilter>;
+  locationsStore = locationsStore;
+  categoriesStore = categoriesStore;
   listingImages: File[];
   listingImagesDisplay: string[];
   originalImages: OriginalImagesCheck[];
@@ -54,7 +53,7 @@ export class EditListingComponent implements OnInit {
     public listingsService: ListingsService,
     private router: Router,
     public snackbarService: SnackbarService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.listingImages = [];
     this.listingImagesDisplay = [];
@@ -62,24 +61,22 @@ export class EditListingComponent implements OnInit {
     this.milestoneArr = [];
     this.jobArr = [];
     this.faqArr = [];
-    this.listingId = "";
+    this.listingId = '';
     this.removable = true;
     this.originalImages = [];
     this.originalHashtags = [];
   }
 
   ngOnInit() {
-    this.categoryGroup = categoryList;
-    this.locationGroup = locationList;
-    this.listingId = this.route.snapshot.params["id"];
+    this.listingId = this.route.snapshot.params['id'];
     this.listingForm = this.fb.group({
       ...EditListingForm,
     });
 
     this.listingsService.getSelectedListing(this.listingId).subscribe(
       (res) => {
-        this.listingForm.patchValue(res["data"]);
-        this.listingImagesDisplay = res["data"].pics;
+        this.listingForm.patchValue(res['data']);
+        this.listingImagesDisplay = res['data'].pics;
         this.listingImages = Array(this.listingImagesDisplay.length).fill(null);
         this.listingImagesDisplay.forEach((val) => {
           this.originalImages.push({ image: val, check: true });
@@ -87,7 +84,7 @@ export class EditListingComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-      }
+      },
     );
 
     this.listingsService.getSelectedListingHashtags(this.listingId).subscribe(
@@ -104,7 +101,7 @@ export class EditListingComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-      }
+      },
     );
 
     this.listingsService.getSelectedListingMilestones(this.listingId).subscribe(
@@ -120,7 +117,7 @@ export class EditListingComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-      }
+      },
     );
 
     this.listingsService.getSelectedListingFAQ(this.listingId).subscribe(
@@ -136,7 +133,7 @@ export class EditListingComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-      }
+      },
     );
 
     this.listingsService.getSelectedListingJobs(this.listingId).subscribe(
@@ -152,20 +149,20 @@ export class EditListingComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-      }
+      },
     );
 
     // CMS
-    $(".action-container .action-btn").on("click", function () {
-      const cmd = $(this).data("command");
-      if (cmd == "createlink") {
-        const url = prompt("Enter the link here: ");
+    $('.action-container .action-btn').on('click', function () {
+      const cmd = $(this).data('command');
+      if (cmd == 'createlink') {
+        const url = prompt('Enter the link here: ');
         if (url === null) {
           return;
         }
         document.execCommand(cmd, false, url);
-      } else if (cmd == "formatBlock") {
-        const size = $(this).data("size");
+      } else if (cmd == 'formatBlock') {
+        const size = $(this).data('size');
         document.execCommand(cmd, false, size);
       } else {
         document.execCommand(cmd, false, null);
@@ -174,17 +171,15 @@ export class EditListingComponent implements OnInit {
   }
 
   addHashtag(event: MatChipInputEvent): void {
-    const value = (
-      "#" + event.value.replace(/[&\/\\#,+()$~%. '":*?<>\[\]{}]/g, "")
-    ).trim();
-    if (this.hashtags.length === 3 || value === "#" || event.value.length < 3) {
+    const value = ('#' + event.value.replace(/[&\/\\#,+()$~%. '":*?<>\[\]{}]/g, '')).trim();
+    if (this.hashtags.length === 3 || value === '#' || event.value.length < 3) {
       return;
     }
     this.hashtags.push({
       hashtag_id: null,
       tag: value,
     });
-    event.input.value = "";
+    event.input.value = '';
   }
 
   removeHashtag(tag: string): void {
@@ -193,10 +188,7 @@ export class EditListingComponent implements OnInit {
   }
 
   uploadImage(event: Event): void {
-    if (
-      this.listingImagesDisplay.length === 5 &&
-      this.listingImages.length === 5
-    ) {
+    if (this.listingImagesDisplay.length === 5 && this.listingImages.length === 5) {
       return;
     }
     const reader: FileReader = new FileReader();
@@ -226,20 +218,18 @@ export class EditListingComponent implements OnInit {
   addMilestone(): void {
     this.milestoneArr.push({
       milestone_id: null,
-      description: "",
+      description: '',
       date: new Date(),
     });
     this.milestoneArr.sort((a, b) => {
-      const result: number =
-        new Date(a.date).valueOf() - new Date(b.date).valueOf();
+      const result: number = new Date(a.date).valueOf() - new Date(b.date).valueOf();
       return result;
     });
   }
 
   sortMilestone(): void {
     this.milestoneArr = this.milestoneArr.sort((a, b) => {
-      const result: number =
-        new Date(a.date).valueOf() - new Date(b.date).valueOf();
+      const result: number = new Date(a.date).valueOf() - new Date(b.date).valueOf();
       return result;
     });
   }
@@ -251,8 +241,8 @@ export class EditListingComponent implements OnInit {
   addFAQ(): void {
     this.faqArr.push({
       faq_id: null,
-      question: "",
-      answer: "",
+      question: '',
+      answer: '',
     });
   }
   removeFAQ(i: number): void {
@@ -262,8 +252,8 @@ export class EditListingComponent implements OnInit {
   addDescription(): void {
     this.jobArr.push({
       job_id: null,
-      title: "",
-      description: "",
+      title: '',
+      description: '',
     });
   }
 
@@ -283,7 +273,7 @@ export class EditListingComponent implements OnInit {
 
   async updateListing(): Promise<void> {
     if (this.getFormValidationErrors() === true) {
-      this.snackbarService.openSnackBar("Please complete the form", false);
+      this.snackbarService.openSnackBar('Please complete the form', false);
       return;
     }
 
@@ -297,7 +287,7 @@ export class EditListingComponent implements OnInit {
     const solution: string = this.listingForm.value.solution;
     const listing_url: string = this.listingForm.value.listing_url;
     const listing_email: string = this.listingForm.value.listing_email;
-    const listing_status: string = "ongoing";
+    const listing_status: string = 'ongoing';
     const locations: string[] = this.listingForm.value.locations;
     const pics: string[] = [null, null, null, null, null];
 
@@ -320,26 +310,30 @@ export class EditListingComponent implements OnInit {
     (await this.listingsService.updateListing(this.listingId, this.listingData, this.listingImages, this.originalImages)).subscribe(
       (res) => {
         this.milestoneArr.forEach((val) => {
-          if (val.milestone_id == null && val.date != null && val.description != "") {
-            this.listingsService.createListingMilestones({
-              listing_id: this.listingId,
-              description: val.description,
-              date: val.date,
-            }).subscribe(
-              (res) => {},
-              (err) => {
-                console.log(err);
-              }
-            )
-          } else if (val.milestone_id && val.date != null && val.description != "") {
-            this.listingsService.updateMilestone(val.milestone_id, {
-              description: val.description,
-              date: val.date,
-            }).subscribe(
-              (res) => {},
-              (err) => {
-                console.log(err);
-              }
+          if (val.milestone_id == null && val.date != null && val.description != '') {
+            this.listingsService
+              .createListingMilestones({
+                listing_id: this.listingId,
+                description: val.description,
+                date: val.date,
+              })
+              .subscribe(
+                (res) => {},
+                (err) => {
+                  console.log(err);
+                },
+              );
+          } else if (val.milestone_id && val.date != null && val.description != '') {
+            this.listingsService
+              .updateMilestone(val.milestone_id, {
+                description: val.description,
+                date: val.date,
+              })
+              .subscribe(
+                (res) => {},
+                (err) => {
+                  console.log(err);
+                },
               );
           }
         });
@@ -347,16 +341,17 @@ export class EditListingComponent implements OnInit {
         const removeHashtagPromises: Promise<any>[] = [];
 
         this.originalHashtags.forEach((val) => {
-          removeHashtagPromises.push(new Promise((resolve, reject) => {
-            this.listingsService.removeHashtags(val).subscribe(
-              (res) => {
-                resolve();
-              },
-              (err) => {
-                reject();
-              }
-            );
-            })
+          removeHashtagPromises.push(
+            new Promise((resolve, reject) => {
+              this.listingsService.removeHashtags(val).subscribe(
+                (res) => {
+                  resolve();
+                },
+                (err) => {
+                  reject();
+                },
+              );
+            }),
           );
         });
 
@@ -371,25 +366,26 @@ export class EditListingComponent implements OnInit {
                 (res) => {},
                 (err) => {
                   console.log(err);
-                }
+                },
               );
           });
         });
 
         this.jobArr.forEach((val) => {
-          if (val.job_id == null && val.title != "" && val.description != "") {
-            this.listingsService.createListingJobs({
-              listing_id: this.listingId,
-              job_title: val.title,
+          if (val.job_id == null && val.title != '' && val.description != '') {
+            this.listingsService
+              .createListingJobs({
+                listing_id: this.listingId,
+                job_title: val.title,
                 job_description: val.description,
               })
               .subscribe(
                 (res) => {},
                 (err) => {
                   console.log(err);
-                }
+                },
               );
-          } else if (val.job_id && val.title != "" && val.description != "") {
+          } else if (val.job_id && val.title != '' && val.description != '') {
             this.listingsService
               .updateJobs(val.job_id, {
                 job_title: val.title,
@@ -399,26 +395,26 @@ export class EditListingComponent implements OnInit {
                 (res) => {},
                 (err) => {
                   console.log(err);
-                }
+                },
               );
           }
         });
 
         this.faqArr.forEach((val) => {
-          if (val.faq_id == null && val.question != "" && val.answer != "") {
+          if (val.faq_id == null && val.question != '' && val.answer != '') {
             this.listingsService
               .createListingFAQ({
                 listing_id: this.listingId,
                 question: val.question,
-                answer: val.answer,      
+                answer: val.answer,
               })
               .subscribe(
                 (res) => {},
                 (err) => {
                   console.log(err);
-                }
+                },
               );
-          } else if (val.faq_id && val.answer != "" && val.question != "") {
+          } else if (val.faq_id && val.answer != '' && val.question != '') {
             this.listingsService
               .updateFAQ(val.faq_id, {
                 question: val.question,
@@ -428,7 +424,7 @@ export class EditListingComponent implements OnInit {
                 (res) => {},
                 (err) => {
                   console.log(err);
-                }
+                },
               );
           }
         });
@@ -466,41 +462,29 @@ export class EditListingComponent implements OnInit {
 
       (err) => {
         console.log(err);
-        this.snackbarService.openSnackBar(
-          this.snackbarService.DialogList.update_listing.error,
-          false
-        );
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.update_listing.error, false);
         return;
       },
 
       () => {
-        this.snackbarService.openSnackBar(
-          this.snackbarService.DialogList.update_listing.success,
-          true
-        );
-        this.router.navigate(["/listing/" + this.listingId]);
-      }
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.update_listing.success, true);
+        this.router.navigate(['/listing/' + this.listingId]);
+      },
     );
   }
 
   removeListing(): void {
-    if (confirm("Are you sure you want to delete " + this.listingForm.value.title + "? This action is currently not reversible.")) {
+    if (confirm('Are you sure you want to delete ' + this.listingForm.value.title + '? This action is currently not reversible.')) {
       this.listingsService.removeListing(this.listingId).subscribe(
         (data) => {
           console.log(data);
-          this.snackbarService.openSnackBar(
-            this.snackbarService.DialogList.delete_listing.success,
-            true
-          );
-          this.router.navigate(["/profile"]);
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_listing.success, true);
+          this.router.navigate(['/profile']);
         },
         (err) => {
-          this.snackbarService.openSnackBar(
-            this.snackbarService.DialogList.delete_listing.error,
-            false
-          );
-          this.router.navigate(["/profile"]);
-        }
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_listing.error, false);
+          this.router.navigate(['/profile']);
+        },
       );
     }
   }
