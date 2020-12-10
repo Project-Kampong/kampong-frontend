@@ -20,7 +20,7 @@
             <mat-form-field class="half-mobile" appearance="fill">
               <mat-label>Location</mat-label>
               <mat-select formControlName="locationParams" multiple disableOptionCentering>
-                <mat-optgroup *ngFor="let group of locationList" [label]="group.name">
+                <mat-optgroup *ngFor="let group of locationsStore.locations" [label]="group.name">
                   <mat-option *ngFor="let location of group.group" [value]="location">
                     {{ location }}
                   </mat-option>
