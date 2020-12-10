@@ -1,20 +1,18 @@
-import { Component, OnInit, Inject } from "@angular/core";
+// Angular Imports
+import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
+// Services
 import { ListingsService } from "@app/services/listings.service";
-import { ProfileService } from "@app/services/profile.service";
 import { AuthService } from "@app/services/auth.service";
 import { SnackbarService } from "@app/services/snackbar.service";
 
-// Interface
-import {
-  Listing,
-  DefaultListing,
-  ListingFAQ,
-  ListingSkills,
-  ListingComments,
-} from "@app/interfaces/listing";
-import { Profile } from "@app/interfaces/profile";
+// Interfaces
+import { ListingIndividual, ListingFAQ, ListingComments, 
+  ListingJobs, ListingUpdates, ListingMilestones,
+  ListingLikes } from "@app/interfaces/listing";
+
+import { groupBy } from "lodash";
 
 declare var $: any;
 
@@ -24,284 +22,233 @@ declare var $: any;
   styleUrls: ["./listing-individual.component.scss"],
 })
 export class ListingIndividualComponent implements OnInit {
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private ListingsService: ListingsService,
-    private ProfileService: ProfileService,
-    public AuthService: AuthService,
-    public SnackbarService: SnackbarService
+
+  listingId: string = "";
+  pics: string[] = [];
+  createdBy: string = "";
+  listingData: ListingIndividual = <ListingIndividual>{};
+  likesArr: ListingLikes[] = [];
+  imageArr: string[] = [];
+  faqArr: ListingFAQ[] = [];
+  jobsArr: ListingJobs[] = [];
+  tagsArr: string[] = [];
+  locationsArr: string[] = [];
+  updatesArr: ListingUpdates[] = [];
+  milestoneArr: ListingMilestones[] = [];
+  category: string  = "";
+  title: string = "";
+  createdOn: string  = "";
+  isPublished: boolean = false;
+  isVerified: boolean = false;
+  email: string = "";
+  status: string = "";
+  url: string = "";
+  mission: string = "";
+  nickname: string = "";
+  profilePicture: string = "";
+  tagline: string = "";
+  updatedOn: string = "";
+  commentsArr: ListingComments[] = [];
+  isLiked: boolean = false;
+  likeId: string = "";
+  commentInput: string = "";
+  replyInput: string = "";
+  updateImages: File[] = [];
+  updateImagesDisplay: string[] = [];
+  updateInput: string = "";
+  updatesFormOpen: boolean = false;
+  currentDate: Date = new Date();
+  enquireMessage: string = "";
+  enquireTopic: string = "";
+
+  constructor( private router: Router, private route: ActivatedRoute, private listingsService: ListingsService,
+    public authService: AuthService, public snackbarService: SnackbarService
   ) {}
 
-  listingId;
-  hashID;
-
-  // Data Arr
-  ListingData: Listing = <Listing>{};
-  ProfileInfo: Profile = <Profile>{};
-  Hashtags = [];
-  SkillsList: ListingSkills[] = [];
-  MilestoneArr = [];
-  // Faq
-  FAQList: ListingFAQ[];
-  // Comments
-  CommentsArr = [];
-  // Updates
-  UpdatesArr = [];
-  // Locations
-  ListingLocation = [];
-
-  // UI
-  SliderImageArr = [];
-  listingLikes;
-  userLikedID = "";
-  currentDate = new Date();
-
-  // Updates
-  fileDisplayArr = [];
-  fileArr = [];
-  fileLimit = false;
-  fileCount = 0;
-  updatesFormOpen = false;
-  locationList = [];
-
-  // Email
-  enquireMessage: String = "";
-  enquireTopic: String = "";
-
   ngOnInit() {
+
     window.scroll(0, 0);
     this.listingId = this.route.snapshot.params["id"];
-    this.getInitData();
 
-    // UI Components
     $(".navigation-tabs li").on("click", function () {
       $(".navigation-tabs li").removeClass("active");
       $(this).addClass("active");
     });
     this.tabs_selected("story");
-  }
 
-  getInitData() {
-    // Static
-    this.ListingsService.getAllLocations().subscribe((data) => {
-      console.log(data);
-      this.locationList = data["data"];
-    });
-
-    // Get Listing Info
-    this.ListingsService.getSelectedListing(this.listingId).subscribe(
+    this.listingsService.getSelectedListing(this.listingId).subscribe(
       (data) => {
-        this.ListingData = data["data"];
-        this.SliderImageArr = this.ListingData["pics"];
-        this.ListingData.overview = this.ListingData["overview"]
-          .replace(/&lt;/g, "<")
-          .replace(/<a/g, "<a target='_blank'");
-        this.ListingData.problem = this.ListingData["problem"]
-          .replace(/&lt;/g, "<")
-          .replace(/<a/g, "<a target='_blank'");
-        this.ListingData.solution = this.ListingData["solution"]
-          .replace(/&lt;/g, "<")
-          .replace(/<a/g, "<a target='_blank'");
-        this.ListingData.outcome = this.ListingData["outcome"]
-          .replace(/&lt;/g, "<")
-          .replace(/<a/g, "<a target='_blank'");
-
-        $("#result-overview").html(this.ListingData.overview);
-        $("#result-problem").html(this.ListingData.problem);
-        $("#result-solution").html(this.ListingData.solution);
-        $("#result-outcome").html(this.ListingData.outcome);
-        console.log(this.ListingData);
-        console.log(this.SliderImageArr);
-        this.ProfileService.getUserProfile(
-          this.ListingData["created_by"]
-        ).subscribe((profile) => {
-          this.ProfileInfo = profile["data"];
-          if (this.ProfileInfo.profile_picture == null) {
-            this.ProfileInfo.profile_picture =
-              "https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png";
-          }
+        console.log(data);
+        this.listingData = data["data"];
+        this.imageArr = this.listingData["pics"];
+        this.likesArr = this.listingData["user_likes"];
+        this.faqArr = this.listingData["faqs"];
+        this.jobsArr = this.listingData["jobs"];
+        this.tagsArr = this.listingData["tags"];
+        this.locationsArr = this.listingData["locations"];
+        this.updatesArr = this.listingData["listing_updates"];
+        this.milestoneArr = this.listingData["milestones"];
+        this.category = this.listingData["category"];
+        this.title = this.listingData["title"];
+        this.createdOn = this.listingData["created_on"];
+        this.isVerified = this.listingData["is_verified"];
+        this.email = this.listingData["listing_email"];
+        this.status = this.listingData["listing_status"];
+        this.url = this.listingData["listing_url"];
+        this.mission = this.listingData["mission"];
+        this.nickname = this.listingData["nickname"];
+        this.profilePicture = this.listingData["profile_picture"];
+        this.tagline = this.listingData["tagline"];
+        this.updatedOn = this.listingData["updated_on"];
+        this.createdBy = this.listingData["created_by"];
+        this.pics = this.listingData["pics"];
+        
+        this.milestoneArr = this.milestoneArr.sort((a, b) => {
+          const result: number = (new Date(a.date)).valueOf() - (new Date(b.date)).valueOf();
+          return result;
         });
 
-        if (this.AuthService.isLoggedIn) {
-          // Check User Liked List
-          this.ListingsService.getLikedListing().subscribe((data) => {
-            const likedArr = data["data"];
-            for (var i = 0; i < likedArr.length; i++) {
-              if (likedArr[i].listing_id == this.listingId) {
-                this.userLikedID = likedArr[i].like_id;
-                $(".like-btn").addClass("liked");
-              }
-            }
-          });
-        }
+        this.updatesArr = this.updatesArr.sort((a, b) => {
+          const result: number = (new Date(b.updated_on)).valueOf() - (new Date(a.updated_on)).valueOf();
+          return result;
+        });
+
+        $("#result-overview").html(this.parseStory(this.listingData['overview']));
+        $("#result-problem").html(this.parseStory(this.listingData['problem']));
+        $("#result-solution").html(this.parseStory(this.listingData['solution']));
+        $("#result-outcome").html(this.parseStory(this.listingData['outcome']));
+
+        this.checkIsLiked();
       },
       (err) => {
+        console.log(err);
         this.router.navigate(["/home"]);
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.generic_error.error, false);
+    });
+
+  }
+
+  loadComments(): void {
+    this.listingsService.getSelectedListingComments(this.listingId).subscribe(
+      (data) => {
+        this.commentsArr = data["data"];
+        this.commentsArr = this.commentsArr.sort((a, b) => {
+          const result: number = (new Date(b.created_on)).valueOf() - (new Date(a.created_on)).valueOf();
+          return result;
+        })
+      }, 
+      (err) => {
+        console.log(err);
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.generic_error.error, false);
+    })
+  }
+
+  //To think through the fastest way
+  groupComments(commentsArr: ListingComments[]): any {
+    const result = commentsArr.filter(comment => comment.reply_to_id === null);
+    commentsArr.forEach((val) => {
+      if (val.reply_to_id) { //it is a reply
+        console.log(val)
+      }
+    })
+  }
+
+  checkIsLiked(): void {
+    this.likesArr.forEach((val) => {
+      if (this.authService.LoggedInUserID && val["user_id"] === this.authService.LoggedInUserID) {
+        this.isLiked = true;
+        this.likeId = val["like_id"];
+        $(".like-btn").addClass("liked");
+      }
+    })
+  }
+
+  parseStory(story: string): string {
+    if (story === null) {
+      return "";
+    }
+    const result = story.replace(/&lt;/g, "<").replace(/<a/g, "<a target='_blank'");
+    return result;
+  }
+
+  uploadImage(event: Event): void {
+    if (this.updateImagesDisplay.length === 5 && this.updateImages.length === 5) {
+      return;
+    }
+    const reader: FileReader = new FileReader();
+    reader.onload = (e) => {
+      this.updateImagesDisplay.push(reader.result.toString());
+    }
+    try {
+      reader.readAsDataURL((event.target as HTMLInputElement).files[0]);
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+    this.updateImages.push(<File>(event.target as HTMLInputElement).files[0]);
+  }
+
+  removeImage(i: number): void {
+    this.updateImages.splice(i, 1);
+    this.updateImagesDisplay.splice(i, 1);
+  }
+
+  async postUpdate(): Promise<void> {
+    (await this.listingsService.createListingUpdates(
+      {
+        description: this.updateInput,
+        listing_id: this.listingId
+      },
+      this.updateImages
+    )).subscribe(
+      (data) => {
+        this.updateImages = [];
+        this.updateImagesDisplay = [];
+        this.updateInput = "";
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_updates.success, true);
+        
+      },
+      (err) => {
+        console.log(err);
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_updates.error, false);
       },
       () => {
-        // Public Data
-        // Get Num of Likes
-        this.ListingsService.getSelectedListingLikes(this.listingId).subscribe(
-          (data) => {
-            this.listingLikes = data["count"];
-          }
-        );
-        // Get FAQ Info
-        this.ListingsService.getSelectedListingFAQ(this.listingId).subscribe(
-          (data) => {
-            this.FAQList = data["data"];
-          }
-        );
-
-        this.ListingsService.getSelectedListingJobs(this.listingId).subscribe(
-          (data) => {
-            this.SkillsList = data["data"];
-            console.log(this.SkillsList);
-          }
-        );
-
-        // Get Hashtags
-        this.ListingsService.getSelectedListingHashtags(
-          this.listingId
-        ).subscribe((data) => {
-          this.Hashtags = data["data"];
-        });
-
-        // Get Location
-        this.ListingsService.getSelectedListingLocations(
-          this.listingId
-        ).subscribe((data) => {
-          this.ListingLocation = data["data"];
-        });
-
-        // Get Comments
-        this.ListingsService.getSelectedListingComments(
-          this.listingId
-        ).subscribe((data) => {
-          this.CommentsArr = data["data"];
-          this.CommentsArr.sort((a, b) => {
-            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-          });
-        });
-
-        // Get Updates
-        this.ListingsService.getSelectedListingUpdates(
-          this.listingId
-        ).subscribe((data) => {
-          this.UpdatesArr = data["data"];
-          this.UpdatesArr.sort((a, b) => {
-            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-          });
-          // this.initiateSlick();
-        });
-
-        // Get Milestones
-        this.ListingsService.getSelectedListingMilestones(
-          this.listingId
-        ).subscribe((data) => {
-          this.MilestoneArr = data["data"];
-          this.MilestoneArr.sort((a, b) => {
-            return <any>new Date(a.date) - <any>new Date(b.date);
-          });
-        });
-
-        // End of Data Retrive
+        setTimeout(() => {
+          this.initiateSlick();
+        }, 500);
+        this.reloadCurrentRoute();
       }
-    );
+    )
   }
 
-  // File Upload
-  selectedFile: File = null;
-  updatesDescription;
-  uploadFile(event) {
-    this.selectedFile = <File>event.target.files[0];
-    // Display Image
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.fileDisplayArr.push(reader.result.toString());
-    };
-    reader.readAsDataURL(event.target.files[0]);
-    this.fileLimitChecker(true);
-    this.fileArr.push(this.selectedFile);
-    console.log(this.fileArr);
-  }
-
-  removeFile(i) {
-    this.fileDisplayArr.splice(i, 1);
-    this.fileArr.splice(i, 1);
-    this.fileLimitChecker(false);
-  }
-
-  fileLimitChecker(increase) {
-    const maxFile = 5;
-    if (increase) {
-      this.fileCount = this.fileCount + 1;
-      if (this.fileCount == maxFile) {
-        this.fileLimit = true;
-      }
-    } else {
-      this.fileCount = this.fileCount - 1;
-      if (this.fileCount != maxFile) {
-        this.fileLimit = false;
-      }
-    }
-  }
-
-  submitUpdates() {
-    var updatesFd = new FormData();
-    updatesFd.append("description", this.updatesDescription);
-    updatesFd.append("listing_id", this.listingId);
-    for (var i = 0; i < this.fileArr.length; i++) {
-      updatesFd.append("pic" + (i + 1), this.fileArr[i].name);
-      updatesFd.append("pics", this.fileArr[i]);
-      console.log("pic" + (i + 1));
-    }
-    this.ListingsService.CreateListingUpdates(updatesFd).subscribe((data) => {
-      console.log(data);
-      this.fileArr = [];
-      this.fileDisplayArr = [];
-      this.updatesDescription = "";
-      this.fileCount = 0;
-      // Get Updates
-      this.ListingsService.getSelectedListingUpdates(this.listingId).subscribe(
+  deleteUpdate(updates: ListingUpdates): void {
+    if (confirm("Delete update?")) {
+      this.listingsService.removeListingUpdates(updates.listing_update_id).subscribe(
         (data) => {
-          this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.upload_updates.success,
-            true
-          );
-          this.UpdatesArr = data["data"];
-          this.UpdatesArr.sort((a, b) => {
-            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-          });
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_updates.success, true);
         },
         (err) => {
-          this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.upload_updates.error,
-            false
-          );
+          console.log(err);
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_updates.error, false);
         },
         () => {
           setTimeout(() => {
             this.initiateSlick();
           }, 500);
+          this.reloadCurrentRoute();
         }
-      );
-    });
+      )
+    }
   }
 
-  // Updates
-  getDiffInTime(time) {
-    const newTime = new Date(time);
-    var diff = this.currentDate.getTime() - newTime.getTime();
-    diff /= 1000;
-
-    var hh = Math.floor(diff / (60 * 60));
-    var dd = Math.floor(diff / (60 * 60 * 24));
-    var mm = Math.floor(diff / (60 * 60 * 24 * 30));
-    var yy = Math.floor(diff / (60 * 60 * 24 * 30 * 12));
+  // To refactor
+  getDiffInTime(time: string): string {
+    const diff = (this.currentDate.getTime() - (new Date(time)).getTime()) / 1000;
+    const hh = Math.floor(diff / (60 * 60));
+    const dd = Math.floor(diff / (60 * 60 * 24));
+    const mm = Math.floor(diff / (60 * 60 * 24 * 30));
+    const yy = Math.floor(diff / (60 * 60 * 24 * 30 * 12));
     if (hh > 24) {
-      // retun day
       if (dd > 30) {
         if (mm > 12) {
           if (yy > 1) {
@@ -334,61 +281,64 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
-  comments;
-  // Comments
-  submitComments() {
-    console.log(this.comments);
-    this.ListingsService.CreateListingComments({
+  postComment(): void {
+    this.listingsService.createListingComments({
       listing_id: this.listingId,
-      comment: this.comments,
-    }).subscribe((data) => {
-      this.comments = "";
-      console.log(data);
-      // Get Comments
-      this.ListingsService.getSelectedListingComments(this.listingId).subscribe(
-        (data) => {
-          this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.upload_comments.success,
-            true
-          );
-          this.CommentsArr = data["data"];
-          this.CommentsArr.sort((a, b) => {
-            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-          });
-          console.log(this.CommentsArr);
-        }
-      );
-    });
-  }
-  replyComments(data) {
-    console.log(data);
-    this.ListingsService.CreateListingComments({
-      listing_id: this.listingId,
-      comment: data.replyToComments,
-      reply_to_id: data.listing_comment_id,
-    }).subscribe((data) => {
-      console.log(data);
-      // Get Comments
-      this.ListingsService.getSelectedListingComments(this.listingId).subscribe(
-        (data) => {
-          this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.upload_comments.success,
-            true
-          );
-          this.CommentsArr = data["data"];
-          this.CommentsArr.sort((a, b) => {
-            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-          });
-          console.log(this.CommentsArr);
-        }
-      );
-    });
+      comment: this.commentInput
+    }).subscribe(
+      (data) => {
+        this.commentInput = "";
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_comments.success, true);
+      },
+      (err) => {
+        console.log(err);
+        this.commentInput = "";
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_comments.error, false);
+      },
+      () => {
+        this.loadComments();
+      }
+    )
   }
 
-  // UI Components
+  replyComment(comment: ListingComments): void {
+    this.listingsService.createListingComments({
+      listing_id: this.listingId,
+      comment: this.replyInput,
+      reply_to_id: comment.listing_comment_id,
+    }).subscribe(
+      (data) => {
+        this.replyInput = "";
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_comments.success, true);
+      },
+      (err) => {
+        console.log(err);
+        this.replyInput = "";
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_comments.error, false);
+      },
+      () => {
+        this.loadComments();
+      }
+    )
+  }
 
-  UpdateSlicked = false;
-  initiateSlick() {
+  deleteComment(comment: ListingComments) {
+    if (confirm("Delete comment?")) {
+      this.listingsService.removeListingComments(comment.listing_comment_id).subscribe(
+        (data) => {
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_comments.success, true);
+        },
+        (err) => {
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_comments.error, false);
+        },
+        () => {
+          this.loadComments();
+        }
+      )
+    }
+  }
+
+  initiateSlick(): void {
     if (!$(".update-image-slider").hasClass("slick-initialized")) {
       $(".update-image-slider").slick({
         slidesToShow: 2,
@@ -411,46 +361,63 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
-  liked_clicked() {
-    if (!this.AuthService.isLoggedIn) {
-      this.SnackbarService.openSnackBar("Please login to like", true);
+  handle_like(): void {
+    if (!this.authService.isLoggedIn) {
+      this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.unauthorized, false);
       return;
-    } else {
-      if (this.userLikedID == "") {
-        this.ListingsService.LikedListing(this.listingId).subscribe((data) => {
-          this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.liked_listing.liked,
-            true
-          );
-          $(".like-btn").toggleClass("liked");
-          this.listingLikes = this.listingLikes + 1;
-          this.userLikedID = data["data"]["like_id"];
-        });
-      } else {
-        this.ListingsService.UnLikedListing(this.userLikedID).subscribe(
-          (data) => {
-            this.SnackbarService.openSnackBar(
-              this.SnackbarService.DialogList.liked_listing.unliked,
-              true
-            );
-            this.userLikedID = "";
-            $(".like-btn").toggleClass("liked");
-            this.listingLikes = this.listingLikes - 1;
-          }
-        );
-      }
     }
+    if (!this.isLiked) {
+      this.listingsService.likeListing(this.listingId).subscribe(
+        (data) => {
+          this.likesArr.push({ like_id: data["data"]["like_id"], user_id: data["data"]["user_id"]});
+          this.isLiked = true;
+          this.likeId = data["data"]["like_id"];
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.liked, true);
+        },
+        (err) => {
+          console.log(err);
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.error, false);
+          return;
+        }
+      )
+    } else {
+      this.listingsService.unlikeListing(this.likeId).subscribe(
+        (data) => {
+          this.likesArr.splice(this.likesArr.map(like => like["user_id"]).indexOf(this.authService.LoggedInUserID), 1);
+          this.isLiked = false;
+          this.likeId = "";
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.unliked, true);
+        },
+        (err) => {
+          console.log(err);
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.error, false);
+          return;
+        }
+      )
+    }
+
+  }
+
+  reloadCurrentRoute(): void {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
   }
 
   tabs_selected(selected: string): void {
     $(".tabs-content").hide();
-    $("#" + selected).show();
-    if (selected == "updates") {
-      this.initiateSlick();
+    switch(selected) {
+      case "updates":
+        this.initiateSlick();
+        break;
+      case "comments":
+        this.loadComments();
     }
+    $("#" + selected).show();
   }
 
-  selectedProfile(user_id: string): void {
+  clickOnProfile(user_id: string): void {
     this.router.navigate(["/profile/" + user_id]);
   }
 
@@ -458,9 +425,7 @@ export class ListingIndividualComponent implements OnInit {
     this.router.navigate(["/edit/" + listing_id]);
   }
 
-  // Toggle Enquire popup
   togglePopup(): void {
-    // Toggle popup
     $(".popup-bg").toggleClass("active");
     $(".popup-box").toggleClass("active");
   }
@@ -468,19 +433,19 @@ export class ListingIndividualComponent implements OnInit {
   sendMessage() {
     if (this.enquireMessage != "") {
       this.togglePopup();
-      this.ListingsService.sendEnquiry({
-        receiverEmail: this.ListingData.listing_email,
+      this.listingsService.sendEnquiry({
+        receiverEmail: this.listingData.listing_email,
         subject: this.enquireTopic,
         message: this.enquireMessage,
       }).subscribe(
         (data) => {
-          this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.send_message.success,
+          this.snackbarService.openSnackBar(
+            this.snackbarService.DialogList.send_message.success,
             true
           ),
             (err) => {
-              this.SnackbarService.openSnackBar(
-                this.SnackbarService.DialogList.send_message.error,
+              this.snackbarService.openSnackBar(
+                this.snackbarService.DialogList.send_message.error,
                 false
               );
             };
@@ -494,64 +459,5 @@ export class ListingIndividualComponent implements OnInit {
     }
   }
 
-  // Delete
-  deleteUpdate(updates) {
-    if (confirm("Are you sure to delete update?")) {
-      console.log(updates);
-      this.ListingsService.removeListingUpdates(
-        updates.listing_update_id
-      ).subscribe(() => {
-        // Get Updates
-        this.ListingsService.getSelectedListingUpdates(
-          this.listingId
-        ).subscribe(
-          (data) => {
-            this.SnackbarService.openSnackBar(
-              this.SnackbarService.DialogList.delete_updates.success,
-              true
-            );
-            this.UpdatesArr = data["data"];
-            this.UpdatesArr.sort((a, b) => {
-              return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-            });
-          },
-          (err) => {
-            this.SnackbarService.openSnackBar(
-              this.SnackbarService.DialogList.delete_updates.error,
-              false
-            );
-          },
-          () => {
-            setTimeout(() => {
-              this.initiateSlick();
-            }, 500);
-          }
-        );
-      });
-    }
-  }
 
-  deleteComments(comment) {
-    if (confirm("Are you sure to delete comment?")) {
-      console.log(comment);
-      this.ListingsService.removeListingComments(
-        comment.listing_comment_id
-      ).subscribe(() => {
-        this.SnackbarService.openSnackBar(
-          this.SnackbarService.DialogList.delete_comments.success,
-          true
-        );
-        // Get Comments
-        this.ListingsService.getSelectedListingComments(
-          this.listingId
-        ).subscribe((data) => {
-          this.CommentsArr = data["data"];
-          this.CommentsArr.sort((a, b) => {
-            return <any>new Date(b.updated_on) - <any>new Date(a.updated_on);
-          });
-          console.log(this.CommentsArr);
-        });
-      });
-    }
-  }
 }

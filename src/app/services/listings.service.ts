@@ -3,7 +3,8 @@ import { HttpClient, HttpHeaders, HttpEvent } from "@angular/common/http";
 import {
   Listing,
   CreateListing,
-  OriginalImagesCheck,
+  CreateListingUpdates,
+  originalImagesCheck,
 } from "@app/interfaces/listing";
 import { API } from "@app/interfaces/api";
 import { Observable } from "rxjs";
@@ -35,8 +36,9 @@ export class ListingsService {
     };
     this.optionsMulti = {
       headers: new HttpHeaders({
-        //"Content-Type": "multipart/form-data",
-        authorization: "Bearer " + this.AuthService.AuthToken,
+        'Accept': 'application/json',
+        "Content-Type": "multipart/form-data",
+        'Authorization': "Bearer " + this.AuthService.AuthToken,
       }),
     };
   }
@@ -143,6 +145,13 @@ export class ListingsService {
     );
   }
 
+  getSelectedCommentChildren(commentId) {
+    return this.httpClient.get<API>(
+      this.url + "api/listing-comments/" + commentId + "/children",
+      this.options
+    );
+  }
+
   // Updates
   getSelectedListingUpdates(listingId) {
     return this.httpClient.get<API>(
@@ -212,7 +221,7 @@ export class ListingsService {
     data: CreateListing,
     images: File[]
   ): Promise<Observable<HttpEvent<API>>> {
-    const imageFd = new FormData();
+    const imageFd: FormData = new FormData();
     images.forEach((val, idx) => {
       if (val) {
         imageFd.append("uploads", val);
@@ -234,6 +243,41 @@ export class ListingsService {
             this.httpClient.post<API>(
               this.url + "api/listings",
               data,
+              this.AuthService.OnlyAuthHttpHeaders
+            )
+          );
+        }
+      );
+    });
+  }
+
+  createListingUpdates(
+    data: CreateListingUpdates,
+    images: File[]
+  ): Promise<Observable<HttpEvent<API>>> {
+    const imageFd: FormData = new FormData();
+    images.forEach((val, idx) => {
+      if (val) {
+        imageFd.append("uploads", val);
+      }
+    });
+    return new Promise<Observable<HttpEvent<API>>>((resolve, reject) => {
+      this.uploadFiles(imageFd).subscribe(
+        (res) => {
+          console.log(res);
+          data.pics = res["data"]
+          ? res["data"].map(({ location }) => location)
+          : null;
+        },
+        (err) => {
+          console.log(err);
+          reject("Photos failed to upload");
+        },
+        () => {
+          resolve(
+            this.httpClient.post<API>(
+              this.url + "api/listing-updates",
+              data, 
               this.AuthService.OnlyAuthHttpHeaders
             )
           );
@@ -301,7 +345,7 @@ export class ListingsService {
   }
 
   // Comments
-  CreateListingComments(data) {
+  createListingComments(data) {
     return this.httpClient.post<API>(
       this.url + "api/listing-comments",
       data,
@@ -309,17 +353,8 @@ export class ListingsService {
     );
   }
 
-  // Updates
-  CreateListingUpdates(data) {
-    return this.httpClient.post<API>(
-      this.url + "api/listing-updates",
-      data,
-      this.AuthService.OnlyAuthHttpHeaders
-    );
-  }
-
   // Like A Listing
-  LikedListing(listing_id) {
+  likeListing(listing_id) {
     return this.httpClient.post<API>(
       this.url + "api/likes",
       { listing_id: listing_id },
@@ -327,7 +362,7 @@ export class ListingsService {
     );
   }
 
-  UnLikedListing(like_id) {
+  unlikeListing(like_id) {
     return this.httpClient.delete<API>(
       this.url + "api/likes/" + like_id,
       this.AuthService.AuthOptions
@@ -339,7 +374,7 @@ export class ListingsService {
     listingId: string,
     data: CreateListing,
     images: File[],
-    originalImages: OriginalImagesCheck[]
+    originalImages: originalImagesCheck[]
   ): Promise<Observable<HttpEvent<API>>> {
     const imageFd = new FormData();
     images.forEach((val, idx) => {

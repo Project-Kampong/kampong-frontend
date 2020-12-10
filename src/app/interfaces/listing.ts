@@ -26,11 +26,58 @@ export interface Listing {
   listing_email: string;
 }
 
-export interface ListingFAQ {
-  faq_id: string;
+export interface ListingIndividual {
+  about: string;
+  category: string;
+  created_by: string;
+  created_on: string;
+  deleted_on: string;
+  end_date: string;
+  is_featured: boolean;
+  is_published: boolean;
+  is_verified: boolean;
+  keyword_vector: string;
+  listing_email: string;
   listing_id: string;
+  listing_status: string;
+  listing_url: string;
+  locations: string[];
+  location_ids: number[];
+  mission: string;
+  nickname: string;
+  outcome: string;
+  overview: string;
+  pics: string[];
+  problem: string;
+  profile_picture: string;
+  solution: string;
+  start_date: string;
+  tagline: string;
+  title: string;
+  updated_on: string;
+}
+
+export interface ListingLikes {
+  like_id: string;
+  user_id: string;
+}
+
+export interface ListingFAQ {
   question: string;
   answer: string;
+}
+
+export interface ListingJobs {
+  job_title: string,
+  job_description: string,
+}
+
+export interface ListingUpdates {
+  listing_update_id: string;
+  pics: string[];
+  created_on: string;
+  updated_on: string;
+  description: string;
 }
 
 export interface ListingSkills {
@@ -47,7 +94,15 @@ export interface ListingComments {
   reply_to_id: string;
   created_on: string;
   updated_on: string;
+  deleted_on: string,
   nickname: string;
+  profile_picture: string;
+  replies?: ListingComments[];
+}
+
+export interface ListingMilestones {
+  date: string;
+  milestone_description: string;
 }
 
 export interface ListingHashtags {
@@ -55,21 +110,25 @@ export interface ListingHashtags {
   tag: string;
 }
 
-
-
 export interface CreateListingMilestones {
-  description: string;
+  milestone_description: string;
   date: Date;
 }
 
 export interface CreateListingJobs {
-  title: string;
-  description: string;
+  job_title: string;
+  job_description: string;
 }
 
 export interface CreateListingFAQ {
   question: string;
   answer: string;
+}
+
+export interface CreateListingUpdates {
+  listing_id: string;
+  description: string;
+  pics ?: string[];
 }
 
 export interface CreateListing {
@@ -84,7 +143,7 @@ export interface CreateListing {
   listing_url: string;
   listing_email: string;
   listing_status: string;
-  pics: string[];
+  pics ?: string[];
   locations: string[];
 }
 
@@ -95,18 +154,18 @@ export interface EditListingHashtags {
 
 export interface EditListingMilestones {
   milestone_id: number;
-  description: string;
+  milestone_description: string;
   date: Date;
 }
 
 export interface EditListingJobs {
   job_id: number;
-  title: string;
-  description: string;
+  job_title: string;
+  job_description: string;
 }
 
 export interface EditListingFAQ {
-  faq_id: string;
+  faq_id: number;
   question: string;
   answer: string;
 }
@@ -127,7 +186,7 @@ export interface EditListing {
   locations: string[];
 }
 
-export const CreateListingForm = {
+export const createListingForm = {
   
   title: new FormControl("", [
     Validators.required,
@@ -174,7 +233,7 @@ export const CreateListingForm = {
 
 };
 
-export const EditListingForm = {
+export const editListingForm = {
   
   title: new FormControl("", [
     Validators.required,
@@ -221,7 +280,7 @@ export const EditListingForm = {
 
 };
 
-export const DefaultListing = {
+export const defaultListing = {
   listing_id: "default",
   organisation_id: "default",
   created_by: "default",
@@ -239,7 +298,7 @@ export const DefaultListing = {
   listing_email: "default",
 };
 
-export interface OriginalImagesCheck {
+export interface originalImagesCheck {
   image: string;
   check: boolean;
 }

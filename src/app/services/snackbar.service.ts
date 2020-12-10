@@ -44,10 +44,11 @@ export class SnackbarService {
       success: "Update deleted",
       error: "Failed to delete Update",
     },
-    liked_listing: {
-      liked: "Added to your Liked Initative",
-      unliked: "Removed from your Liked Initative",
+    like_listing: {
+      liked: "Added to your Likes",
+      unliked: "Removed from your Likes",
       error: "Error, please try again later",
+      unauthorized: "Please login to like",
     },
     create_organisation : { 
       success: "Organisation Successfully Created",
@@ -85,12 +86,15 @@ export class SnackbarService {
     verify: {
       msg: "PLease verify your email",
     },
+    generic_error: {
+      error: "Error, please try again later",
+    }
   };
 
   horizontalPosition: MatSnackBarHorizontalPosition = "right";
   verticalPosition: MatSnackBarVerticalPosition = "top";
 
-  openSnackBar(message: String, success: boolean) {
+  openSnackBar(message: string, success: boolean) {
     this.AuthService.Dialogmessage = message;
     if (success) {
       this._snackBar.openFromComponent(SnackbarSuccessComponent, {
