@@ -1,6 +1,6 @@
 // Angular Imports
 import { Component, OnInit } from "@angular/core";
-import { COMMA, ENTER, QUESTION_MARK, SPACE } from "@angular/cdk/keycodes";
+import { COMMA, ENTER, SPACE } from "@angular/cdk/keycodes";
 import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -369,10 +369,7 @@ export class EditListingComponent implements OnInit {
         return;
       },
       () => {
-        this.snackbarService.openSnackBar(
-          this.snackbarService.DialogList.update_listing.success,
-          true
-        );
+
         const combinedObservables = forkJoin([this.updateHashtags(), this.updateJobs(), this.updateMilestones(), this.updateFaqs()]);
         combinedObservables.subscribe({
           next: res => console.log(res),
@@ -383,7 +380,13 @@ export class EditListingComponent implements OnInit {
               false
             );
           },
-          complete: () => this.router.navigate(["/listing/" + this.listingId])
+          complete: () => {
+            this.snackbarService.openSnackBar(
+              this.snackbarService.DialogList.update_listing.success,
+              true
+            );
+            this.router.navigate(["/listing/" + this.listingId])
+          }
         });
 
       }

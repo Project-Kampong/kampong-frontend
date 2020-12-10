@@ -17,6 +17,8 @@ import { categoryList } from "@app/util/categories";
 import { createListingForm, CreateListingFAQ, 
   CreateListingJobs, CreateListingMilestones, CreateListing } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
+import { catchError } from 'rxjs/operators';
+import { forkJoin, Observable, of } from 'rxjs';
 
 declare var $: any;
 
@@ -30,33 +32,23 @@ export class CreateListingComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
   listingForm: FormGroup;
   listingData: CreateListing;
-  listingId: string;
-  removable: boolean;
-  categoryGroup: Array<CategoryFilter>;
-  locationGroup: Array<LocationFilter>;
-  listingImages: File[];
-  listingImagesDisplay: string[];
-  hashtags: string[];
-  milestoneArr: Array<CreateListingMilestones>;
-  jobArr: Array<CreateListingJobs>
-  faqArr: Array<CreateListingFAQ>;
+  listingId: string = "";
+  removable: boolean = true;
+  categoryGroup: CategoryFilter[] = [];
+  locationGroup: LocationFilter[] = [];
+  listingImages: File[] = [];
+  listingImagesDisplay: string[] = [];
+  hashtags: string[] = [];
+  milestoneArr: CreateListingMilestones[] = [{ milestone_description: "", date: new Date() }];
+  jobArr: CreateListingJobs[] = [];
+  faqArr: CreateListingFAQ[] = [];
 
   constructor(
     private fb: FormBuilder,
     public listingsService: ListingsService,
     private router: Router,
     public snackbarService: SnackbarService,
-  ) {
-    
-    this.listingImages = [];
-    this.listingImagesDisplay = [];
-    this.hashtags = [];
-    this.milestoneArr = [{ description: "", date: new Date() }];
-    this.jobArr = [];
-    this.faqArr = [];
-    this.listingId = "";
-    this.removable = true;
-  }
+  ) {}
   
   ngOnInit() {
 
@@ -121,7 +113,7 @@ export class CreateListingComponent implements OnInit {
   }
 
   addMilestone(): void {
-    this.milestoneArr.push({ description: "", date: new Date() });
+    this.milestoneArr.push({ milestone_description: "", date: new Date() });
     this.milestoneArr.sort((a, b) => {
       const result: number = (new Date(a.date)).valueOf() - (new Date(b.date)).valueOf();
       return result;
@@ -150,7 +142,7 @@ export class CreateListingComponent implements OnInit {
   }
 
   addDescription(): void {
-    this.jobArr.push({ title: "", description: "" });
+    this.jobArr.push({ job_title: "", job_description: "" });
   }
 
   removeDescription(i: number): void {
@@ -165,6 +157,59 @@ export class CreateListingComponent implements OnInit {
       }
     });
     return false;
+  }
+
+  createMilestones(): Observable<any[]> {
+    const milestoneCreateObservables: Observable<any>[] = [];
+    this.milestoneArr.forEach((val) => {
+      if (val.milestone_description !== "" && val.date !== null) {
+        milestoneCreateObservables.push(this.listingsService.createListingMilestones({
+          listing_id: this.listingId,
+          description: val.milestone_description,
+          date: val.date,
+        }).pipe(catchError(error => of(error))));
+      }
+    })
+    return forkJoin(milestoneCreateObservables);
+  }
+
+  createHashtags(): Observable<any[]> {
+    const hashtagsCreateObservables: Observable<any>[] = [];
+    this.hashtags.forEach((val) => {
+      hashtagsCreateObservables.push(this.listingsService.createListingHashtags({
+        listing_id: this.listingId,
+        tag: val,
+      }).pipe(catchError(error => of(error))));
+    })
+    return forkJoin(hashtagsCreateObservables);
+  }
+
+  createJobs(): Observable<any[]> {
+    const jobsCreateObservables: Observable<any>[] = [];
+    this.jobArr.forEach((val) => {
+      if (val.job_title !== "" && val.job_description !== "") {
+        jobsCreateObservables.push(this.listingsService.createListingJobs({
+          listing_id: this.listingId,
+          job_title: val.job_title,
+          job_description: val.job_description,
+        }).pipe(catchError(error => of(error))));
+      }
+    })
+    return forkJoin(jobsCreateObservables);
+  }
+
+  createFaqs(): Observable<any[]> {
+    const faqCreateObservables: Observable<any>[] = [];
+    this.faqArr.forEach((val) => {
+      if (val.question !== "" && val.answer !== "") {
+        faqCreateObservables.push(this.listingsService.createListingFAQ({
+          listing_id: this.listingId,
+          question: val.question,
+          answer: val.answer,
+        }).pipe(catchError(error => of(error))));
+      }
+    })
+    return forkJoin(faqCreateObservables);
   }
 
   async createListing(): Promise<void> {
@@ -190,113 +235,43 @@ export class CreateListingComponent implements OnInit {
     const solution: string = $("#solution").html();
 
     this.listingData = {
-      title,
-      category,
-      tagline,
-      mission,
-      overview,
-      problem,
-      outcome,
-      solution,
-      listing_url,
-      listing_email,
-      listing_status,
-      pics,
-      locations
+      title, category, tagline, mission, overview,
+      problem, outcome, solution, listing_url, listing_email,
+      listing_status, pics, locations
     };
 
     (await this.listingsService.createListing(this.listingData, this.listingImages)).subscribe(
       (res) => {
-        this.listingId = res["data"][0]["listing_id"];
-
-        this.milestoneArr.forEach((val) => {
-          if (val.description != "" || val.date != null) {
-            this.listingsService.createListingMilestones({
-              listing_id: this.listingId,
-              description: val.description,
-              date: val.date,
-            }).subscribe(
-              (res) => {},
-              (err) => {
-                console.log(err);
-              }
-            );
-          }
-        })
-
-        this.hashtags.forEach((val) => {
-          this.listingsService.createListingHashtags({
-            listing_id: this.listingId,
-            tag: val,
-          }).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-            }
-          );
-        })
-
-        this.jobArr.forEach((val) => {
-          if (val.title != "" && val.description != "") {
-            this.listingsService.createListingJobs({
-              listing_id: this.listingId,
-              job_title: val.title,
-              job_description: val.description,
-            }).subscribe(
-              (res) => {},
-              (err) => {
-                console.log(err);
-              }
-            )
-          }
-        });
-
-        this.faqArr.forEach((val) => {
-          if (val.question != "" && val.answer != "") {
-            this.listingsService.createListingFAQ({
-              listing_id: this.listingId,
-              question: val.question,
-              answer: val.answer,
-            }).subscribe(
-              (res) => {},
-              (err) => {
-                console.log(err);
-              }
-            )
-          }
-        });
-
-        this.listingData.locations.forEach((val) => {
-          this.listingsService.createListingLocation({
-            listing_id: this.listingId,
-            location_id: 1,
-          }).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-            }
-          );
-        })
-
+        console.log(res);
+        this.listingId = res["data"]["listing_id"];
       },
-      
       (err) => {
         console.log(err);
         this.snackbarService.openSnackBar(
           this.snackbarService.DialogList.create_listing.error,
           false
         );
-        this.listingForm.reset();
       },
-
       () => {
-        this.snackbarService.openSnackBar(
-          this.snackbarService.DialogList.create_listing.success,
-          true
-        );
-        this.router.navigate(["/listing/" + this.listingId]);
+        const combinedObservables = forkJoin([this.createFaqs(), this.createHashtags(), this.createJobs(), this.createMilestones()]);
+        combinedObservables.subscribe({
+          next: res => console.log(res),
+          error: err => {
+            console.log(err);
+            this.snackbarService.openSnackBar(
+              this.snackbarService.DialogList.create_listing.error,
+              false
+            );
+          },
+          complete: () => {
+            this.snackbarService.openSnackBar(
+              this.snackbarService.DialogList.create_listing.success,
+              true
+            );
+            this.router.navigate(["/listing/" + this.listingId]);
+          }
+        });
       }
     );
   }
-
 }

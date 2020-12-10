@@ -111,13 +111,13 @@ export interface ListingHashtags {
 }
 
 export interface CreateListingMilestones {
-  description: string;
+  milestone_description: string;
   date: Date;
 }
 
 export interface CreateListingJobs {
-  title: string;
-  description: string;
+  job_title: string;
+  job_description: string;
 }
 
 export interface CreateListingFAQ {
