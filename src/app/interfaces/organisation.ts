@@ -19,11 +19,14 @@ export interface CreateOrganisation {
   name: string,
   organisation_type: string,
   about: string,
-  website_url: string,
-  phone: string,
+  website_url?: string,
+  phone?: string,
   email: string,
-  locations: string[],
-  story: string,
+  address?: string,
+  locations?: string[],
+  facebook_link?: string,
+  twitter_link?: string,
+  instagram_link?: string,
 }
 
 export interface Programmes {
@@ -39,7 +42,7 @@ export interface CreateProgrammes {
   media_url: string[],
 }
 
-export const CreateOrganisationForm = {
+export const createOrganisationForm = {
 
   name: new FormControl("", [
     Validators.required, 
@@ -58,37 +61,35 @@ export const CreateOrganisationForm = {
   ]),
 
   website_url: new FormControl("", [
-    Validators.required,
     Validators.maxLength(100)
   ]),
 
-  handphone: new FormControl("", [
-    Validators.required,
+  phone: new FormControl("", [  
     Validators.maxLength(20), 
     ORG_VALIDATION_PATTERN
   ]),
 
   email: new FormControl("", [
-    Validators.required, 
     Validators.email,
     Validators.maxLength(320),
+    Validators.required,
   ]),
 
   locations: new FormControl([]),
 
-  address: new FormControl("", [
-    Validators.required,
-  ]),
+  address: new FormControl(""),
 
   story: new FormControl(""),
 
-  customType: new FormControl("", [
-    Validators.maxLength(25)
-  ]),
+  facebook_link: new FormControl(""),
+
+  twitter_link: new FormControl(""),
+
+  instagram_link: new FormControl(""),
 
 };
 
-export const DefaultOrganisation = {
+export const defaultOrganisation = {
   organisation_id: "default",
   created_by: "default",
   name: "default",

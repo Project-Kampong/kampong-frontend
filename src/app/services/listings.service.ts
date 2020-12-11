@@ -8,7 +8,6 @@ import {
 } from "@app/interfaces/listing";
 import { API } from "@app/interfaces/api";
 import { Observable } from "rxjs";
-// Services Import
 import { AuthService } from "@app/services/auth.service";
 
 interface OptionObject {

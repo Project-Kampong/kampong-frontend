@@ -54,6 +54,26 @@
               </mat-optgroup>
             </mat-select>
           </mat-form-field>
+
+          <div
+            *ngIf="organisationForm.value.organisation_type == 'Create a Type'"
+            class="half-width px-3"
+          >
+            <label>Create a Type</label>
+            <input
+              matInput
+              formControlName="customType"
+              placeholder="Enter your organisation type"
+            />
+            <!-- Errors Validation -->
+            <span
+              class="error-hint"
+              *ngIf="organisationForm.get('customType').hasError('maxlength')"
+            >
+              Type must not be more than 25 characters long.
+            </span>
+            <!-- End of Errors Validation -->
+          </div>
         </div>
 
         <div class="form-item">
@@ -69,50 +89,58 @@
           <!-- Errors Validation -->
           <span
             class="error-hint"
+            *ngIf="
+              organisationForm.get('email').hasError('required') &&
+              organisationForm.controls['email']?.touched
+            "
+          >
+            Email is required
+          </span>
+          <span
+            class="error-hint"
             *ngIf="organisationForm.get('email').hasError('email')"
           >
             Please Enter a Valid Email
           </span>
-
-          <span
-          class="error-hint"
-          *ngIf="
-            organisationForm.get('email').hasError('required') &&
-            organisationForm.controls['email']?.touched
-          "
-        >
-          Name is required
-        </span>
         </div>
 
         <div class="form-item">
-          <label>Contact Number</label>
+          <label>Contact Number *</label>
           <input
             placeholder="Enter a contact number for your organisation"
-            formControlName="phone"
+            formControlName="handphone"
           />
           <div class="hint">
-            {{ organisationForm.value.phone.length }} / 20
+            {{ organisationForm.value.handphone.length }} / 20
           </div>
 
           <!-- Errors Validation -->
           <span
             class="error-hint"
-            *ngIf="organisationForm.get('phone').hasError('max')"
+            *ngIf="organisationForm.get('handphone').hasError('max')"
           >
             Contact Number is too long
           </span>
           <span
             class="error-hint"
-            *ngIf="organisationForm.get('phone').hasError('pattern')"
+            *ngIf="organisationForm.get('handphone').hasError('pattern')"
           >
             Special characters not allowed
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="
+              organisationForm.get('handphone').hasError('required') &&
+              organisationForm.controls['handphone']?.touched
+            "
+          >
+            Contact Number is required
           </span>
           <!-- End of Errors Validation -->
         </div>
 
         <div class="form-item">
-          <label>Website URL</label>
+          <label>Website URL *</label>
           <input
             placeholder="Enter a website URL for your organisation"
             formControlName="website_url"
@@ -128,6 +156,15 @@
           >
             Website URL must not be more than 100 characters long.
           </span>
+          <span
+            class="error-hint"
+            *ngIf="
+              organisationForm.get('website_url').hasError('required') &&
+              organisationForm.controls['website_url']?.touched
+            "
+          >
+            Website URL is required
+          </span>
           <!-- End of Errors Validation -->
         </div>
 
@@ -138,7 +175,7 @@
         <div class="form-item">
           <div [formGroup]="organisationForm">
             <mat-form-field appearance="fill">
-              <mat-label>Area</mat-label>
+              <mat-label>Area *</mat-label>
               <mat-select formControlName="locations" multiple>
                 <mat-optgroup
                   *ngFor="let group of locationGroup"
@@ -155,13 +192,22 @@
         </div>
 
         <div class="form-item">
-          <label>Address</label>
+          <label>Address *</label>
           <input
             placeholder="Enter the address for your organisation"
             formControlName="address"
           />
 
           <!-- Errors Validation -->
+          <span
+            class="error-hint"
+            *ngIf="
+              organisationForm.get('address').hasError('required') &&
+              organisationForm.controls['address']?.touched
+            "
+          >
+            Address is required
+          </span>
           <!-- End of Errors Validation -->
         </div>
 
@@ -201,35 +247,6 @@
           >
             About Statement must not be more than 500 characters long.
           </span>
-          <!-- End of Errors Validation -->
-        </div>
-      </div>
-    </div>
-    <div class="listing-section">
-      <div class="listing-stepper">
-        <span> 3 </span>
-        <p>Social Media</p>
-      </div>
-      <div class="listing-form" [formGroup]="organisationForm">
-        <div class="form-item">
-          <label>Facebook Link</label>
-          <input
-            formControlName="facebook_link"
-          />
-          <!-- End of Errors Validation -->
-        </div>
-        <div class="form-item">
-          <label>Twitter Link</label>
-          <input
-            formControlName="twitter_link"
-          />
-          <!-- End of Errors Validation -->
-        </div>
-        <div class="form-item">
-          <label>Instagram Link</label>
-          <input
-            formControlName="instagram_link"
-          />
           <!-- End of Errors Validation -->
         </div>
       </div>

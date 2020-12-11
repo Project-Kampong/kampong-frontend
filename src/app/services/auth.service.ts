@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CookieService } from "ngx-cookie-service";
 import { environment } from "./../../environments/environment";
 
@@ -31,7 +31,6 @@ export class AuthService {
   };
   AuthHttpHeaders;
   AuthOptions;
-  // Containers only token - No content type
   OnlyAuthHttpHeaders;
 
   Dialogmessage: string = "";
