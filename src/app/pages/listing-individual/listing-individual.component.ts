@@ -1,5 +1,5 @@
 // Angular Imports
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
 // Services
@@ -11,8 +11,7 @@ import { SnackbarService } from "@app/services/snackbar.service";
 import { ListingIndividual, ListingFAQ, ListingComments, 
   ListingJobs, ListingUpdates, ListingMilestones,
   ListingLikes } from "@app/interfaces/listing";
-
-import { groupBy } from "lodash";
+import { Subscription } from 'rxjs';
 
 declare var $: any;
 
@@ -21,7 +20,7 @@ declare var $: any;
   templateUrl: "./listing-individual.component.html",
   styleUrls: ["./listing-individual.component.scss"],
 })
-export class ListingIndividualComponent implements OnInit {
+export class ListingIndividualComponent implements OnInit, OnDestroy {
 
   listingId: string = "";
   pics: string[] = [];
@@ -60,6 +59,7 @@ export class ListingIndividualComponent implements OnInit {
   currentDate: Date = new Date();
   enquireMessage: string = "";
   enquireTopic: string = "";
+  subscriptions: Subscription[] = [];
 
   constructor( private router: Router, private route: ActivatedRoute, private listingsService: ListingsService,
     public authService: AuthService, public snackbarService: SnackbarService
@@ -76,9 +76,8 @@ export class ListingIndividualComponent implements OnInit {
     });
     this.tabs_selected("story");
 
-    this.listingsService.getSelectedListing(this.listingId).subscribe(
+    this.subscriptions.push(this.listingsService.getSelectedListing(this.listingId).subscribe(
       (data) => {
-        console.log(data);
         this.listingData = data["data"];
         this.imageArr = this.listingData["pics"];
         this.likesArr = this.listingData["user_likes"];
@@ -124,12 +123,12 @@ export class ListingIndividualComponent implements OnInit {
         console.log(err);
         this.router.navigate(["/home"]);
         this.snackbarService.openSnackBar(this.snackbarService.DialogList.generic_error.error, false);
-    });
+    }));
 
   }
 
   loadComments(): void {
-    this.listingsService.getSelectedListingComments(this.listingId).subscribe(
+    this.subscriptions.push(this.listingsService.getSelectedListingComments(this.listingId).subscribe(
       (data) => {
         this.commentsArr = data["data"];
         this.commentsArr = this.commentsArr.sort((a, b) => {
@@ -140,7 +139,7 @@ export class ListingIndividualComponent implements OnInit {
       (err) => {
         console.log(err);
         this.snackbarService.openSnackBar(this.snackbarService.DialogList.generic_error.error, false);
-    })
+    }));
   }
 
   //To think through the fastest way
@@ -194,7 +193,7 @@ export class ListingIndividualComponent implements OnInit {
   }
 
   async postUpdate(): Promise<void> {
-    (await this.listingsService.createListingUpdates(
+    this.subscriptions.push((await this.listingsService.createListingUpdates(
       {
         description: this.updateInput,
         listing_id: this.listingId
@@ -218,7 +217,7 @@ export class ListingIndividualComponent implements OnInit {
         }, 500);
         this.reloadCurrentRoute();
       }
-    )
+    ))
   }
 
   deleteUpdate(updates: ListingUpdates): void {
@@ -367,7 +366,7 @@ export class ListingIndividualComponent implements OnInit {
       return;
     }
     if (!this.isLiked) {
-      this.listingsService.likeListing(this.listingId).subscribe(
+      this.subscriptions.push(this.listingsService.likeListing(this.listingId).subscribe(
         (data) => {
           this.likesArr.push({ like_id: data["data"]["like_id"], user_id: data["data"]["user_id"]});
           this.isLiked = true;
@@ -379,9 +378,9 @@ export class ListingIndividualComponent implements OnInit {
           this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.error, false);
           return;
         }
-      )
+      ))
     } else {
-      this.listingsService.unlikeListing(this.likeId).subscribe(
+      this.subscriptions.push(this.listingsService.unlikeListing(this.likeId).subscribe(
         (data) => {
           this.likesArr.splice(this.likesArr.map(like => like["user_id"]).indexOf(this.authService.LoggedInUserID), 1);
           this.isLiked = false;
@@ -393,7 +392,7 @@ export class ListingIndividualComponent implements OnInit {
           this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.error, false);
           return;
         }
-      )
+      ))
     }
 
   }
@@ -433,7 +432,7 @@ export class ListingIndividualComponent implements OnInit {
   sendMessage() {
     if (this.enquireMessage != "") {
       this.togglePopup();
-      this.listingsService.sendEnquiry({
+      this.subscriptions.push(this.listingsService.sendEnquiry({
         receiverEmail: this.listingData.listing_email,
         subject: this.enquireTopic,
         message: this.enquireMessage,
@@ -455,9 +454,12 @@ export class ListingIndividualComponent implements OnInit {
             this.initiateSlick();
           }, 500);
         }
-      );
+      ));
     }
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
 
 }

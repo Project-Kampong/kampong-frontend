@@ -1,16 +1,13 @@
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { OrganisationsService } from "@app/services/organisations.service";
-import { ProfileService } from "@app/services/profile.service";
 import { AuthService } from "@app/services/auth.service";
 import { SnackbarService } from "@app/services/snackbar.service";
 
 // Interface
-import {
-  Organisation,
-} from "@app/interfaces/organisation";
-import { Profile } from "@app/interfaces/profile";
+import { Organisation, OrganisationBanner } from "@app/interfaces/organisation";
+import { Subscription } from 'rxjs';
 
 declare var $: any;
 
@@ -19,34 +16,47 @@ declare var $: any;
   templateUrl: "./organisation-individual.component.html",
   styleUrls: ["./organisation-individual.component.scss"],
 })
-export class OrganisationIndividualComponent implements OnInit {
+export class OrganisationIndividualComponent implements OnInit, OnDestroy {
+
+  organisationId: string = "";
+  subscriptions: Subscription[] = [];
+  organisationData: Organisation = <Organisation>{};
+  currentDate = new Date();
+  organisationBanner: OrganisationBanner = <OrganisationBanner>{};
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private OrganisationsService: OrganisationsService,
-    private ProfileService: ProfileService,
-    public AuthService: AuthService,
-    public SnackbarService: SnackbarService
+    private organisationsService: OrganisationsService,
+    private authService: AuthService,
+    public snackbarService: SnackbarService
   ) {}
-
-  organisationId;
-  hashID;
-
-  // Data Arr
-  OrganisationData: Organisation = <Organisation>{};
-  ProfileInfo: Profile = <Profile>{};
-  Hashtags = [];
-  // Stories
-
-  // UI
-  SliderImageArr = [];
-  currentDate = new Date();
 
   // Updates
   ngOnInit() {
     window.scroll(0, 0);
     this.organisationId = this.route.snapshot.params["id"];
-    this.getInitData();
+    this.subscriptions.push(this.organisationsService.getSelectedOrganisation(this.organisationId).subscribe(
+      (data) => {
+        this.organisationData = data["data"];
+        this.organisationBanner = { 
+          banner_photo: this.organisationData.banner_photo,
+          profile_photo: this.organisationData.profile_photo,
+          name: this.organisationData.name,
+          about: this.organisationData.about,
+          address: this.organisationData.address,
+          facebook_link: this.organisationData.facebook_link,
+          instagram_link: this.organisationData.instagram_link,
+          twitter_link: this.organisationData.twitter_link,
+          website_url: this.organisationData.website_url,
+        }
+      },
+      (err) => {
+        console.log(err);
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.generic_error.error, false);
+        this.router.navigate(["/home/"]);
+      }
+    ));
 
     // UI Components
     $(".navigation-tabs li").on("click", function () {
@@ -55,59 +65,6 @@ export class OrganisationIndividualComponent implements OnInit {
     });
     this.tabs_selected("story");
   }
-
-  getInitData() {
-    // Static
-
-    // Get Listing Info
-    this.OrganisationsService.getSelectedOrganisation(this.organisationId).subscribe(
-      (data) => {
-        this.OrganisationData = data["data"];
-        console.log(this.OrganisationData);
-        console.log(this.OrganisationData);
-        this.ProfileService.getUserProfile(
-          this.OrganisationData["owned_by"]
-        ).subscribe((profile) => {
-          this.ProfileInfo = profile["data"];
-          if (this.ProfileInfo.profile_picture == null) {
-            this.ProfileInfo.profile_picture =
-              "https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png";
-          }
-        });
-      },
-      (err) => {
-        this.router.navigate(["/home"]);
-      },
-      () => {
-        // Public Data
-        // Get Num of Likes
-        // Get FAQ Info
-
-        // Get Skills
-        // this.ListingsService.getSelectedListingSkills(this.listingId).subscribe(
-        //   (data) => {
-        //     this.SkillsList = data["data"];
-        //     console.log(this.SkillsList);
-        //   }
-        // );
-        // Get Hashtags
-
-        // Get Location
-
-        // Get Stories
-
-        // Get Comments
-
-        // Get Updates
-
-        // Get Milestones
-
-        // End of Data Retrive
-      }
-    );
-  }
-
-  // File Upload
 
   // Updates
   getDiffInTime(time) {
@@ -191,20 +148,14 @@ export class OrganisationIndividualComponent implements OnInit {
     this.router.navigate(["/profile/" + user_id]);
   }
 
-  enquireMessage: String = "";
-  // Toggle Enquire popup
   togglePopup() {
     // Toggle popup
     $(".popup-bg").toggleClass("active");
     $(".popup-box").toggleClass("active");
   }
-  sendMessage() {
-    if (this.enquireMessage != "") {
-      this.togglePopup();
-      this.SnackbarService.openSnackBar(
-        this.SnackbarService.DialogList.send_message.success,
-        true
-      );
-    }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
+
 }
