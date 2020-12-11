@@ -1,5 +1,5 @@
 // Angular Imports
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { COMMA, ENTER, SPACE } from "@angular/cdk/keycodes";
 import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
 import { MatChipInputEvent } from "@angular/material/chips";
@@ -24,7 +24,7 @@ import {
   EditListingHashtags,
 } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from "@app/interfaces/filters";
-import { forkJoin, Observable, of } from 'rxjs';
+import { forkJoin, Observable, of, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 declare var $: any;
@@ -34,7 +34,7 @@ declare var $: any;
   templateUrl: "./edit-listing.component.html",
   styleUrls: ["./edit-listing.component.scss"],
 })
-export class EditListingComponent implements OnInit {
+export class EditListingComponent implements OnInit, OnDestroy {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
   listingForm: FormGroup;
   listingData: EditListing;
@@ -53,6 +53,7 @@ export class EditListingComponent implements OnInit {
   originalJobIds: number[] = [];
   faqArr: EditListingFAQ[] = [];
   originalFaqIds: number[] = [];
+  subscriptions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -358,7 +359,7 @@ export class EditListingComponent implements OnInit {
       listing_status, pics, locations,
     };
 
-    (await this.listingsService.updateListing(this.listingId, this.listingData, this.listingImages, this.originalImages)).subscribe(
+    this.subscriptions.push((await this.listingsService.updateListing(this.listingId, this.listingData, this.listingImages, this.originalImages)).subscribe(
       (res) => {},
       (err) => {
         console.log(err);
@@ -371,7 +372,7 @@ export class EditListingComponent implements OnInit {
       () => {
 
         const combinedObservables = forkJoin([this.updateHashtags(), this.updateJobs(), this.updateMilestones(), this.updateFaqs()]);
-        combinedObservables.subscribe({
+        this.subscriptions.push(combinedObservables.subscribe({
           next: res => console.log(res),
           error: err => {
             console.log(err);
@@ -387,10 +388,10 @@ export class EditListingComponent implements OnInit {
             );
             this.router.navigate(["/listing/" + this.listingId])
           }
-        });
+        }));
 
       }
-    );
+    ));
   }
 
   removeListing(): void {
@@ -413,6 +414,10 @@ export class EditListingComponent implements OnInit {
         }
       );
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }
 

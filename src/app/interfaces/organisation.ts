@@ -22,6 +22,7 @@ export interface CreateOrganisation {
   website_url?: string,
   phone?: string,
   email: string,
+  story?: string,
   address?: string,
   locations?: string[],
   facebook_link?: string,

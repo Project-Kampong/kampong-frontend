@@ -1,5 +1,5 @@
 // Angular Imports
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { COMMA, ENTER, SPACE } from "@angular/cdk/keycodes";
 import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
 import { MatChipInputEvent } from "@angular/material/chips";
@@ -18,7 +18,7 @@ import { createListingForm, CreateListingFAQ,
   CreateListingJobs, CreateListingMilestones, CreateListing } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 import { catchError } from 'rxjs/operators';
-import { forkJoin, Observable, of } from 'rxjs';
+import { forkJoin, Observable, of, Subscription } from 'rxjs';
 
 declare var $: any;
 
@@ -27,7 +27,7 @@ declare var $: any;
   templateUrl: "./create-listing.component.html",
   styleUrls: ["./create-listing.component.scss"],
 })
-export class CreateListingComponent implements OnInit {
+export class CreateListingComponent implements OnInit, OnDestroy {
   
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
   listingForm: FormGroup;
@@ -42,6 +42,7 @@ export class CreateListingComponent implements OnInit {
   milestoneArr: CreateListingMilestones[] = [{ milestone_description: "", date: new Date() }];
   jobArr: CreateListingJobs[] = [];
   faqArr: CreateListingFAQ[] = [];
+  subscriptions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -54,7 +55,6 @@ export class CreateListingComponent implements OnInit {
 
     this.categoryGroup = categoryList;
     this.locationGroup = locationList;
-
     this.listingForm = this.fb.group({
       ...createListingForm,
     });
@@ -240,7 +240,7 @@ export class CreateListingComponent implements OnInit {
       listing_status, pics, locations
     };
 
-    (await this.listingsService.createListing(this.listingData, this.listingImages)).subscribe(
+    this.subscriptions.push((await this.listingsService.createListing(this.listingData, this.listingImages)).subscribe(
       (res) => {
         console.log(res);
         this.listingId = res["data"]["listing_id"];
@@ -254,7 +254,7 @@ export class CreateListingComponent implements OnInit {
       },
       () => {
         const combinedObservables = forkJoin([this.createFaqs(), this.createHashtags(), this.createJobs(), this.createMilestones()]);
-        combinedObservables.subscribe({
+        this.subscriptions.push(combinedObservables.subscribe({
           next: res => console.log(res),
           error: err => {
             console.log(err);
@@ -270,8 +270,12 @@ export class CreateListingComponent implements OnInit {
             );
             this.router.navigate(["/listing/" + this.listingId]);
           }
-        });
+        }));
       }
-    );
+    ));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }
