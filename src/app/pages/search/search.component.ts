@@ -92,6 +92,7 @@ export class SearchComponent implements OnInit {
       const keywords = this.concatKeywords();
       this.listingsService.getSearchResult(keywords).subscribe(
         (data) => {
+          console.log(data);
           this.resultsArr = data["data"];
           this.resultsCount = data["data"].length;
           this.resultsInputString = this.searchInput.length > 0 ? this.searchInput : "Everything";

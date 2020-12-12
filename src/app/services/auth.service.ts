@@ -71,7 +71,7 @@ export class AuthService {
         (err) => {
           this.invalidLoginResponse.emit();
           return false;
-        }
+        } 
       );
   }
   getUserDetails() {

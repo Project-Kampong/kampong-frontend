@@ -1,5 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
+import {NgxPaginationModule} from 'ngx-pagination';
 
 import { AppRoutingModule } from "./app-routing.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -96,6 +97,7 @@ import { EditOrganisationCardsComponent } from './components/edit-organisation-c
     MatExpansionModule,
     MatCheckboxModule,
     MatStepperModule,
+    NgxPaginationModule,
   ],
   exports: [],
   entryComponents: [SnackbarSuccessComponent, SnackbarErrorComponent],

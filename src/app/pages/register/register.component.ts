@@ -57,7 +57,7 @@ export class RegisterComponent implements OnInit {
       confirmPassword: ["", [Validators.minLength(8)]],
       termsAndCondition: false,
     });
-
+// This is where we need to edit!!!!!
     this.AuthService.validRegisterResponse.subscribe(() => {
       this.showLoading = false;
       this.SnackbarService.openSnackBar(
