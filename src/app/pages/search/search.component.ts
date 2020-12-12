@@ -1,5 +1,5 @@
 // Angular Imports
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { Location } from "@angular/common";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
@@ -13,6 +13,7 @@ import { categoryList } from "@app/util/categories";
 // Interfaces
 import { Listing } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
+import { ListingCardsComponent } from "@app/components/listing-cards/listing-cards.component";
 
 declare var $: any;
 
@@ -62,6 +63,8 @@ export class SearchComponent implements OnInit {
 
   }
 
+
+
   ngOnInit() {
     this.locationList = locationList;
     this.categoryList = categoryList;
@@ -92,7 +95,6 @@ export class SearchComponent implements OnInit {
       const keywords = this.concatKeywords();
       this.listingsService.getSearchResult(keywords).subscribe(
         (data) => {
-          console.log(data);
           this.resultsArr = data["data"];
           this.resultsCount = data["data"].length;
           this.resultsInputString = this.searchInput.length > 0 ? this.searchInput : "Everything";
