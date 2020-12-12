@@ -33,6 +33,7 @@ export class ProfileService {
 
   // Write
   updateUserProfile(userId, data) {
+    console.log("hello", data);
     return this.httpClient.put<API>(
       this.url + "api/users/" + userId + "/profiles",
       data,

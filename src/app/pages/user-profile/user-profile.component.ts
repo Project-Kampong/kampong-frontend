@@ -66,6 +66,19 @@ export class UserProfileComponent implements OnInit {
     window.scrollTo(0,0);
   }
 
+  getInitDataWithoutListings() { 
+    this.profileService.getUserProfile(
+      this.authService.LoggedInUserID
+    ).subscribe((data) => {
+      this.profileDetails = data["data"];
+      this.EditProfileForm.patchValue(this.profileDetails);
+      if (this.profileDetails.profile_picture == null) {
+        this.profileDetails.profile_picture =
+          "https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png";
+      }
+    });
+  }
+
   getInitData() {
     this.profileService.getUserProfile(
       this.authService.LoggedInUserID
@@ -108,6 +121,11 @@ export class UserProfileComponent implements OnInit {
     this.isEditingProfile = !this.isEditingProfile;
   }
 
+  discardChanges() { 
+    this.isEditingProfile = !this.isEditingProfile;
+    this.getInitDataWithoutListings();
+  }
+
   selectedFile;
   uploadFile(event) {
     this.selectedFile = <File>event.target.files[0];
@@ -144,17 +162,19 @@ export class UserProfileComponent implements OnInit {
           ).subscribe(
             (res) => {
               this.authService.LoginResponse.emit();
+              window.location.reload(); //because there is some additional listing bug
             },
             (err) => {
               console.log("error");
             }
           );
         } else {
-          this.authService.LoginResponse.emit();
+          this.authService.LoginResponse.emit() 
           this.snackbarService.openSnackBar(
             this.snackbarService.DialogList.update_profile.success,
             true
           );
+          window.location.reload(); //because there is some additional listing bug
         }
       },
       (err) => {
@@ -163,6 +183,7 @@ export class UserProfileComponent implements OnInit {
           this.snackbarService.DialogList.update_profile.error,
           false
         );
+        window.location.reload(); //because there is some additional listing bug
       }
     );
   }
