@@ -4,7 +4,7 @@
       <div class="bg-colored profile-item-container">
         <div class="sticky-profile-container">
           <div class="sticky-profile pt-lg-3">
-            <div class="d-flex">
+            <div class="d-flex" *ngIf="isEditingProfile == false">
               <div class="profile-image">
                 <img src="{{ profileDetails.profile_picture }}" />
               </div>
@@ -13,26 +13,55 @@
                 <p *ngIf="profileDetails.occupation != null" class="position">
                   {{ profileDetails.occupation }}
                 </p>
-                <p *ngIf="profileDetails.occupation == null" class="position">
-                  Newbie
-                </p>
+                <p *ngIf="profileDetails.occupation == null" class="position">Newbie</p>
+                <p class="editProfileLink"><a [ngStyle]="{ color: 'blue' }" [routerLink]="'/edit-profile'">Alternative Edit Profile</a></p>
+                <p class="editProfileLink"><button (click)="editProfile()">Edit Profile</button></p>
               </div>
             </div>
-
+            <div class="d-flex" *ngIf="isEditingProfile == true">
+              <form [formGroup]="EditProfileForm" class="form-group">
+                <div class="custom-input">
+                  <div class="profile-image">
+                    <label for="file-upload">
+                      <img src="{{ profileDetails.profile_picture }}" />
+                    </label>
+                  </div>
+                  <input type="file" accept="image/*" id="file-upload" (change)="uploadFile($event)" />
+                </div>
+              </form>
+              <form [formGroup]="EditProfileForm" class="form-group">
+                <div class="user-details">
+                  <p *ngIf="isEditingProfile == true" class="light-s">
+                    <mat-form-field class="matInput">
+                      <mat-label>Username</mat-label>
+                      <input matInput formControlName="nickname" />
+                      <!-- Errors Validation -->
+                      <mat-error *ngIf="EditProfileForm.get('nickname').hasError('required')"> Username is required </mat-error>
+                      <mat-error *ngIf="EditProfileForm.get('nickname').hasError('maxlength')">
+                        Username must not be more than 15 characters long.
+                      </mat-error>
+                      <mat-error *ngIf="EditProfileForm.get('nickname').hasError('pattern')"> Special characters not allowed </mat-error>
+                      <!-- End of Errors Validation -->
+                    </mat-form-field>
+                    <mat-form-field class="matInput">
+                      <mat-label>Occupation</mat-label>
+                      <input matInput formControlName="occupation" />
+                      <!-- Errors Validation -->
+                      <mat-error *ngIf="EditProfileForm.get('occupation').hasError('required')"> Occupation is required </mat-error>
+                      <mat-error *ngIf="EditProfileForm.get('occupation').hasError('maxlength')">
+                        Occupation must not be more than 30 characters long.
+                      </mat-error>
+                      <mat-error *ngIf="EditProfileForm.get('occupation').hasError('pattern')"> Special characters not allowed </mat-error>
+                      <!-- End of Errors Validation -->
+                    </mat-form-field>
+                  </p>
+                </div>
+              </form>
+            </div>
             <ul class="profile-nav">
-              <li
-                class="active"
-                id="profile-nav"
-                (click)="scrollToSection('profile')"
-              >
-                My Profile
-              </li>
-              <li (click)="scrollToSection('started')" id="started-nav">
-                Initiatives I've Started
-              </li>
-              <li (click)="scrollToSection('liked')" id="liked-nav">
-                Initiatives I've Liked
-              </li>
+              <li class="active" id="profile-nav" (click)="scrollToSection('profile')">My Profile</li>
+              <li (click)="scrollToSection('started')" id="started-nav">Initiatives I've Started</li>
+              <li (click)="scrollToSection('liked')" id="liked-nav">Initiatives I've Liked</li>
             </ul>
           </div>
         </div>
@@ -40,13 +69,34 @@
     </div>
     <div class="col-12 col-lg-8">
       <div class="profile-item-container">
-        <div class="profile-item pt-lg-4" id="profile">
-          <div *ngIf="profileDetails.about !== null">
+        <div class="profile-item pt-lg-4" id="profile" *ngIf="isEditingProfile == false">
+          <div *ngIf="profileDetails.about !== null" id="about">
             <h2>About</h2>
             <p class="light-s">
               {{ profileDetails.about }}
             </p>
           </div>
+        </div>
+        <div class="profile-item pt-lg-4" id="profile" *ngIf="isEditingProfile == true">
+          <form [formGroup]="EditProfileForm" class="form-group">
+            <p *ngIf="isEditingProfile == true" class="light-s">
+              <mat-form-field class="aboutFormField">
+                <mat-label>About</mat-label>
+                <textarea matInput cdkAutosizeMinRows="3" cdkTextareaAutosize formControlName="about"></textarea>
+                <!-- Errors Validation -->
+                <mat-error *ngIf="EditProfileForm.get('about').hasError('required')"> About Me is required </mat-error>
+                <mat-error *ngIf="EditProfileForm.get('about').hasError('maxlength')">
+                  About Me must not be more than 1000 characters long.
+                </mat-error>
+                <mat-error *ngIf="EditProfileForm.get('about').hasError('pattern')"> Special characters not allowed </mat-error>
+                <!-- End of Errors Validation -->
+              </mat-form-field>
+            </p>
+            <button class="btn yellow-btn" [ngStyle]="{ float: 'right' }" [disabled]="getFormValidationErrors()" (click)="saveProfile()">
+              Save Changes
+            </button>
+            <button class="btn red-btn" [ngStyle]="{ float: 'right', margin: '5px' }" (click)="editProfile()">Discard Changes</button>
+          </form>
         </div>
         <div class="profile-item">
           <div class="limit-width">
@@ -75,33 +125,23 @@
         <div class="profile-item" id="started">
           <div *ngIf="startedArr.length != 0">
             <h2>Initiatives I've Started</h2>
-            <app-edit-listing-cards
-              [ListingData]="startedArr"
-              [ColNum]="6"
-            ></app-edit-listing-cards>
+            <app-edit-listing-cards [ListingData]="startedArr" [ColNum]="6"></app-edit-listing-cards>
           </div>
         </div>
 
         <div class="profile-item" id="liked">
           <div *ngIf="likedArr.length != 0">
             <h2>Initiatives I've Liked</h2>
-            <app-listing-cards
-              [ListingData]="likedArr"
-              [ColNum]="6"
-            ></app-listing-cards>
+            <app-listing-cards [ListingData]="likedArr" [ColNum]="6"></app-listing-cards>
           </div>
         </div>
 
         <div class="profile-item" id="org">
           <div *ngIf="orgArr.length != 0">
             <h2>My Organisations</h2>
-            <app-edit-organisation-cards
-              [OrganisationData]="orgArr"
-              [ColNum]="6"
-            ></app-edit-organisation-cards>
+            <app-edit-organisation-cards [OrganisationData]="orgArr" [ColNum]="6"></app-edit-organisation-cards>
           </div>
         </div>
-
       </div>
     </div>
   </div>

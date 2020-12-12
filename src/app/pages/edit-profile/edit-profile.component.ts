@@ -42,6 +42,7 @@ export class EditProfileComponent implements OnInit {
     this.AuthService.LoginResponse.subscribe(() => {
       this.getInitData();
     });
+    window.scrollTo(0,0);
   }
 
   getInitData() {

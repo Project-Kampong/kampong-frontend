@@ -59,13 +59,18 @@ export class RegisterComponent implements OnInit {
     });
 
     this.AuthService.validRegisterResponse.subscribe(() => {
+      this.showLoading = false;
+      this.SnackbarService.openSnackBar(
+        this.SnackbarService.DialogList.register.success,
+        true,
+      );
       this.router.navigate(["/onboarding"]);
     });
     this.AuthService.invalidRegisterResponse.subscribe(() => {
       this.showLoading = false;
       this.SnackbarService.openSnackBar(
         this.SnackbarService.DialogList.register.error,
-        false
+        false,
       );
       // this.registerError = true;
     });
