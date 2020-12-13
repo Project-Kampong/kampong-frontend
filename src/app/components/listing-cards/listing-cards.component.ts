@@ -13,6 +13,7 @@ export class ListingCardsComponent {
   }
 
   @Input() ListingData;
+  @Input() isPaginationRequired;
   @Input() ColNum;
 
   selectedCard(data) {
