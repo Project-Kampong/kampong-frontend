@@ -7,7 +7,7 @@ import { Router } from "@angular/router";
   styleUrls: ["./listing-cards.component.scss"]
 })
 export class ListingCardsComponent {
-  page : Number;
+  page;
   constructor(private router: Router) {
     this.page = 1;
   }
