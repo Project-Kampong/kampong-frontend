@@ -50,12 +50,19 @@ export class AuthService {
           this.AuthToken = res["token"];
           this.setAuthHeaders(this.AuthToken);
           this.CookieService.set("token", this.AuthToken);
-          this.getUserDetailsRegister();
+          //Something must be done here to verify the email before we can move on to the next step! 
+          //How can we catch the GET request from /api/register/asdasdasdasd/confirm-email?
+          // this.getUserDetailsRegister();
+          this.getEmailVerification();
         },
         (err) => {
           this.invalidRegisterResponse.emit();
         }
       );
+  }
+
+  getEmailVerification() { 
+    
   }
 
   userLogin(credentials) {

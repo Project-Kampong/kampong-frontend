@@ -14,8 +14,8 @@
                   {{ profileDetails.occupation }}
                 </p>
                 <p *ngIf="profileDetails.occupation == null" class="position">Newbie</p>
-                <p class="editProfileLink"><a [ngStyle]="{ color: 'blue' }" [routerLink]="'/edit-profile'">Alternative Edit Profile</a></p>
-                <p class="editProfileLink"><button (click)="editProfile()">Edit Profile</button></p>
+                <!-- <p class="editProfileLink"><a [ngStyle]="{ color: 'blue' }" [routerLink]="'/edit-profile'">Alternative Edit Profile</a></p> -->
+                <div class="editProfileLink"><a (click)="editProfile()">Edit Profile</a></div>
               </div>
             </div>
             <div class="d-flex" *ngIf="isEditingProfile == true">
