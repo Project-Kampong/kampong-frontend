@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Material Components
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material';
+import { MatNativeDateModule, MatProgressSpinnerModule, MAT_DATE_LOCALE } from '@angular/material';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -98,6 +98,7 @@ import { MobxAngularModule } from 'mobx-angular';
     MatCheckboxModule,
     MatStepperModule,
     MobxAngularModule,
+    MatProgressSpinnerModule,
   ],
   exports: [],
   entryComponents: [SnackbarSuccessComponent, SnackbarErrorComponent],

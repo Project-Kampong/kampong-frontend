@@ -6,6 +6,7 @@ import { CategoriesService } from './services/categories.service';
 import * as _ from 'lodash';
 import { LocationsService } from './services/locations.service';
 import { locationsStore } from '../app/store/locations-store';
+import { uiStore } from './store/ui-store';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ export class AppComponent implements OnInit {
   title = 'Kampong-frontend';
   categoriesStore = categoriesStore;
   locationsStore = locationsStore;
+  uiStore = uiStore;
 
   constructor(public AuthService: AuthService, private CategoriesService: CategoriesService, private LocationService: LocationsService) {}
 
