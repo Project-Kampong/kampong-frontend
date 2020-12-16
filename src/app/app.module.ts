@@ -51,7 +51,6 @@ import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { EditOrganisationCardsComponent } from './components/edit-organisation-cards/edit-organisation-cards.component';
 import { MobxAngularModule } from 'mobx-angular';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { SafeHtmlPipe } from './pipes/html.pipe';
 import { CropImageDialogComponent } from './components/crop-image-dialog/crop-image-dialog.component';
 
 @NgModule({
@@ -83,7 +82,6 @@ import { CropImageDialogComponent } from './components/crop-image-dialog/crop-im
     MainSearchComponent,
     OrganisationCardsComponent,
     CropImageDialogComponent,
-    SafeHtmlPipe,
   ],
   imports: [
     BrowserModule,
@@ -107,7 +105,7 @@ import { CropImageDialogComponent } from './components/crop-image-dialog/crop-im
     ImageCropperModule,
     MatDialogModule,
   ],
-  exports: [SafeHtmlPipe],
+  exports: [],
   entryComponents: [SnackbarSuccessComponent, SnackbarErrorComponent, CropImageDialogComponent],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
