@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Material Components
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, MatProgressSpinnerModule, MAT_DATE_LOCALE } from '@angular/material';
+import { MatDialogModule, MatNativeDateModule, MatProgressSpinnerModule, MAT_DATE_LOCALE } from '@angular/material';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -50,6 +50,9 @@ import { SearchComponent } from '@app/pages/search/search.component';
 import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { EditOrganisationCardsComponent } from './components/edit-organisation-cards/edit-organisation-cards.component';
 import { MobxAngularModule } from 'mobx-angular';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { SafeHtmlPipe } from './pipes/html.pipe';
+import { CropImageDialogComponent } from './components/crop-image-dialog/crop-image-dialog.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +82,8 @@ import { MobxAngularModule } from 'mobx-angular';
     OnboardingComponent,
     MainSearchComponent,
     OrganisationCardsComponent,
+    CropImageDialogComponent,
+    SafeHtmlPipe,
   ],
   imports: [
     BrowserModule,
@@ -99,9 +104,11 @@ import { MobxAngularModule } from 'mobx-angular';
     MatStepperModule,
     MobxAngularModule,
     MatProgressSpinnerModule,
+    ImageCropperModule,
+    MatDialogModule,
   ],
-  exports: [],
-  entryComponents: [SnackbarSuccessComponent, SnackbarErrorComponent],
+  exports: [SafeHtmlPipe],
+  entryComponents: [SnackbarSuccessComponent, SnackbarErrorComponent, CropImageDialogComponent],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     CookieService,

@@ -23,6 +23,9 @@ import {
 // Stores
 import { categoriesStore } from '@app/store/categories-store';
 import { locationsStore } from '@app/store/locations-store';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { MatDialog } from '@angular/material';
+import { CropImageDialogComponent } from '@app/components/crop-image-dialog/crop-image-dialog.component';
 
 declare var $: any;
 
@@ -48,12 +51,16 @@ export class EditListingComponent implements OnInit {
   jobArr: Array<EditListingJobs>;
   faqArr: Array<EditListingFAQ>;
 
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+
   constructor(
     private fb: FormBuilder,
     public listingsService: ListingsService,
     private router: Router,
     public snackbarService: SnackbarService,
     private route: ActivatedRoute,
+    private dialog: MatDialog,
   ) {
     this.listingImages = [];
     this.listingImagesDisplay = [];
@@ -187,6 +194,41 @@ export class EditListingComponent implements OnInit {
     this.hashtags.splice(removeIndex, 1);
   }
 
+  /**
+   *
+   * Test
+   */
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+    const dialogRef = this.dialog.open(CropImageDialogComponent, {
+      data: {
+        title: 'Crop Image',
+        imageChangedEvent: event,
+        croppedImage: '',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+      console.log(result);
+      this.croppedImage = result.imageCropped;
+
+      this.listingImages.push(<File>(result.imageCropped as HTMLInputElement).files[0]);
+    });
+  }
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.base64;
+  }
+  imageLoaded() {
+    // show cropper
+  }
+  cropperReady() {
+    // cropper ready
+  }
+  loadImageFailed() {
+    // show message
+  }
+
   uploadImage(event: Event): void {
     if (this.listingImagesDisplay.length === 5 && this.listingImages.length === 5) {
       return;
@@ -201,6 +243,7 @@ export class EditListingComponent implements OnInit {
       console.log(error);
       return;
     }
+    console.log(<File>(event.target as HTMLInputElement).files[0]);
     this.listingImages.push(<File>(event.target as HTMLInputElement).files[0]);
   }
 
@@ -507,6 +550,7 @@ import { locationList } from "@app/util/locations";
 // Interfaces
 import { CreateListingForm, CreateListingStoryForm } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
+import { CropImageDialogComponent } from './../../components/crop-image-dialog/crop-image-dialog.component';
 
 declare var $: any;
 

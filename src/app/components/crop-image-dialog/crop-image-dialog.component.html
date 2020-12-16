@@ -1,0 +1,29 @@
+<div class="dialog">
+  <h2 mat-dialog-title>{{ data.title }}</h2>
+  <mat-dialog-content class="mat-typography">
+    <div class="container">
+      <div class="row">
+        <div class="text-center col-md">
+          <image-cropper
+            [imageChangedEvent]="data.imageChangedEvent"
+            [maintainAspectRatio]="true"
+            [resizeToWidth]="256"
+            format="png"
+            (imageCropped)="imageCropped($event)"
+            (imageLoaded)="imageLoaded()"
+            (cropperReady)="cropperReady()"
+            (loadImageFailed)="loadImageFailed()"
+          ></image-cropper>
+        </div>
+        <!-- <div class="text-center col-md">
+          <h5>Preview</h5>
+          <img [src]="data.imageCropped" />
+        </div> -->
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Done</button>
+  </mat-dialog-actions>
+</div>
