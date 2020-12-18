@@ -12,9 +12,11 @@ import { categoryList} from "@app/util/categories";
 import { locationList } from '@app/util/locations';
 
 // Interfaces
-import { createOrganisationForm, CreateOrganisation } from "@app/interfaces/organisation";
+import { CreateOrganisation } from "@app/interfaces/organisation";
+import { createOrganisationForm } from "@app/util/forms/organisation";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 import { Subscription } from 'rxjs';
+import { AuthService } from "@app/services/auth.service";
 
 declare var $: any;
 
@@ -34,9 +36,10 @@ export class CreateOrganisationComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    public organisationsService: OrganisationsService,
+    private organisationsService: OrganisationsService,
     private router: Router,
-    public snackbarService: SnackbarService,
+    private snackbarService: SnackbarService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -76,7 +79,7 @@ export class CreateOrganisationComponent implements OnInit, OnDestroy {
       email, locations, address, facebook_link, twitter_link, instagram_link,
     };
 
-    this.subscriptions.push(this.organisationsService.createOrganisation(this.organisationData).subscribe(
+    this.subscriptions.push(this.organisationsService.createOrganisation(this.organisationData, this.authService.getAuthOptionsWithoutContentType()).subscribe(
       (res) => {
         this.organisationId = res["data"]["organisation_id"];
       },

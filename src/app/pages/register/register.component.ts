@@ -8,7 +8,7 @@ import { Router } from "@angular/router";
 import { UserRegisterData } from "@app/interfaces/auth";
 import { Subscription } from "rxjs";
 import { CookieService } from "ngx-cookie-service";
-import { registerForm } from "@app/util/forms";
+import { registerForm } from "@app/util/forms/register";
 
 @Component({
   selector: "app-register",

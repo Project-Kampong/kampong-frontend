@@ -31,6 +31,7 @@ export class AuthService {
   };
 
   private authOptions: OptionObject = <OptionObject>{};
+  private authOptionsWithoutContentType: OptionObject = <OptionObject>{};
 
   constructor(
     private httpClient: HttpClient,
@@ -74,6 +75,11 @@ export class AuthService {
         authorization: "Bearer " + token,
       }),
     }
+    this.authOptionsWithoutContentType = {
+      headers: new HttpHeaders({
+        authorization: "Bearer " + token,
+      }),
+    };
   }
 
   /**
@@ -105,10 +111,31 @@ export class AuthService {
   }
 
   /**
+   * Get auth options for http headers
+   */
+  getAuthOptions(): OptionObject {
+    return this.authOptions;
+  }
+
+  /**
+   * Get auth options without content type for http headers
+   */
+  getAuthOptionsWithoutContentType(): OptionObject {
+    return this.authOptionsWithoutContentType;
+  }
+
+  /**
    * Get details of logged in user
    */
   getUserDetails(): UserData {
     return this.userData ? this.userData : null;
+  }
+
+  /**
+   * Get is logged in status
+   */
+  getIsLoggedIn(): boolean {
+    return this.isLoggedIn;
   }
 
 

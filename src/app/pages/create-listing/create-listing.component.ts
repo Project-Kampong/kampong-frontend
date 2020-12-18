@@ -14,10 +14,12 @@ import { locationList } from '@app/util/locations';
 import { categoryList } from "@app/util/categories";
 
 // Interfaces
-import { createListingForm, CreateListingFAQ,  CreateListing } from "@app/interfaces/listing";
+import { CreateListingFAQ,  CreateListing } from "@app/interfaces/listing";
+import { createListingForm } from "@app/util/forms/listing";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 import { catchError } from 'rxjs/operators';
 import { forkJoin, Observable, of, Subscription } from 'rxjs';
+import { AuthService } from "@app/services/auth.service";
 
 declare var $: any;
 
@@ -58,9 +60,11 @@ export class CreateListingComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    public listingsService: ListingsService,
+    private listingsService: ListingsService,
     private router: Router,
-    public snackbarService: SnackbarService,
+    private snackbarService: SnackbarService,
+    private authService: AuthService,
+
   ) {}
   
   ngOnInit() {
@@ -179,7 +183,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           listing_id: this.listingId,
           milestone_description: val.milestone_description,
           date: val.date,
-        }).pipe(catchError(error => of(error))));
+        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(milestoneCreateObservables);
@@ -191,7 +195,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       hashtagsCreateObservables.push(this.listingsService.createListingHashtags({
         listing_id: this.listingId,
         tag: val,
-      }).pipe(catchError(error => of(error))));
+      }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
     })
     return forkJoin(hashtagsCreateObservables);
   }
@@ -204,7 +208,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           listing_id: this.listingId,
           job_title: val.job_title,
           job_description: val.job_description,
-        }).pipe(catchError(error => of(error))));
+        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(jobsCreateObservables);
@@ -218,7 +222,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           listing_id: this.listingId,
           question: val.question,
           answer: val.answer,
-        }).pipe(catchError(error => of(error))));
+        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(faqCreateObservables);
@@ -252,7 +256,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       listing_status, pics, locations
     };
 
-    this.subscriptions.push((await this.listingsService.createListing(this.listingData)).subscribe(
+    this.subscriptions.push((await this.listingsService.createListing(this.listingData, this.authService.getAuthOptionsWithoutContentType()).subscribe(
       (res) => {
         console.log(res);
         this.listingId = res["data"]["listing_id"];
@@ -284,7 +288,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           }
         }));
       }
-    ));
+    )))
   }
 
   ngOnDestroy() {

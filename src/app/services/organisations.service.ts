@@ -4,7 +4,6 @@ import { CreateOrganisation, UpdateOrganisation } from "@app/interfaces/organisa
 import { API } from "@app/interfaces/api";
 
 // Services Import
-import { AuthService } from "@app/services/auth.service";
 import { Observable } from 'rxjs';
 import { environment } from "src/environments/environment";
 
@@ -25,7 +24,7 @@ export class OrganisationsService {
     }),
   };
 
-  constructor(private httpClient: HttpClient, private authService: AuthService) {}
+  constructor(private httpClient: HttpClient) {}
 
   /**
    * Get all organisations
@@ -53,13 +52,14 @@ export class OrganisationsService {
   /**
    * Create an organisation
    * @param data Organisation Data
+   * @param headers authOptionsWithoutContentType
    * @event POST
    */
-  createOrganisation(data: CreateOrganisation): Observable<HttpEvent<API>> {
+  createOrganisation(data: CreateOrganisation, headers: OptionObject): Observable<API> {
     return this.httpClient.post<API>(
       this.url + "api/organisations",
       data,
-      this.authService.OnlyAuthHttpHeaders
+      headers
     );
   }
 
@@ -67,24 +67,27 @@ export class OrganisationsService {
    * Update organisation details
    * @param organisationId Organisation ID
    * @param data Updated Organisation Data
+   * @param headers authOptionsWithoutContentType
    * @event PUT
    */
-  updateOrganisation(organisationId: string, data: UpdateOrganisation): Observable<HttpEvent<API>> {
+  updateOrganisation(organisationId: string, data: UpdateOrganisation, headers: OptionObject): Observable<API> {
     return this.httpClient.put<API>(
       this.url + "api/organisations/" + organisationId,
       data,
-      this.authService.OnlyAuthHttpHeaders
+      headers
     );
   }
 
   /**
    * Delete a particular organisation
    * @param organisationId Organisation ID
+   * @param headers authOptions
    * @event DELETE
    */
-  removeOrganisation(organisationId: string): Observable<API> {
+  removeOrganisation(organisationId: string, headers: OptionObject): Observable<API> {
     return this.httpClient.delete<API>(
-      this.url + "api/organisations/" + organisationId
+      this.url + "api/organisations/" + organisationId,
+      headers
     );
   }
 

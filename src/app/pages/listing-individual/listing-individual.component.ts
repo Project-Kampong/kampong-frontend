@@ -12,6 +12,8 @@ import { ListingIndividual, ListingFAQ, ListingComments,
   ListingJobs, ListingUpdates, ListingMilestones,
   ListingLikes } from "@app/interfaces/listing";
 import { Subscription } from 'rxjs';
+import { UserData } from "@app/interfaces/user";
+import { EmailService } from "@app/services/email.service";
 
 declare var $: any;
 
@@ -49,7 +51,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
   updatedOn: string = "";
   commentsArr: ListingComments[] = [];
   isLiked: boolean = false;
-  likeId: string = "";
+  likeId: number;
   commentInput: string = "";
   replyInput: string = "";
   updateImages: File[] = [];
@@ -60,15 +62,21 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
   enquireMessage: string = "";
   enquireTopic: string = "";
   subscriptions: Subscription[] = [];
+  isLoggedIn: boolean;
+  private userData: UserData = <UserData>{};
 
   constructor( private router: Router, private route: ActivatedRoute, private listingsService: ListingsService,
-    public authService: AuthService, public snackbarService: SnackbarService
+    private authService: AuthService, private snackbarService: SnackbarService, private emailService: EmailService
   ) {}
 
   ngOnInit() {
 
     window.scroll(0, 0);
     this.listingId = this.route.snapshot.params["id"];
+    this.isLoggedIn = this.authService.getIsLoggedIn();
+    if (this.isLoggedIn) {
+      this.userData = this.authService.getUserDetails();
+    }
 
     $(".navigation-tabs li").on("click", function () {
       $(".navigation-tabs li").removeClass("active");
@@ -154,7 +162,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
 
   checkIsLiked(): void {
     this.likesArr.forEach((val) => {
-      if (this.authService.LoggedInUserID && val["user_id"] === this.authService.LoggedInUserID) {
+      if (this.isLoggedIn && val["user_id"] === this.userData["user_id"]) {
         this.isLiked = true;
         this.likeId = val["like_id"];
         $(".like-btn").addClass("liked");
@@ -198,7 +206,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
         description: this.updateInput,
         listing_id: this.listingId
       },
-      this.updateImages
+      this.authService.getAuthOptionsWithoutContentType()
     )).subscribe(
       (data) => {
         this.updateImages = [];
@@ -222,7 +230,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
 
   deleteUpdate(updates: ListingUpdates): void {
     if (confirm("Delete update?")) {
-      this.listingsService.removeListingUpdates(updates.listing_update_id).subscribe(
+      this.listingsService.removeListingUpdates(updates.listing_update_id, this.authService.getAuthOptions()).subscribe(
         (data) => {
           this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_updates.success, true);
         },
@@ -284,7 +292,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
     this.listingsService.createListingComments({
       listing_id: this.listingId,
       comment: this.commentInput
-    }).subscribe(
+    }, this.authService.getAuthOptions()).subscribe(
       (data) => {
         this.commentInput = "";
         this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_comments.success, true);
@@ -305,7 +313,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
       listing_id: this.listingId,
       comment: this.replyInput,
       reply_to_id: comment.listing_comment_id,
-    }).subscribe(
+    }, this.authService.getAuthOptions()).subscribe(
       (data) => {
         this.replyInput = "";
         this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_comments.success, true);
@@ -323,7 +331,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
 
   deleteComment(comment: ListingComments) {
     if (confirm("Delete comment?")) {
-      this.listingsService.removeListingComments(comment.listing_comment_id).subscribe(
+      this.listingsService.removeListingComments(comment.listing_comment_id, this.authService.getAuthOptions()).subscribe(
         (data) => {
           this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_comments.success, true);
         },
@@ -361,12 +369,12 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
   }
 
   handle_like(): void {
-    if (!this.authService.isLoggedIn) {
+    if (!this.isLoggedIn) {
       this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.unauthorized, false);
       return;
     }
     if (!this.isLiked) {
-      this.subscriptions.push(this.listingsService.likeListing(this.listingId).subscribe(
+      this.subscriptions.push(this.listingsService.likeListing(this.listingId, this.authService.getAuthOptions()).subscribe(
         (data) => {
           this.likesArr.push({ like_id: data["data"]["like_id"], user_id: data["data"]["user_id"]});
           this.isLiked = true;
@@ -380,11 +388,11 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
         }
       ))
     } else {
-      this.subscriptions.push(this.listingsService.unlikeListing(this.likeId).subscribe(
+      this.subscriptions.push(this.listingsService.unlikeListing(this.likeId, this.authService.getAuthOptions()).subscribe(
         (data) => {
-          this.likesArr.splice(this.likesArr.map(like => like["user_id"]).indexOf(this.authService.LoggedInUserID), 1);
+          this.likesArr.splice(this.likesArr.map(like => like["user_id"]).indexOf(this.userData["user_id"]), 1);
           this.isLiked = false;
-          this.likeId = "";
+          this.likeId = null;
           this.snackbarService.openSnackBar(this.snackbarService.DialogList.like_listing.unliked, true);
         },
         (err) => {
@@ -432,8 +440,9 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
   sendMessage() {
     if (this.enquireMessage != "") {
       this.togglePopup();
-      this.subscriptions.push(this.listingsService.sendEnquiry({
+      this.subscriptions.push(this.emailService.sendEnquiry({
         receiverEmail: this.listingData.listing_email,
+        senderEmail: "",
         subject: this.enquireTopic,
         message: this.enquireMessage,
       }).subscribe(

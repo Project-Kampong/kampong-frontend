@@ -95,7 +95,6 @@ export class SnackbarService {
   verticalPosition: MatSnackBarVerticalPosition = "top";
 
   openSnackBar(message: string, success: boolean) {
-    this.AuthService.Dialogmessage = message;
     if (success) {
       this._snackBar.openFromComponent(SnackbarSuccessComponent, {
         duration: 5000,

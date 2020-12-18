@@ -14,18 +14,13 @@ import { locationList } from "@app/util/locations";
 import { categoryList } from "@app/util/categories";
 
 // Interfaces
-import {
-  editListingForm,
-  EditListingFAQ,
-  EditListingJobs,
-  EditListingMilestones,
-  EditListing,
-  originalImagesCheck,
-  EditListingHashtags,
-} from "@app/interfaces/listing";
+import { EditListingFAQ, EditListingJobs, EditListingMilestones, EditListing, originalImagesCheck,
+  EditListingHashtags } from "@app/interfaces/listing";
+import { editListingForm } from "@app/util/forms/listing";
 import { CategoryFilter, LocationFilter } from "@app/interfaces/filters";
 import { forkJoin, Observable, of, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AuthService } from "@app/services/auth.service";
 
 declare var $: any;
 
@@ -57,10 +52,11 @@ export class EditListingComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    public listingsService: ListingsService,
+    private listingsService: ListingsService,
     private router: Router,
-    public snackbarService: SnackbarService,
-    private route: ActivatedRoute
+    private snackbarService: SnackbarService,
+    private route: ActivatedRoute,
+    private authService: AuthService,
   ) {}
 
   ngOnInit() {
@@ -241,20 +237,20 @@ export class EditListingComponent implements OnInit, OnDestroy {
       if (val.milestone_id === null && val.milestone_description !== "" && val.date !== null) {
         milestoneEditObservables.push(this.listingsService.createListingMilestones({
           listing_id: this.listingId,
-          description: val.milestone_description,
+          milestone_description: val.milestone_description,
           date: val.date
-        }).pipe(catchError(error => of(error))));
+        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       } else if (val.milestone_id && val.date !== null && val.milestone_description !== "") {
         checkMilestones.push(val.milestone_id);
         milestoneEditObservables.push(this.listingsService.updateMilestone(val.milestone_id, {
-          description: val.milestone_description,
+          milestone_description: val.milestone_description,
           date: val.date,
-        }).pipe(catchError(error => of(error))));
+        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       }
     })
     this.originalMilestoneIds.forEach((val) => {
       if (!checkMilestones.includes(val)) {
-        milestoneEditObservables.push(this.listingsService.removeMilestone(val).pipe(catchError(error => of(error))));
+        milestoneEditObservables.push(this.listingsService.removeMilestone(val, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(milestoneEditObservables);
@@ -268,14 +264,14 @@ export class EditListingComponent implements OnInit, OnDestroy {
         hashtagsEditObservables.push(this.listingsService.createListingHashtags({
           listing_id: this.listingId,
           tag: val.tag,
-        }).pipe(catchError(error => of(error))));
+        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       } else {
         checkHashtags.push(val.hashtag_id);
       }
     })
     this.originalHashtags.forEach((val) => {
       if (!checkHashtags.includes(val)) {
-        hashtagsEditObservables.push(this.listingsService.removeHashtags(val).pipe(catchError(error => of(error))));
+        hashtagsEditObservables.push(this.listingsService.removeHashtags(val, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(hashtagsEditObservables);
@@ -290,18 +286,18 @@ export class EditListingComponent implements OnInit, OnDestroy {
           listing_id: this.listingId,
           job_title: val.job_title,
           job_description: val.job_description,
-        }).pipe(catchError(error => of(error))));
+        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       } else if (val.job_id && val.job_title !== "" && val.job_description !== "") {
         checkJobs.push(val.job_id);
         jobEditObservables.push(this.listingsService.updateJobs(val.job_id, {
           job_title: val.job_title,
           job_description: val.job_description
-        }).pipe(catchError(error => of(error))));
+        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       }
     })
     this.originalJobIds.forEach((val) => {
       if (!checkJobs.includes(val)) {
-        jobEditObservables.push(this.listingsService.removeListingJobs(val).pipe(catchError(error => of(error))));
+        jobEditObservables.push(this.listingsService.removeListingJobs(val, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(jobEditObservables);
@@ -316,18 +312,18 @@ export class EditListingComponent implements OnInit, OnDestroy {
           listing_id: this.listingId,
           question: val.question,
           answer: val.answer,
-        }).pipe(catchError(error => of(error))));
+        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       } else if (val.faq_id && val.question !== "" && val.answer !== "") {
         checkFaqs.push(val.faq_id);
         faqEditObservables.push(this.listingsService.updateFAQ(val.faq_id, {
           question: val.question,
           answer: val.answer,
-        }).pipe(catchError(error => of(error))));
+        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       }
     })
     this.originalFaqIds.forEach((val) => {
       if (!checkFaqs.includes(val)) {
-        faqEditObservables.push(this.listingsService.removeFAQ(val).pipe(catchError(error => of(error))));
+        faqEditObservables.push(this.listingsService.removeFAQ(val, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(faqEditObservables);
@@ -359,7 +355,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
       listing_status, pics, locations,
     };
 
-    this.subscriptions.push((await this.listingsService.updateListing(this.listingId, this.listingData, this.listingImages, this.originalImages)).subscribe(
+    this.subscriptions.push((await this.listingsService.updateListing(this.listingId, this.listingData, this.authService.getAuthOptionsWithoutContentType()).subscribe(
       (res) => {},
       (err) => {
         console.log(err);
@@ -391,12 +387,12 @@ export class EditListingComponent implements OnInit, OnDestroy {
         }));
 
       }
-    ));
+    )))
   }
 
   removeListing(): void {
     if (confirm("Are you sure you want to delete " + this.listingForm.value.title + "? This action is currently not reversible.")) {
-      this.listingsService.removeListing(this.listingId).subscribe(
+      this.listingsService.removeListing(this.listingId, this.authService.getAuthOptions()).subscribe(
         (data) => {
           console.log(data);
           this.snackbarService.openSnackBar(
@@ -420,212 +416,3 @@ export class EditListingComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }
-
-/*
-
-
-  updateMilestones(): Promise<void>[] {
-    const checkMilestones: number[] = [];
-    const milestoneEditPromises: Promise<void>[] = [];
-    this.milestoneArr.forEach((val) => {
-      if (val.milestone_id === null && val.milestone_description !== "" && val.date !== null) {
-        milestoneEditPromises.push(new Promise((resolve, reject) => {
-          this.listingsService.createListingMilestones({
-            listing_id: this.listingId,
-            description: val.milestone_description,
-            date: val.date,
-          }).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-              reject();
-            }
-          )
-          resolve();
-        }))
-      } else if (val.milestone_id && val.date !== null && val.milestone_description !== "") {
-        checkMilestones.push(val.milestone_id);
-        milestoneEditPromises.push(new Promise((resolve, reject) => {
-          this.listingsService.updateMilestone(val.milestone_id, {
-            description: val.milestone_description,
-            date: val.date,
-          }).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-              reject();
-            }
-          )
-          resolve();
-        }))
-      }
-    })
-    
-    this.originalMilestoneIds.forEach((val) => {
-      if (!checkMilestones.includes(val)) {
-        milestoneEditPromises.push(new Promise((resolve, reject) => {
-          this.listingsService.removeMilestone(val).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-              reject();
-            }
-          );
-          resolve();
-        }))
-      }
-    })
-    return milestoneEditPromises;
-  }
-
-    updateHashtags(): Promise<void>[] {
-    const checkHashtags: number[] = [];
-    const hashtagEditPromises: Promise<void>[] = [];
-    this.hashtags.forEach((val) => {
-      if (val.hashtag_id === null) {
-        hashtagEditPromises.push(new Promise((resolve, reject) => {
-          this.listingsService.createListingHashtags({
-            listing_id: this.listingId,
-            tag: val.tag,
-          }).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-              reject();
-            }
-          )
-          resolve();
-        }))
-      } else {
-        checkHashtags.push(val.hashtag_id);
-      }
-    })
-
-    this.originalHashtags.forEach((val) => {
-      if (!checkHashtags.includes(val)) {
-        hashtagEditPromises.push(new Promise((resolve, reject) => {
-          this.listingsService.removeHashtags(val).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-              reject();
-            }
-          );
-          resolve();
-        }))
-      }
-    })
-    return hashtagEditPromises;
-  }
-
-    updateJobs(): Promise<void>[] {
-    const checkJobs: number[] = [];
-    const jobEditPromises: Promise<void>[] = [];
-    this.jobArr.forEach((val) => {
-      console.log(val);
-      if (val.job_id === null && val.job_title !== "" && val.job_description !== "") {
-        jobEditPromises.push(new Promise((resolve, reject) => {
-          this.listingsService.createListingJobs({
-            listing_id: this.listingId,
-            job_title: val.job_title,
-            job_description: val.job_description,
-          }).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-              reject();
-            }
-          )
-          resolve();
-        }))
-      } else if (val.job_id && val.job_title !== "" && val.job_description !== "") {
-        checkJobs.push(val.job_id);
-        jobEditPromises.push(new Promise((resolve, reject) => {
-          this.listingsService.updateJobs(val.job_id, {
-            job_title: val.job_title,
-            job_description: val.job_description
-          }).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-              reject();
-            }
-          )
-          resolve();
-        }))
-      }
-    })
-
-    this.originalJobIds.forEach((val) => {
-      if (!checkJobs.includes(val)) {
-        jobEditPromises.push(new Promise((resolve, reject) => {
-          this.listingsService.removeListingJobs(val).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-              reject();
-            }
-          );
-          resolve();
-        }))
-      }
-    })
-    return jobEditPromises;
-  }
-
-    updateFaqs(): Promise<void>[] {
-    const checkFaqs: number[] = [];
-    const faqEditPromises: Promise<void>[] = [];
-    this.faqArr.forEach((val) => {
-      console.log(val);
-      if (val.faq_id === null && val.question !== "" && val.answer !== "") {
-        faqEditPromises.push(new Promise((resolve, reject) => {
-          this.listingsService.createListingFAQ({
-            listing_id: this.listingId,
-            question: val.question,
-            answer: val.answer,
-          }).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-              reject();
-            }
-          )
-          resolve();
-        }))
-      } else if (val.faq_id && val.question !== "" && val.answer !== "") {
-        checkFaqs.push(val.faq_id);
-        faqEditPromises.push(new Promise((resolve, reject) => {
-          this.listingsService.updateFAQ(val.faq_id, {
-            question: val.question,
-            answer: val.answer,
-          }).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-              reject();
-            }
-          )
-          resolve();
-        }))
-      }
-    })
-
-
-    this.originalFaqIds.forEach((val) => {
-      if (!checkFaqs.includes(val)) {
-        faqEditPromises.push(new Promise((resolve, reject) => {
-          this.listingsService.removeFAQ(val).subscribe(
-            (res) => {},
-            (err) => {
-              console.log(err);
-              reject();
-            }
-          );
-          resolve();
-        }))
-      }
-    })
-    return faqEditPromises;
-  }
-*/

@@ -7,10 +7,10 @@ import { Router } from "@angular/router";
 import { SnackbarService } from "@app/services/snackbar.service";
 
 // Interface
-import { UserLogin, UserLoginDefault } from "@app/interfaces/user";
 import { Subscription } from "rxjs";
 import { UserLoginData } from "@app/interfaces/auth";
 import { CookieService } from "ngx-cookie-service";
+import { UserLoginForm } from "@app/util/forms/login";
 
 @Component({
   selector: "app-login",
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.loginCredentials = this.fb.group({
-      ...UserLoginDefault,
+      ...UserLoginForm,
     });
   }
 

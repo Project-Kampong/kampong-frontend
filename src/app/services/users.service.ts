@@ -30,7 +30,7 @@ export class UsersService {
    * @param userId User ID
    * @event GET
    */
-  getPublicOwnedListings(userId: string): Observable<API> {
+  getOwnedListings(userId: string): Observable<API> {
       return this.httpClient.get<API>(
         this.url + "api/users/" + userId + "/listings/owner",
         this.options

@@ -37,7 +37,7 @@ export class ListingHomeComponent implements OnInit {
     this.categoryList = categoryList;
     this.listingsService.getListings();
 
-    this.organisationService.getOrganisations(1).subscribe(
+    this.organisationService.getOrganisations().subscribe(
       (res) => {
         this.organisationList = res["data"];
       },

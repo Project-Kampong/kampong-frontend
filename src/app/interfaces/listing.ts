@@ -1,13 +1,3 @@
-import { FormControl, Validators } from "@angular/forms";
-
-const LISTING_VALIDATION_PATTERN = Validators.pattern(
-  "^[a-zA-Z0-9 \n .,'()\"$#%&-°*!']+$"
-);
-
-const URL_VALIDATION_PATTERN = Validators.pattern(
-  '((http|ftp|https):\\/\\/)?[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?'
-);
-
 export interface Listing {
   listing_id: string;
   organisation_id: string;
@@ -58,7 +48,7 @@ export interface ListingIndividual {
 }
 
 export interface ListingLikes {
-  like_id: string;
+  like_id: number;
   user_id: string;
 }
 
@@ -73,7 +63,7 @@ export interface ListingJobs {
 }
 
 export interface ListingUpdates {
-  listing_update_id: string;
+  listing_update_id: number;
   pics: string[];
   created_on: string;
   updated_on: string;
@@ -81,17 +71,17 @@ export interface ListingUpdates {
 }
 
 export interface ListingSkills {
-  skill_id: string;
+  skill_id: number;
   listing_id: string;
   skill: string;
 }
 
 export interface ListingComments {
-  listing_comment_id: string;
+  listing_comment_id: number;
   listing_id: string;
   user_id: string;
   comment: string;
-  reply_to_id: string;
+  reply_to_id: number;
   created_on: string;
   updated_on: string;
   deleted_on: string,
@@ -130,6 +120,7 @@ export interface CreateListingJobs {
 export interface CreateListingComments {
   listing_id: string;
   comment: string;
+  reply_to_id?: number;
 }
 
 export interface CreateListingLocation {
@@ -176,7 +167,6 @@ export interface UpdateListingMilestones {
 }
 
 export interface UpdateListingJobs {
-  job_id: number;
   job_title: string;
   job_description: string;
 }
@@ -202,117 +192,44 @@ export interface UpdateListing {
   locations: string[];
 }
 
-export const createListingForm = {
-  
-  title: new FormControl("", [
-    Validators.required,
-    Validators.maxLength(50),
-    LISTING_VALIDATION_PATTERN
-  ]),
+export interface EditListingHashtags {
+  hashtag_id: number;
+  tag: string;
+}
 
-  category: new FormControl("", [
-    Validators.required,
-  ]),
+export interface EditListingMilestones {
+  milestone_id: number,
+  milestone_description: string;
+  date: Date;
+}
 
-  about: new FormControl(""),
+export interface EditListingJobs {
+  job_id: number;
+  job_title: string;
+  job_description: string;
+}
 
-  tagline: new FormControl("",[
-    Validators.required,
-    Validators.maxLength(100),
-    LISTING_VALIDATION_PATTERN,
-  ]),
+export interface EditListingFAQ {
+  faq_id: number;
+  question: string;
+  answer: string;
+}
 
-  mission: new FormControl("", [
-    Validators.required,
-    Validators.maxLength(150),
-    LISTING_VALIDATION_PATTERN
-  ]),
-
-  overview: new FormControl(""),
-
-  problem: new FormControl(""),
-
-  solution: new FormControl(""),
-
-  outcome: new FormControl(""),
-
-  listing_email: new FormControl("", [
-    Validators.required,
-    Validators.email
-  ]),
-
-  listing_url: new FormControl("", [
-    URL_VALIDATION_PATTERN,
-  ]),
-
-  locations: new FormControl([]),
-
-};
-
-export const editListingForm = {
-  
-  title: new FormControl("", [
-    Validators.required,
-    Validators.maxLength(50),
-    LISTING_VALIDATION_PATTERN
-  ]),
-
-  category: new FormControl("", [
-    Validators.required,
-  ]),
-
-  about: new FormControl(""),
-
-  tagline: new FormControl("",[
-    Validators.required,
-    Validators.maxLength(100),
-    LISTING_VALIDATION_PATTERN,
-  ]),
-
-  mission: new FormControl("", [
-    Validators.required,
-    Validators.maxLength(150),
-    LISTING_VALIDATION_PATTERN
-  ]),
-
-  overview: new FormControl(""),
-
-  problem: new FormControl(""),
-
-  solution: new FormControl(""),
-
-  outcome: new FormControl(""),
-
-  listing_email: new FormControl("", [
-    Validators.required,
-    Validators.email
-  ]),
-
-  listing_url: new FormControl("", [
-    URL_VALIDATION_PATTERN,
-  ]),
-
-  locations: new FormControl([]),
-
-};
-
-export const defaultListing = {
-  listing_id: "default",
-  organisation_id: "default",
-  created_by: "default",
-  title: "default",
-  category: "default",
-  about: "default",
-  tagline: "default",
-  mission: "default",
-  overview: "default",
-  problem: "default",
-  solution: "default",
-  outcome: "default",
-  listing_url: "default",
-  pics: ["default"],
-  listing_email: "default",
-};
+export interface EditListing {
+  title: string;
+  category: string;
+  tagline: string;
+  mission: string;
+  outcome: string;
+  overview: string;
+  problem: string;
+  solution: string;
+  listing_url: string;
+  listing_email: string;
+  listing_status: string;
+  pics?: string[];
+  locations: string[];
+}
 
 export interface originalImagesCheck {
   image: string;

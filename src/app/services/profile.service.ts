@@ -1,8 +1,16 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AuthService } from "@app/services/auth.service";
+import { environment } from "src/environments/environment";
 
 import { API } from "@app/interfaces/api";
+import { Observable } from "rxjs";
+
+interface OptionObject {
+  headers: HttpHeaders;
+  authorization?: string;
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -12,39 +20,75 @@ export class ProfileService {
     private AuthService: AuthService
   ) {}
 
-  url = this.AuthService.URL;
+  private url: string = environment.apiUrl;
 
-  options = this.AuthService.options;
-  AuthOptions = this.AuthService.AuthOptions;
+  private options: OptionObject = {
+    headers: new HttpHeaders({
+      "Content-Type": "application/json",
+    }),
+  };
 
-  getUserProfile(userId) {
+  /**
+   * Get a particular user profile
+   * @param userId User ID
+   */
+  getUserProfile(userId: string) {
     return this.httpClient.get<API>(
       this.url + "api/users/" + userId + "/profiles",
       this.options
     );
   }
 
-  getPublicLikes(userId) {
+  /**
+   * Get all liked listings for a particular user
+   * @param userId User ID
+   */
+  getPublicLikes(userId: string) {
     return this.httpClient.get<API>(
       this.url + "api/users/" + userId + "/likes",
       this.options
     );
   }
 
-  // Write
-  updateUserProfile(userId, data) {
+  /**
+   * Updates user profile data
+   * @param userId User ID
+   * @param data Updated Profile Data
+   * @param headers authOptions 
+   */
+  updateUserProfile(userId: string, data, headers: OptionObject) {
     return this.httpClient.put<API>(
       this.url + "api/users/" + userId + "/profiles",
       data,
-      this.AuthOptions
+      headers
     );
   }
 
-  updateUserProfilePic(userId, data) {
+  /**
+   * Deprecated
+   * @param userId User ID
+   * @param data ProfileData
+   * @param headers authOptionsWithoutContentType
+   */
+  updateUserProfilePic(userId: string, data, headers) {
     return this.httpClient.put<API>(
       this.url + "api/users/" + userId + "/profiles/upload-photo",
       data,
-      this.AuthService.OnlyAuthHttpHeaders
+      headers
     );
   }
+
+  /**
+   * Gets all listings owned by user
+   * @param userId User ID
+   * @event GET
+   */
+  getPublicOwnedListings(userId: string): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/users/" + userId + "/listings/owner",
+      this.options
+    );
+  }
+
+  
 }
