@@ -298,6 +298,10 @@ export class ListingsService {
   }
 
   sendEnquiry(data) {
-    return this.httpClient.post<API>(this.url + 'api/mailer/send', data, this.optionsMulti);
+    return this.httpClient.post<API>(this.url + 'api/mailer/send-enquiry', data, this.optionsMulti);
+  }
+
+  sendApplication(data) {
+    return this.httpClient.post<API>(this.url + 'api/mailer/send-application', data, this.optionsMulti);
   }
 }
