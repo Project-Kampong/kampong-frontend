@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "./services/auth.service";
 import { environment } from "./../environments/environment";
+import { CookieService } from "ngx-cookie-service";
 
 @Component({
   selector: "app-root",
@@ -10,9 +11,12 @@ import { environment } from "./../environments/environment";
 export class AppComponent implements OnInit {
   title = "Kampong-frontend";
 
-  constructor(public AuthService: AuthService) {}
+  constructor(private cookieService: CookieService, private authService: AuthService) {}
 
   ngOnInit() {
-    this.AuthService.tokenExist();
+    const token = this.cookieService.get("token");
+    if (token) {
+      this.authService.setUserDetails();
+    }
   }
 }

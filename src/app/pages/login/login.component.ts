@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 
 import { AuthService } from "@app/services/auth.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
@@ -8,41 +8,59 @@ import { SnackbarService } from "@app/services/snackbar.service";
 
 // Interface
 import { UserLogin, UserLoginDefault } from "@app/interfaces/user";
+import { Subscription } from "rxjs";
+import { UserLoginData } from "@app/interfaces/auth";
+import { CookieService } from "ngx-cookie-service";
 
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.scss"],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+
+  subscriptions: Subscription[] = [];
+
   constructor(
-    private AuthService: AuthService,
+    private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    public SnackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private cookieService: CookieService,
   ) {}
 
   loginCredentials: FormGroup;
   loginErrorMsg = false;
   ngOnInit() {
+
     this.loginCredentials = this.fb.group({
       ...UserLoginDefault,
     });
-
-    this.AuthService.LoginResponse.subscribe(() => {
-      this.SnackbarService.openSnackBar(
-        this.SnackbarService.DialogList.login.success,
-        true
-      );
-      this.router.navigate(["/home"]);
-    });
-    this.AuthService.invalidLoginResponse.subscribe(() => {
-      this.SnackbarService.openSnackBar(
-        this.SnackbarService.DialogList.login.error,
-        false
-      );
-    });
   }
+
+  loginUser(data: UserLoginData) {
+    //check login details first
+    this.subscriptions.push(this.authService.loginUser(data).subscribe(
+      (res) => {
+        this.cookieService.set("token", res["token"]);
+        this.authService.setUserDetails();
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.login.success, true);
+      },
+      (err) => {
+        console.log(err);
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.login.error, false);
+      },
+      () => {
+        this.router.navigate(["/home"]);
+      }
+    ))
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  /*
   loginCheck() {
     if (
       this.loginCredentials.value.email == "" ||
@@ -53,7 +71,8 @@ export class LoginComponent implements OnInit {
         false
       );
     } else {
-      this.AuthService.userLogin(this.loginCredentials.value);
+      this.authService.userLogin(this.loginCredentials.value);
     }
   }
+  */
 }

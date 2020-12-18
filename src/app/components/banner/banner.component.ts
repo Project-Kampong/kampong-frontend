@@ -13,13 +13,13 @@ export class BannerComponent implements OnInit {
   slickInitiated = false;
   numtoget: number;
 
-  constructor(public ListingsService: ListingsService) {
+  constructor(public listingsService: ListingsService) {
     this.numtoget = 0;
   }
 
   ngOnInit() {
-    this.ListingsService.getFeaturedListings().subscribe((data) => {
-      this.featuredData = data.data;
+    this.listingsService.getFeaturedListings().subscribe((data) => {
+      this.featuredData = data["data"];
       this.numtoget = this.featuredData.length;
     });
   }
@@ -27,7 +27,7 @@ export class BannerComponent implements OnInit {
   sliderSlickInit(): void {
     if (this.slickInitiated) {
       return;
-    } else if (this.featuredData.length == this.numtoget) {
+    } else if (this.featuredData.length === this.numtoget) {
       // Jquery
       $(".slick-belt").slick({
         slidesToShow: 1,

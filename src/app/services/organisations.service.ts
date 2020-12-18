@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpEvent, HttpHeaders } from "@angular/common/http";
-import { CreateOrganisation, CreateProgrammes, UpdateOrganisation } from "@app/interfaces/organisation";
+import { CreateOrganisation, UpdateOrganisation } from "@app/interfaces/organisation";
 import { API } from "@app/interfaces/api";
 
 // Services Import

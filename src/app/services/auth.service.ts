@@ -2,45 +2,120 @@ import { Injectable, EventEmitter } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CookieService } from "ngx-cookie-service";
 import { environment } from "./../../environments/environment";
+
+// Interface
 import { UserData } from "@app/interfaces/user";
 import { API } from "@app/interfaces/api";
-import { UserRegisterData } from "@app/interfaces/auth";
+import { Observable, Subscription } from "rxjs";
+import { UserLoginData, UserRegisterData } from "@app/interfaces/auth";
+
+interface OptionObject {
+  headers: HttpHeaders;
+  authorization?: string;
+}
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
 
-  loginResponse = new EventEmitter<void>();
-  invalidLoginResponse = new EventEmitter<void>();
-  invalidRegisterResponse = new EventEmitter<void>();
-  validRegisterResponse = new EventEmitter<void>();
-
-  private URL = environment.apiUrl;
-  private isLoggedIn = false;
-  private is_activated = false;
-  private AuthToken;
-  private UserData: UserData[];
-  private LoggedInUserID;
+  private url: string = environment.apiUrl;
+  private userData: UserData = <UserData>{};
+  private isLoggedIn: boolean = false;
 
   // Headers
-  httpHeaders = new HttpHeaders({
-    "Content-Type": "application/json",
-  });
-  options = {
-    headers: this.httpHeaders,
+  private options: OptionObject = {
+    headers: new HttpHeaders({
+      "Content-Type": "application/json",
+    }),
   };
-  AuthHttpHeaders;
-  AuthOptions;
-  OnlyAuthHttpHeaders;
 
-  Dialogmessage: string = "";
+  private authOptions: OptionObject = <OptionObject>{};
 
-  constructor(private httpClient: HttpClient, private cookieService: CookieService) {}
+  constructor(
+    private httpClient: HttpClient,
+    private cookieService: CookieService
+  ) {}
 
-  userRegister(data: UserRegisterData) {
+  /**
+   * Register User
+   * @param data User Details
+   * @event POST
+   */
+  registerUser(data: UserRegisterData): Observable<API> {
+    return this.httpClient.post<API>(
+      this.url + "api/auth/register",
+      data,
+      this.options
+    );
+  }
+
+  /**
+   * Login User
+   * @param data User Details
+   * @event POST 
+   */
+  loginUser(data: UserLoginData): Observable<API> {
+    return this.httpClient.post<API>(
+      this.url + "api/auth/login",
+      data,
+      this.options
+    )
+  }
+  
+  /**
+   * Private method which sets token
+   */
+  private setTokenInAuthOptions(): void {
+    const token = this.cookieService.get("token");
+    this.authOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        authorization: "Bearer " + token,
+      }),
+    }
+  }
+
+  /**
+   * Logout the current user
+   */
+  logoutUser(): void {
+    this.isLoggedIn = false;
+    this.userData = <UserData>{};
+    this.authOptions = <OptionObject>{};
+  }
+
+  /**
+   * Set user details
+   */
+  setUserDetails(): Subscription {
+    this.setTokenInAuthOptions();
+    return this.httpClient.get<API>(
+      this.url + "api/auth/me",
+      this.authOptions
+    ).subscribe(
+      (res) => {
+        this.userData = res["data"];
+        this.isLoggedIn = true;
+      },
+      (err) => {
+        console.log(err);
+      }
+    )
+  }
+
+  /**
+   * Get details of logged in user
+   */
+  getUserDetails(): UserData {
+    return this.userData ? this.userData : null;
+  }
+
+
+  /*
+  userRegister(data) {
     return this.httpClient
-      .post<API>(this.URL + "api/auth/register", data, this.options)
+      .post<API>(this.url + "api/auth/register", data, this.options)
       .subscribe(
         (res) => {
           this.validRegisterResponse.emit();
@@ -57,7 +132,7 @@ export class AuthService {
 
   userLogin(credentials) {
     return this.httpClient
-      .post<API>(this.URL + "api/auth/login", credentials, this.options)
+      .post<API>(this.url + "api/auth/login", credentials, this.options)
       .subscribe(
         (res) => {
           this.AuthToken = res["token"];
@@ -73,19 +148,19 @@ export class AuthService {
   }
   getUserDetails() {
     return this.httpClient
-      .get<API>(this.URL + "api/auth/me", this.AuthOptions)
+      .get<API>(this.url + "api/auth/me", this.AuthOptions)
       .subscribe((data) => {
         console.log(data);
         this.UserData = data["data"];
         this.LoggedInUserID = this.UserData["user_id"];
         this.is_activated = this.UserData["is_activated"];
         this.isLoggedIn = true;
-        this.loginResponse.emit();
+        this.LoginResponse.emit();
       });
   }
   getUserDetailsRegister() {
     return this.httpClient
-      .get<API>(this.URL + "api/auth/me", this.AuthOptions)
+      .get<API>(this.url + "api/auth/me", this.AuthOptions)
       .subscribe((data) => {
         console.log(data);
         this.UserData = data["data"];
@@ -135,9 +210,10 @@ export class AuthService {
   // Update Password
   updatePassword(data) {
     return this.httpClient.put<API>(
-      this.URL + "api/auth/updatepassword",
+      this.url + "api/auth/updatepassword",
       data,
       this.AuthOptions
     );
   }
+  */
 }
