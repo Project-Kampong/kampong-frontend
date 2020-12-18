@@ -4,6 +4,7 @@ import { CookieService } from "ngx-cookie-service";
 import { environment } from "./../../environments/environment";
 import { UserData } from "@app/interfaces/user";
 import { API } from "@app/interfaces/api";
+import { UserRegisterData } from "@app/interfaces/auth";
 
 @Injectable({
   providedIn: "root",
@@ -37,7 +38,7 @@ export class AuthService {
 
   constructor(private httpClient: HttpClient, private cookieService: CookieService) {}
 
-  userRegister(data) {
+  userRegister(data: UserRegisterData) {
     return this.httpClient
       .post<API>(this.URL + "api/auth/register", data, this.options)
       .subscribe(

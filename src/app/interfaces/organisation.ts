@@ -54,6 +54,21 @@ export interface CreateOrganisation {
   instagram_link?: string,
 }
 
+export interface UpdateOrganisation {
+  name: string,
+  organisation_type: string,
+  about: string,
+  website_url?: string,
+  phone?: string,
+  email: string,
+  story?: string,
+  address?: string,
+  locations?: string[],
+  facebook_link?: string,
+  twitter_link?: string,
+  instagram_link?: string,
+}
+
 export interface Programmes {
   organisation_id : string,
   title: string,
