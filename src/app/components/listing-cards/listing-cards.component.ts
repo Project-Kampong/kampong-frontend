@@ -10,8 +10,8 @@ export class ListingCardsComponent {
   
   constructor(private router: Router) {}
 
-  @Input() ListingData;
-  @Input() ColNum;
+  @Input() listingData;
+  @Input() colNum;
 
   selectedCard(data) {
     console.log(data);

@@ -14,18 +14,17 @@ declare var $: any;
 })
 export class ListingHomeComponent implements OnInit {
 
-  categoryList: Array<CategoryFilter>;
-  organisationList: Array<Organisation>;
+  categoryList: CategoryFilter[];
+  organisationList: Organisation[] = [];
 
   constructor(
-    public ListingsService: ListingsService,
-    public OrganisationService: OrganisationsService,
-    public AuthService: AuthService
-  ) {
-    this.organisationList = [];
-  }
+    public listingsService: ListingsService,
+    public organisationService: OrganisationsService,
+    public authService: AuthService
+  ) {}
 
   ngOnInit() {
+
     window.scroll(0, 0);
     $(".category-list ul li").on("click", function () {
       $(this).toggleClass("active");
@@ -36,9 +35,9 @@ export class ListingHomeComponent implements OnInit {
     });
 
     this.categoryList = categoryList;
-    this.ListingsService.getListingLoop(1);
+    this.listingsService.getListings();
 
-    this.OrganisationService.getOrganisations(1).subscribe(
+    this.organisationService.getOrganisations(1).subscribe(
       (res) => {
         this.organisationList = res["data"];
       },

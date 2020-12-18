@@ -9,10 +9,10 @@ import { Router } from "@angular/router";
 export class EditListingCardsComponent implements OnInit {
   constructor(private router: Router) {}
 
-  @Input() ListingData;
-  @Input() ColNum;
+  @Input() listingData;
+  @Input() colNum;
   ngOnInit() {
-    console.log(this.ListingData);
+    console.log(this.listingData);
   }
   selectedCard(data) {
     console.log(data);

@@ -110,17 +110,35 @@ export interface ListingHashtags {
   tag: string;
 }
 
+export interface CreateListingHashtags {
+  listing_id: string;
+  tag: string;
+}
+
 export interface CreateListingMilestones {
+  listing_id: string;
   milestone_description: string;
   date: Date;
 }
 
 export interface CreateListingJobs {
+  listing_id: string;
   job_title: string;
   job_description: string;
 }
 
+export interface CreateListingComments {
+  listing_id: string;
+  comment: string;
+}
+
+export interface CreateListingLocation {
+  listing_id: string;
+  location_id: number;
+}
+
 export interface CreateListingFAQ {
+  listing_id: string;
   question: string;
   answer: string;
 }
@@ -143,34 +161,32 @@ export interface CreateListing {
   listing_url: string;
   listing_email: string;
   listing_status: string;
-  pics ?: string[];
+  pics?: string[];
   locations: string[];
 }
 
-export interface EditListingHashtags {
+export interface UpdateListingHashtags {
   hashtag_id: number;
   tag: string;
 }
 
-export interface EditListingMilestones {
-  milestone_id: number;
+export interface UpdateListingMilestones {
   milestone_description: string;
   date: Date;
 }
 
-export interface EditListingJobs {
+export interface UpdateListingJobs {
   job_id: number;
   job_title: string;
   job_description: string;
 }
 
-export interface EditListingFAQ {
-  faq_id: number;
+export interface UpdateListingFAQ {
   question: string;
   answer: string;
 }
 
-export interface EditListing {
+export interface UpdateListing {
   title: string;
   category: string;
   tagline: string;
@@ -182,7 +198,7 @@ export interface EditListing {
   listing_url: string;
   listing_email: string;
   listing_status: string;
-  pics: string[];
+  pics?: string[];
   locations: string[];
 }
 

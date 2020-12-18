@@ -14,13 +14,25 @@ import { locationList } from '@app/util/locations';
 import { categoryList } from "@app/util/categories";
 
 // Interfaces
-import { createListingForm, CreateListingFAQ, 
-  CreateListingJobs, CreateListingMilestones, CreateListing } from "@app/interfaces/listing";
+import { createListingForm, CreateListingFAQ,  CreateListing } from "@app/interfaces/listing";
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 import { catchError } from 'rxjs/operators';
 import { forkJoin, Observable, of, Subscription } from 'rxjs';
 
 declare var $: any;
+
+interface AddListingMilestones {
+  milestone_description: string;
+  date: Date;
+}
+interface AddListingJobs {
+  job_title: string;
+  job_description: string;
+}
+interface AddListingFAQ {
+  question: string;
+  answer: string;
+}
 
 @Component({
   selector: "app-create-listing",
@@ -39,9 +51,9 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   listingImages: File[] = [];
   listingImagesDisplay: string[] = [];
   hashtags: string[] = [];
-  milestoneArr: CreateListingMilestones[] = [{ milestone_description: "", date: new Date() }];
-  jobArr: CreateListingJobs[] = [];
-  faqArr: CreateListingFAQ[] = [];
+  milestoneArr: AddListingMilestones[] = [{ milestone_description: "", date: new Date() }];
+  jobArr: AddListingJobs[] = [];
+  faqArr: AddListingFAQ[] = [];
   subscriptions: Subscription[] = [];
 
   constructor(
@@ -165,7 +177,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       if (val.milestone_description !== "" && val.date !== null) {
         milestoneCreateObservables.push(this.listingsService.createListingMilestones({
           listing_id: this.listingId,
-          description: val.milestone_description,
+          milestone_description: val.milestone_description,
           date: val.date,
         }).pipe(catchError(error => of(error))));
       }
@@ -240,7 +252,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       listing_status, pics, locations
     };
 
-    this.subscriptions.push((await this.listingsService.createListing(this.listingData, this.listingImages)).subscribe(
+    this.subscriptions.push((await this.listingsService.createListing(this.listingData)).subscribe(
       (res) => {
         console.log(res);
         this.listingId = res["data"]["listing_id"];

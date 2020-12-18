@@ -2,25 +2,25 @@ import { Injectable, EventEmitter } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CookieService } from "ngx-cookie-service";
 import { environment } from "./../../environments/environment";
-
-// Interface
 import { UserData } from "@app/interfaces/user";
 import { API } from "@app/interfaces/api";
+
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
-  LoginResponse = new EventEmitter<void>();
+
+  loginResponse = new EventEmitter<void>();
   invalidLoginResponse = new EventEmitter<void>();
   invalidRegisterResponse = new EventEmitter<void>();
   validRegisterResponse = new EventEmitter<void>();
 
-  public URL = environment.apiUrl;
-  public isLoggedIn = false;
-  public is_activated = false;
-  public AuthToken;
+  private URL = environment.apiUrl;
+  private isLoggedIn = false;
+  private is_activated = false;
+  private AuthToken;
   private UserData: UserData[];
-  public LoggedInUserID;
+  private LoggedInUserID;
 
   // Headers
   httpHeaders = new HttpHeaders({
@@ -35,10 +35,7 @@ export class AuthService {
 
   Dialogmessage: string = "";
 
-  constructor(
-    private httpClient: HttpClient,
-    private CookieService: CookieService
-  ) {}
+  constructor(private httpClient: HttpClient, private cookieService: CookieService) {}
 
   userRegister(data) {
     return this.httpClient
@@ -48,7 +45,7 @@ export class AuthService {
           this.validRegisterResponse.emit();
           this.AuthToken = res["token"];
           this.setAuthHeaders(this.AuthToken);
-          this.CookieService.set("token", this.AuthToken);
+          this.cookieService.set("token", this.AuthToken);
           this.getUserDetailsRegister();
         },
         (err) => {
@@ -64,7 +61,7 @@ export class AuthService {
         (res) => {
           this.AuthToken = res["token"];
           this.setAuthHeaders(this.AuthToken);
-          this.CookieService.set("token", this.AuthToken);
+          this.cookieService.set("token", this.AuthToken);
           this.getUserDetails();
         },
         (err) => {
@@ -82,7 +79,7 @@ export class AuthService {
         this.LoggedInUserID = this.UserData["user_id"];
         this.is_activated = this.UserData["is_activated"];
         this.isLoggedIn = true;
-        this.LoginResponse.emit();
+        this.loginResponse.emit();
       });
   }
   getUserDetailsRegister() {
@@ -118,7 +115,7 @@ export class AuthService {
 
   // Find token in cookies
   tokenExist() {
-    const tokenExist = this.CookieService.get("token");
+    const tokenExist = this.cookieService.get("token");
     if (tokenExist != null && tokenExist != "") {
       this.AuthToken = tokenExist;
       this.setAuthHeaders(tokenExist);
@@ -130,7 +127,7 @@ export class AuthService {
     console.log("logout");
     this.AuthToken = "";
     this.isLoggedIn = false;
-    this.CookieService.delete("token", "/");
+    this.cookieService.delete("token", "/");
     window.location.href = "/login";
   }
 

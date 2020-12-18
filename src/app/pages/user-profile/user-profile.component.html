@@ -76,8 +76,8 @@
           <div *ngIf="startedArr.length != 0">
             <h2>Initiatives I've Started</h2>
             <app-edit-listing-cards
-              [ListingData]="startedArr"
-              [ColNum]="6"
+              [listingData]="startedArr"
+              [colNum]="6"
             ></app-edit-listing-cards>
           </div>
         </div>
@@ -86,8 +86,8 @@
           <div *ngIf="likedArr.length != 0">
             <h2>Initiatives I've Liked</h2>
             <app-listing-cards
-              [ListingData]="likedArr"
-              [ColNum]="6"
+              [listingData]="likedArr"
+              [colNum]="6"
             ></app-listing-cards>
           </div>
         </div>
@@ -96,8 +96,8 @@
           <div *ngIf="orgArr.length != 0">
             <h2>My Organisations</h2>
             <app-edit-organisation-cards
-              [OrganisationData]="orgArr"
-              [ColNum]="6"
+              [organisationData]="orgArr"
+              [colNum]="6"
             ></app-edit-organisation-cards>
           </div>
         </div>

@@ -100,7 +100,7 @@ export class SearchComponent implements OnInit {
         }
       );
     } else {
-      this.listingsService.getListings(1).subscribe((data) => {
+      this.listingsService.getListings().subscribe((data) => {
         this.resultsArr = data["data"];
         this.resultsInputString = "Everything";
         this.resultsLocString = ["All locations"];
