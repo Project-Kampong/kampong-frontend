@@ -213,7 +213,7 @@ export class EditListingComponent implements OnInit {
       console.log(result);
       this.croppedImage = result.imageCropped;
 
-      this.listingImages.push(<File>(result.imageCropped as HTMLInputElement).files[0]);
+      // this.listingImages.push(<File>(result.imageCropped as HTMLInputElement).files[0]);
     });
   }
   imageCropped(event: ImageCroppedEvent) {

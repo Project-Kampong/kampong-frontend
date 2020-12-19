@@ -433,17 +433,22 @@ export class ListingIndividualComponent implements OnInit {
   sendMessage() {
     if (this.enquireMessage != '') {
       this.togglePopup();
-      console.log(this.enquireMessage);
+
+      uiStore.toggleLoading();
       this.ListingsService.sendEnquiry({
-        receiverEmail: this.ListingData.listing_email,
+        listingId: this.ListingData['listing_id'],
         subject: this.enquireTopic,
         message: this.enquireMessage,
       }).subscribe(
         (data) => {
+          uiStore.toggleLoading();
           this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.send_message.success, true),
             (err) => {
               this.SnackbarService.openSnackBar(this.SnackbarService.DialogList.send_message.error, false);
             };
+        },
+        (error) => {
+          uiStore.toggleLoading();
         },
         () => {
           setTimeout(() => {
