@@ -117,7 +117,7 @@ export class EditListingComponent implements OnInit {
         milestonesData.forEach((val) => {
           this.milestoneArr.push({
             milestone_id: val.milestone_id,
-            description: val.description,
+            description: val['milestone_description'],
             date: val.date,
           });
         });
