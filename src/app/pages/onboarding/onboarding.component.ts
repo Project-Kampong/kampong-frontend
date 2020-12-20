@@ -101,7 +101,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     );
   }
 
-  uploadFile(): void {
+  uploadFile(e: any): void {
     console.log("Upload file");
   }
 

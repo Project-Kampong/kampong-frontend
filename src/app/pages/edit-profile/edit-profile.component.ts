@@ -55,7 +55,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  uploadFile(): void {
+  uploadFile(e: any): void {
     return null;
   }
 
