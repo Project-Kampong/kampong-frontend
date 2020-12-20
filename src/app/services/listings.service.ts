@@ -6,6 +6,7 @@ import { CreateListing, CreateListingUpdates, CreateListingMilestones, CreateLis
 import { API } from "@app/interfaces/api";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
+import { AuthService } from "./auth.service";
 
 interface OptionObject {
   headers: HttpHeaders;
@@ -24,7 +25,7 @@ export class ListingsService {
     }),
   };
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private authService: AuthService) {}
 
   /**
    * Get all listings that are checked featured
@@ -183,139 +184,129 @@ export class ListingsService {
   /**
    * Creates Listing
    * @param data Listing Data
-   * @param headers authOptionsWithoutContentType
    * @event POST
    */
-  createListing(data: CreateListing, headers: OptionObject): Observable<API> {
+  createListing(data: CreateListing): Observable<API> {
     return this.httpClient.post<API>(
       this.url + "api/listings",
       data,
-      headers
+      this.authService.getAuthOptionsWithoutContentType()
     )
   }
 
   /**
    * Creates an update for a particular listing
    * @param data Update Data
-   * @param headers authOptionsWithoutContentType
    * @event POST
    */
-  createListingUpdates(data: CreateListingUpdates, headers: OptionObject): Observable<API> {
+  createListingUpdates(data: CreateListingUpdates): Observable<API> {
     return this.httpClient.post<API>(
       this.url + "api/listing-updates",
       data,
-      headers
+      this.authService.getAuthOptionsWithoutContentType()
     )
   }
 
   /**
    * Creates a milestone for a particular listing
    * @param data Milestone Data
-   * @param headers authOptions
    * @event POST
    */
-  createListingMilestones(data: CreateListingMilestones, headers: OptionObject): Observable<API> {
+  createListingMilestones(data: CreateListingMilestones): Observable<API> {
     return this.httpClient.post<API>(
       this.url + "api/milestones",
       data,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
   /**
    * Creates a hashtag for a particular listing
    * @param data Hashtag Data
-   * @param headers authOptions
    * @event POST
    */
-  createListingHashtags(data: CreateListingHashtags, headers: OptionObject): Observable<API> {
+  createListingHashtags(data: CreateListingHashtags): Observable<API> {
     return this.httpClient.post<API>(
       this.url + "api/hashtags",
       data,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
   /**
    * Creates an FAQ for a particular listing
    * @param data FAQ Data
-   * @param headers authOptions
    * @event POST
    */
-  createListingFAQ(data: CreateListingFAQ, headers: OptionObject): Observable<API> {
+  createListingFAQ(data: CreateListingFAQ): Observable<API> {
     return this.httpClient.post<API>(
       this.url + "api/faqs",
       data,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
   /**
    * Creates/Connects a location for a particular listing
    * @param data Location Data
-   * @param headers authOptions
    * @event POST
    */
-  createListingLocation(data: CreateListingLocation, headers: OptionObject): Observable<API> {
+  createListingLocation(data: CreateListingLocation): Observable<API> {
     return this.httpClient.post<API>(
       this.url + "api/listing-locations",
       data,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
   /**
    * Creates a job for a particular listing
    * @param data Job data
-   * @param headers authOptions
    * @event POST
    */
-  createListingJobs(data: CreateListingJobs, headers: OptionObject): Observable<API> {
+  createListingJobs(data: CreateListingJobs): Observable<API> {
     return this.httpClient.post<API>(
       this.url + "api/jobs",
       data,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
   /**
    * Creates a comment for a particular listing
    * @param data Comment data
-   * @param headers authOptions
    * @event POST
    */
-  createListingComments(data: CreateListingComments, headers: OptionObject): Observable<API> {
+  createListingComments(data: CreateListingComments): Observable<API> {
     return this.httpClient.post<API>(
       this.url + "api/listing-comments",
       data,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
   /**
    * Like a particular listing
    * @param listing_id Listing ID
-   * @param headers authOptions
    * @event POST
    */
-  likeListing(listing_id: string, headers: OptionObject): Observable<API> {
+  likeListing(listing_id: string): Observable<API> {
     return this.httpClient.post<API>(
       this.url + "api/likes",
       { listing_id: listing_id },
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
   /**
    * Unlike a particular listing
    * @param like_id Listing ID
-   * @param headers authOptions
    * @event DELETE
    */
-  unlikeListing(like_id: number, headers: OptionObject): Observable<API> {
+  unlikeListing(like_id: number): Observable<API> {
     return this.httpClient.delete<API>(
       this.url + "api/likes/" + like_id,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
@@ -324,14 +315,13 @@ export class ListingsService {
    * Update a particular listing
    * @param listing_id Listing ID
    * @param data Updated Listing Data
-   * @param headers authOptionsWithoutContentType
    * @event PUT
    */
-  updateListing(listing_id: string, data: UpdateListing, headers: OptionObject): Observable<API> {
+  updateListing(listing_id: string, data: UpdateListing): Observable<API> {
     return this.httpClient.put<API>(
       this.url + "api/listings/" + listing_id,
       data,
-      headers
+      this.authService.getAuthOptionsWithoutContentType()
     )
   }
 
@@ -339,14 +329,13 @@ export class ListingsService {
    * Updates a particular milestone
    * @param milestone_id Milestone ID
    * @param data Updated Milestone Data
-   * @param headers authOptions
    * @event PUT
    */
-  updateMilestone(milestone_id: number, data: UpdateListingMilestones, headers: OptionObject): Observable<API> {
+  updateMilestone(milestone_id: number, data: UpdateListingMilestones): Observable<API> {
     return this.httpClient.put<API>(
       this.url + "api/milestones/" + milestone_id,
       data,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
@@ -354,14 +343,13 @@ export class ListingsService {
    * Updates a particular FAQ
    * @param faq_id FAQ ID
    * @param data Updated FAQ Data
-   * @param headers authOptions
    * @event PUT
    */
-  updateFAQ(faq_id: number, data: UpdateListingFAQ, headers: OptionObject): Observable<API> {
+  updateFAQ(faq_id: number, data: UpdateListingFAQ): Observable<API> {
     return this.httpClient.put<API>(
       this.url + "api/faqs/" + faq_id,
       data,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
@@ -369,119 +357,112 @@ export class ListingsService {
    * Updates a particular Job
    * @param job_id Job ID
    * @param data Updated Job Data
-   * @param headers authOptions
    * @event PUT
    */
-  updateJobs(job_id: number, data: UpdateListingJobs, headers: OptionObject): Observable<API> {
+  updateJobs(job_id: number, data: UpdateListingJobs): Observable<API> {
     return this.httpClient.put<API>(
       this.url + "api/jobs/" + job_id,
       data,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
   /**
    * Deletes a particular listing
    * @param listingId Listing ID
-   * @param headers authOptions
    * @event DELETE
    */
-  removeListing(listingId: string, headers: OptionObject): Observable<API> {
+  removeListing(listingId: string): Observable<API> {
     return this.httpClient.put<API>(
       this.url + "api/listings/" + listingId + "/deactivate",
       {},
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
   /**
    * Deletes a particular milestone
    * @param milestone_id Milestone ID
-   * @param headers authOptions
    * @event DELETE
    */
-  removeMilestone(milestone_id: number, headers: OptionObject): Observable<API> {
+  removeMilestone(milestone_id: number): Observable<API> {
     return this.httpClient.delete<API>(
       this.url + "api/milestones/" + milestone_id,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
   /**
    * Deletes a particular FAQ
    * @param faq_id FAQ ID
-   * @param headers authOptions
    * @event DELETE
    */
-  removeFAQ(faq_id: number, headers: OptionObject): Observable<API> {
+  removeFAQ(faq_id: number): Observable<API> {
     return this.httpClient.delete<API>(
       this.url + "api/faqs/" + faq_id,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
   /**
    * Deletes a particular hashtag
    * @param hashtag_id Hashtag ID
-   * @param headers authOptions
    * @event DELETE 
    */
-  removeHashtags(hashtag_id: number, headers: OptionObject): Observable<API> {
+  removeHashtags(hashtag_id: number): Observable<API> {
     return this.httpClient.delete<API>(
       this.url + "api/hashtags/" + hashtag_id,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
   /**
    * Deletes a particular location connected to the listing
    * @param listing_location_id Listing Location ID
-   * @param headers authOptions
    * @event DELETE
    */
-  removeListingLocation(listing_location_id: number, headers: OptionObject): Observable<API> {
+  removeListingLocation(listing_location_id: number): Observable<API> {
     return this.httpClient.delete<API>(
       this.url + "api/listing-locations/" + listing_location_id,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 
   /**
    * Deletes a particular job
    * @param listing_job_id Job ID
-   * @param headers authOptions
    * @event DELETE
    */
-  removeListingJobs(listing_job_id: number, headers: OptionObject): Observable<API> {
+  removeListingJobs(listing_job_id: number): Observable<API> {
     return this.httpClient.delete<API>(
       this.url + "api/jobs/" + listing_job_id,
-      headers
+      this.authService.getAuthOptions()
+
     );
   }
 
   /**
    * Deletes a particular comment
    * @param comment_id Comment ID
-   * @param headers authOptions
    * @event DELETE
    */
-  removeListingComments(comment_id: number, headers: OptionObject): Observable<API> {
+  removeListingComments(comment_id: number): Observable<API> {
     return this.httpClient.delete<API>(
       this.url + "api/listing-comments/" + comment_id,
-      headers
+      this.authService.getAuthOptions()
+
     );
   }
 
   /**
    * Deletes a particular listing update
    * @param update_id Update ID
-   * @param headers authOptions
    * @event DELETE
    */
-  removeListingUpdates(update_id: number, headers: OptionObject): Observable<API> {
+  removeListingUpdates(update_id: number): Observable<API> {
     return this.httpClient.delete<API>(
       this.url + "api/listing-updates/" + update_id,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 

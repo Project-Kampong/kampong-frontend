@@ -6,6 +6,7 @@ import { API } from "@app/interfaces/api";
 // Services Import
 import { Observable } from 'rxjs';
 import { environment } from "src/environments/environment";
+import { AuthService } from "./auth.service";
 
 interface OptionObject {
   headers: HttpHeaders;
@@ -24,7 +25,7 @@ export class OrganisationsService {
     }),
   };
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private authService: AuthService) {}
 
   /**
    * Get all organisations
@@ -52,14 +53,13 @@ export class OrganisationsService {
   /**
    * Create an organisation
    * @param data Organisation Data
-   * @param headers authOptionsWithoutContentType
    * @event POST
    */
   createOrganisation(data: CreateOrganisation, headers: OptionObject): Observable<API> {
     return this.httpClient.post<API>(
       this.url + "api/organisations",
       data,
-      headers
+      this.authService.getAuthOptionsWithoutContentType()
     );
   }
 
@@ -67,27 +67,25 @@ export class OrganisationsService {
    * Update organisation details
    * @param organisationId Organisation ID
    * @param data Updated Organisation Data
-   * @param headers authOptionsWithoutContentType
    * @event PUT
    */
   updateOrganisation(organisationId: string, data: UpdateOrganisation, headers: OptionObject): Observable<API> {
     return this.httpClient.put<API>(
       this.url + "api/organisations/" + organisationId,
       data,
-      headers
+      this.authService.getAuthOptionsWithoutContentType()
     );
   }
 
   /**
    * Delete a particular organisation
    * @param organisationId Organisation ID
-   * @param headers authOptions
    * @event DELETE
    */
   removeOrganisation(organisationId: string, headers: OptionObject): Observable<API> {
     return this.httpClient.delete<API>(
       this.url + "api/organisations/" + organisationId,
-      headers
+      this.authService.getAuthOptions()
     );
   }
 

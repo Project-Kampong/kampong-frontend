@@ -1,12 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import {
-  FormGroup,
-  FormBuilder,
-  ValidationErrors,
-} from "@angular/forms";
+import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
 import { Router } from "@angular/router";
-
-declare var $: any;
 
 // Services
 import { AuthService } from "@app/services/auth.service";
@@ -27,27 +21,36 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   
   private userData: UserData = <UserData>{};
   editProfileForm: FormGroup;
-  profileData: Profile = <Profile>{};
-  isLoggedIn: boolean;
+  private profileData: Profile = <Profile>{};
+  private isLoggedIn: boolean = false;
   subscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder, private authService: AuthService, private profileService: ProfileService, private router: Router, private snackbarService: SnackbarService) {}
 
   ngOnInit() {
     this.editProfileForm = this.fb.group({ ...profileForm });
-    this.isLoggedIn = this.authService.getIsLoggedIn();
-    if (this.isLoggedIn) {
-      this.userData = this.authService.getUserDetails();
+    if (this.authService.checkCookie()) {
+      this.subscriptions.push(this.authService.getUserDataByToken().subscribe(
+        (res) => {
+          this.userData = res["data"];
+          this.subscriptions.push(this.profileService.getUserProfile(this.userData["user_id"]).subscribe(
+            (res) => {
+              this.profileData = res["data"];
+              this.editProfileForm.patchValue(this.profileData);
+              this.isLoggedIn = true;
+            },
+            (err) => {
+              console.log(err);
+            }
+          ))
+        },
+        (err) => {
+          console.log(err);
+          console.log("User is not logged in");
+          this.router.navigate(["/login"]);
+        }
+      ))
     }
-    this.subscriptions.push(this.profileService.getUserProfile(this.userData["user_id"]).subscribe(
-      (res) => {
-        this.profileData = res["data"];
-        this.editProfileForm.patchValue(this.profileData);
-      },
-      (err) => {
-        console.log(err)
-      }
-    ));
   }
 
   saveProfile() {
@@ -72,7 +75,6 @@ export class OnboardingComponent implements OnInit, OnDestroy {
             this.authService.getAuthOptionsWithoutContentType()
           ).subscribe(
             (res) => {
-              //this.authService.LoginResponse.emit();
               this.router.navigate(["/profile"]);
             },
             (err) => {

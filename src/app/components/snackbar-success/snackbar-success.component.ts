@@ -1,11 +1,6 @@
-import { Component, Inject, Input } from "@angular/core";
-import { AuthService } from "@app/services/auth.service";
+import { Component, Inject } from "@angular/core";
 
-import {
-  MatSnackBarConfig,
-  MAT_SNACK_BAR_DATA,
-  MatSnackBarRef,
-} from "@angular/material";
+import { MAT_SNACK_BAR_DATA, MatSnackBarRef } from "@angular/material";
 
 @Component({
   selector: "app-snackbar-success",
@@ -13,9 +8,7 @@ import {
   styleUrls: ["./snackbar-success.component.scss"],
 })
 export class SnackbarSuccessComponent {
-  constructor(
-    public AuthService: AuthService,
-    public snackBarRef: MatSnackBarRef<SnackbarSuccessComponent>,
-    @Inject(MAT_SNACK_BAR_DATA) public data: any
-  ) {}
+  
+  constructor(public snackBarRef: MatSnackBarRef<SnackbarSuccessComponent>, @Inject(MAT_SNACK_BAR_DATA) private data: string) {}
+  
 }

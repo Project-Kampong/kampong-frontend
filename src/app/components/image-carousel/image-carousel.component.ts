@@ -7,7 +7,7 @@ declare var $: any;
   templateUrl: "./image-carousel.component.html",
   styleUrls: ["./image-carousel.component.scss"],
 })
-export class ImageCarousel implements OnInit {
+export class ImageCarouselComponent implements OnInit {
   constructor() {}
 
   sliderSlicked = false;

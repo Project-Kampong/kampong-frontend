@@ -73,15 +73,25 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
 
     window.scroll(0, 0);
     this.listingId = this.route.snapshot.params["id"];
-    this.isLoggedIn = this.authService.getIsLoggedIn();
-    if (this.isLoggedIn) {
-      this.userData = this.authService.getUserDetails();
+
+    if (this.authService.checkCookie()) {
+      this.subscriptions.push(this.authService.getUserDataByToken().subscribe(
+        (res) => {
+          this.userData = res["data"];
+          this.isLoggedIn = true;
+        },
+        (err) => {
+          console.log(err);
+          console.log("User is not logged in");
+        }
+      ))
     }
 
     $(".navigation-tabs li").on("click", function () {
       $(".navigation-tabs li").removeClass("active");
       $(this).addClass("active");
     });
+    
     this.tabs_selected("story");
 
     this.subscriptions.push(this.listingsService.getSelectedListing(this.listingId).subscribe(
@@ -206,7 +216,6 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
         description: this.updateInput,
         listing_id: this.listingId
       },
-      this.authService.getAuthOptionsWithoutContentType()
     )).subscribe(
       (data) => {
         this.updateImages = [];
@@ -230,7 +239,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
 
   deleteUpdate(updates: ListingUpdates): void {
     if (confirm("Delete update?")) {
-      this.listingsService.removeListingUpdates(updates.listing_update_id, this.authService.getAuthOptions()).subscribe(
+      this.listingsService.removeListingUpdates(updates.listing_update_id).subscribe(
         (data) => {
           this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_updates.success, true);
         },
@@ -292,7 +301,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
     this.listingsService.createListingComments({
       listing_id: this.listingId,
       comment: this.commentInput
-    }, this.authService.getAuthOptions()).subscribe(
+    }).subscribe(
       (data) => {
         this.commentInput = "";
         this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_comments.success, true);
@@ -313,7 +322,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
       listing_id: this.listingId,
       comment: this.replyInput,
       reply_to_id: comment.listing_comment_id,
-    }, this.authService.getAuthOptions()).subscribe(
+    }).subscribe(
       (data) => {
         this.replyInput = "";
         this.snackbarService.openSnackBar(this.snackbarService.DialogList.upload_comments.success, true);
@@ -331,7 +340,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
 
   deleteComment(comment: ListingComments) {
     if (confirm("Delete comment?")) {
-      this.listingsService.removeListingComments(comment.listing_comment_id, this.authService.getAuthOptions()).subscribe(
+      this.listingsService.removeListingComments(comment.listing_comment_id).subscribe(
         (data) => {
           this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_comments.success, true);
         },
@@ -374,7 +383,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
       return;
     }
     if (!this.isLiked) {
-      this.subscriptions.push(this.listingsService.likeListing(this.listingId, this.authService.getAuthOptions()).subscribe(
+      this.subscriptions.push(this.listingsService.likeListing(this.listingId).subscribe(
         (data) => {
           this.likesArr.push({ like_id: data["data"]["like_id"], user_id: data["data"]["user_id"]});
           this.isLiked = true;
@@ -388,7 +397,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
         }
       ))
     } else {
-      this.subscriptions.push(this.listingsService.unlikeListing(this.likeId, this.authService.getAuthOptions()).subscribe(
+      this.subscriptions.push(this.listingsService.unlikeListing(this.likeId).subscribe(
         (data) => {
           this.likesArr.splice(this.likesArr.map(like => like["user_id"]).indexOf(this.userData["user_id"]), 1);
           this.isLiked = false;

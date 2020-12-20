@@ -22,18 +22,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    public authService: AuthService,
-    public snackbarService: SnackbarService,
+    private authService: AuthService,
+    private snackbarService: SnackbarService,
     private cookieService: CookieService
   ) {}
 
   registerForm: FormGroup;
-  //showCheckMail = false;
-  //registerError = false;
   showLoading: boolean = false;
 
   ngOnInit() {
-    this.registerForm = this.fb.group(registerForm);
+    this.registerForm = this.fb.group({...registerForm});
   }
 
   registerUser(data: UserRegisterData): void {
@@ -42,7 +40,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.authService.registerUser(data).subscribe(
       (res) => {
         this.cookieService.set("token", res["token"]);
-        this.authService.setUserDetails();
         this.snackbarService.openSnackBar(this.snackbarService.DialogList.register.success, true);
       },
       (err) => {

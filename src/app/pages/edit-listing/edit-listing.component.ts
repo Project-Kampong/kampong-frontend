@@ -239,18 +239,18 @@ export class EditListingComponent implements OnInit, OnDestroy {
           listing_id: this.listingId,
           milestone_description: val.milestone_description,
           date: val.date
-        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        }).pipe(catchError(error => of(error))));
       } else if (val.milestone_id && val.date !== null && val.milestone_description !== "") {
         checkMilestones.push(val.milestone_id);
         milestoneEditObservables.push(this.listingsService.updateMilestone(val.milestone_id, {
           milestone_description: val.milestone_description,
           date: val.date,
-        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        }).pipe(catchError(error => of(error))));
       }
     })
     this.originalMilestoneIds.forEach((val) => {
       if (!checkMilestones.includes(val)) {
-        milestoneEditObservables.push(this.listingsService.removeMilestone(val, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        milestoneEditObservables.push(this.listingsService.removeMilestone(val).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(milestoneEditObservables);
@@ -264,14 +264,14 @@ export class EditListingComponent implements OnInit, OnDestroy {
         hashtagsEditObservables.push(this.listingsService.createListingHashtags({
           listing_id: this.listingId,
           tag: val.tag,
-        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        }).pipe(catchError(error => of(error))));
       } else {
         checkHashtags.push(val.hashtag_id);
       }
     })
     this.originalHashtags.forEach((val) => {
       if (!checkHashtags.includes(val)) {
-        hashtagsEditObservables.push(this.listingsService.removeHashtags(val, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        hashtagsEditObservables.push(this.listingsService.removeHashtags(val).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(hashtagsEditObservables);
@@ -286,18 +286,18 @@ export class EditListingComponent implements OnInit, OnDestroy {
           listing_id: this.listingId,
           job_title: val.job_title,
           job_description: val.job_description,
-        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        }).pipe(catchError(error => of(error))));
       } else if (val.job_id && val.job_title !== "" && val.job_description !== "") {
         checkJobs.push(val.job_id);
         jobEditObservables.push(this.listingsService.updateJobs(val.job_id, {
           job_title: val.job_title,
           job_description: val.job_description
-        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        }).pipe(catchError(error => of(error))));
       }
     })
     this.originalJobIds.forEach((val) => {
       if (!checkJobs.includes(val)) {
-        jobEditObservables.push(this.listingsService.removeListingJobs(val, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        jobEditObservables.push(this.listingsService.removeListingJobs(val).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(jobEditObservables);
@@ -312,18 +312,18 @@ export class EditListingComponent implements OnInit, OnDestroy {
           listing_id: this.listingId,
           question: val.question,
           answer: val.answer,
-        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        }).pipe(catchError(error => of(error))));
       } else if (val.faq_id && val.question !== "" && val.answer !== "") {
         checkFaqs.push(val.faq_id);
         faqEditObservables.push(this.listingsService.updateFAQ(val.faq_id, {
           question: val.question,
           answer: val.answer,
-        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        }).pipe(catchError(error => of(error))));
       }
     })
     this.originalFaqIds.forEach((val) => {
       if (!checkFaqs.includes(val)) {
-        faqEditObservables.push(this.listingsService.removeFAQ(val, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        faqEditObservables.push(this.listingsService.removeFAQ(val).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(faqEditObservables);
@@ -355,7 +355,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
       listing_status, pics, locations,
     };
 
-    this.subscriptions.push((await this.listingsService.updateListing(this.listingId, this.listingData, this.authService.getAuthOptionsWithoutContentType()).subscribe(
+    this.subscriptions.push((await this.listingsService.updateListing(this.listingId, this.listingData).subscribe(
       (res) => {},
       (err) => {
         console.log(err);
@@ -392,7 +392,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
 
   removeListing(): void {
     if (confirm("Are you sure you want to delete " + this.listingForm.value.title + "? This action is currently not reversible.")) {
-      this.listingsService.removeListing(this.listingId, this.authService.getAuthOptions()).subscribe(
+      this.listingsService.removeListing(this.listingId).subscribe(
         (data) => {
           console.log(data);
           this.snackbarService.openSnackBar(

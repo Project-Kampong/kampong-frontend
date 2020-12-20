@@ -56,14 +56,14 @@
           class="btn yellow-btn"
           >Start an Initiative</a
         >
-        <div class="user-info" *ngIf="isLoggedIn">
+        <div class="user-info" *ngIf="isLoggedIn" (click)="toggleIsProfileDropdownShown($event)">
           <div *ngIf="profileData !== null" class="profile-image">
             <img src="{{ profileData['profile_picture'] ? profileData['profile_picture'] : 'https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png'}}" />
           </div>
           <p *ngIf="profileData !== null" class="username">
             {{ profileData["nickname"] }}
           </p>
-          <span class="dropdown-icon"></span>
+          <span class="dropdown-icon" [ngClass]="{'active': isProfileDropdownShown}" (click)="toggleClass($event)"></span>
         </div>
         <a
           *ngIf="!isLoggedIn"
@@ -71,7 +71,7 @@
           class="btn yellow-btn ml-3"
           >LOGIN</a
         >
-        <div class="profile-dropdown">
+        <div class="profile-dropdown" *ngIf="isLoggedIn" [ngClass]="{'active': isProfileDropdownShown}">
           <ul>
             <li class="mobile-show">
               <a href="/about/" target="_blank">What We Do</a>

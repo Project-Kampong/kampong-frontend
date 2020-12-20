@@ -8,9 +8,8 @@ import { SnackbarService } from "@app/services/snackbar.service";
 
 // Interface
 import { Subscription } from "rxjs";
-import { UserLoginData } from "@app/interfaces/auth";
 import { CookieService } from "ngx-cookie-service";
-import { UserLoginForm } from "@app/util/forms/login";
+import { userLoginForm } from "@app/util/forms/login";
 
 @Component({
   selector: "app-login",
@@ -31,19 +30,21 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   loginCredentials: FormGroup;
   loginErrorMsg = false;
+
   ngOnInit() {
 
     this.loginCredentials = this.fb.group({
-      ...UserLoginForm,
+      ...userLoginForm,
     });
   }
 
-  loginUser(data: UserLoginData) {
-    //check login details first
-    this.subscriptions.push(this.authService.loginUser(data).subscribe(
+  loginUser(): void {
+    
+    const loginDetails = this.loginCredentials.value;
+
+    this.subscriptions.push(this.authService.loginUser(loginDetails).subscribe(
       (res) => {
         this.cookieService.set("token", res["token"]);
-        this.authService.setUserDetails();
         this.snackbarService.openSnackBar(this.snackbarService.DialogList.login.success, true);
       },
       (err) => {

@@ -23,26 +23,35 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   
   private userData: UserData = <UserData>{};
   editProfileForm: FormGroup;
-  profileData: Profile = <Profile>{};
-  isLoggedIn: boolean;
+  private profileData: Profile = <Profile>{};
+  private isLoggedIn: boolean;
   subscriptions: Subscription[] = [];
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private profileService: ProfileService,
-     private router: Router, private snackbarService: SnackbarService) {}
+  constructor(private fb: FormBuilder, private authService: AuthService, private profileService: ProfileService) {}
 
   ngOnInit() {
     this.editProfileForm = this.fb.group({...profileForm});
-    this.userData = this.authService.getUserDetails();
-    this.isLoggedIn = this.authService.getIsLoggedIn();
-    this.subscriptions.push(this.profileService.getUserProfile(this.userData["user_id"]).subscribe(
-      (res) => {
-        this.profileData = res["data"];
-        this.editProfileForm.patchValue(this.profileData);
-      },
-      (err) => {
-        console.log(err);
-      }
-    ));
+    if (this.authService.checkCookie()) {
+      this.subscriptions.push(this.authService.getUserDataByToken().subscribe(
+        (res) => {
+          this.userData = res["data"];
+          this.subscriptions.push(this.profileService.getUserProfile(this.userData["user_id"]).subscribe(
+            (res) => {
+              this.profileData = res["data"];
+              this.editProfileForm.patchValue(this.profileData);
+              this.isLoggedIn = true;
+            },
+            (err) => {
+              console.log(err);
+            }
+          ))
+        },
+        (err) => {
+          console.log(err);
+          console.log("User is not logged in");
+        }
+      ))
+    }
   }
 
   saveProfile() {

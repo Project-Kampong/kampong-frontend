@@ -183,7 +183,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           listing_id: this.listingId,
           milestone_description: val.milestone_description,
           date: val.date,
-        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        }).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(milestoneCreateObservables);
@@ -195,7 +195,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       hashtagsCreateObservables.push(this.listingsService.createListingHashtags({
         listing_id: this.listingId,
         tag: val,
-      }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+      }).pipe(catchError(error => of(error))));
     })
     return forkJoin(hashtagsCreateObservables);
   }
@@ -208,7 +208,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           listing_id: this.listingId,
           job_title: val.job_title,
           job_description: val.job_description,
-        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        }).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(jobsCreateObservables);
@@ -222,7 +222,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           listing_id: this.listingId,
           question: val.question,
           answer: val.answer,
-        }, this.authService.getAuthOptions()).pipe(catchError(error => of(error))));
+        }).pipe(catchError(error => of(error))));
       }
     })
     return forkJoin(faqCreateObservables);
@@ -256,7 +256,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       listing_status, pics, locations
     };
 
-    this.subscriptions.push((await this.listingsService.createListing(this.listingData, this.authService.getAuthOptionsWithoutContentType()).subscribe(
+    this.subscriptions.push((await this.listingsService.createListing(this.listingData).subscribe(
       (res) => {
         console.log(res);
         this.listingId = res["data"]["listing_id"];

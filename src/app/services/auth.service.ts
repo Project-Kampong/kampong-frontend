@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CookieService } from "ngx-cookie-service";
 import { environment } from "./../../environments/environment";
@@ -6,7 +6,7 @@ import { environment } from "./../../environments/environment";
 // Interface
 import { UserData } from "@app/interfaces/user";
 import { API } from "@app/interfaces/api";
-import { Observable, Subscription } from "rxjs";
+import { Observable } from "rxjs";
 import { UserLoginData, UserRegisterData } from "@app/interfaces/auth";
 
 interface OptionObject {
@@ -67,8 +67,7 @@ export class AuthService {
   /**
    * Private method which sets token
    */
-  private setTokenInAuthOptions(): void {
-    const token = this.cookieService.get("token");
+  private setTokenInAuthOptions(token: string): void {
     this.authOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -86,27 +85,22 @@ export class AuthService {
    * Logout the current user
    */
   logoutUser(): void {
+    this.cookieService.delete("token", "/");
     this.isLoggedIn = false;
     this.userData = <UserData>{};
     this.authOptions = <OptionObject>{};
+    window.location.href = "/login";
   }
 
   /**
-   * Set user details
+   * Get user details
    */
-  setUserDetails(): Subscription {
-    this.setTokenInAuthOptions();
+  getUserDataByToken(): Observable<API> {
+    const token = this.cookieService.get("token");
+    this.setTokenInAuthOptions(token);
     return this.httpClient.get<API>(
       this.url + "api/auth/me",
       this.authOptions
-    ).subscribe(
-      (res) => {
-        this.userData = res["data"];
-        this.isLoggedIn = true;
-      },
-      (err) => {
-        console.log(err);
-      }
     )
   }
 
@@ -125,21 +119,47 @@ export class AuthService {
   }
 
   /**
-   * Get details of logged in user
+   * Check cookie and set headers if it exists
    */
-  getUserDetails(): UserData {
-    return this.userData ? this.userData : null;
+  checkCookieAndSetHeaders(): void {
+    const token = this.cookieService.get("token");
+    if (token && token !== null && token !== "") {
+      this.setTokenInAuthOptions(token);
+    }
   }
 
   /**
-   * Get is logged in status
+   * Check cookie if it exists
+   */
+  checkCookie(): boolean {
+    const token = this.cookieService.get("token");
+    return token && token!== null && token !== "";
+  }
+
+  /**
+   * Deprecated
    */
   getIsLoggedIn(): boolean {
     return this.isLoggedIn;
   }
 
+  /**
+   * Deprecated
+   */
+  getUserData() {
+    return this.userData;
+  }
+  
+  /**
+   * Deprecated
+   */
+  setUserData(userData: UserData): void {
+    this.isLoggedIn = true;
+    this.userData = userData;
+  }
 
   /*
+  
   userRegister(data) {
     return this.httpClient
       .post<API>(this.url + "api/auth/register", data, this.options)

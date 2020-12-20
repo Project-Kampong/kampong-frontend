@@ -21,11 +21,11 @@
         </div> -->
         <div>
           <p class="small-badge">{{ listing.category }}</p>
-          <p class="title medium-s">{{ listing.title }}</p>
+          <p class="title medium-s">{{ listing.listing_title }}</p>
           <p class="tagline light-xs">{{ listing.tagline }}</p>
         </div>
 
-        <div *ngIf="listing.locations">
+        <div *ngIf="listing.locations.length > 0">
           <div class="locationtags-list">
             <div class="location-icon"></div>
             <ul>

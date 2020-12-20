@@ -14,7 +14,6 @@ export class ListingCardsComponent {
   @Input() colNum;
 
   selectedCard(data) {
-    console.log(data);
     this.router.navigate(["/listing/" + data.listing_id]);
   }
 }

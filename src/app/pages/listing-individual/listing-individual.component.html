@@ -9,7 +9,7 @@
       <div class="col-lg-8">
         <app-image-carousel
           *ngIf="pics && pics.length > 0"
-          [SliderImages]="pics"
+          [sliderImages]="pics"
         ></app-image-carousel>
       </div>
       <div class="col-lg-4">
@@ -246,7 +246,7 @@
           </div>
           <div class="card-content">
             <app-update-carousel
-              [SliderImages]="update.pics"
+              [sliderImages]="update.pics"
             ></app-update-carousel>
             <div class="text-content">
               <p class="light-s">

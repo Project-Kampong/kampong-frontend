@@ -11,12 +11,9 @@ import { CookieService } from "ngx-cookie-service";
 export class AppComponent implements OnInit {
   title = "Kampong-frontend";
 
-  constructor(private cookieService: CookieService, private authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    const token = this.cookieService.get("token");
-    if (token) {
-      this.authService.setUserDetails();
-    }
+    this.authService.checkCookieAndSetHeaders();
   }
 }

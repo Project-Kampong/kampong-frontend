@@ -54,8 +54,7 @@
   -->
   </div>
   <app-listing-cards
-    *ngIf="listingsService.listingData"
-    [listingData]="listingsService.listingData"
+    [listingData]="listingList"
     [colNum]="4"
   ></app-listing-cards>
   <div class="category-section">
@@ -65,7 +64,6 @@
     </p>
   </div>
   <app-organisation-cards
-    *ngIf="organisationList"
     [organisationData]="organisationList"
     [colNum]="4"
   ></app-organisation-cards>

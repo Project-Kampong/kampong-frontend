@@ -25,7 +25,7 @@ import { AppComponent } from "./app.component";
 import { BannerComponent } from "./components/banner/banner.component";
 import { MainSearchComponent } from "./components/main-search/main-search.component";
 import { ListingCardsComponent } from "./components/listing-cards/listing-cards.component";
-import { ImageCarousel } from "./components/image-carousel/image-carousel.component";
+import { ImageCarouselComponent } from "./components/image-carousel/image-carousel.component";
 import { UpdateCarouselComponent } from "./components/update-carousel/update-carousel.component";
 import { MilestonesComponent } from "./components/milestones/milestones.component";
 import { ContentWrapper } from "./layout/content-wrapper/content-wrapper.component";
@@ -59,7 +59,7 @@ import { EditOrganisationCardsComponent } from './components/edit-organisation-c
     ListingCardsComponent,
     ListingIndividualComponent,
     OrganisationIndividualComponent,
-    ImageCarousel,
+    ImageCarouselComponent,
     UpdateCarouselComponent,
     MilestonesComponent,
     UserProfileComponent,
