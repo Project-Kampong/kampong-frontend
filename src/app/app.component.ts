@@ -40,8 +40,6 @@ export class AppComponent implements OnInit {
     });
 
     this.LocationService.getAllLocations().subscribe((data) => {
-      console.log(data);
-
       let locations = data.data;
       let sortedLocations = _(locations)
         .groupBy((location) => location['zone'])

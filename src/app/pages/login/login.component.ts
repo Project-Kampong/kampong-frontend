@@ -52,6 +52,6 @@ export class LoginComponent implements OnInit {
         this.AuthService.userLogin(this.loginCredentials.value);
       }
       uiStore.toggleLoading();
-    }, 4000);
+    }, 2000);
   }
 }

@@ -75,9 +75,6 @@ export class ListingIndividualComponent implements OnInit {
     window.scroll(0, 0);
     this.listingId = this.route.snapshot.params['id'];
     this.getInitData();
-    console.log('init');
-    console.log(this.ListingData);
-    console.log('hi');
 
     // UI Components
     $('.navigation-tabs li').on('click', function () {
@@ -90,7 +87,6 @@ export class ListingIndividualComponent implements OnInit {
   getInitData() {
     // Static
     this.ListingsService.getAllLocations().subscribe((data) => {
-      console.log(data);
       this.locationList = data['data'];
     });
 
@@ -149,7 +145,6 @@ export class ListingIndividualComponent implements OnInit {
 
         this.ListingsService.getSelectedListingJobs(this.listingId).subscribe((data) => {
           this.SkillsList = data['data'];
-          console.log(this.SkillsList);
         });
 
         // Get Hashtags
@@ -205,7 +200,6 @@ export class ListingIndividualComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
     this.fileLimitChecker(true);
     this.fileArr.push(this.selectedFile);
-    console.log(this.fileArr);
   }
 
   removeFile(i) {
@@ -236,10 +230,8 @@ export class ListingIndividualComponent implements OnInit {
     for (var i = 0; i < this.fileArr.length; i++) {
       updatesFd.append('pic' + (i + 1), this.fileArr[i].name);
       updatesFd.append('pics', this.fileArr[i]);
-      console.log('pic' + (i + 1));
     }
     this.ListingsService.CreateListingUpdates(updatesFd).subscribe((data) => {
-      console.log(data);
       this.fileArr = [];
       this.fileDisplayArr = [];
       this.updatesDescription = '';
