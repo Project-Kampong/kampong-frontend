@@ -101,6 +101,10 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     );
   }
 
+  uploadFile(): void {
+    console.log("Upload file");
+  }
+
 
   getFormValidationErrors() {
     var error = false;

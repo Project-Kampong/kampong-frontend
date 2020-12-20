@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { ListingsService } from "@app/services/listings.service";
-import { AuthService } from "@app/services/auth.service";
 import { ProfileService } from "@app/services/profile.service";
 
 // Interface

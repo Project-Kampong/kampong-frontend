@@ -22,7 +22,7 @@ export class ContentWrapper implements OnInit, OnDestroy {
 
   isProfileDropdownShown: boolean = false;
 
-  toggleIsProfileDropdownShown(): void {
+  toggleIsProfileDropdownShown(e: any): void {
     this.isProfileDropdownShown = !this.isProfileDropdownShown;
   }
 

@@ -63,7 +63,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
   enquireTopic: string = "";
   subscriptions: Subscription[] = [];
   isLoggedIn: boolean;
-  private userData: UserData = <UserData>{};
+  userData: UserData = <UserData>{};
 
   constructor( private router: Router, private route: ActivatedRoute, private listingsService: ListingsService,
     private authService: AuthService, private snackbarService: SnackbarService, private emailService: EmailService

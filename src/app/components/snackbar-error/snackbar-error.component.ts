@@ -8,6 +8,6 @@ import { MAT_SNACK_BAR_DATA, MatSnackBarRef } from "@angular/material";
 })
 export class SnackbarErrorComponent {
 
-  constructor(public snackBarRef: MatSnackBarRef<SnackbarErrorComponent>, @Inject(MAT_SNACK_BAR_DATA) data: string) {}
+  constructor(public snackBarRef: MatSnackBarRef<SnackbarErrorComponent>, @Inject(MAT_SNACK_BAR_DATA) public data: string) {}
 
 }

@@ -9,9 +9,9 @@
                 <img src="{{ profileData.profile_picture }}" />
               </div>
               <div class="user-details">
-                <p class="name">{{ ProfileDetails.nickname }}</p>
+                <p class="name">{{ profileData.nickname }}</p>
                 <p *ngIf="profileData.occupation != null" class="position">
-                  {{ ProfileDetails.occupation }}
+                  {{ profileData.occupation }}
                 </p>
                 <p *ngIf="profileData.occupation == null" class="position">
                   Newbie
