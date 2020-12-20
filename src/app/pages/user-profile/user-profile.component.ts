@@ -54,28 +54,31 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         (err) => {
           console.log(err);
           console.log("User is not logged in");
+        },
+        () => {
+          this.subscriptions.push(this.userService.getLikedListing(this.userData["user_id"]).subscribe(
+            (res) => {
+              this.likeCount = res["count"];
+              this.likedArr = res["data"];
+            },
+            (err) => {
+              console.log(err);
+            }
+          ));
+          this.subscriptions.push(this.userService.getOwnedListings(this.userData["user_id"]).subscribe(
+            (res) => {
+              res["data"].map((x) => {
+                if (x.deleted_on === null) {
+                  this.startedArr.push(x);
+                }
+              })
+            }
+          ));
         }
       ))
     }
 
-    this.subscriptions.push(this.userService.getLikedListing(this.userData["user_id"]).subscribe(
-      (res) => {
-        this.likeCount = res["count"];
-        this.likedArr = res["data"];
-      },
-      (err) => {
-        console.log(err);
-      }
-    ));
-    this.subscriptions.push(this.userService.getOwnedListings(this.userData["user_id"]).subscribe(
-      (res) => {
-        res["data"].map((x) => {
-          if (x.deleted_on === null) {
-            this.startedArr.push(x);
-          }
-        })
-      }
-    ));
+
   }
 
   ngOnDestroy() {

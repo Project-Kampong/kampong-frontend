@@ -1,4 +1,4 @@
-<section *ngIf="profileDetails != null" class="profile-display">
+<section *ngIf="profileData != null" class="profile-display">
   <div class="container d-flex flex-wrap bg-colored-mobile">
     <div class="col-lg-4 pl-lg-0 pr-lg-5">
       <div class="bg-colored profile-item-container">
@@ -6,14 +6,14 @@
           <div class="sticky-profile pt-lg-3">
             <div class="d-flex">
               <div class="profile-image">
-                <img src="{{ profileDetails.profile_picture }}" />
+                <img src="{{ profileData.profile_picture }}" />
               </div>
               <div class="user-details">
-                <p class="name">{{ profileDetails.nickname }}</p>
-                <p *ngIf="profileDetails.occupation != null" class="position">
-                  {{ profileDetails.occupation }}
+                <p class="name">{{ profileData.nickname }}</p>
+                <p *ngIf="profileData.occupation != null" class="position">
+                  {{ profileData.occupation }}
                 </p>
-                <p *ngIf="profileDetails.occupation == null" class="position">
+                <p *ngIf="profileData.occupation == null" class="position">
                   Newbie
                 </p>
               </div>
@@ -41,10 +41,10 @@
     <div class="col-12 col-lg-8">
       <div class="profile-item-container">
         <div class="profile-item pt-lg-4" id="profile">
-          <div *ngIf="profileDetails.about !== null">
+          <div *ngIf="profileData.about !== null">
             <h2>About</h2>
             <p class="light-s">
-              {{ profileDetails.about }}
+              {{ profileData.about }}
             </p>
           </div>
         </div>
@@ -73,7 +73,7 @@
         </div>
 
         <div class="profile-item" id="started">
-          <div *ngIf="startedArr.length != 0">
+          <div *ngIf="startedArr.length > 0">
             <h2>Initiatives I've Started</h2>
             <app-edit-listing-cards
               [listingData]="startedArr"
@@ -83,7 +83,7 @@
         </div>
 
         <div class="profile-item" id="liked">
-          <div *ngIf="likedArr.length != 0">
+          <div *ngIf="likedArr.length > 0">
             <h2>Initiatives I've Liked</h2>
             <app-listing-cards
               [listingData]="likedArr"
@@ -93,7 +93,7 @@
         </div>
 
         <div class="profile-item" id="org">
-          <div *ngIf="orgArr.length != 0">
+          <div *ngIf="orgArr.length > 0">
             <h2>My Organisations</h2>
             <app-edit-organisation-cards
               [organisationData]="orgArr"
