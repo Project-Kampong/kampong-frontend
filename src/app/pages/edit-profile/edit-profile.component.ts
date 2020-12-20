@@ -1,13 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
-import { Router } from "@angular/router";
 
 declare var $: any;
 
 // Services
 import { AuthService } from "@app/services/auth.service";
 import { ProfileService } from "@app/services/profile.service";
-import { SnackbarService } from "@app/services/snackbar.service";
 // Interface
 import { Profile } from "@app/interfaces/profile";
 import { profileForm } from "@app/util/forms/profile";
@@ -23,9 +21,12 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   
   private userData: UserData = <UserData>{};
   editProfileForm: FormGroup;
-  private profileData: Profile = <Profile>{};
-  private isLoggedIn: boolean;
+  profileData: Profile = <Profile>{};
+  isLoggedIn: boolean;
   subscriptions: Subscription[] = [];
+
+  oldpassword: string = "";
+  newpassword: string = "";
 
   constructor(private fb: FormBuilder, private authService: AuthService, private profileService: ProfileService) {}
 
@@ -52,6 +53,20 @@ export class EditProfileComponent implements OnInit, OnDestroy {
         }
       ))
     }
+  }
+
+  uploadFile(): void {
+    return null;
+  }
+
+  getFormValidationErrors(): boolean {
+    Object.keys(this.editProfileForm.controls).forEach((key) => {
+      const controlErrors: ValidationErrors = this.editProfileForm.get(key).errors;
+      if (controlErrors != null) {
+        return true;
+      }
+    });
+    return false;
   }
 
   saveProfile() {

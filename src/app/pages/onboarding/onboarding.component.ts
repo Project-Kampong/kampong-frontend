@@ -21,8 +21,8 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   
   private userData: UserData = <UserData>{};
   editProfileForm: FormGroup;
-  private profileData: Profile = <Profile>{};
-  private isLoggedIn: boolean = false;
+  profileData: Profile = <Profile>{};
+  isLoggedIn: boolean = false;
   subscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder, private authService: AuthService, private profileService: ProfileService, private router: Router, private snackbarService: SnackbarService) {}

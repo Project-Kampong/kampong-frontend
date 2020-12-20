@@ -37,8 +37,8 @@
 
             <div class="button-container">
               <div *ngIf="
-                authService.isLoggedIn &&
-                createdBy == authService.LoggedInUserID;
+                isLoggedIn &&
+                createdBy === userData['user_id'];
                 else isNotOwner">
                   <button class="primary-button" (click)="editListing(this.listingId)">
                     Edit this listing
@@ -166,8 +166,8 @@
     <div class="tabs-content" id="updates">
       <div
         *ngIf="
-          authService.isLoggedIn &&
-          createdBy == authService.LoggedInUserID
+          isLoggedIn &&
+          createdBy === userData['user_id']
         "
         class="updates-input"
       >
@@ -256,8 +256,8 @@
           </div>
           <div
             *ngIf="
-              authService.isLoggedIn == true &&
-              createdBy == authService.LoggedInUserID
+              isLoggedIn&&
+              createdBy === user_data['user_id']
             "
             class="d-flex justify-content-end p-1"
           >
@@ -270,7 +270,7 @@
     </div>
     <!-- Comments -->
     <div class="tabs-content" id="comments">
-      <div *ngIf="authService.isLoggedIn == true" class="comments-input">
+      <div *ngIf="isLoggedIn" class="comments-input">
         <mat-form-field class="full-width">
           <mat-label>Comments</mat-label>
           <textarea
@@ -328,7 +328,7 @@
                 Reply
               </button>
               <button
-                *ngIf="comment.user_id == authService.LoggedInUserID"
+                *ngIf="comment.user_id == userData['user_id']"
                 class="delete-btn btn"
                 (click)="deleteComment(comment)"
               >
@@ -336,7 +336,7 @@
               </button>
               <div
                 *ngIf="
-                  authService.isLoggedIn == true && comment.openbox == true
+                  isLoggedIn && comment.openbox == true
                 "
                 class="comments-input reply-input mt-2"
               >
@@ -405,7 +405,7 @@
                     </p>
                   </div>
                   <button
-                    *ngIf="reply.user_id == authService.LoggedInUserID"
+                    *ngIf="reply.user_id === userData['user_id']"
                     class="delete-btn btn"
                     (click)="deleteComment(reply)"
                   >

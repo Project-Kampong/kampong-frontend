@@ -63,7 +63,7 @@
           <p *ngIf="profileData !== null" class="username">
             {{ profileData["nickname"] }}
           </p>
-          <span class="dropdown-icon" [ngClass]="{'active': isProfileDropdownShown}" (click)="toggleClass($event)"></span>
+          <span class="dropdown-icon" [ngClass]="{'active': isProfileDropdownShown}" (click)="toggleIsProfileDropdownShown($event)"></span>
         </div>
         <a
           *ngIf="!isLoggedIn"

@@ -16,11 +16,11 @@ export class ContentWrapper implements OnInit, OnDestroy {
   constructor(private authService: AuthService, private profileService: ProfileService) {}
 
   private userData: UserData = <UserData>{};
-  private profileData: Profile = <Profile>{};
-  private isLoggedIn: boolean = false;
+  profileData: Profile = <Profile>{};
+  isLoggedIn: boolean = false;
   subscriptions: Subscription[] = [];
 
-  private isProfileDropdownShown: boolean = false;
+  isProfileDropdownShown: boolean = false;
 
   toggleIsProfileDropdownShown(): void {
     this.isProfileDropdownShown = !this.isProfileDropdownShown;

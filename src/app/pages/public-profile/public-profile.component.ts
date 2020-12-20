@@ -20,7 +20,6 @@ export class PublicProfileComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService,
     private profileService: ProfileService
   ) {}
 

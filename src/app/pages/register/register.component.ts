@@ -5,7 +5,6 @@ import { SnackbarService } from "@app/services/snackbar.service";
 
 import { AuthService } from "@app/services/auth.service";
 import { Router } from "@angular/router";
-import { UserRegisterData } from "@app/interfaces/auth";
 import { Subscription } from "rxjs";
 import { CookieService } from "ngx-cookie-service";
 import { registerForm } from "@app/util/forms/register";
@@ -34,10 +33,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.registerForm = this.fb.group({...registerForm});
   }
 
-  registerUser(data: UserRegisterData): void {
+  registerUser(): void {
     //check input
     this.showLoading = true;
-    this.subscriptions.push(this.authService.registerUser(data).subscribe(
+    this.subscriptions.push(this.authService.registerUser(this.registerForm.value).subscribe(
       (res) => {
         this.cookieService.set("token", res["token"]);
         this.snackbarService.openSnackBar(this.snackbarService.DialogList.register.success, true);
