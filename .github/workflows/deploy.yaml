@@ -19,4 +19,4 @@ jobs:
           USERNAME: root
           PORT: 22
           KEY: ${{ secrets.SSHKEY }}
-          script: ~/deployment-scripts/backend-script/development/update-backend.sh
+          script: ~/deployment-scripts/frontend-script/development/update-serve-frontend.sh
