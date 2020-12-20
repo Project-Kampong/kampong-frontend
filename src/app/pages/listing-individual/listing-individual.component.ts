@@ -109,9 +109,6 @@ export class ListingIndividualComponent implements OnInit {
         this.ListingData.outcome =
           this.ListingData['outcome'] != null ? this.ListingData['outcome'].replace(/&lt;/g, '<').replace(/<a/g, "<a target='_blank'") : null;
 
-        console.log('sdadada');
-        console.log(this.ListingData);
-        console.log('hi');
         $('#result-overview').html(this.ListingData.overview);
         $('#result-problem').html(this.ListingData.problem);
         $('#result-solution').html(this.ListingData.solution);

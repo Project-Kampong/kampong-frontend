@@ -28,8 +28,8 @@ export class AppComponent implements OnInit {
       let categories = data.data;
       let sortedCategories = _(categories)
         .groupBy((category) => category['category_group'])
-        .map((value, key) => {
-          let updatedValues = _.map(value, 'category_name');
+        .map((values, key) => {
+          let updatedValues = _.map(values, (value) => _.pick(value, 'category_id', 'category_name'));
           return {
             name: key,
             group: updatedValues,
@@ -45,8 +45,8 @@ export class AppComponent implements OnInit {
       let locations = data.data;
       let sortedLocations = _(locations)
         .groupBy((location) => location['zone'])
-        .map((value, key) => {
-          let updatedValues = _.map(value, 'location_name');
+        .map((values, key) => {
+          let updatedValues = _.map(values, (value) => _.pick(value, 'location_id', 'location_name'));
           return {
             name: key,
             group: updatedValues,
