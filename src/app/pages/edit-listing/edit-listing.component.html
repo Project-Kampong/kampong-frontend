@@ -24,9 +24,9 @@
           <mat-form-field appearance="fill">
             <mat-label>Category</mat-label>
             <mat-select required formControlName="category">
-              <mat-optgroup *ngFor="let group of categoriesStore.categories" [label]="group.name" [disabled]="group.disabled">
-                <mat-option *ngFor="let category of group.group" [value]="category">
-                  {{ category }}
+              <mat-optgroup *ngFor="let group of categoryGroup.categories" [label]="group.name" [disabled]="group.disabled">
+                <mat-option *ngFor="let category of group.group" [value]="category.category_id">
+                  {{ category.category_name }}
                 </mat-option>
               </mat-optgroup>
             </mat-select>
@@ -116,9 +116,9 @@
             <mat-form-field appearance="fill">
               <mat-label>Project Location</mat-label>
               <mat-select formControlName="locations" multiple>
-                <mat-optgroup *ngFor="let group of locationsStore.locations" [label]="group.name" [disabled]="group.disabled">
-                  <mat-option *ngFor="let location of group.group" [value]="location">
-                    {{ location }}
+                <mat-optgroup *ngFor="let group of locationGroup.locations" [label]="group.name" [disabled]="group.disabled">
+                  <mat-option *ngFor="let location of group.group" [value]="location.location_id">
+                    {{ location.location_name }}
                   </mat-option>
                 </mat-optgroup>
               </mat-select>
@@ -154,7 +154,7 @@
       </div>
     </div>
 
-    <div class="container">
+    <!-- <div class="container">
       <div class="row" style="margin-top: 5%">
         <div class="text-center col-md-12">
           <input type="file" (change)="fileChangeEvent($event)" />
@@ -180,7 +180,7 @@
           <img [src]="croppedImage" />
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Section 3 -->
     <div class="listing-section">
@@ -582,8 +582,8 @@
               <div class="input-field-container">
                 <mat-form-field class="milestone-input">
                   <mat-label>Milestone</mat-label>
-                  <input maxlength="50" matInput [(ngModel)]="milestone.description" />
-                  <mat-hint> {{ milestone.description.length }}/50 </mat-hint>
+                  <input maxlength="50" matInput [(ngModel)]="milestone.milestone_description" />
+                  <mat-hint> {{ milestone.milestone_description.length }}/50 </mat-hint>
                 </mat-form-field>
                 <mat-form-field class="deadline-input">
                   <mat-label>Deadline</mat-label>
@@ -662,7 +662,7 @@
                     placeholder="Job Title"
                     cdkTextareaAutosize
                     cdkAutosizeMinRows="2"
-                    [(ngModel)]="job.title"
+                    [(ngModel)]="job.job_title"
                     maxlength="200"
                   ></textarea>
                 </div>
@@ -672,11 +672,11 @@
                     matInput
                     cdkTextareaAutosize
                     cdkAutosizeMinRows="5"
-                    [(ngModel)]="job.description"
+                    [(ngModel)]="job.job_description"
                     maxlength="500"
                   ></textarea>
                 </div>
-                <span class="hint"> {{ job.description.length }} / 500 </span>
+                <span class="hint"> {{ job.job_description.length }} / 500 </span>
               </div>
               <button class="remove-skills" (click)="removeDescription(i)"></button>
             </div>

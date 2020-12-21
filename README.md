@@ -21,7 +21,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 Latest version of the app has been tested to run on:
 
 ```
-- Node v14.14.0
+- Node v14.15.3
 - npm v6.14.8
 ```
 
