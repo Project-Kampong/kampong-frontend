@@ -458,9 +458,10 @@ export class ListingIndividualComponent implements OnInit {
   sendMessage() {
     if (this.enquireMessage != '') {
       this.togglePopup();
+      uiStore.toggleLoading();
       this.listingsService
         .sendEnquiry({
-          receiverEmail: this.listingData.listing_email,
+          listingId: this.listingId,
           subject: this.enquireTopic,
           message: this.enquireMessage,
         })
@@ -475,9 +476,10 @@ export class ListingIndividualComponent implements OnInit {
             uiStore.toggleLoading();
           },
           () => {
-            setTimeout(() => {
-              this.initiateSlick();
-            }, 500);
+            // setTimeout(() => {
+            //   this.initiateSlick();
+            // }, 500);
+            uiStore.toggleLoading();
           },
         );
     }
@@ -493,17 +495,11 @@ export class ListingIndividualComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe((result) => {
         uiStore.toggleLoading();
-
-        console.log(`Dialog result: ${result}`);
-        console.log(this.listingId);
-        console.log(job['job_title']);
         if (result) {
           this.listingsService
             .sendApplication({
-              // listingId: this.listingId,
-              // roleApplied: job['job_title'],
-              listingId: '1276b4eb-df3a-4de3-bcae-a450ed96eeac',
-              roleApplied: 'HR Manager',
+              listingId: this.listingId,
+              roleApplied: job['job_title'],
             })
             .subscribe(
               (data) => {

@@ -18,6 +18,7 @@ export class ListingsService {
   url: string;
   options: OptionObject;
   optionsMulti: OptionObject;
+  authenticatedOption: OptionObject;
 
   constructor(private httpClient: HttpClient, private AuthService: AuthService) {
     this.url = this.AuthService.URL;
@@ -30,6 +31,13 @@ export class ListingsService {
       headers: new HttpHeaders({
         Accept: 'application/json',
         'Content-Type': 'multipart/form-data',
+        Authorization: 'Bearer ' + this.AuthService.AuthToken,
+      }),
+    };
+
+    this.authenticatedOption = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
         Authorization: 'Bearer ' + this.AuthService.AuthToken,
       }),
     };
@@ -322,11 +330,10 @@ export class ListingsService {
   }
 
   sendEnquiry(data) {
-    return this.httpClient.post<API>(this.url + 'api/mailer/send-enquiry', data, this.optionsMulti);
+    return this.httpClient.post<API>(this.url + 'api/mailer/send-enquiry', data, this.authenticatedOption);
   }
 
   sendApplication(data) {
-    console.log(data);
-    return this.httpClient.post<API>(this.url + 'api/mailer/send-application', data, this.optionsMulti);
+    return this.httpClient.post<API>(this.url + 'api/mailer/send-application', data, this.authenticatedOption);
   }
 }
