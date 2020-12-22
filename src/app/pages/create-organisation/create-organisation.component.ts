@@ -14,6 +14,9 @@ import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 import { Subscription } from 'rxjs';
 import { AuthService } from "@app/services/auth.service";
 
+import { categoriesStore } from '@app/store/categories-store';
+import { locationsStore } from '@app/store/locations-store';
+
 declare var $: any;
 
 @Component({
@@ -23,11 +26,11 @@ declare var $: any;
 })
 export class CreateOrganisationComponent implements OnInit, OnDestroy {
   
-  typeGroup: CategoryFilter[];
-  locationGroup: LocationFilter[];
   organisationForm: FormGroup;
   organisationData: CreateOrganisation = null;
   organisationId: string = "";
+  categoryGroup = categoriesStore;
+  locationGroup = locationsStore;
   subscriptions: Subscription[] = [];
 
   constructor(
@@ -39,8 +42,6 @@ export class CreateOrganisationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.typeGroup = [];
-    this.locationGroup = [];
     this.organisationForm = this.fb.group(createOrganisationForm);
   }
 

@@ -24,7 +24,7 @@
           <mat-form-field appearance="fill">
             <mat-label>Type</mat-label>
             <mat-select required formControlName="organisation_type">
-              <mat-optgroup *ngFor="let group of categoriesStore.categories" [label]="group.name" [disabled]="group.disabled">
+              <mat-optgroup *ngFor="let group of categoryGroup.categories" [label]="group.name" [disabled]="group.disabled">
                 <mat-option *ngFor="let type of group.group" [value]="type">
                   {{ type }}
                 </mat-option>
@@ -109,7 +109,7 @@
             <mat-form-field appearance="fill">
               <mat-label>Area</mat-label>
               <mat-select formControlName="locations" multiple>
-                <mat-optgroup *ngFor="let group of locationsStore.locations" [label]="group.name" [disabled]="group.disabled">
+                <mat-optgroup *ngFor="let group of locationGroup.locations" [label]="group.name" [disabled]="group.disabled">
                   <mat-option *ngFor="let location of group.group" [value]="location">
                     {{ location }}
                   </mat-option>
