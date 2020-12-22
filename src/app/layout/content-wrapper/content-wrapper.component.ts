@@ -11,7 +11,7 @@ import { Subscription } from "rxjs";
   templateUrl: "./content-wrapper.component.html",
   styleUrls: ["./content-wrapper.component.scss"],
 })
-export class ContentWrapper implements OnInit, OnDestroy {
+export class ContentWrapperComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService, private profileService: ProfileService) {}
 

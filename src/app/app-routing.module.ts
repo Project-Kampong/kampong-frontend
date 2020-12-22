@@ -3,7 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 
 // Layouts
 //ContentWrapperComponent
-import { ContentWrapper } from "./layout/content-wrapper/content-wrapper.component";
+import { ContentWrapperComponent } from "./layout/content-wrapper/content-wrapper.component";
 
 // Import Components
 import { ListingHomeComponent } from "@app/pages/listing-home/listing-home.component";
@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: "register", component: RegisterComponent },
   {
     path: "",
-    component: ContentWrapper,
+    component: ContentWrapperComponent,
     children: [
       { path: "home", component: ListingHomeComponent },
       { path: "listing/:id", component: ListingIndividualComponent },

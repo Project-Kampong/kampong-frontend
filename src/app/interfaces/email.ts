@@ -1,6 +1,10 @@
 export interface SendEmail {
-    receiverEmail: string;
-    senderEmail: string;
+    listingId: string;
     subject: string;
     message: string;
+}
+
+export interface SendApplication {
+    listingId: string;
+    roleApplied: string;
 }

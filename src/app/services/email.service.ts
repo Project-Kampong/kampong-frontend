@@ -1,29 +1,20 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpEvent } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { API } from "@app/interfaces/api";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
-import { SendEmail } from "@app/interfaces/email";
-
-interface OptionObject {
-  headers: HttpHeaders;
-  authorization?: string;
-}
+import { SendApplication, SendEmail } from "@app/interfaces/email";
+import { AuthService } from "./auth.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class EmailService {
 
-  private options: OptionObject = {
-    headers: new HttpHeaders({
-      "Content-Type": "application/json",
-    }),
-  };
   private url: string = environment.apiUrl;
 
   constructor(
-    private httpClient: HttpClient,
+    private httpClient: HttpClient, private authService: AuthService
   ) {}
 
   /**
@@ -33,10 +24,22 @@ export class EmailService {
    */
   sendEnquiry(data: SendEmail): Observable<API> {
     return this.httpClient.post<API>(
-      this.url + "api/mailer/send",
+      this.url + "api/mailer/send-enquiry",
       data,
-      this.options
+      this.authService.getAuthOptions()
     );
+  }
+
+  /**
+   * Sends an application
+   * @param data Email data
+   * @event POST
+   */
+  sendApplication(data: SendApplication): Observable<API> {
+    return this.httpClient.post<API>(
+      this.url + 'api/mailer/send-application',
+      data,
+      this.authService.getAuthOptions());
   }
 
 }
