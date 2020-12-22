@@ -8,7 +8,7 @@ import { Inject } from '@angular/core';
   styleUrls: ['./dialog.component.scss'],
 })
 export class DialogComponent implements OnInit {
-  constructor(@Inject(MAT_DIALOG_DATA) private data: any) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit() {}
 }

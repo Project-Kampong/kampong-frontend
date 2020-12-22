@@ -9,7 +9,7 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
   styleUrls: ['./crop-image-dialog.component.scss'],
 })
 export class CropImageDialogComponent implements OnInit {
-  constructor(@Inject(MAT_DIALOG_DATA) private data: any) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit() {}
 

@@ -75,7 +75,7 @@ export class ListingIndividualComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private listingsService: ListingsService,
-    private authService: AuthService,
+    public authService: AuthService,
     private snackbarService: SnackbarService,
     private dialog: MatDialog,
   ) {}
