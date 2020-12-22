@@ -1,5 +1,5 @@
 // Angular Imports
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 
 // Services
 import { ListingsService } from "@app/services/listings.service";
@@ -11,6 +11,9 @@ import { OrganisationsService } from '@app/services/organisations.service';
 import { Profile } from "@app/interfaces/profile";
 import { Listing } from "@app/interfaces/listing";
 import { Organisation } from "@app/interfaces/organisation";
+import { UserData } from "@app/interfaces/user";
+import { Subscription } from "rxjs";
+import { UsersService } from "@app/services/users.service";
 
 declare var $: any;
 
@@ -19,71 +22,67 @@ declare var $: any;
   templateUrl: "./user-profile.component.html",
   styleUrls: ["./user-profile.component.scss"],
 })
-export class UserProfileComponent implements OnInit {
+export class UserProfileComponent implements OnInit, OnDestroy {
 
-  profileDetails: Profile;
-  likedArr: Listing[];
-  startedArr: Listing[];
-  likeCount: number;
-  orgArr: Organisation[];
+  profileData: Profile = <Profile>{};
+  likedArr: Listing[] = [];
+  startedArr: Listing[] = [];
+  likeCount: number = 0;
+  orgArr: Organisation[] = [];
+  private userData: UserData = <UserData>{};
+  isLoggedIn: boolean = false;
+  subscriptions: Subscription[] = [];
 
-  constructor(
-    public listingsService: ListingsService,
-    public authService: AuthService,
-    public profileService: ProfileService,
-    public organisationService: OrganisationsService,
-  ) {
-    this.likedArr = [];
-    this.startedArr = [];
-    this.orgArr = [];
-    this.likeCount = 0;
-  }
+  constructor(private authService: AuthService, private profileService: ProfileService, private userService: UsersService) {}
 
   ngOnInit() {
-    if (this.authService.isLoggedIn) {
-      this.getInitData();
+
+    if (this.authService.checkCookie()) {
+      this.subscriptions.push(this.authService.getUserDataByToken().subscribe(
+        (res) => {
+          this.userData = res["data"];
+          this.subscriptions.push(this.profileService.getUserProfile(this.userData["user_id"]).subscribe(
+            (res) => {
+              this.profileData = res["data"];
+              this.isLoggedIn = true;
+            },
+            (err) => {
+              console.log(err);
+            }
+          ))
+        },
+        (err) => {
+          console.log(err);
+          console.log("User is not logged in");
+        },
+        () => {
+          this.subscriptions.push(this.userService.getLikedListing(this.userData["user_id"]).subscribe(
+            (res) => {
+              this.likeCount = res["count"];
+              this.likedArr = res["data"];
+            },
+            (err) => {
+              console.log(err);
+            }
+          ));
+          this.subscriptions.push(this.userService.getOwnedListings(this.userData["user_id"]).subscribe(
+            (res) => {
+              res["data"].map((x) => {
+                if (x.deleted_on === null) {
+                  this.startedArr.push(x);
+                }
+              })
+            }
+          ));
+        }
+      ))
     }
 
-    this.authService.LoginResponse.subscribe(() => {
-      this.getInitData();
-    });
+
   }
 
-  getInitData() {
-    this.profileService.getUserProfile(
-      this.authService.LoggedInUserID
-    ).subscribe((data) => {
-      this.profileDetails = data["data"];
-      if (this.profileDetails.profile_picture == null) {
-        this.profileDetails.profile_picture =
-          "https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png";
-      }
-    });
-
-    // Liked
-    this.listingsService.getLikedListing().subscribe((data) => {
-      this.likeCount = data["count"];
-      this.likedArr = data["data"];
-    });
-    // Started
-    this.listingsService.getPublicOwnedListings(
-      this.authService.LoggedInUserID
-    ).subscribe((data) => {
-      data["data"].map((x) => {
-        if (x.deleted_on == null) {
-          this.startedArr.push(x);
-        }
-      });
-    });
-
-    this.organisationService.getOrganisations(1).subscribe(
-      (res) => {
-        console.log(res);
-        this.orgArr = res["data"].filter((org) => (
-          org["owned_by"] === this.authService.LoggedInUserID
-        ))
-      }
-    );
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   scrollToSection(id) {

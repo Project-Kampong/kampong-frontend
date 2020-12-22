@@ -1,4 +1,4 @@
-<section *ngIf="ProfileDetails != null" class="container block-content">
+<section *ngIf="profileData != null" class="container block-content">
   <div class="d-flex flex-wrap">
     <div class="col-lg-4 order-lg-2 text-right">
       <a class="btn outline-btn" (click)="togglePopup()">Change Password</a>
@@ -6,11 +6,11 @@
     <div class="col-lg-8 order-lg-1">
       <h3>Edit Profile</h3>
 
-      <form [formGroup]="EditProfileForm" class="form-group">
+      <form [formGroup]="editProfileForm" class="form-group">
         <div class="custom-input">
           <div class="profile-image">
             <label for="file-upload">
-              <img src="{{ ProfileDetails.profile_picture }}" />
+              <img src="{{ profileData.profile_picture }}" />
             </label>
           </div>
           <input
@@ -26,17 +26,17 @@
           <input matInput formControlName="nickname" required />
           <!-- Errors Validation -->
           <mat-error
-            *ngIf="EditProfileForm.get('nickname').hasError('required')"
+            *ngIf="editProfileForm.get('nickname').hasError('required')"
           >
             Username is required
           </mat-error>
           <mat-error
-            *ngIf="EditProfileForm.get('nickname').hasError('maxlength')"
+            *ngIf="editProfileForm.get('nickname').hasError('maxlength')"
           >
             Username must not be more than 15 characters long.
           </mat-error>
           <mat-error
-            *ngIf="EditProfileForm.get('nickname').hasError('pattern')"
+            *ngIf="editProfileForm.get('nickname').hasError('pattern')"
           >
             Special characters not allowed
           </mat-error>
@@ -57,7 +57,7 @@
           ></mat-datepicker-toggle>
           <mat-datepicker #DateOfBirthPicker></mat-datepicker>
           <!-- Errors Validation -->
-          <mat-error *ngIf="EditProfileForm.get('dob').hasError('required')">
+          <mat-error *ngIf="editProfileForm.get('dob').hasError('required')">
             Date Of Birth is required
           </mat-error>
           <!-- End of Errors Validation -->
@@ -68,17 +68,17 @@
           <input matInput formControlName="occupation" />
           <!-- Errors Validation -->
           <mat-error
-            *ngIf="EditProfileForm.get('occupation').hasError('required')"
+            *ngIf="editProfileForm.get('occupation').hasError('required')"
           >
             Occupation is required
           </mat-error>
           <mat-error
-            *ngIf="EditProfileForm.get('occupation').hasError('maxlength')"
+            *ngIf="editProfileForm.get('occupation').hasError('maxlength')"
           >
             Occupation must not be more than 30 characters long.
           </mat-error>
           <mat-error
-            *ngIf="EditProfileForm.get('occupation').hasError('pattern')"
+            *ngIf="editProfileForm.get('occupation').hasError('pattern')"
           >
             Special characters not allowed
           </mat-error>
@@ -93,13 +93,13 @@
             formControlName="about"
           ></textarea>
           <!-- Errors Validation -->
-          <mat-error *ngIf="EditProfileForm.get('about').hasError('required')">
+          <mat-error *ngIf="editProfileForm.get('about').hasError('required')">
             About Me is required
           </mat-error>
-          <mat-error *ngIf="EditProfileForm.get('about').hasError('maxlength')">
+          <mat-error *ngIf="editProfileForm.get('about').hasError('maxlength')">
             About Me must not be more than 1000 characters long.
           </mat-error>
-          <mat-error *ngIf="EditProfileForm.get('about').hasError('pattern')">
+          <mat-error *ngIf="editProfileForm.get('about').hasError('pattern')">
             Special characters not allowed
           </mat-error>
           <!-- End of Errors Validation -->
@@ -127,9 +127,9 @@
         <input matInput required type="password" [(ngModel)]="newpassword" />
       </mat-form-field>
     </div>
-    <span class="error-msg" *ngIf="showErrorMsg == true">
+    <span class="error-msg" *ngIf="false">
       Invalid password, try again
     </span>
-    <a class="btn yellow-btn" (click)="updatePassword()">Change Password</a>
+    <a class="btn yellow-btn">Change Password</a>
   </div>
 </section>

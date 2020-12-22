@@ -11,13 +11,13 @@
     <mat-horizontal-stepper #stepper>
       <mat-step>
         <div class="steps-form-container">
-          <form [formGroup]="EditProfileForm" class="form-group">
+          <form [formGroup]="editProfileForm" class="form-group">
             <ng-template matStepLabel>Customise Profile</ng-template>
             <label>Profile Image</label>
             <div class="custom-input">
               <div class="profile-image">
                 <label for="file-upload">
-                  <img src="{{ ProfileDetails.profile_picture }}" />
+                  <img src="{{ profileData.profile_picture }}" />
                 </label>
               </div>
               <input
@@ -33,17 +33,17 @@
               <input matInput formControlName="nickname" required />
               <!-- Errors Validation -->
               <mat-error
-                *ngIf="EditProfileForm.get('nickname').hasError('required')"
+                *ngIf="editProfileForm.get('nickname').hasError('required')"
               >
                 Username is required
               </mat-error>
               <mat-error
-                *ngIf="EditProfileForm.get('nickname').hasError('maxlength')"
+                *ngIf="editProfileForm.get('nickname').hasError('maxlength')"
               >
                 Username must not be more than 15 characters long.
               </mat-error>
               <mat-error
-                *ngIf="EditProfileForm.get('nickname').hasError('pattern')"
+                *ngIf="editProfileForm.get('nickname').hasError('pattern')"
               >
                 Special characters not allowed
               </mat-error>
@@ -64,7 +64,7 @@
               <mat-datepicker #DateOfBirthPicker></mat-datepicker>
               <!-- Errors Validation -->
               <mat-error
-                *ngIf="EditProfileForm.get('dob').hasError('required')"
+                *ngIf="editProfileForm.get('dob').hasError('required')"
               >
                 Date Of Birth is required
               </mat-error>
@@ -78,23 +78,23 @@
       </mat-step>
       <mat-step label="Occupation">
         <div class="steps-form-container">
-          <form [formGroup]="EditProfileForm" class="form-group">
+          <form [formGroup]="editProfileForm" class="form-group">
             <mat-form-field class="full-width">
               <mat-label>Occupation</mat-label>
               <input matInput formControlName="occupation" />
               <!-- Errors Validation -->
               <mat-error
-                *ngIf="EditProfileForm.get('occupation').hasError('required')"
+                *ngIf="editProfileForm.get('occupation').hasError('required')"
               >
                 Occupation is required
               </mat-error>
               <mat-error
-                *ngIf="EditProfileForm.get('occupation').hasError('maxlength')"
+                *ngIf="editProfileForm.get('occupation').hasError('maxlength')"
               >
                 Occupation must not be more than 30 characters long.
               </mat-error>
               <mat-error
-                *ngIf="EditProfileForm.get('occupation').hasError('pattern')"
+                *ngIf="editProfileForm.get('occupation').hasError('pattern')"
               >
                 Special characters not allowed
               </mat-error>
@@ -109,7 +109,7 @@
       </mat-step>
       <mat-step label="Tell us more about yourself">
         <div class="steps-form-container">
-          <form [formGroup]="EditProfileForm" class="form-group">
+          <form [formGroup]="editProfileForm" class="form-group">
             <mat-form-field class="full-width text-field">
               <mat-label>About Me</mat-label>
               <textarea
@@ -120,17 +120,17 @@
               ></textarea>
               <!-- Errors Validation -->
               <mat-error
-                *ngIf="EditProfileForm.get('about').hasError('required')"
+                *ngIf="editProfileForm.get('about').hasError('required')"
               >
                 About Me is required
               </mat-error>
               <mat-error
-                *ngIf="EditProfileForm.get('about').hasError('maxlength')"
+                *ngIf="editProfileForm.get('about').hasError('maxlength')"
               >
                 About Me must not be more than 1000 characters long.
               </mat-error>
               <mat-error
-                *ngIf="EditProfileForm.get('about').hasError('pattern')"
+                *ngIf="editProfileForm.get('about').hasError('pattern')"
               >
                 Special characters not allowed
               </mat-error>

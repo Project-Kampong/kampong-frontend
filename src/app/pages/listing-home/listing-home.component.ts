@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ListingsService } from '@app/services/listings.service';
-import { AuthService } from '@app/services/auth.service';
+import { Component, OnInit } from "@angular/core";
+import { ListingsService } from "@app/services/listings.service";
 import { OrganisationsService } from '@app/services/organisations.service';
 import { Organisation } from '@app/interfaces/organisation';
+import { ListingIndividual } from "@app/interfaces/listing";
 declare var $: any;
 
 @Component({
@@ -11,25 +11,29 @@ declare var $: any;
   styleUrls: ['./listing-home.component.scss'],
 })
 export class ListingHomeComponent implements OnInit {
-  organisationList: Array<Organisation>;
 
-  constructor(public ListingsService: ListingsService, public OrganisationService: OrganisationsService, public AuthService: AuthService) {
-    this.organisationList = [];
-  }
+  organisationList: Organisation[] = [];
+  listingList: ListingIndividual[] = [];
+
+  constructor(
+    private listingsService: ListingsService,
+    private organisationService: OrganisationsService,
+  ) {}
 
   ngOnInit() {
+
     window.scroll(0, 0);
-    $('.category-list ul li').on('click', function () {
-      $(this).toggleClass('active');
-    });
 
-    $('.category-filter ul li .outline').on('click', function () {
-      $(this).toggleClass('active');
-    });
+    this.listingsService.getListings().subscribe(
+      (res) => {
+        this.listingList = res["data"];
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
 
-    this.ListingsService.getListingLoop(1);
-
-    this.OrganisationService.getOrganisations(1).subscribe(
+    this.organisationService.getOrganisations().subscribe(
       (res) => {
         this.organisationList = res['data'];
       },

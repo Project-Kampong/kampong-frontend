@@ -9,10 +9,10 @@ import { Router } from '@angular/router';
 export class ListingCardsComponent {
   constructor(private router: Router) {}
 
-  @Input() ListingData;
-  @Input() ColNum;
+  @Input() listingData;
+  @Input() colNum;
 
   selectedCard(data) {
-    this.router.navigate(['/listing/' + data.listing_id]);
+    this.router.navigate(["/listing/" + data.listing_id]);
   }
 }

@@ -1,48 +1,48 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpEvent, HttpHeaders } from "@angular/common/http";
-import { CreateOrganisation, CreateProgrammes } from "@app/interfaces/organisation";
+import { CreateOrganisation, UpdateOrganisation } from "@app/interfaces/organisation";
 import { API } from "@app/interfaces/api";
 
 // Services Import
-import { AuthService } from "@app/services/auth.service";
 import { Observable } from 'rxjs';
+import { environment } from "src/environments/environment";
+import { AuthService } from "./auth.service";
+
+interface OptionObject {
+  headers: HttpHeaders;
+  authorization?: string;
+}
 
 @Injectable({
   providedIn: "root",
 })
 export class OrganisationsService {
 
-  constructor(
-    private httpClient: HttpClient,
-    private AuthService: AuthService
-  ) {}
-
-  url: string = this.AuthService.URL;
-  httpHeaders: HttpHeaders = new HttpHeaders({
-    "Content-Type": "application/json",
-  });
-
-  options = {
-    headers: this.httpHeaders,
+  private url: string = environment.apiUrl;
+  private options: OptionObject = {
+    headers: new HttpHeaders({
+      "Content-Type": "application/json",
+    }),
   };
 
-  getOrganisations(page: number): Observable<API> {
+  constructor(private httpClient: HttpClient, private authService: AuthService) {}
+
+  /**
+   * Get all organisations
+   * @event GET
+   */
+  getOrganisations(): Observable<API> {
     return this.httpClient.get<API>(
-      this.url + "api/organisations?sort=created_on&page=" + page,
+      this.url + "api/organisations",
       this.options
     );
   }
 
-  getSearchResult(keyword: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url +
-        "api/organisations/search-title?title=" +
-        keyword +
-        "&limit=25&sensitivity=50",
-      this.options
-    );
-  }
-
+  /**
+   * Get a particular organisation
+   * @param organisationId Organisation ID
+   * @event GET
+   */
   getSelectedOrganisation(organisationId: string): Observable<API> {
     return this.httpClient.get<API>(
       this.url + "api/organisations/" + organisationId,
@@ -50,35 +50,46 @@ export class OrganisationsService {
     );
   }
 
-  createOrganisation(data: CreateOrganisation): Observable<HttpEvent<API>> {
+  /**
+   * Create an organisation
+   * @param data Organisation Data
+   * @event POST
+   */
+  createOrganisation(data: CreateOrganisation, headers: OptionObject): Observable<API> {
     return this.httpClient.post<API>(
       this.url + "api/organisations",
       data,
-      this.AuthService.OnlyAuthHttpHeaders
+      this.authService.getAuthOptionsWithoutContentType()
     );
   }
 
-  updateOrganisation(organisationId: string, data: CreateOrganisation): Observable<HttpEvent<API>> {
+  /**
+   * Update organisation details
+   * @param organisationId Organisation ID
+   * @param data Updated Organisation Data
+   * @event PUT
+   */
+  updateOrganisation(organisationId: string, data: UpdateOrganisation, headers: OptionObject): Observable<API> {
     return this.httpClient.put<API>(
       this.url + "api/organisations/" + organisationId,
       data,
-      this.AuthService.OnlyAuthHttpHeaders
+      this.authService.getAuthOptionsWithoutContentType()
     );
   }
 
-  removeOrganisation(organisationId: string): Observable<API> {
+  /**
+   * Delete a particular organisation
+   * @param organisationId Organisation ID
+   * @event DELETE
+   */
+  removeOrganisation(organisationId: string, headers: OptionObject): Observable<API> {
     return this.httpClient.delete<API>(
-      this.url + "api/organisations/" + organisationId
+      this.url + "api/organisations/" + organisationId,
+      this.authService.getAuthOptions()
     );
   }
 
-  getProgrammes(page: number): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/programmes?sort=created_on&page=" + page,
-      this.options
-    );
-  }
-
+  /*
   getSelectedProgramme(programmeId: number): Observable<API> {
     return this.httpClient.get<API>(
       this.url + "api/organisations/" + programmeId,
@@ -90,7 +101,7 @@ export class OrganisationsService {
     return this.httpClient.post<API>(
       this.url + "api/programmes",
       data,
-      this.AuthService.OnlyAuthHttpHeaders, 
+      this.authService.OnlyAuthHttpHeaders, 
     );
   }
 
@@ -98,7 +109,7 @@ export class OrganisationsService {
     return this.httpClient.put<API>(
       this.url + "api/programmes/" + programmeId,
       data,
-      this.AuthService.OnlyAuthHttpHeaders
+      this.authService.OnlyAuthHttpHeaders
     );
   }
 
@@ -107,5 +118,6 @@ export class OrganisationsService {
       this.url + "api/programmes/" + programmeId
     );
   }
+  */
 
 }

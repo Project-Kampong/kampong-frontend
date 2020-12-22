@@ -1,30 +1,46 @@
 // Angular Imports
-import { Component, OnInit } from '@angular/core';
-import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
-import { FormGroup, FormBuilder, ValidationErrors } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { COMMA, ENTER, SPACE } from "@angular/cdk/keycodes";
+import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
+import { MatChipInputEvent } from "@angular/material/chips";
+import { Router } from "@angular/router";
 
 // Services
 import { ListingsService } from '@app/services/listings.service';
 import { SnackbarService } from '@app/services/snackbar.service';
+import { AuthService } from "@app/services/auth.service";
 
 // Interfaces
-import { createListingForm, CreateListingFAQ, CreateListingJobs, CreateListingMilestones, CreateListing } from '@app/interfaces/listing';
-import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
+import { CreateListing } from '@app/interfaces/listing';
+import { createListingForm } from '@app/util/forms/listing';
 import { catchError } from 'rxjs/operators';
-import { forkJoin, Observable, of } from 'rxjs';
+import { forkJoin, Observable, of, Subscription } from 'rxjs';
 import { categoriesStore } from '@app/store/categories-store';
 import { locationsStore } from '@app/store/locations-store';
 
+
 declare var $: any;
+
+interface AddListingMilestones {
+  milestone_description: string;
+  date: Date;
+}
+interface AddListingJobs {
+  job_title: string;
+  job_description: string;
+}
+interface AddListingFAQ {
+  question: string;
+  answer: string;
+}
 
 @Component({
   selector: 'app-create-listing',
   templateUrl: './create-listing.component.html',
   styleUrls: ['./create-listing.component.scss'],
 })
-export class CreateListingComponent implements OnInit {
+export class CreateListingComponent implements OnInit, OnDestroy {
+  
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
   listingForm: FormGroup;
   listingData: CreateListing;
@@ -35,11 +51,19 @@ export class CreateListingComponent implements OnInit {
   listingImages: File[] = [];
   listingImagesDisplay: string[] = [];
   hashtags: string[] = [];
-  milestoneArr: CreateListingMilestones[] = [{ milestone_description: '', date: new Date() }];
-  jobArr: CreateListingJobs[] = [];
-  faqArr: CreateListingFAQ[] = [];
+  milestoneArr: AddListingMilestones[] = [{ milestone_description: "", date: new Date() }];
+  jobArr: AddListingJobs[] = [];
+  faqArr: AddListingFAQ[] = [];
+  subscriptions: Subscription[] = [];
 
-  constructor(private fb: FormBuilder, public listingsService: ListingsService, private router: Router, public snackbarService: SnackbarService) {}
+  constructor(
+    private fb: FormBuilder,
+    private listingsService: ListingsService,
+    private router: Router,
+    private snackbarService: SnackbarService,
+    private authService: AuthService,
+
+  ) {} 
 
   ngOnInit() {
     this.listingForm = this.fb.group({
@@ -149,16 +173,12 @@ export class CreateListingComponent implements OnInit {
   createMilestones(): Observable<any[]> {
     const milestoneCreateObservables: Observable<any>[] = [];
     this.milestoneArr.forEach((val) => {
-      if (val.milestone_description !== '' && val.date !== null) {
-        milestoneCreateObservables.push(
-          this.listingsService
-            .createListingMilestones({
-              listing_id: this.listingId,
-              description: val.milestone_description,
-              date: val.date,
-            })
-            .pipe(catchError((error) => of(error))),
-        );
+      if (val.milestone_description !== "" && val.date !== null) {
+        milestoneCreateObservables.push(this.listingsService.createListingMilestones({
+          listing_id: this.listingId,
+          milestone_description: val.milestone_description,
+          date: val.date,
+        }).pipe(catchError(error => of(error))));
       }
     });
     return forkJoin(milestoneCreateObservables);
@@ -253,7 +273,7 @@ export class CreateListingComponent implements OnInit {
       locations,
     };
 
-    (await this.listingsService.createListing(this.listingData, this.listingImages)).subscribe(
+    this.subscriptions.push((await this.listingsService.createListing(this.listingData).subscribe(
       (res) => {
         console.log(res);
         this.listingId = res['data']['listing_id'];
@@ -264,18 +284,25 @@ export class CreateListingComponent implements OnInit {
       },
       () => {
         const combinedObservables = forkJoin([this.createFaqs(), this.createHashtags(), this.createJobs(), this.createMilestones()]);
-        combinedObservables.subscribe({
-          next: (res) => console.log(res),
-          error: (err) => {
+        this.subscriptions.push(combinedObservables.subscribe({
+          next: res => console.log(res),
+          error: err => {
             console.log(err);
             this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);
           },
           complete: () => {
-            this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.success, true);
-            this.router.navigate(['/listing/' + this.listingId]);
-          },
-        });
-      },
-    );
+            this.snackbarService.openSnackBar(
+              this.snackbarService.DialogList.create_listing.success,
+              true
+            );
+            this.router.navigate(["/listing/" + this.listingId]);
+          }
+        }));
+      }
+    )))
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

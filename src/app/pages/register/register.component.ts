@@ -1,109 +1,76 @@
-import { Component, OnInit } from "@angular/core";
-import {
-  FormGroup,
-  FormControl,
-  FormBuilder,
-  Validators,
-  ValidationErrors,
-} from "@angular/forms";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
 
 import { SnackbarService } from "@app/services/snackbar.service";
 
 import { AuthService } from "@app/services/auth.service";
-import { Router, ActivatedRoute } from "@angular/router";
-
-function passwordValidator(control: FormControl) {
-  let password = control.value;
-  const containsNum = /\d/.test(password);
-  var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-  var Capitalise = /[A-Z]/;
-  if (!format.test(password) || !containsNum || !Capitalise.test(password)) {
-    return {
-      passwordChecker: {
-        parsedPassword: password,
-      },
-    };
-  }
-  return null;
-}
+import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
+import { CookieService } from "ngx-cookie-service";
+import { registerForm } from "@app/util/forms/register";
 
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.scss"],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
+
+  subscriptions: Subscription[] = [];
+  
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    public AuthService: AuthService,
-    public SnackbarService: SnackbarService
+    private authService: AuthService,
+    private snackbarService: SnackbarService,
+    private cookieService: CookieService
   ) {}
 
-  LoginForm: FormGroup;
-  showCheckMail = false;
-  registerError = false;
-  showLoading = false;
+  registerForm: FormGroup;
+  showLoading: boolean = false;
 
   ngOnInit() {
-    this.LoginForm = this.fb.group({
-      first_name: ["", [Validators.maxLength(25), Validators.required]],
-      last_name: ["", [Validators.maxLength(25), Validators.required]],
-      email: ["", [Validators.email, Validators.required]],
-      password: [
-        "",
-        [Validators.minLength(8), Validators.required, passwordValidator],
-      ],
-      confirmPassword: ["", [Validators.minLength(8)]],
-      termsAndCondition: false,
-    });
-
-    this.AuthService.validRegisterResponse.subscribe(() => {
-      this.router.navigate(["/onboarding"]);
-    });
-    this.AuthService.invalidRegisterResponse.subscribe(() => {
-      this.showLoading = false;
-      this.SnackbarService.openSnackBar(
-        this.SnackbarService.DialogList.register.error,
-        false
-      );
-      // this.registerError = true;
-    });
-  }
-  register() {
-    if (this.LoginForm.value.termsAndCondition != true) {
-      this.SnackbarService.openSnackBar(
-        "Please accept the terms and conditions",
-        false
-      );
-    } else {
-      this.showLoading = true;
-      this.AuthService.userRegister(this.LoginForm.value);
-      this.LoginForm.reset();
-    }
+    this.registerForm = this.fb.group({...registerForm});
   }
 
-  getFormValidationErrors() {
-    var error = false;
-    Object.keys(this.LoginForm.controls).forEach((key) => {
-      const controlErrors: ValidationErrors = this.LoginForm.get(key).errors;
-      if (controlErrors != null) {
-        Object.keys(controlErrors).forEach((keyError) => {
-          error = true;
-        });
+  registerUser(): void {
+    //check input
+    this.showLoading = true;
+    this.subscriptions.push(this.authService.registerUser(this.registerForm.value).subscribe(
+      (res) => {
+        this.cookieService.set("token", res["token"]);
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.register.success, true);
+      },
+      (err) => {
+        console.log(err);
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.register.error, false);
+      },
+      () => {
+        this.showLoading = false;
+        this.router.navigate(["/onboarding"]);
+      }
+    ))
+  }
+
+  getFormValidationErrors(): boolean {
+    Object.keys(this.registerForm.controls).forEach((key) => {
+      const controlErrors: ValidationErrors = this.registerForm.get(key).errors;
+      if (controlErrors !== null) {
+        return true;
       }
     });
-    if (this.LoginForm.value.password != this.LoginForm.value.confirmPassword) {
-      error = true;
+    if (!this.checkPassword()) {
+      return true;
     }
-    return error;
+    return false;
   }
 
-  checkPassword() {
-    var error = false;
-    if (this.LoginForm.value.password != this.LoginForm.value.confirmPassword) {
-      error = true;
-    }
-    return error;
+  checkPassword(): boolean {
+    return this.registerForm.value.password === this.registerForm.value.confirmPassword;
   }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
 }

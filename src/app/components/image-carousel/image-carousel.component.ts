@@ -12,13 +12,13 @@ export class ImageCarouselComponent implements OnInit {
 
   sliderSlicked = false;
   navSlicked = false;
-  @Input() SliderImages = [];
+  @Input() sliderImages = [];
 
   ngOnInit() {
-    const sliderLength = this.SliderImages.length;
+    const sliderLength = this.sliderImages.length;
     for (var i = 0; i < sliderLength; i++) {
-      if (this.SliderImages[i] == null) {
-        this.SliderImages.splice(i, sliderLength - i);
+      if (this.sliderImages[i] == null) {
+        this.sliderImages.splice(i, sliderLength - i);
         return;
       }
     }
@@ -43,8 +43,8 @@ export class ImageCarouselComponent implements OnInit {
   navSlickInit() {
     if (this.navSlicked) {
       return;
-    } else if (this.SliderImages.length > 0) {
-      if (this.SliderImages.length > 1) {
+    } else if (this.sliderImages.length > 0) {
+      if (this.sliderImages.length > 1) {
         this.navSlicked = true;
         $(".carousel-nav").slick({
           slidesToShow: 3,
@@ -57,7 +57,7 @@ export class ImageCarouselComponent implements OnInit {
           focusOnSelect: true,
           adaptiveHeight: false,
         });
-      } else if (this.SliderImages.length == 1) {
+      } else if (this.sliderImages.length == 1) {
         $(".carousel-nav img").css({
           "max-width": "100px",
         });

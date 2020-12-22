@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
-import { environment } from './../environments/environment';
 import { categoriesStore } from '../app/store/categories-store';
 import { CategoriesService } from './services/categories.service';
 import * as _ from 'lodash';
@@ -14,17 +13,19 @@ import { uiStore } from './store/ui-store';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  
   title = 'Kampong-frontend';
   categoriesStore = categoriesStore;
   locationsStore = locationsStore;
   uiStore = uiStore;
 
-  constructor(public AuthService: AuthService, private CategoriesService: CategoriesService, private LocationService: LocationsService) {}
+  constructor(private authService: AuthService, private categoriesService: CategoriesService, private locationService: LocationsService) {}
 
   ngOnInit() {
-    this.AuthService.tokenExist();
 
-    this.CategoriesService.getAllCategories().subscribe((data) => {
+    this.authService.checkCookieAndSetHeaders();
+
+    this.categoriesService.getAllCategories().subscribe((data) => {
       let categories = data.data;
       let sortedCategories = _(categories)
         .groupBy((category) => category['category_group'])
@@ -39,7 +40,7 @@ export class AppComponent implements OnInit {
       this.categoriesStore.setCategories(sortedCategories);
     });
 
-    this.LocationService.getAllLocations().subscribe((data) => {
+    this.locationService.getAllLocations().subscribe((data) => {
       let locations = data.data;
       let sortedLocations = _(locations)
         .groupBy((location) => location['zone'])

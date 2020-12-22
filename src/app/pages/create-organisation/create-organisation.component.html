@@ -24,23 +24,13 @@
           <mat-form-field appearance="fill">
             <mat-label>Type</mat-label>
             <mat-select required formControlName="organisation_type">
-              <mat-optgroup *ngFor="let group of categoriesStore.categories" [label]="group.name" [disabled]="group.disabled">
+              <mat-optgroup *ngFor="let group of categoryGroup.categories" [label]="group.name" [disabled]="group.disabled">
                 <mat-option *ngFor="let type of group.group" [value]="type">
                   {{ type }}
                 </mat-option>
               </mat-optgroup>
             </mat-select>
           </mat-form-field>
-
-          <div *ngIf="organisationForm.value.organisation_type == 'Create a Type'" class="half-width px-3">
-            <label>Create a Type</label>
-            <input matInput formControlName="customType" placeholder="Enter your organisation type" />
-            <!-- Errors Validation -->
-            <span class="error-hint" *ngIf="organisationForm.get('customType').hasError('maxlength')">
-              Type must not be more than 25 characters long.
-            </span>
-            <!-- End of Errors Validation -->
-          </div>
         </div>
 
         <div class="form-item">
@@ -49,40 +39,63 @@
           <div class="hint">{{ organisationForm.value.email.length }} / 320</div>
 
           <!-- Errors Validation -->
-          <span class="error-hint" *ngIf="organisationForm.get('email').hasError('required') && organisationForm.controls['email']?.touched">
-            Email is required
+          <span
+            class="error-hint"
+            *ngIf="organisationForm.get('email').hasError('email')"
+          >
+            Please Enter a Valid Email
           </span>
-          <span class="error-hint" *ngIf="organisationForm.get('email').hasError('email')"> Please Enter a Valid Email </span>
+
+          <span
+          class="error-hint"
+          *ngIf="
+            organisationForm.get('email').hasError('required') &&
+            organisationForm.controls['email']?.touched
+          "
+        >
+          Name is required
+        </span>
         </div>
 
         <div class="form-item">
-          <label>Contact Number *</label>
-          <input placeholder="Enter a contact number for your organisation" formControlName="handphone" />
-          <div class="hint">{{ organisationForm.value.handphone.length }} / 20</div>
+          <label>Contact Number</label>
+          <input
+            placeholder="Enter a contact number for your organisation"
+            formControlName="phone"
+          />
+          <div class="hint">
+            {{ organisationForm.value.phone.length }} / 20
+          </div>
 
           <!-- Errors Validation -->
-          <span class="error-hint" *ngIf="organisationForm.get('handphone').hasError('max')"> Contact Number is too long </span>
-          <span class="error-hint" *ngIf="organisationForm.get('handphone').hasError('pattern')"> Special characters not allowed </span>
-          <span class="error-hint" *ngIf="organisationForm.get('handphone').hasError('required') && organisationForm.controls['handphone']?.touched">
-            Contact Number is required
+          <span
+            class="error-hint"
+            *ngIf="organisationForm.get('phone').hasError('max')"
+          >
+            Contact Number is too long
+          </span>
+          <span
+            class="error-hint"
+            *ngIf="organisationForm.get('phone').hasError('pattern')"
+          >
+            Special characters not allowed
           </span>
           <!-- End of Errors Validation -->
         </div>
 
         <div class="form-item">
-          <label>Website URL *</label>
-          <input placeholder="Enter a website URL for your organisation" formControlName="website_url" />
-          <div class="hint">{{ organisationForm.value.website_url.length }} / 100</div>
+          <label>Website URL</label>
+          <input
+            placeholder="Enter a website URL for your organisation"
+            formControlName="website_url"
+          />
+          <div class="hint">
+            {{ organisationForm.value.website_url.length }} / 100
+          </div>
 
           <!-- Errors Validation -->
           <span class="error-hint" *ngIf="organisationForm.get('website_url').hasError('max')">
             Website URL must not be more than 100 characters long.
-          </span>
-          <span
-            class="error-hint"
-            *ngIf="organisationForm.get('website_url').hasError('required') && organisationForm.controls['website_url']?.touched"
-          >
-            Website URL is required
           </span>
           <!-- End of Errors Validation -->
         </div>
@@ -94,9 +107,9 @@
         <div class="form-item">
           <div [formGroup]="organisationForm">
             <mat-form-field appearance="fill">
-              <mat-label>Area *</mat-label>
+              <mat-label>Area</mat-label>
               <mat-select formControlName="locations" multiple>
-                <mat-optgroup *ngFor="let group of locationsStore.locations" [label]="group.name" [disabled]="group.disabled">
+                <mat-optgroup *ngFor="let group of locationGroup.locations" [label]="group.name" [disabled]="group.disabled">
                   <mat-option *ngFor="let location of group.group" [value]="location">
                     {{ location }}
                   </mat-option>
@@ -107,13 +120,13 @@
         </div>
 
         <div class="form-item">
-          <label>Address *</label>
-          <input placeholder="Enter the address for your organisation" formControlName="address" />
+          <label>Address</label>
+          <input
+            placeholder="Enter the address for your organisation"
+            formControlName="address"
+          />
 
           <!-- Errors Validation -->
-          <span class="error-hint" *ngIf="organisationForm.get('address').hasError('required') && organisationForm.controls['address']?.touched">
-            Address is required
-          </span>
           <!-- End of Errors Validation -->
         </div>
       </div>
@@ -143,100 +156,60 @@
           </span>
           <!-- End of Errors Validation -->
         </div>
-
-        <div class="form-item">
-          <label>Story *</label>
-          <div class="CMS-editor editing-active">
-            <div class="action-container">
-              <ul>
-                <li>
-                  <button type="button" data-command="justifyLeft" class="action-btn">
-                    <i class="fas fa-align-left"></i>
-                  </button>
-                </li>
-                <li>
-                  <button type="button" data-command="justifyCenter" class="action-btn">
-                    <i class="fas fa-align-center"></i>
-                  </button>
-                </li>
-                <li>
-                  <button type="button" data-command="justifyRight" class="action-btn">
-                    <i class="fas fa-align-right"></i>
-                  </button>
-                </li>
-
-                <li>
-                  <button type="button" data-command="bold" class="action-btn">
-                    <i class="fas fa-bold"></i>
-                  </button>
-                </li>
-                <li>
-                  <button type="button" data-command="underline" class="action-btn">
-                    <i class="fas fa-underline"></i>
-                  </button>
-                </li>
-
-                <li>
-                  <button type="button" data-command="insertOrderedList" class="action-btn">
-                    <i class="fas fa-list-ol"></i>
-                  </button>
-                </li>
-
-                <li>
-                  <button type="button" data-command="insertUnorderedList" class="action-btn">
-                    <i class="fas fa-list-ul"></i>
-                  </button>
-                </li>
-
-                <li>
-                  <button type="button" data-command="createlink" class="action-btn">
-                    <i class="fas fa-link"></i>
-                  </button>
-                </li>
-
-                <li>
-                  <button type="button" data-command="formatBlock" data-size="H1" class="action-btn">
-                    <i>H1</i>
-                  </button>
-                </li>
-
-                <li>
-                  <button type="button" data-command="formatBlock" data-size="H2" class="action-btn">
-                    <i>H2</i>
-                  </button>
-                </li>
-
-                <li>
-                  <button type="button" data-command="formatBlock" data-size="H3" class="action-btn">
-                    <i>H3</i>
-                  </button>
-                </li>
-              </ul>
-            </div>
-            <div contenteditable="true" id="output">
-              <b>Write about the story behind your organisation! This text block is editable.</b>
-              <div>
-                <b><br /></b>
-              </div>
-              <div>
-                <ol>
-                  <li>item 1</li>
-                  <li>item 2</li>
-                </ol>
-                <div><br /></div>
-              </div>
-              <div>
-                <ul>
-                  <li>bullet 1</li>
-                  <li>bullet 2</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     <div class="listing-section">
+      <div class="listing-stepper">
+        <span> 3 </span>
+        <p>Social Media</p>
+      </div>
+      <div class="listing-form" [formGroup]="organisationForm">
+        <div class="form-item">
+          <label>Facebook Link</label>
+          <input
+            formControlName="facebook_link"
+          />
+          <!-- End of Errors Validation -->
+        </div>
+        <div class="form-item">
+          <label>Twitter Link</label>
+          <input
+            formControlName="twitter_link"
+          />
+          <!-- End of Errors Validation -->
+        </div>
+        <div class="form-item">
+          <label>Instagram Link</label>
+          <input
+            formControlName="instagram_link"
+          />
+          <!-- End of Errors Validation -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section>
+  <!-- Submit -->
+  <div class="listing-section floating-actions-container">
+    <div class="floating-actions">
+      <div class="container">
+        <div class="submit-btn">
+          <button class="btn yellow-btn" (click)="createOrganisation()">
+            Create Organisation
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--
+
+  
+OLD
+
+      <div class="listing-section">
       <div class="listing-stepper">
         <span> 3 </span>
         <p>Upload Photos</p>
@@ -327,17 +300,4 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-<section>
-  <!-- Submit -->
-  <div class="listing-section floating-actions-container">
-    <div class="floating-actions">
-      <div class="container">
-        <div class="submit-btn">
-          <button class="btn yellow-btn" (click)="createOrganisation()">Create Organisation</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+-->

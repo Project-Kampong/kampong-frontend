@@ -1,84 +1,80 @@
-import { Component, OnInit } from "@angular/core";
-import {
-  FormGroup,
-  FormBuilder,
-  ValidationErrors,
-} from "@angular/forms";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
 import { Router } from "@angular/router";
-
-declare var $: any;
 
 // Services
 import { AuthService } from "@app/services/auth.service";
 import { ProfileService } from "@app/services/profile.service";
 import { SnackbarService } from "@app/services/snackbar.service";
 // Interface
-import { Profile, DefaultProfile } from "@app/interfaces/profile";
+import { Profile } from "@app/interfaces/profile";
+import { profileForm } from "@app/util/forms/profile";
+import { UserData } from "@app/interfaces/user";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-onboarding",
   templateUrl: "./onboarding.component.html",
   styleUrls: ["./onboarding.component.scss"],
 })
-export class OnboardingComponent implements OnInit {
-  EditProfileForm: FormGroup;
-  ProfileDetails: Profile = <Profile>{};
+export class OnboardingComponent implements OnInit, OnDestroy {
+  
+  private userData: UserData = <UserData>{};
+  editProfileForm: FormGroup;
+  profileData: Profile = <Profile>{};
+  isLoggedIn: boolean = false;
+  subscriptions: Subscription[] = [];
 
-  constructor(
-    private fb: FormBuilder,
-    public AuthService: AuthService,
-    public ProfileService: ProfileService,
-    private router: Router,
-    public SnackbarService: SnackbarService
-  ) {}
+  constructor(private fb: FormBuilder, private authService: AuthService, private profileService: ProfileService, private router: Router, private snackbarService: SnackbarService) {}
 
   ngOnInit() {
-    this.EditProfileForm = this.fb.group({
-      ...DefaultProfile,
-    });
-    if (this.AuthService.isLoggedIn) {
-      this.getInitData();
+    this.editProfileForm = this.fb.group({ ...profileForm });
+    if (this.authService.checkCookie()) {
+      this.subscriptions.push(this.authService.getUserDataByToken().subscribe(
+        (res) => {
+          this.userData = res["data"];
+          this.subscriptions.push(this.profileService.getUserProfile(this.userData["user_id"]).subscribe(
+            (res) => {
+              this.profileData = res["data"];
+              this.editProfileForm.patchValue(this.profileData);
+              this.isLoggedIn = true;
+            },
+            (err) => {
+              console.log(err);
+            }
+          ))
+        },
+        (err) => {
+          console.log(err);
+          console.log("User is not logged in");
+          this.router.navigate(["/login"]);
+        }
+      ))
     }
-    this.AuthService.LoginResponse.subscribe(() => {
-      this.getInitData();
-    });
-    this.AuthService.validRegisterResponse.subscribe(() => {
-      this.getInitData();
-    });
-  }
-
-  getInitData() {
-    console.log(this.AuthService.LoggedInUserID);
-    this.ProfileService.getUserProfile(
-      this.AuthService.LoggedInUserID
-    ).subscribe((data) => {
-      this.ProfileDetails = data["data"];
-      this.EditProfileForm.patchValue(this.ProfileDetails);
-    });
   }
 
   saveProfile() {
     if (this.getFormValidationErrors()) {
-      this.SnackbarService.openSnackBar(
-        this.SnackbarService.DialogList.setup_profile.validation_error,
+      this.snackbarService.openSnackBar(
+        this.snackbarService.DialogList.setup_profile.validation_error,
         false
       );
       return;
     }
-    this.ProfileService.updateUserProfile(
-      this.ProfileDetails["user_id"],
-      this.EditProfileForm.value
+    this.profileService.updateUserProfile(
+      this.profileData["user_id"],
+      this.editProfileForm.value,
+      this.authService.getAuthOptions()
     ).subscribe(
       (res) => {
-        if (this.selectedFile != null) {
+        if (true) {
           var ImageFd = new FormData();
-          ImageFd.append("pic", this.selectedFile);
-          this.ProfileService.updateUserProfilePic(
-            this.ProfileDetails["user_id"],
-            ImageFd
+          this.profileService.updateUserProfilePic(
+            this.profileData["user_id"],
+            ImageFd,
+            this.authService.getAuthOptionsWithoutContentType()
           ).subscribe(
             (res) => {
-              this.AuthService.LoginResponse.emit();
               this.router.navigate(["/profile"]);
             },
             (err) => {
@@ -86,9 +82,9 @@ export class OnboardingComponent implements OnInit {
             }
           );
         } else {
-          this.AuthService.LoginResponse.emit();
-          this.SnackbarService.openSnackBar(
-            this.SnackbarService.DialogList.setup_profile.success,
+          //this.authService.LoginResponse.emit();
+          this.snackbarService.openSnackBar(
+            this.snackbarService.DialogList.setup_profile.success,
             true
           );
           this.router.navigate(["/profile"]);
@@ -96,8 +92,8 @@ export class OnboardingComponent implements OnInit {
       },
       (err) => {
         console.log("error");
-        this.SnackbarService.openSnackBar(
-          this.SnackbarService.DialogList.setup_profile.error,
+        this.snackbarService.openSnackBar(
+          this.snackbarService.DialogList.setup_profile.error,
           false
         );
         this.router.navigate(["/profile"]);
@@ -105,22 +101,15 @@ export class OnboardingComponent implements OnInit {
     );
   }
 
-  selectedFile;
-  uploadFile(event) {
-    this.selectedFile = <File>event.target.files[0];
-    // Display Image
-    var reader: FileReader = new FileReader();
-    reader.onload = (e) => {
-      // this.fileDisplayArr.push(reader.result.toString());
-      this.ProfileDetails.profile_picture = reader.result.toString();
-    };
-    reader.readAsDataURL(event.target.files[0]);
+  uploadFile(e: any): void {
+    console.log("Upload file");
   }
+
 
   getFormValidationErrors() {
     var error = false;
-    Object.keys(this.EditProfileForm.controls).forEach((key) => {
-      const controlErrors: ValidationErrors = this.EditProfileForm.get(key)
+    Object.keys(this.editProfileForm.controls).forEach((key) => {
+      const controlErrors: ValidationErrors = this.editProfileForm.get(key)
         .errors;
       if (controlErrors != null) {
         Object.keys(controlErrors).forEach((keyError) => {
@@ -129,5 +118,9 @@ export class OnboardingComponent implements OnInit {
       }
     });
     return error;
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

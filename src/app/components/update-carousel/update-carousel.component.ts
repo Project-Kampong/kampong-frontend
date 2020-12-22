@@ -9,11 +9,11 @@ declare var $: any;
 export class UpdateCarouselComponent implements OnInit {
   constructor() {}
 
-  @Input() SliderImages = [];
+  @Input() sliderImages = [];
   ngOnInit() {
-    this.SliderImages = this.SliderImages.filter(function (el) {
+    this.sliderImages = this.sliderImages.filter(function (el) {
       return el != null;
     });
-    console.log(this.SliderImages);
+    console.log(this.sliderImages);
   }
 }

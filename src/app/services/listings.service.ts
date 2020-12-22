@@ -1,10 +1,12 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpEvent } from '@angular/common/http';
-import { Listing, CreateListing, CreateListingUpdates, originalImagesCheck } from '@app/interfaces/listing';
-import { API } from '@app/interfaces/api';
-import { Observable } from 'rxjs';
-// Services Import
-import { AuthService } from '@app/services/auth.service';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { CreateListing, CreateListingUpdates, CreateListingMilestones, CreateListingHashtags,
+  CreateListingFAQ, CreateListingLocation, CreateListingJobs, CreateListingComments, UpdateListingMilestones, 
+  UpdateListingJobs, UpdateListing, UpdateListingFAQ } from "@app/interfaces/listing";
+import { API } from "@app/interfaces/api";
+import { Observable } from "rxjs";
+import { environment } from "src/environments/environment";
+import { AuthService } from "./auth.service";
 
 interface OptionObject {
   headers: HttpHeaders;
@@ -15,325 +17,453 @@ interface OptionObject {
   providedIn: 'root',
 })
 export class ListingsService {
-  url: string;
-  options: OptionObject;
-  optionsMulti: OptionObject;
-  authenticatedOption: OptionObject;
+  
+  private url: string = environment.apiUrl;
+  private options: OptionObject = {
+    headers: new HttpHeaders({
+      "Content-Type": "application/json",
+    }),
+  };
 
-  constructor(private httpClient: HttpClient, private AuthService: AuthService) {
-    this.url = this.AuthService.URL;
-    this.options = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
-    this.optionsMulti = {
-      headers: new HttpHeaders({
-        Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer ' + this.AuthService.AuthToken,
-      }),
-    };
+  constructor(private httpClient: HttpClient, private authService: AuthService) {}
 
-    this.authenticatedOption = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.AuthService.AuthToken,
-      }),
-    };
-  }
-
-  // Variables
-  ListingData: Listing[];
-  tempListingData: Listing[] = [];
-  FeaturedListingData: Listing[];
-
-  // Eventemitter
-  SkillsetsReturned = new EventEmitter<void>();
-
-  // Static Data
-  getAllSkillsets() {
-    return this.httpClient.get<API>(this.url + 'api/skills?limit=100&', this.options);
-  }
-
-  getAllLocations() {
-    return this.httpClient.get<API>(this.url + 'api/locations?limit=100&', this.options);
-  }
-
-  getFeaturedListings() {
-    return this.httpClient.get<API>(this.url + 'api/listings/featured', this.options);
-  }
-
-  getListings(page: number) {
-    return this.httpClient.get<API>(this.url + 'api/listings?sort=created_on&page=' + page, this.options);
-  }
-
-  getListingLoop(pagenum) {
-    this.getListings(pagenum).subscribe((data) => {
-      this.tempListingData.push(...data['data']);
-      this.FeaturedListingData = data['data'];
-      if (data['pagination']['next'] != null) {
-        this.getListingLoop(data['pagination']['next']['page']);
-      } else {
-        this.ListingData = this.tempListingData;
-        this.tempListingData = [];
-      }
-    });
-  }
-
-  getSearchResult(keyword) {
-    return this.httpClient.get<API>(this.url + 'api/listings/search?keyword=' + keyword + 'limit=25', this.options);
-  }
-
-  getPublicOwnedListings(userId) {
-    return this.httpClient.get<API>(this.url + 'api/users/' + userId + '/listings/owner', this.options);
-  }
-
-  getSelectedListing(listingId) {
-    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId, this.options);
-  }
-
-  // Listing Likes
-  getSelectedListingLikes(listingId) {
-    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/likes', this.options);
-  }
-  // Listing FAQ
-  getSelectedListingFAQ(listingId) {
-    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/faqs', this.options);
-  }
-
-  // Listing Skills
-  getSelectedListingSkills(listingId) {
-    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/listing-skills', this.options);
-  }
-
-  // Listing Comments
-  getSelectedListingComments(listingId) {
-    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/listing-comments', this.options);
-  }
-
-  getSelectedCommentChildren(commentId) {
-    return this.httpClient.get<API>(this.url + 'api/listing-comments/' + commentId + '/children', this.options);
-  }
-
-  // Updates
-  getSelectedListingUpdates(listingId) {
-    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/listing-updates', this.options);
-  }
-
-  // Listing Milestones
-  getSelectedListingMilestones(listingId) {
-    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/milestones', this.options);
-  }
-
-  // Listing Hashtags
-  getSelectedListingHashtags(listingId) {
-    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/hashtags', this.options);
-  }
-
-  // Listing Location
-  getSelectedListingLocations(listingId) {
-    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/listing-locations', this.options);
-  }
-
-  // Listing Jobs
-  getSelectedListingJobs(listingId) {
-    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/jobs', this.options);
-  }
-
-  // Liked Listing - by User
-  getLikedListing() {
-    return this.httpClient.get<API>(this.url + 'api/users/' + this.AuthService.LoggedInUserID + '/likes', this.options);
-  }
-
-  // Write
-  uploadFile(fd) {
-    return this.httpClient.post<API>(this.url + 'api/file-upload', fd, this.optionsMulti);
-  }
-
-  uploadFiles(fd) {
-    return this.httpClient.post<API>(this.url + 'api/file-upload/multi', fd, this.optionsMulti);
-  }
-
-  createListing(data: CreateListing, images: File[]): Promise<Observable<HttpEvent<API>>> {
-    const imageFd: FormData = new FormData();
-    images.forEach((val, idx) => {
-      if (val) {
-        imageFd.append('uploads', val);
-      }
-    });
-    return new Promise<Observable<HttpEvent<API>>>((resolve, reject) => {
-      this.uploadFiles(imageFd).subscribe(
-        (res) => {
-          data.pics = res['data'] ? res['data'].map(({ location }) => location) : null;
-        },
-        (err) => {
-          console.log(err);
-          reject('Photos failed to upload');
-        },
-        () => {
-          resolve(this.httpClient.post<API>(this.url + 'api/listings', data, this.AuthService.OnlyAuthHttpHeaders));
-        },
-      );
-    });
-  }
-
-  createListingUpdates(data: CreateListingUpdates, images: File[]): Promise<Observable<HttpEvent<API>>> {
-    const imageFd: FormData = new FormData();
-    images.forEach((val, idx) => {
-      if (val) {
-        imageFd.append('uploads', val);
-      }
-    });
-    return new Promise<Observable<HttpEvent<API>>>((resolve, reject) => {
-      this.uploadFiles(imageFd).subscribe(
-        (res) => {
-          console.log(res);
-          data.pics = res['data'] ? res['data'].map(({ location }) => location) : null;
-        },
-        (err) => {
-          console.log(err);
-          reject('Photos failed to upload');
-        },
-        () => {
-          resolve(this.httpClient.post<API>(this.url + 'api/listing-updates', data, this.AuthService.OnlyAuthHttpHeaders));
-        },
-      );
-    });
-  }
-
-  createListingMilestones(data) {
-    return this.httpClient.post<API>(this.url + 'api/milestones', data, this.AuthService.AuthOptions);
-  }
-
-  createListingHashtags(data) {
-    return this.httpClient.post<API>(this.url + 'api/hashtags', data, this.AuthService.AuthOptions);
-  }
-
-  createListingSkills(data) {
-    return this.httpClient.post<API>(
-      this.url + 'api/skills',
-      {
-        skill: data,
-      },
-      this.AuthService.AuthOptions,
+  /**
+   * Get all listings that are checked featured
+   * @event GET
+   */
+  getFeaturedListings(): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/listings/featured",
+      this.options
     );
   }
 
-  connectListingSkills(data) {
-    return this.httpClient.post<API>(this.url + 'api/listing-skills', data, this.AuthService.AuthOptions);
+  /**
+   * Get data of all listings
+   * @event GET
+   */
+  getListings(): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/listings",
+      this.options
+    );
   }
 
-  createListingFAQ(data) {
-    return this.httpClient.post<API>(this.url + 'api/faqs', data, this.AuthService.AuthOptions);
+  /**
+   * Get listing associated with the input ID 
+   * @param listingId Listing ID
+   * @event GET
+   */
+  getSelectedListing(listingId: string): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/listings/" + listingId,
+      this.options
+    );
   }
 
-  createListingLocation(data) {
-    return this.httpClient.post<API>(this.url + 'api/listing-locations', data, this.AuthService.AuthOptions);
+  /**
+   * Get listings based on the input keywords
+   * @param input Input keywords
+   * @event GET
+   */
+  getSearchResult(input: string): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/listings/search?keyword=" + input,
+      this.options
+    );
   }
 
-  createListingJobs(data) {
-    return this.httpClient.post<API>(this.url + 'api/jobs', data, this.AuthService.AuthOptions);
+  /**
+   * Get all the likes for a particular listing
+   * @param listingId Listing ID
+   * @event GET
+   */
+  getSelectedListingLikes(listingId: string): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/listings/" + listingId + "/likes",
+      this.options
+    );
   }
 
-  // Comments
-  createListingComments(data) {
-    return this.httpClient.post<API>(this.url + 'api/listing-comments', data, this.AuthService.AuthOptions);
+  /**
+   * Get all the FAQs for a particular listing
+   * @param listingId Listing ID
+   * @event GET
+   */
+  getSelectedListingFAQ(listingId: string): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/listings/" + listingId + "/faqs",
+      this.options
+    );
   }
 
-  // Like A Listing
-  likeListing(listing_id) {
-    return this.httpClient.post<API>(this.url + 'api/likes', { listing_id: listing_id }, this.AuthService.AuthOptions);
+  /**
+   * Get all the comments for a particular listing
+   * @param listingId Listing ID
+   * @event GET
+   */
+  getSelectedListingComments(listingId: string): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/listings/" + listingId + "/listing-comments",
+      this.options
+    );
   }
 
-  unlikeListing(like_id) {
-    return this.httpClient.delete<API>(this.url + 'api/likes/' + like_id, this.AuthService.AuthOptions);
+  /**
+   * Get all the replies for a particular parent comment
+   * @param commentId Comment ID
+   * @event GET
+   */
+  getSelectedCommentChildren(commentId: string): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/listing-comments/" + commentId + "/children",
+      this.options
+    );
   }
 
-  // UPDATE LISTING INFO SECTION
-  updateListing(listingId: string, data: CreateListing, images: File[], originalImages: originalImagesCheck[]): Promise<Observable<HttpEvent<API>>> {
-    const imageFd = new FormData();
-    images.forEach((val, idx) => {
-      if (val) {
-        imageFd.append('uploads', val);
-      }
-    });
-    return new Promise<Observable<HttpEvent<API>>>((resolve, reject) => {
-      this.uploadFiles(imageFd).subscribe(
-        (res) => {
-          data.pics = res['data'] ? res['data'].map(({ location }) => location) : null;
-          originalImages.forEach((val) => {
-            if (val.check) {
-              data.pics.push(val.image);
-            }
-          });
-        },
-        (err) => {
-          console.log(err);
-          reject('Photos failed to upload');
-        },
-        () => {
-          resolve(this.httpClient.put<API>(this.url + 'api/listings/' + listingId, data, this.AuthService.OnlyAuthHttpHeaders));
-        },
-      );
-    });
+  /**
+   * Get all updates for a particular listing
+   * @param listingId Listing ID
+   * @event GET
+   */
+  getSelectedListingUpdates(listingId: string): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/listings/" + listingId + "/listing-updates",
+      this.options
+    );
   }
 
-  updateMilestone(milestone_id, data) {
-    return this.httpClient.put<API>(this.url + 'api/milestones/' + milestone_id, data, this.AuthService.AuthOptions);
+  /**
+   * Get all milestones for a particular listing
+   * @param listingId Listing ID
+   * @event GET
+   */
+  getSelectedListingMilestones(listingId: string): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/listings/" + listingId + "/milestones",
+      this.options
+    );
   }
 
-  updateFAQ(faq_id, data) {
-    return this.httpClient.put<API>(this.url + 'api/faqs/' + faq_id, data, this.AuthService.AuthOptions);
+  /**
+   * Get all hashtags for a particular listing
+   * @param listingId Listing ID
+   * @event GET
+   */
+  getSelectedListingHashtags(listingId: string): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/listings/" + listingId + "/hashtags",
+      this.options
+    );
   }
 
-  updateJobs(job_id, data) {
-    return this.httpClient.put<API>(this.url + 'api/jobs/' + job_id, data, this.AuthService.AuthOptions);
+  /**
+   * Get all locations for a particular listing
+   * @param listingId Listing ID
+   * @event GET
+   */
+  getSelectedListingLocations(listingId: string): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/listings/" + listingId + "/listing-locations",
+      this.options
+    );
   }
 
-  // Edit Listing
-  // Delete
-  removeListing(listingId) {
-    return this.httpClient.put<API>(this.url + 'api/listings/' + listingId + '/deactivate', {}, this.AuthService.AuthOptions);
+  /**
+   * Get all jobs for a particular listing
+   * @param listingId Listing ID
+   * @event GET
+   */
+  getSelectedListingJobs(listingId: string): Observable<API> {
+    return this.httpClient.get<API>(
+      this.url + "api/listings/" + listingId + "/jobs",
+      this.options
+    );
   }
 
-  removeMilestone(milestone_id) {
-    return this.httpClient.delete<API>(this.url + 'api/milestones/' + milestone_id, this.AuthService.AuthOptions);
+  /**
+   * Creates Listing
+   * @param data Listing Data
+   * @event POST
+   */
+  createListing(data: CreateListing): Observable<API> {
+    return this.httpClient.post<API>(
+      this.url + "api/listings",
+      data,
+      this.authService.getAuthOptionsWithoutContentType()
+    )
   }
 
-  removeFAQ(faq_id) {
-    return this.httpClient.delete<API>(this.url + 'api/faqs/' + faq_id, this.AuthService.AuthOptions);
+  /**
+   * Creates an update for a particular listing
+   * @param data Update Data
+   * @event POST
+   */
+  createListingUpdates(data: CreateListingUpdates): Observable<API> {
+    return this.httpClient.post<API>(
+      this.url + "api/listing-updates",
+      data,
+      this.authService.getAuthOptionsWithoutContentType()
+    )
   }
 
-  removeHashtags(hashtag_id) {
-    return this.httpClient.delete<API>(this.url + 'api/hashtags/' + hashtag_id, this.AuthService.AuthOptions);
+  /**
+   * Creates a milestone for a particular listing
+   * @param data Milestone Data
+   * @event POST
+   */
+  createListingMilestones(data: CreateListingMilestones): Observable<API> {
+    return this.httpClient.post<API>(
+      this.url + "api/milestones",
+      data,
+      this.authService.getAuthOptions()
+    );
   }
 
-  removeListingSkills(listing_skill_id) {
-    return this.httpClient.delete<API>(this.url + 'api/listing-skills/' + listing_skill_id, this.AuthService.AuthOptions);
+  /**
+   * Creates a hashtag for a particular listing
+   * @param data Hashtag Data
+   * @event POST
+   */
+  createListingHashtags(data: CreateListingHashtags): Observable<API> {
+    return this.httpClient.post<API>(
+      this.url + "api/hashtags",
+      data,
+      this.authService.getAuthOptions()
+    );
   }
 
-  removeListingLocation(listing_location_id) {
-    return this.httpClient.delete<API>(this.url + 'api/listing-locations/' + listing_location_id, this.AuthService.AuthOptions);
+  /**
+   * Creates an FAQ for a particular listing
+   * @param data FAQ Data
+   * @event POST
+   */
+  createListingFAQ(data: CreateListingFAQ): Observable<API> {
+    return this.httpClient.post<API>(
+      this.url + "api/faqs",
+      data,
+      this.authService.getAuthOptions()
+    );
   }
 
-  removeListingJobs(listing_job_id) {
-    return this.httpClient.put<API>(this.url + 'api/jobs/' + listing_job_id + '/deactivate', {}, this.AuthService.AuthOptions);
+  /**
+   * Creates/Connects a location for a particular listing
+   * @param data Location Data
+   * @event POST
+   */
+  createListingLocation(data: CreateListingLocation): Observable<API> {
+    return this.httpClient.post<API>(
+      this.url + "api/listing-locations",
+      data,
+      this.authService.getAuthOptions()
+    );
   }
 
-  removeListingComments(comment_id) {
-    return this.httpClient.put<API>(this.url + 'api/listing-comments/' + comment_id + '/deactivate', {}, this.AuthService.AuthOptions);
+  /**
+   * Creates a job for a particular listing
+   * @param data Job data
+   * @event POST
+   */
+  createListingJobs(data: CreateListingJobs): Observable<API> {
+    return this.httpClient.post<API>(
+      this.url + "api/jobs",
+      data,
+      this.authService.getAuthOptions()
+    );
   }
 
-  removeListingUpdates(update_id) {
-    return this.httpClient.delete<API>(this.url + 'api/listing-updates/' + update_id, this.AuthService.AuthOptions);
+  /**
+   * Creates a comment for a particular listing
+   * @param data Comment data
+   * @event POST
+   */
+  createListingComments(data: CreateListingComments): Observable<API> {
+    return this.httpClient.post<API>(
+      this.url + "api/listing-comments",
+      data,
+      this.authService.getAuthOptions()
+    );
   }
 
-  sendEnquiry(data) {
-    return this.httpClient.post<API>(this.url + 'api/mailer/send-enquiry', data, this.authenticatedOption);
+  /**
+   * Like a particular listing
+   * @param listing_id Listing ID
+   * @event POST
+   */
+  likeListing(listing_id: string): Observable<API> {
+    return this.httpClient.post<API>(
+      this.url + "api/likes",
+      { listing_id: listing_id },
+      this.authService.getAuthOptions()
+    );
   }
 
-  sendApplication(data) {
-    return this.httpClient.post<API>(this.url + 'api/mailer/send-application', data, this.authenticatedOption);
+  /**
+   * Unlike a particular listing
+   * @param like_id Listing ID
+   * @event DELETE
+   */
+  unlikeListing(like_id: number): Observable<API> {
+    return this.httpClient.delete<API>(
+      this.url + "api/likes/" + like_id,
+      this.authService.getAuthOptions()
+    );
   }
+
+
+  /**
+   * Update a particular listing
+   * @param listing_id Listing ID
+   * @param data Updated Listing Data
+   * @event PUT
+   */
+  updateListing(listing_id: string, data: UpdateListing): Observable<API> {
+    return this.httpClient.put<API>(
+      this.url + "api/listings/" + listing_id,
+      data,
+      this.authService.getAuthOptionsWithoutContentType()
+    )
+  }
+
+  /**
+   * Updates a particular milestone
+   * @param milestone_id Milestone ID
+   * @param data Updated Milestone Data
+   * @event PUT
+   */
+  updateMilestone(milestone_id: number, data: UpdateListingMilestones): Observable<API> {
+    return this.httpClient.put<API>(
+      this.url + "api/milestones/" + milestone_id,
+      data,
+      this.authService.getAuthOptions()
+    );
+  }
+
+  /**
+   * Updates a particular FAQ
+   * @param faq_id FAQ ID
+   * @param data Updated FAQ Data
+   * @event PUT
+   */
+  updateFAQ(faq_id: number, data: UpdateListingFAQ): Observable<API> {
+    return this.httpClient.put<API>(
+      this.url + "api/faqs/" + faq_id,
+      data,
+      this.authService.getAuthOptions()
+    );
+  }
+
+  /**
+   * Updates a particular Job
+   * @param job_id Job ID
+   * @param data Updated Job Data
+   * @event PUT
+   */
+  updateJobs(job_id: number, data: UpdateListingJobs): Observable<API> {
+    return this.httpClient.put<API>(
+      this.url + "api/jobs/" + job_id,
+      data,
+      this.authService.getAuthOptions()
+    );
+  }
+
+  /**
+   * Deletes a particular listing
+   * @param listingId Listing ID
+   * @event DELETE
+   */
+  removeListing(listingId: string): Observable<API> {
+    return this.httpClient.put<API>(
+      this.url + "api/listings/" + listingId + "/deactivate",
+      {},
+      this.authService.getAuthOptions()
+    );
+  }
+
+  /**
+   * Deletes a particular milestone
+   * @param milestone_id Milestone ID
+   * @event DELETE
+   */
+  removeMilestone(milestone_id: number): Observable<API> {
+    return this.httpClient.delete<API>(
+      this.url + "api/milestones/" + milestone_id,
+      this.authService.getAuthOptions()
+    );
+  }
+
+  /**
+   * Deletes a particular FAQ
+   * @param faq_id FAQ ID
+   * @event DELETE
+   */
+  removeFAQ(faq_id: number): Observable<API> {
+    return this.httpClient.delete<API>(
+      this.url + "api/faqs/" + faq_id,
+      this.authService.getAuthOptions()
+    );
+  }
+
+  /**
+   * Deletes a particular hashtag
+   * @param hashtag_id Hashtag ID
+   * @event DELETE 
+   */
+  removeHashtags(hashtag_id: number): Observable<API> {
+    return this.httpClient.delete<API>(
+      this.url + "api/hashtags/" + hashtag_id,
+      this.authService.getAuthOptions()
+    );
+  }
+
+  /**
+   * Deletes a particular location connected to the listing
+   * @param listing_location_id Listing Location ID
+   * @event DELETE
+   */
+  removeListingLocation(listing_location_id: number): Observable<API> {
+    return this.httpClient.delete<API>(
+      this.url + "api/listing-locations/" + listing_location_id,
+      this.authService.getAuthOptions()
+    );
+  }
+
+  /**
+   * Deletes a particular job
+   * @param listing_job_id Job ID
+   * @event DELETE
+   */
+  removeListingJobs(listing_job_id: number): Observable<API> {
+    return this.httpClient.delete<API>(
+      this.url + "api/jobs/" + listing_job_id,
+      this.authService.getAuthOptions()
+
+    );
+  }
+
+  /**
+   * Deletes a particular comment
+   * @param comment_id Comment ID
+   * @event DELETE
+   */
+  removeListingComments(comment_id: number): Observable<API> {
+    return this.httpClient.delete<API>(
+      this.url + "api/listing-comments/" + comment_id,
+      this.authService.getAuthOptions()
+
+    );
+  }
+
+  /**
+   * Deletes a particular listing update
+   * @param update_id Update ID
+   * @event DELETE
+   */
+  removeListingUpdates(update_id: number): Observable<API> {
+    return this.httpClient.delete<API>(
+      this.url + "api/listing-updates/" + update_id,
+      this.authService.getAuthOptions()
+    );
+  }
+
 }

@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -33,6 +32,7 @@ import { EditListingCardsComponent } from './components/edit-listing-cards/edit-
 import { SnackbarErrorComponent } from './components/snackbar-error/snackbar-error.component';
 import { SnackbarSuccessComponent } from './components/snackbar-success/snackbar-success.component';
 import { OrganisationCardsComponent } from './components/organisation-cards/organisation-cards.component';
+import { OrgBannerComponent } from './components/organisation-banner/organisation-banner.component';
 
 // Pages
 import { ListingHomeComponent } from '@app/pages/listing-home/listing-home.component';
@@ -82,6 +82,7 @@ import { DialogComponent } from './components/dialog/dialog.component';
     OnboardingComponent,
     MainSearchComponent,
     OrganisationCardsComponent,
+    OrgBannerComponent,
     CropImageDialogComponent,
     DialogComponent,
   ],

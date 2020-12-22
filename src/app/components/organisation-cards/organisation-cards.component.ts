@@ -11,11 +11,10 @@ export class OrganisationCardsComponent{
   constructor(private router: Router) {
   }
 
-  @Input() OrganisationData;
-  @Input() ColNum;
+  @Input() organisationData;
+  @Input() colNum;
 
   selectedCard(data) {
-      console.log(data);
       this.router.navigate(["/organisation/" + data.organisation_id]);
   }
 }
