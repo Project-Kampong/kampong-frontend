@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthService } from '@app/services/auth.service';
+import { environment } from "../../environments/environment";
 import { API } from '@app/interfaces/api';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocationsService {
-  url: string;
+  
+  url: string = environment.apiUrl;
 
-  constructor(private httpClient: HttpClient, private AuthService: AuthService) {
-    this.url = this.AuthService.URL;
+  constructor(private httpClient: HttpClient) {
   }
 
   getAllLocations() {
