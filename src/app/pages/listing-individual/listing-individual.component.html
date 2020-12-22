@@ -7,10 +7,7 @@
     </div>
     <div class="d-flex flex-wrap">
       <div class="col-lg-8">
-        <app-image-carousel
-          *ngIf="pics && pics.length > 0"
-          [SliderImages]="pics"
-        ></app-image-carousel>
+        <app-image-carousel *ngIf="pics && pics.length > 0" [SliderImages]="pics"></app-image-carousel>
       </div>
       <div class="col-lg-4">
         <div class="project-sidebar-container">
@@ -36,39 +33,24 @@
             </div>
 
             <div class="button-container">
-              <div *ngIf="
-                authService.isLoggedIn &&
-                createdBy == authService.LoggedInUserID;
-                else isNotOwner">
-                  <button class="primary-button" (click)="editListing(this.listingId)">
-                    Edit this listing
-                  </button>
+              <div *ngIf="authService.isLoggedIn && createdBy == authService.LoggedInUserID; else isNotOwner">
+                <button class="primary-button" (click)="editListing(this.listingId)">Edit this listing</button>
               </div>
-                <ng-template #isNotOwner>
-                  <button class="primary-button" (click)="togglePopup()">
-                    Enquire this project
-                  </button>
-                </ng-template>
+              <ng-template #isNotOwner>
+                <button class="primary-button" (click)="togglePopup()">Enquire this project</button>
+              </ng-template>
             </div>
 
             <div *ngIf="isLiked">
-              <p (click)="handle_like()" class="light-xs like-btn liked">
-                {{ likesArr.length }} Likes
-              </p>
+              <p (click)="handle_like()" class="light-xs like-btn liked">{{ likesArr.length }} Likes</p>
             </div>
             <div *ngIf="!isLiked">
-              <p (click)="handle_like()" class="light-xs like-btn">
-                {{ likesArr.length }} Likes
-              </p>
+              <p (click)="handle_like()" class="light-xs like-btn">{{ likesArr.length }} Likes</p>
             </div>
-
           </div>
 
           <div *ngIf="listingData">
-            <div
-              class="user-info"
-              (click)="clickOnProfile(createdBy)"
-            >
+            <div class="user-info" (click)="clickOnProfile(createdBy)">
               <div class="profile-image">
                 <img src="{{ profilePicture }}" />
               </div>
@@ -84,10 +66,7 @@
   </div>
   <div *ngIf="milestoneArr && milestoneArr.length > 0">
     <div class="milestone-timeline container">
-      <app-milestones
-        *ngIf="milestoneArr"
-        [MilestoneArr]="milestoneArr"
-      ></app-milestones>
+      <app-milestones *ngIf="milestoneArr" [MilestoneArr]="milestoneArr"></app-milestones>
     </div>
   </div>
 </section>
@@ -118,37 +97,58 @@
           </p>
           <p class="job-description light-s">
             {{ job.job_description }}
+            <button (click)="applyJob(job)" class="apply-button primary-button">Apply</button>
           </p>
+          <!-- <div class="popup-email">
+            <div class="close-btn" (click)="toggleEmailPopup()"></div>
+            <p class="popup-title">Are you sure you want to apply ?</p>
+            <a class="btn yellow-btn mt-5" (click)="applyJob(skills)">Confirm</a>
+          </div> -->
         </div>
       </div>
     </div>
     <!-- Story -->
     <div class="tabs-content" id="story">
       <h3 class="primary-badge">Overview</h3>
-      <div *ngIf="listingData" style="margin-bottom: 20px;">
+      <div *ngIf="listingData" style="margin-bottom: 20px">
         <div class="CMS-editor">
           <div id="result-overview"></div>
         </div>
+        <div *ngIf="!listingData.overview">
+          <ng-container *ngTemplateOutlet="emptyPlaceHolder"></ng-container>
+        </div>
       </div>
       <h3 class="primary-badge">Problem</h3>
-      <div *ngIf="listingData" style="margin-bottom: 20px;">
+      <div *ngIf="listingData" style="margin-bottom: 20px">
         <div class="CMS-editor">
           <div id="result-problem"></div>
         </div>
+        <div *ngIf="!listingData.problem">
+          <ng-container *ngTemplateOutlet="emptyPlaceHolder"></ng-container>
+        </div>
       </div>
-      <h3 class="primary-badge"> Solution</h3>
-      <div *ngIf="listingData" style="margin-bottom: 20px;">
+      <h3 class="primary-badge">Solution</h3>
+      <div *ngIf="listingData" style="margin-bottom: 20px">
         <div class="CMS-editor">
           <div id="result-solution"></div>
         </div>
+        <div *ngIf="!listingData.solution">
+          <ng-container *ngTemplateOutlet="emptyPlaceHolder"></ng-container>
+        </div>
       </div>
       <h3 class="primary-badge">Outcome</h3>
-      <div *ngIf="listingData" style="margin-bottom: 20px;">
+      <div *ngIf="listingData" style="margin-bottom: 20px">
         <div class="CMS-editor">
           <div id="result-outcome"></div>
         </div>
+        <div *ngIf="!listingData.outcome">
+          <ng-container *ngTemplateOutlet="emptyPlaceHolder"></ng-container>
+        </div>
       </div>
     </div>
+
+    <ng-template #emptyPlaceHolder> <div class="empty-placeholder">There doesn't seem to be anything here.</div> </ng-template>
+
     <!-- FAQ -->
     <div class="tabs-content" id="FAQ">
       <div *ngIf="faqArr && faqArr.length > 0" class="faq-container">
@@ -164,56 +164,28 @@
     </div>
     <!-- Updates -->
     <div class="tabs-content" id="updates">
-      <div
-        *ngIf="
-          authService.isLoggedIn &&
-          createdBy == authService.LoggedInUserID
-        "
-        class="updates-input"
-      >
+      <div *ngIf="authService.isLoggedIn && createdBy == authService.LoggedInUserID" class="updates-input">
         <div class="d-flex justify-content-end">
-          <button
-            class="outline-btn btn"
-            (click)="updatesFormOpen = !updatesFormOpen"
-          >
-            Post Update
-          </button>
+          <button class="outline-btn btn" (click)="updatesFormOpen = !updatesFormOpen">Post Update</button>
         </div>
         <div *ngIf="updatesFormOpen" style="padding: 1rem">
           <div class="custom-input">
             <label class="input-label">Images (Maximum of 5)</label>
             <div class="d-flex flex-wrap align-items-start mt-2 image-output">
-              <div
-                *ngFor="let file of updateImagesDisplay; index as i"
-                class="image-container"
-                (click)="removeImage(i)"
-              >
+              <div *ngFor="let file of updateImagesDisplay; index as i" class="image-container" (click)="removeImage(i)">
                 <img src="{{ file }}" />
               </div>
 
-              <div
-                *ngIf="updateImagesDisplay.length < 5 && updateImages.length < 5"
-                class="custom-file-upload-container"
-              >
+              <div *ngIf="updateImagesDisplay.length < 5 && updateImages.length < 5" class="custom-file-upload-container">
                 <label for="file-upload" class="custom-file-upload"> </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="file-upload"
-                  (change)="uploadImage($event)"
-                />
+                <input type="file" accept="image/*" id="file-upload" (change)="uploadImage($event)" />
               </div>
             </div>
           </div>
 
           <mat-form-field class="full-width">
             <mat-label>Description</mat-label>
-            <textarea
-              matInput
-              cdkTextareaAutosize
-              cdkAutosizeMinRows="3"
-              [(ngModel)]="updateInput"
-            ></textarea>
+            <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3" [(ngModel)]="updateInput"></textarea>
           </mat-form-field>
           <div class="d-flex justify-content-end">
             <button class="yellow-btn" (click)="postUpdate()">Submit</button>
@@ -222,10 +194,7 @@
       </div>
 
       <div *ngIf="updatesArr && updatesArr.length > 0">
-        <div
-          *ngFor="let update of updatesArr; let i = index"
-          class="update-card"
-        >
+        <div *ngFor="let update of updatesArr; let i = index" class="update-card">
           <div class="card-head">
             <div class="d-flex align-items-center updates-user-info">
               <div class="profile-image">
@@ -234,7 +203,7 @@
               <div class="ml-3">
                 <p class="user regular-s">by {{ nickname }}</p>
                 <p class="datetime light-xs">
-                  {{ update.updated_on | date: "d MMM y" }}
+                  {{ update.updated_on | date: 'd MMM y' }}
                 </p>
               </div>
             </div>
@@ -245,25 +214,15 @@
             </div>
           </div>
           <div class="card-content">
-            <app-update-carousel
-              [SliderImages]="update.pics"
-            ></app-update-carousel>
+            <app-update-carousel [SliderImages]="update.pics"></app-update-carousel>
             <div class="text-content">
               <p class="light-s">
                 {{ update.description }}
               </p>
             </div>
           </div>
-          <div
-            *ngIf="
-              authService.isLoggedIn == true &&
-              createdBy == authService.LoggedInUserID
-            "
-            class="d-flex justify-content-end p-1"
-          >
-            <button (click)="deleteUpdate(update)" class="red-btn btn">
-              Delete Update
-            </button>
+          <div *ngIf="authService.isLoggedIn == true && createdBy == authService.LoggedInUserID" class="d-flex justify-content-end p-1">
+            <button (click)="deleteUpdate(update)" class="red-btn btn">Delete Update</button>
           </div>
         </div>
       </div>
@@ -273,12 +232,7 @@
       <div *ngIf="authService.isLoggedIn == true" class="comments-input">
         <mat-form-field class="full-width">
           <mat-label>Comments</mat-label>
-          <textarea
-            matInput
-            cdkTextareaAutosize
-            cdkAutosizeMinRows="3"
-            [(ngModel)]="commentInput"
-          ></textarea>
+          <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3" [(ngModel)]="commentInput"></textarea>
         </mat-form-field>
         <div class="d-flex justify-content-end">
           <button class="yellow-btn" (click)="postComment()">Submit</button>
@@ -289,10 +243,7 @@
           <div *ngIf="comment.reply_to_id == null" class="comments-card">
             <div class="avatar-container updates-user-info">
               <div class="profile-image">
-                <img
-                  *ngIf="comment.profile_picture != null"
-                  src="{{ comment.profile_picture }}"
-                />
+                <img *ngIf="comment.profile_picture != null" src="{{ comment.profile_picture }}" />
                 <img
                   *ngIf="comment.profile_picture == null"
                   src="https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png"
@@ -302,79 +253,38 @@
             <div class="ml-3" style="flex: 1">
               <div class="comments-info">
                 <div class="d-flex justify-content-between mb-2">
-                  <p
-                    (click)="clickOnProfile(comment.user_id)"
-                    class="username medium-s"
-                  >
-                    <span
-                      *ngIf="comment.user_id == listingData.created_by"
-                      class="owner-badge"
-                      >Project Owner</span
-                    >
+                  <p (click)="clickOnProfile(comment.user_id)" class="username medium-s">
+                    <span *ngIf="comment.user_id == listingData.created_by" class="owner-badge">Project Owner</span>
                     {{ comment.nickname }}
                   </p>
                   <p class="time light-xs">
-                    {{ comment.updated_on | date: "d MMM y" }}
+                    {{ comment.updated_on | date: 'd MMM y' }}
                   </p>
                 </div>
                 <p class="comments light-s">
                   {{ comment.comment }}
                 </p>
               </div>
-              <button
-                class="reply-btn btn"
-                (click)="comment.openbox = !comment.openbox"
-              >
-                Reply
-              </button>
-              <button
-                *ngIf="comment.user_id == authService.LoggedInUserID"
-                class="delete-btn btn"
-                (click)="deleteComment(comment)"
-              >
-                Delete
-              </button>
-              <div
-                *ngIf="
-                  authService.isLoggedIn == true && comment.openbox == true
-                "
-                class="comments-input reply-input mt-2"
-              >
+              <button class="reply-btn btn" (click)="comment.openbox = !comment.openbox">Reply</button>
+              <button *ngIf="comment.user_id == authService.LoggedInUserID" class="delete-btn btn" (click)="deleteComment(comment)">Delete</button>
+              <div *ngIf="authService.isLoggedIn == true && comment.openbox == true" class="comments-input reply-input mt-2">
                 <mat-form-field class="full-width">
                   <mat-label>Reply to</mat-label>
-                  <textarea
-                    matInput
-                    cdkTextareaAutosize
-                    cdkAutosizeMinRows="3"
-                    [(ngModel)]="replyInput"
-                  ></textarea>
+                  <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3" [(ngModel)]="replyInput"></textarea>
                 </mat-form-field>
                 <div class="d-flex justify-content-end">
-                  <button
-                    class="yellow-btn"
-                    (click)="
-                      replyComment(comment);
-                    "
-                  >
-                    Submit
-                  </button>
+                  <button class="yellow-btn" (click)="replyComment(comment)">Submit</button>
                 </div>
               </div>
             </div>
           </div>
           <!-- Child Comments -->
           <div *ngFor="let reply of commentsArr">
-            <div
-              class="child-container"
-              *ngIf="reply.reply_to_id == comment.listing_comment_id"
-            >
+            <div class="child-container" *ngIf="reply.reply_to_id == comment.listing_comment_id">
               <div class="comments-card">
                 <div class="avatar-container updates-user-info">
                   <div class="profile-image">
-                    <img
-                      *ngIf="reply.profile_picture != null"
-                      src="{{ reply.profile_picture }}"
-                    />
+                    <img *ngIf="reply.profile_picture != null" src="{{ reply.profile_picture }}" />
                     <img
                       *ngIf="reply.profile_picture == null"
                       src="https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png"
@@ -384,33 +294,19 @@
                 <div class="ml-3" style="flex: 1">
                   <div class="comments-info">
                     <div class="d-flex justify-content-between mb-2">
-                      <p
-                        class="username medium-s"
-                        (click)="clickOnProfile(reply.user_id)"
-                      >
-                        <span
-                          *ngIf="reply.user_id == listingData.created_by"
-                          class="owner-badge"
-                          >Project Owner</span
-                        >
-
+                      <p class="username medium-s" (click)="clickOnProfile(reply.user_id)">
+                        <span *ngIf="reply.user_id == listingData.created_by" class="owner-badge">Project Owner</span>
                         {{ reply.nickname }}
                       </p>
                       <p class="time light-xs">
-                        {{ reply.updated_on | date: "d MMM y" }}
+                        {{ reply.updated_on | date: 'd MMM y' }}
                       </p>
                     </div>
                     <p class="comments light-s">
                       {{ reply.comment }}
                     </p>
                   </div>
-                  <button
-                    *ngIf="reply.user_id == authService.LoggedInUserID"
-                    class="delete-btn btn"
-                    (click)="deleteComment(reply)"
-                  >
-                    Delete
-                  </button>
+                  <button *ngIf="reply.user_id == authService.LoggedInUserID" class="delete-btn btn" (click)="deleteComment(reply)">Delete</button>
                 </div>
               </div>
             </div>
@@ -432,13 +328,7 @@
       </mat-form-field>
       <mat-form-field class="full-width">
         <mat-label>Your Message</mat-label>
-        <textarea
-          matInput
-          cdkTextareaAutosize
-          cdkAutosizeMinRows="10"
-          cdkAutosizeMaxRows="10"
-          [(ngModel)]="enquireMessage"
-        ></textarea>
+        <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="10" cdkAutosizeMaxRows="10" [(ngModel)]="enquireMessage"></textarea>
       </mat-form-field>
     </div>
     <a class="btn yellow-btn mt-5" (click)="sendMessage()">Send Message</a>
