@@ -14,7 +14,7 @@ interface OptionObject {
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class ListingsService {
   

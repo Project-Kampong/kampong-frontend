@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 
-import { AuthService } from "@app/services/auth.service";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
+import { AuthService } from '@app/services/auth.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { SnackbarService } from "@app/services/snackbar.service";
+import { SnackbarService } from '@app/services/snackbar.service';
 
 // Interface
 import { Subscription } from "rxjs";
@@ -12,9 +12,9 @@ import { CookieService } from "ngx-cookie-service";
 import { userLoginForm } from "@app/util/forms/login";
 
 @Component({
-  selector: "app-login",
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"],
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
 

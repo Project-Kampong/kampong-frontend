@@ -15,7 +15,7 @@ interface OptionObject {
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthService {
 
@@ -219,9 +219,9 @@ export class AuthService {
   }
 
   setAuthHeaders(token) {
-    const authorizationCode = "Bearer " + token;
+    const authorizationCode = 'Bearer ' + token;
     this.AuthHttpHeaders = new HttpHeaders({
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       authorization: authorizationCode,
     });
 
@@ -247,8 +247,7 @@ export class AuthService {
   }
 
   logout() {
-    console.log("logout");
-    this.AuthToken = "";
+    this.AuthToken = '';
     this.isLoggedIn = false;
     this.cookieService.delete("token", "/");
     window.location.href = "/login";

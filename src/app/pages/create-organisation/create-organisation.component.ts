@@ -7,10 +7,6 @@ import { Router } from "@angular/router";
 import { OrganisationsService } from "@app/services/organisations.service";
 import { SnackbarService } from "@app/services/snackbar.service"
 
-// Util
-import { categoryList} from "@app/util/categories";
-import { locationList } from '@app/util/locations';
-
 // Interfaces
 import { CreateOrganisation } from "@app/interfaces/organisation";
 import { createOrganisationForm } from "@app/util/forms/organisation";
@@ -21,9 +17,9 @@ import { AuthService } from "@app/services/auth.service";
 declare var $: any;
 
 @Component({
-  selector: "app-create-organisation",
-  templateUrl: "./create-organisation.component.html",
-  styleUrls: ["./create-organisation.component.scss"],
+  selector: 'app-create-organisation',
+  templateUrl: './create-organisation.component.html',
+  styleUrls: ['./create-organisation.component.scss'],
 })
 export class CreateOrganisationComponent implements OnInit, OnDestroy {
   
@@ -43,8 +39,8 @@ export class CreateOrganisationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.typeGroup = categoryList;
-    this.locationGroup = locationList;
+    this.typeGroup = [];
+    this.locationGroup = [];
     this.organisationForm = this.fb.group(createOrganisationForm);
   }
 
@@ -60,7 +56,7 @@ export class CreateOrganisationComponent implements OnInit, OnDestroy {
 
   createOrganisation(): void {
     if (this.getFormValidationErrors()) {
-      this.snackbarService.openSnackBar("Please complete the form", false);
+      this.snackbarService.openSnackBar('Please complete the form', false);
       return;
     }
     const name: string = this.organisationForm.value.name;
@@ -85,10 +81,7 @@ export class CreateOrganisationComponent implements OnInit, OnDestroy {
       },
       (err) => {
         console.log(err);
-        this.snackbarService.openSnackBar(
-          this.snackbarService.DialogList.create_organisation.error,
-          false
-        );
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_organisation.error, false);
       },
       () => {
         this.snackbarService.openSnackBar(
@@ -103,5 +96,4 @@ export class CreateOrganisationComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
-
 }

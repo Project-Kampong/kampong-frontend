@@ -6,20 +6,18 @@ import { MatChipInputEvent } from "@angular/material/chips";
 import { Router } from "@angular/router";
 
 // Services
-import { ListingsService } from "@app/services/listings.service";
-import { SnackbarService } from "@app/services/snackbar.service";
-
-// Util
-import { locationList } from '@app/util/locations';
-import { categoryList } from "@app/util/categories";
+import { ListingsService } from '@app/services/listings.service';
+import { SnackbarService } from '@app/services/snackbar.service';
+import { AuthService } from "@app/services/auth.service";
 
 // Interfaces
-import { CreateListingFAQ,  CreateListing } from "@app/interfaces/listing";
-import { createListingForm } from "@app/util/forms/listing";
-import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
+import { CreateListing } from '@app/interfaces/listing';
+import { createListingForm } from '@app/util/forms/listing';
 import { catchError } from 'rxjs/operators';
 import { forkJoin, Observable, of, Subscription } from 'rxjs';
-import { AuthService } from "@app/services/auth.service";
+import { categoriesStore } from '@app/store/categories-store';
+import { locationsStore } from '@app/store/locations-store';
+
 
 declare var $: any;
 
@@ -37,19 +35,19 @@ interface AddListingFAQ {
 }
 
 @Component({
-  selector: "app-create-listing",
-  templateUrl: "./create-listing.component.html",
-  styleUrls: ["./create-listing.component.scss"],
+  selector: 'app-create-listing',
+  templateUrl: './create-listing.component.html',
+  styleUrls: ['./create-listing.component.scss'],
 })
 export class CreateListingComponent implements OnInit, OnDestroy {
   
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
   listingForm: FormGroup;
   listingData: CreateListing;
-  listingId: string = "";
+  listingId: string = '';
   removable: boolean = true;
-  categoryGroup: CategoryFilter[] = [];
-  locationGroup: LocationFilter[] = [];
+  categoryGroup = categoriesStore;
+  locationGroup = locationsStore;
   listingImages: File[] = [];
   listingImagesDisplay: string[] = [];
   hashtags: string[] = [];
@@ -65,27 +63,24 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     private snackbarService: SnackbarService,
     private authService: AuthService,
 
-  ) {}
-  
-  ngOnInit() {
+  ) {} 
 
-    this.categoryGroup = categoryList;
-    this.locationGroup = locationList;
+  ngOnInit() {
     this.listingForm = this.fb.group({
       ...createListingForm,
     });
 
     // CMS
-    $(".action-container .action-btn").on("click", function() {
-      const cmd = $(this).data("command");
-      if (cmd == "createlink") {
-        const url = prompt("Enter the link here: ");
+    $('.action-container .action-btn').on('click', function () {
+      const cmd = $(this).data('command');
+      if (cmd == 'createlink') {
+        const url = prompt('Enter the link here: ');
         if (url === null) {
           return;
         }
         document.execCommand(cmd, false, url);
-      } else if (cmd == "formatBlock") {
-        const size = $(this).data("size");
+      } else if (cmd == 'formatBlock') {
+        const size = $(this).data('size');
         document.execCommand(cmd, false, size);
       } else {
         document.execCommand(cmd, false, null);
@@ -94,12 +89,12 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   }
 
   addHashtag(event: MatChipInputEvent): void {
-    const value = ("#" + event.value.replace(/[&\/\\#,+()$~%. '":*?<>\[\]{}]/g, "")).trim();
-    if (this.hashtags.length === 3 || value === "#" || event.value.length < 3) {
+    const value = ('#' + event.value.replace(/[&\/\\#,+()$~%. '":*?<>\[\]{}]/g, '')).trim();
+    if (this.hashtags.length === 3 || value === '#' || event.value.length < 3) {
       return;
     }
     this.hashtags.push(value);
-    event.input.value = "";
+    event.input.value = '';
   }
 
   removeHashtag(tag: string): void {
@@ -113,7 +108,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     const reader: FileReader = new FileReader();
     reader.onload = (e) => {
       this.listingImagesDisplay.push(reader.result.toString());
-    }
+    };
     try {
       reader.readAsDataURL((event.target as HTMLInputElement).files[0]);
     } catch (error) {
@@ -129,16 +124,16 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   }
 
   addMilestone(): void {
-    this.milestoneArr.push({ milestone_description: "", date: new Date() });
+    this.milestoneArr.push({ milestone_description: '', date: new Date() });
     this.milestoneArr.sort((a, b) => {
-      const result: number = (new Date(a.date)).valueOf() - (new Date(b.date)).valueOf();
+      const result: number = new Date(a.date).valueOf() - new Date(b.date).valueOf();
       return result;
     });
   }
 
   sortMilestone(): void {
     this.milestoneArr = this.milestoneArr.sort((a, b) => {
-      const result: number = (new Date(a.date)).valueOf() - (new Date(b.date)).valueOf();
+      const result: number = new Date(a.date).valueOf() - new Date(b.date).valueOf();
       return result;
     });
   }
@@ -149,8 +144,8 @@ export class CreateListingComponent implements OnInit, OnDestroy {
 
   addFAQ(): void {
     this.faqArr.push({
-      question: "",
-      answer: "",
+      question: '',
+      answer: '',
     });
   }
   removeFAQ(i: number): void {
@@ -158,7 +153,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   }
 
   addDescription(): void {
-    this.jobArr.push({ job_title: "", job_description: "" });
+    this.jobArr.push({ job_title: '', job_description: '' });
   }
 
   removeDescription(i: number): void {
@@ -185,52 +180,64 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           date: val.date,
         }).pipe(catchError(error => of(error))));
       }
-    })
+    });
     return forkJoin(milestoneCreateObservables);
   }
 
   createHashtags(): Observable<any[]> {
     const hashtagsCreateObservables: Observable<any>[] = [];
     this.hashtags.forEach((val) => {
-      hashtagsCreateObservables.push(this.listingsService.createListingHashtags({
-        listing_id: this.listingId,
-        tag: val,
-      }).pipe(catchError(error => of(error))));
-    })
+      hashtagsCreateObservables.push(
+        this.listingsService
+          .createListingHashtags({
+            listing_id: this.listingId,
+            tag: val,
+          })
+          .pipe(catchError((error) => of(error))),
+      );
+    });
     return forkJoin(hashtagsCreateObservables);
   }
 
   createJobs(): Observable<any[]> {
     const jobsCreateObservables: Observable<any>[] = [];
     this.jobArr.forEach((val) => {
-      if (val.job_title !== "" && val.job_description !== "") {
-        jobsCreateObservables.push(this.listingsService.createListingJobs({
-          listing_id: this.listingId,
-          job_title: val.job_title,
-          job_description: val.job_description,
-        }).pipe(catchError(error => of(error))));
+      if (val.job_title !== '' && val.job_description !== '') {
+        jobsCreateObservables.push(
+          this.listingsService
+            .createListingJobs({
+              listing_id: this.listingId,
+              job_title: val.job_title,
+              job_description: val.job_description,
+            })
+            .pipe(catchError((error) => of(error))),
+        );
       }
-    })
+    });
     return forkJoin(jobsCreateObservables);
   }
 
   createFaqs(): Observable<any[]> {
     const faqCreateObservables: Observable<any>[] = [];
     this.faqArr.forEach((val) => {
-      if (val.question !== "" && val.answer !== "") {
-        faqCreateObservables.push(this.listingsService.createListingFAQ({
-          listing_id: this.listingId,
-          question: val.question,
-          answer: val.answer,
-        }).pipe(catchError(error => of(error))));
+      if (val.question !== '' && val.answer !== '') {
+        faqCreateObservables.push(
+          this.listingsService
+            .createListingFAQ({
+              listing_id: this.listingId,
+              question: val.question,
+              answer: val.answer,
+            })
+            .pipe(catchError((error) => of(error))),
+        );
       }
-    })
+    });
     return forkJoin(faqCreateObservables);
   }
 
   async createListing(): Promise<void> {
     if (this.getFormValidationErrors() === true) {
-      this.snackbarService.openSnackBar("Please complete the form", false);
+      this.snackbarService.openSnackBar('Please complete the form', false);
       return;
     }
 
@@ -240,33 +247,40 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     const mission: string = this.listingForm.value.mission;
     const listing_url: string = this.listingForm.value.listing_url;
     const listing_email: string = this.listingForm.value.listing_email;
-    const listing_status: string = "ongoing";
+    const listing_status: string = 'ongoing';
     const locations: string[] = this.listingForm.value.locations;
     const pics: string[] = [null, null, null, null, null];
 
     //CMS
-    const overview: string = $("#overview").html();
-    const problem: string = $("#problem").html();
-    const outcome: string = $("#outcome").html();
-    const solution: string = $("#solution").html();
+    const overview: string = $('#overview').html();
+    const problem: string = $('#problem').html();
+    const outcome: string = $('#outcome').html();
+    const solution: string = $('#solution').html();
 
     this.listingData = {
-      title, category, tagline, mission, overview,
-      problem, outcome, solution, listing_url, listing_email,
-      listing_status, pics, locations
+      title,
+      category,
+      tagline,
+      mission,
+      overview,
+      problem,
+      outcome,
+      solution,
+      listing_url,
+      listing_email,
+      listing_status,
+      pics,
+      locations,
     };
 
     this.subscriptions.push((await this.listingsService.createListing(this.listingData).subscribe(
       (res) => {
         console.log(res);
-        this.listingId = res["data"]["listing_id"];
+        this.listingId = res['data']['listing_id'];
       },
       (err) => {
         console.log(err);
-        this.snackbarService.openSnackBar(
-          this.snackbarService.DialogList.create_listing.error,
-          false
-        );
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);
       },
       () => {
         const combinedObservables = forkJoin([this.createFaqs(), this.createHashtags(), this.createJobs(), this.createMilestones()]);
@@ -274,10 +288,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           next: res => console.log(res),
           error: err => {
             console.log(err);
-            this.snackbarService.openSnackBar(
-              this.snackbarService.DialogList.create_listing.error,
-              false
-            );
+            this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);
           },
           complete: () => {
             this.snackbarService.openSnackBar(

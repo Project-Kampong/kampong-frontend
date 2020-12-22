@@ -8,32 +8,13 @@
       <div class="listing-form" [formGroup]="organisationForm">
         <div class="form-item">
           <label>Name Of Organisation *</label>
-          <input
-            placeholder="Give your organisation a name"
-            formControlName="name"
-          />
+          <input placeholder="Give your organisation a name" formControlName="name" />
           <div class="hint">{{ organisationForm.value.name.length }} / 50</div>
 
           <!-- Errors Validation -->
-          <span
-            class="error-hint"
-            *ngIf="organisationForm.get('name').hasError('maxlength')"
-          >
-            Name must not be more than 50 characters long.
-          </span>
-          <span
-            class="error-hint"
-            *ngIf="organisationForm.get('name').hasError('pattern')"
-          >
-            Special characters not allowed
-          </span>
-          <span
-            class="error-hint"
-            *ngIf="
-              organisationForm.get('name').hasError('required') &&
-              organisationForm.controls['name']?.touched
-            "
-          >
+          <span class="error-hint" *ngIf="organisationForm.get('name').hasError('maxlength')"> Name must not be more than 50 characters long. </span>
+          <span class="error-hint" *ngIf="organisationForm.get('name').hasError('pattern')"> Special characters not allowed </span>
+          <span class="error-hint" *ngIf="organisationForm.get('name').hasError('required') && organisationForm.controls['name']?.touched">
             Name is required
           </span>
           <!-- End of Errors Validation -->
@@ -43,11 +24,7 @@
           <mat-form-field appearance="fill">
             <mat-label>Type</mat-label>
             <mat-select required formControlName="organisation_type">
-              <mat-optgroup
-                *ngFor="let group of typeGroup"
-                [label]="group.name"
-                [disabled]="group.disabled"
-              >
+              <mat-optgroup *ngFor="let group of categoriesStore.categories" [label]="group.name" [disabled]="group.disabled">
                 <mat-option *ngFor="let type of group.group" [value]="type">
                   {{ type }}
                 </mat-option>
@@ -58,13 +35,8 @@
 
         <div class="form-item">
           <label>Contact Email *</label>
-          <input
-            placeholder="Give your organisation an email"
-            formControlName="email"
-          />
-          <div class="hint">
-            {{ organisationForm.value.email.length }} / 320
-          </div>
+          <input placeholder="Give your organisation an email" formControlName="email" />
+          <div class="hint">{{ organisationForm.value.email.length }} / 320</div>
 
           <!-- Errors Validation -->
           <span
@@ -122,10 +94,7 @@
           </div>
 
           <!-- Errors Validation -->
-          <span
-            class="error-hint"
-            *ngIf="organisationForm.get('website_url').hasError('max')"
-          >
+          <span class="error-hint" *ngIf="organisationForm.get('website_url').hasError('max')">
             Website URL must not be more than 100 characters long.
           </span>
           <!-- End of Errors Validation -->
@@ -140,15 +109,11 @@
             <mat-form-field appearance="fill">
               <mat-label>Area</mat-label>
               <mat-select formControlName="locations" multiple>
-                <mat-optgroup
-                  *ngFor="let group of locationGroup"
-                  [label]="group.name"
-                  [disabled]="group.disabled"
-                >
-                <mat-option *ngFor="let location of group.group" [value]="location">
-                  {{ location }}
-                </mat-option>
-              </mat-optgroup>
+                <mat-optgroup *ngFor="let group of locationsStore.locations" [label]="group.name" [disabled]="group.disabled">
+                  <mat-option *ngFor="let location of group.group" [value]="location">
+                    {{ location }}
+                  </mat-option>
+                </mat-optgroup>
               </mat-select>
             </mat-form-field>
           </div>
@@ -164,7 +129,6 @@
           <!-- Errors Validation -->
           <!-- End of Errors Validation -->
         </div>
-
       </div>
     </div>
     <div class="listing-section">
@@ -182,23 +146,12 @@
             formControlName="about"
           >
           </textarea>
-          <span class="hint">
-            {{ organisationForm.value.about.length }} / 500
-          </span>
+          <span class="hint"> {{ organisationForm.value.about.length }} / 500 </span>
           <!-- Errors Validation -->
-          <span
-            class="error-hint"
-            *ngIf="
-              organisationForm.get('about').hasError('required') &&
-              organisationForm.controls['about']?.touched
-            "
-          >
+          <span class="error-hint" *ngIf="organisationForm.get('about').hasError('required') && organisationForm.controls['about']?.touched">
             About is required
           </span>
-          <span
-            class="error-hint"
-            *ngIf="organisationForm.get('about').hasError('maxlength')"
-          >
+          <span class="error-hint" *ngIf="organisationForm.get('about').hasError('maxlength')">
             About Statement must not be more than 500 characters long.
           </span>
           <!-- End of Errors Validation -->
@@ -265,24 +218,12 @@ OLD
         <div class="custom-input col-lg-12">
           <label>Upload your header photo here!</label>
           <div class="d-flex flex-wrap align-items-start mt-2 image-output">
-            <div
-              *ngIf="headerPhoto !== null"
-              class="image-container"
-              (click)="removeHeaderPhoto()"
-            >
-              <img src="{{headerPhotoDisplay}}" />
+            <div *ngIf="headerPhoto !== null" class="image-container" (click)="removeHeaderPhoto()">
+              <img src="{{ headerPhotoDisplay }}" />
             </div>
-            <div
-              *ngIf="headerPhoto === null"
-              class="custom-file-upload-container"
-            >
+            <div *ngIf="headerPhoto === null" class="custom-file-upload-container">
               <label for="header-upload" class="custom-file-upload"> </label>
-              <input
-                type="file"
-                accept="image/*"
-                id="header-upload"
-                (change)="uploadHeaderPhoto($event)"
-              />
+              <input type="file" accept="image/*" id="header-upload" (change)="uploadHeaderPhoto($event)" />
             </div>
           </div>
         </div>
@@ -291,24 +232,12 @@ OLD
         <div class="custom-input col-lg-12">
           <label>Upload your display photo here!</label>
           <div class="d-flex flex-wrap align-items-start mt-2 image-output">
-            <div
-              *ngIf="displayPhoto !== null"
-              class="image-container"
-              (click)="removeDisplayPhoto()"
-            >
-              <img src="{{displayPhotoDisplay}}" />
+            <div *ngIf="displayPhoto !== null" class="image-container" (click)="removeDisplayPhoto()">
+              <img src="{{ displayPhotoDisplay }}" />
             </div>
-            <div
-              *ngIf="displayPhoto === null"
-              class="custom-file-upload-container"
-            >
+            <div *ngIf="displayPhoto === null" class="custom-file-upload-container">
               <label for="display-upload" class="custom-file-upload"> </label>
-              <input
-                type="file"
-                accept="image/*"
-                id="display-upload"
-                (change)="uploadDisplayPhoto($event)"
-              />
+              <input type="file" accept="image/*" id="display-upload" (change)="uploadDisplayPhoto($event)" />
             </div>
           </div>
         </div>
@@ -317,25 +246,13 @@ OLD
         <div class="custom-input col-lg-12">
           <label>Upload images of your organisation here* (Maximum of 5)</label>
           <div class="d-flex flex-wrap align-items-start mt-2 image-output">
-            <div
-              *ngFor="let img of additionalPhotosDisplay; index as i"
-              class="image-container"
-              (click)="removeAdditionalPhoto(i)"
-            >
+            <div *ngFor="let img of additionalPhotosDisplay; index as i" class="image-container" (click)="removeAdditionalPhoto(i)">
               <img src="{{ img }}" />
             </div>
 
-            <div
-              *ngIf="additionalPhotosDisplay.length < 5 && additionalPhotos.length < 5"
-              class="custom-file-upload-container"
-            >
+            <div *ngIf="additionalPhotosDisplay.length < 5 && additionalPhotos.length < 5" class="custom-file-upload-container">
               <label for="additional-upload" class="custom-file-upload"> </label>
-              <input
-                type="file"
-                accept="image/*"
-                id="additional-upload"
-                (change)="uploadAdditionalPhoto($event)"
-              />
+              <input type="file" accept="image/*" id="additional-upload" (change)="uploadAdditionalPhoto($event)" />
             </div>
           </div>
         </div>
@@ -351,54 +268,26 @@ OLD
           <div class="faq-container">
             <div *ngFor="let pg of pgArr; index as i" class="faq">
               <div class="input-field-container">
-                <div style="padding-bottom: 10px;">
-                  Programme {{i+1}}
-                </div>
+                <div style="padding-bottom: 10px">Programme {{ i + 1 }}</div>
                 <div class="form-item faq-input bg-colored">
-                  <textarea
-                    matInput
-                    placeholder="Title"
-                    cdkTextareaAutosize
-                    cdkAutosizeMinRows="2"
-                    [(ngModel)]="pg.title"
-                    maxlength="200"
-                  ></textarea>
+                  <textarea matInput placeholder="Title" cdkTextareaAutosize cdkAutosizeMinRows="2" [(ngModel)]="pg.title" maxlength="200"></textarea>
                   <span class="hint"> {{ pg.title.length }} / 200 </span>
                 </div>
                 <div class="form-item faq-input">
-                  <textarea
-                    placeholder="About"
-                    matInput
-                    cdkTextareaAutosize
-                    cdkAutosizeMinRows="5"
-                    [(ngModel)]="pg.about"
-                    maxlength="500"
-                  ></textarea>
+                  <textarea placeholder="About" matInput cdkTextareaAutosize cdkAutosizeMinRows="5" [(ngModel)]="pg.about" maxlength="500"></textarea>
                   <span class="hint"> {{ pg.about.length }} / 500 </span>
                 </div>
                 <div class="form-item">
                   <div class="custom-input col-lg-12">
                     <label>Upload images of your programme here* (Maximum of 5)</label>
                     <div class="d-flex flex-wrap align-items-start mt-2 image-output">
-                      <div
-                        *ngFor="let img of programmePhotosDisplay[i]; index as j"
-                        class="image-container"
-                        (click)="removeProgrammePhoto(j, i)"
-                      >
+                      <div *ngFor="let img of programmePhotosDisplay[i]; index as j" class="image-container" (click)="removeProgrammePhoto(j, i)">
                         <img src="{{ img }}" />
                       </div>
-          
-                      <div
-                        *ngIf="programmePhotosDisplay[i].length < 5 && programmePhotos[i].length < 5"
-                        class="custom-file-upload-container"
-                      >
+
+                      <div *ngIf="programmePhotosDisplay[i].length < 5 && programmePhotos[i].length < 5" class="custom-file-upload-container">
                         <label for="programme-upload-{{ i }}" class="custom-file-upload"> </label>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          id="programme-upload-{{ i }}"
-                          (change)="uploadProgrammePhoto($event, i)"
-                        />
+                        <input type="file" accept="image/*" id="programme-upload-{{ i }}" (change)="uploadProgrammePhoto($event, i)" />
                       </div>
                     </div>
                   </div>
