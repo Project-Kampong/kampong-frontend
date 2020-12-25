@@ -21,6 +21,10 @@ export class SnackbarService {
       success: 'Please verify your email',
       error: 'Register failed, please try again',
     },
+    email_verified: { 
+      success: "Your account has been activated",
+      error: "Email verification failed, please try again",
+    },
     upload_comments: {
       success: 'Comment posted successfully',
       error: 'Comment failed to post',

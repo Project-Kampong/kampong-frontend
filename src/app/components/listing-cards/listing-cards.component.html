@@ -1,8 +1,8 @@
 <div class="d-flex flex-wrap listing-card-wrapper">
-  <div
-    [className]="'px-2 col-lg-' + colNum"
-    *ngFor="let listing of listingData"
-  >
+  <p class="paginationControls" *ngIf="listingData.length != 0 && isPaginationRequired == true">
+    <pagination-controls (pageChange)="handlePageChange($event)"></pagination-controls>
+  </p>
+  <div [className]="'px-2 col-lg-' + colNum" *ngFor="let listing of listingData | paginate: { itemsPerPage: 2, currentPage: page }">
     <div (click)="selectedCard(listing)" class="listing-card">
       <img src="{{ listing.pics[0] }}" />
       <div class="listing-card-body">
@@ -29,10 +29,7 @@
           <div class="locationtags-list">
             <div class="location-icon"></div>
             <ul>
-              <li
-                class="light-xs"
-                *ngFor="let location of listing.locations"
-              >
+              <li class="light-xs" *ngFor="let location of listing.locations">
                 {{ location }}
               </li>
             </ul>

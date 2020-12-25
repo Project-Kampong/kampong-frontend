@@ -7,12 +7,20 @@ import { Router } from '@angular/router';
   styleUrls: ['./listing-cards.component.scss'],
 })
 export class ListingCardsComponent {
-  constructor(private router: Router) {}
+  page;
+  constructor(private router: Router) {
+    this.page = 1;
+  }
 
   @Input() listingData;
+  @Input() isPaginationRequired;
   @Input() colNum;
 
   selectedCard(data) {
-    this.router.navigate(["/listing/" + data.listing_id]);
+    this.router.navigate(['/listing/' + data.listing_id]);
+  }
+
+  handlePageChange(event) {
+    this.page = event;
   }
 }

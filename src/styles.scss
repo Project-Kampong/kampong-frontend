@@ -22,7 +22,7 @@ $font-xlarge: 2rem;
 $shadow-border: 1px solid rgba(0, 0, 0, 0.11);
 // Fonts
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .light {
@@ -171,12 +171,12 @@ body {
   .location-icon {
     padding-right: 0.5rem;
     &:before {
-      content: "\f3c5";
+      content: '\f3c5';
       color: $primary;
       margin-right: 0.25rem;
       font-size: $font-medium;
       font-weight: bold;
-      font-family: "Font Awesome\ 5 Free";
+      font-family: 'Font Awesome\ 5 Free';
     }
   }
   ul {
@@ -188,13 +188,13 @@ body {
       color: black;
       text-transform: capitalize;
       &:after {
-        content: ",";
+        content: ',';
         padding-right: 0.25rem;
       }
     }
     li:last-child {
       &:after {
-        content: "";
+        content: '';
         padding-right: 0;
       }
     }
@@ -322,8 +322,8 @@ button,
 }
 .back-btn {
   &:before {
-    content: "\f060";
-    font-family: "Font Awesome\ 5 Free";
+    content: '\f060';
+    font-family: 'Font Awesome\ 5 Free';
     font-weight: 900;
     font-size: 1.5rem;
     color: rgba(0, 0, 0, 0.5);
@@ -331,8 +331,8 @@ button,
 }
 .search-btn {
   &:before {
-    content: "\f002";
-    font-family: "Font Awesome\ 5 Free";
+    content: '\f002';
+    font-family: 'Font Awesome\ 5 Free';
     font-weight: 900;
     font-size: 1rem;
     color: rgba(0, 0, 0, 1);
@@ -429,15 +429,15 @@ button,
   margin-bottom: 0.5rem;
   cursor: pointer;
   &:after {
-    content: "\f078";
+    content: '\f078';
     color: rgba(0, 0, 0, 0.5);
     font-weight: bold;
-    font-family: "Font Awesome\ 5 Free";
+    font-family: 'Font Awesome\ 5 Free';
   }
 }
 .collapse-btn.active {
   &:after {
-    content: "\f077";
+    content: '\f077';
   }
 }
 
@@ -480,7 +480,7 @@ button,
       button {
         position: relative;
         &:before {
-          content: "";
+          content: '';
           width: 25px;
           height: 5px;
           background-color: #ffffff;
@@ -505,7 +505,7 @@ button,
     padding: 0.5rem;
     &:before {
       font-weight: bold;
-      font-family: "Font Awesome\ 5 Free";
+      font-family: 'Font Awesome\ 5 Free';
       width: 3rem;
       height: 3rem;
       display: block;
@@ -525,14 +525,14 @@ button,
     left: auto !important;
     right: 3.1rem !important;
     &::before {
-      content: "\f053";
+      content: '\f053';
       font-size: 1.5rem;
     }
   }
   .slick-next {
     right: 0 !important;
     &::before {
-      content: "\f054";
+      content: '\f054';
       font-size: 1.5rem;
     }
   }
@@ -566,7 +566,7 @@ button,
       button {
         position: relative;
         &:before {
-          content: "";
+          content: '';
           width: 20px;
           height: 5px;
           background-color: $primary-yellow;
@@ -585,7 +585,7 @@ button,
     transform: translateY(-100%);
     &:before {
       font-weight: bold;
-      font-family: "Font Awesome\ 5 Free";
+      font-family: 'Font Awesome\ 5 Free';
       width: 3rem;
       height: 3rem;
       display: block;
@@ -599,14 +599,14 @@ button,
     left: auto !important;
     right: 3.1rem !important;
     &::before {
-      content: "\f053";
+      content: '\f053';
       font-size: 2rem;
     }
   }
   .slick-next {
     right: 0 !important;
     &::before {
-      content: "\f054";
+      content: '\f054';
       font-size: 2rem;
     }
   }
@@ -619,7 +619,7 @@ button,
       button {
         position: relative;
         &:before {
-          content: "";
+          content: '';
           width: 20px;
           height: 5px;
           background-color: $primary-yellow;
@@ -709,8 +709,8 @@ body {
       outline: none;
     }
     &:after {
-      content: "\f057";
-      font-family: "Font Awesome\ 5 Free";
+      content: '\f057';
+      font-family: 'Font Awesome\ 5 Free';
       font-weight: bold;
       font-size: 1.3rem;
       color: white;
@@ -735,8 +735,8 @@ body {
       outline: none;
     }
     &:after {
-      content: "\f057";
-      font-family: "Font Awesome\ 5 Free";
+      content: '\f057';
+      font-family: 'Font Awesome\ 5 Free';
       font-weight: bold;
       font-size: 1.3rem;
       color: white;
@@ -867,7 +867,7 @@ footer {
     font-weight: inherit;
     font-style: inherit;
     font-size: 100%;
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Open Sans', sans-serif;
     vertical-align: baseline;
     position: initial;
   }
@@ -893,8 +893,11 @@ footer {
     font-weight: 700;
   }
 
-  font-family: "Open Sans", sans-serif;
-  #overview, #problem, #solution, #outcome {
+  font-family: 'Open Sans', sans-serif;
+  #overview,
+  #problem,
+  #solution,
+  #outcome {
     min-height: 100px;
     // box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
     border: $shadow-border;
@@ -1079,8 +1082,8 @@ footer {
         position: relative;
         cursor: pointer;
         &:after {
-          content: "\f067";
-          font-family: "Font Awesome\ 5 Free";
+          content: '\f067';
+          font-family: 'Font Awesome\ 5 Free';
           font-size: 2rem;
           position: absolute;
           left: 50%;
@@ -1114,8 +1117,8 @@ footer {
       &:hover {
         &:after {
           cursor: pointer;
-          content: "\f068";
-          font-family: "Font Awesome\ 5 Free";
+          content: '\f068';
+          font-family: 'Font Awesome\ 5 Free';
           font-weight: 900;
           font-size: 2rem;
           display: flex;
@@ -1171,8 +1174,8 @@ footer {
         }
         &:after {
           cursor: pointer;
-          content: "\f068";
-          font-family: "Font Awesome\ 5 Free";
+          content: '\f068';
+          font-family: 'Font Awesome\ 5 Free';
           font-weight: 900;
           background-color: $primary;
           padding: 0.5rem;
@@ -1232,8 +1235,8 @@ footer {
         }
         &:after {
           cursor: pointer;
-          content: "\f068";
-          font-family: "Font Awesome\ 5 Free";
+          content: '\f068';
+          font-family: 'Font Awesome\ 5 Free';
           font-weight: 900;
           background-color: $primary;
           padding: 0.5rem;
@@ -1300,8 +1303,8 @@ footer {
         }
         &:after {
           cursor: pointer;
-          content: "\f068";
-          font-family: "Font Awesome\ 5 Free";
+          content: '\f068';
+          font-family: 'Font Awesome\ 5 Free';
           font-weight: 900;
           background-color: $primary;
           padding: 0.5rem;
@@ -1369,7 +1372,7 @@ footer {
       position: relative;
     }
     &:before {
-      content: "";
+      content: '';
       position: absolute;
       background: #e5e5e5;
       top: 0;

@@ -82,11 +82,11 @@ export class SearchComponent implements OnInit {
       });
     } else {
       this.listingsService.getListings().subscribe((data) => {
-        this.resultsArr = data["data"];
-        this.resultsInputString = "Everything";
-        this.resultsLocString = ["All locations"];
-        this.resultsCatString = ["All interests"];
-      })
+        this.resultsArr = data['data'];
+        this.resultsInputString = 'Everything';
+        this.resultsLocString = ['All locations'];
+        this.resultsCatString = ['All interests'];
+      });
     }
   }
 

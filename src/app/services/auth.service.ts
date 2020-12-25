@@ -1,13 +1,13 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { CookieService } from "ngx-cookie-service";
-import { environment } from "./../../environments/environment";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
+import { environment } from './../../environments/environment';
 
 // Interface
-import { UserData } from "@app/interfaces/user";
-import { API } from "@app/interfaces/api";
-import { Observable } from "rxjs";
-import { UserLoginData, UserRegisterData } from "@app/interfaces/auth";
+import { UserData } from '@app/interfaces/user';
+import { API } from '@app/interfaces/api';
+import { Observable } from 'rxjs';
+import { UserLoginData, UserRegisterData } from '@app/interfaces/auth';
 
 interface OptionObject {
   headers: HttpHeaders;
@@ -18,7 +18,6 @@ interface OptionObject {
   providedIn: 'root',
 })
 export class AuthService {
-
   private url: string = environment.apiUrl;
   private userData: UserData = <UserData>{};
   private isLoggedIn: boolean = false;
@@ -26,17 +25,14 @@ export class AuthService {
   // Headers
   private options: OptionObject = {
     headers: new HttpHeaders({
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     }),
   };
 
   private authOptions: OptionObject = <OptionObject>{};
   private authOptionsWithoutContentType: OptionObject = <OptionObject>{};
 
-  constructor(
-    private httpClient: HttpClient,
-    private cookieService: CookieService
-  ) {}
+  constructor(private httpClient: HttpClient, private cookieService: CookieService) {}
 
   /**
    * Register User
@@ -44,39 +40,31 @@ export class AuthService {
    * @event POST
    */
   registerUser(data: UserRegisterData): Observable<API> {
-    return this.httpClient.post<API>(
-      this.url + "api/auth/register",
-      data,
-      this.options
-    );
+    return this.httpClient.post<API>(this.url + 'api/auth/register', data, this.options);
   }
 
   /**
    * Login User
    * @param data User Details
-   * @event POST 
+   * @event POST
    */
   loginUser(data: UserLoginData): Observable<API> {
-    return this.httpClient.post<API>(
-      this.url + "api/auth/login",
-      data,
-      this.options
-    )
+    return this.httpClient.post<API>(this.url + 'api/auth/login', data, this.options);
   }
-  
+
   /**
    * Private method which sets token
    */
   private setTokenInAuthOptions(token: string): void {
     this.authOptions = {
       headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        authorization: "Bearer " + token,
+        'Content-Type': 'application/json',
+        authorization: 'Bearer ' + token,
       }),
-    }
+    };
     this.authOptionsWithoutContentType = {
       headers: new HttpHeaders({
-        authorization: "Bearer " + token,
+        authorization: 'Bearer ' + token,
       }),
     };
   }
@@ -85,23 +73,20 @@ export class AuthService {
    * Logout the current user
    */
   logoutUser(): void {
-    this.cookieService.delete("token", "/");
+    this.cookieService.delete('token', '/');
     this.isLoggedIn = false;
     this.userData = <UserData>{};
     this.authOptions = <OptionObject>{};
-    window.location.href = "/login";
+    window.location.href = '/login';
   }
 
   /**
    * Get user details
    */
   getUserDataByToken(): Observable<API> {
-    const token = this.cookieService.get("token");
+    const token = this.cookieService.get('token');
     this.setTokenInAuthOptions(token);
-    return this.httpClient.get<API>(
-      this.url + "api/auth/me",
-      this.authOptions
-    )
+    return this.httpClient.get<API>(this.url + 'api/auth/me', this.authOptions);
   }
 
   /**
@@ -122,8 +107,8 @@ export class AuthService {
    * Check cookie and set headers if it exists
    */
   checkCookieAndSetHeaders(): void {
-    const token = this.cookieService.get("token");
-    if (token && token !== null && token !== "") {
+    const token = this.cookieService.get('token');
+    if (token && token !== null && token !== '') {
       this.setTokenInAuthOptions(token);
     }
   }
@@ -132,8 +117,8 @@ export class AuthService {
    * Check cookie if it exists
    */
   checkCookie(): boolean {
-    const token = this.cookieService.get("token");
-    return token && token!== null && token !== "";
+    const token = this.cookieService.get('token');
+    return token && token !== null && token !== '';
   }
 
   /**
@@ -149,7 +134,7 @@ export class AuthService {
   getUserData() {
     return this.userData;
   }
-  
+
   /**
    * Deprecated
    */
@@ -177,6 +162,10 @@ export class AuthService {
       );
   }
 
+  getEmailVerification() { 
+    
+  }
+
   userLogin(credentials) {
     return this.httpClient
       .post<API>(this.url + "api/auth/login", credentials, this.options)
@@ -190,7 +179,7 @@ export class AuthService {
         (err) => {
           this.invalidLoginResponse.emit();
           return false;
-        }
+        } 
       );
   }
   getUserDetails() {

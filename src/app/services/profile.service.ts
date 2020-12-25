@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { AuthService } from "@app/services/auth.service";
-import { environment } from "src/environments/environment";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthService } from '@app/services/auth.service';
+import { environment } from 'src/environments/environment';
 
-import { API } from "@app/interfaces/api";
-import { Observable } from "rxjs";
+import { API } from '@app/interfaces/api';
+import { Observable } from 'rxjs';
 
 interface OptionObject {
   headers: HttpHeaders;
@@ -12,19 +12,16 @@ interface OptionObject {
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class ProfileService {
-  constructor(
-    private httpClient: HttpClient,
-    private AuthService: AuthService
-  ) {}
+  constructor(private httpClient: HttpClient, private authService: AuthService) {}
 
   private url: string = environment.apiUrl;
 
   private options: OptionObject = {
     headers: new HttpHeaders({
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     }),
   };
 
@@ -33,10 +30,7 @@ export class ProfileService {
    * @param userId User ID
    */
   getUserProfile(userId: string) {
-    return this.httpClient.get<API>(
-      this.url + "api/users/" + userId + "/profiles",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/users/' + userId + '/profiles', this.options);
   }
 
   /**
@@ -44,37 +38,28 @@ export class ProfileService {
    * @param userId User ID
    */
   getPublicLikes(userId: string) {
-    return this.httpClient.get<API>(
-      this.url + "api/users/" + userId + "/likes",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/users/' + userId + '/likes', this.options);
   }
 
   /**
    * Updates user profile data
    * @param userId User ID
    * @param data Updated Profile Data
-   * @param headers authOptions 
    */
-  updateUserProfile(userId: string, data, headers: OptionObject) {
-    return this.httpClient.put<API>(
-      this.url + "api/users/" + userId + "/profiles",
-      data,
-      headers
-    );
+  updateUserProfile(userId: string, data) {
+    return this.httpClient.put<API>(this.url + 'api/users/' + userId + '/profiles', data, this.authService.getAuthOptions());
   }
 
   /**
    * Deprecated
    * @param userId User ID
    * @param data ProfileData
-   * @param headers authOptionsWithoutContentType
    */
-  updateUserProfilePic(userId: string, data, headers) {
+  updateUserProfilePic(userId: string, data) {
     return this.httpClient.put<API>(
-      this.url + "api/users/" + userId + "/profiles/upload-photo",
+      this.url + 'api/users/' + userId + '/profiles/upload-photo',
       data,
-      headers
+      this.authService.getAuthOptionsWithoutContentType(),
     );
   }
 
@@ -84,11 +69,6 @@ export class ProfileService {
    * @event GET
    */
   getPublicOwnedListings(userId: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/users/" + userId + "/listings/owner",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/users/' + userId + '/listings/owner', this.options);
   }
-
-  
 }

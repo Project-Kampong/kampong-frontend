@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -103,6 +104,7 @@ import { DialogComponent } from './components/dialog/dialog.component';
     MatExpansionModule,
     MatCheckboxModule,
     MatStepperModule,
+    NgxPaginationModule,
     MobxAngularModule,
     MatProgressSpinnerModule,
     ImageCropperModule,
