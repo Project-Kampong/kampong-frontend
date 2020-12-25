@@ -11,8 +11,3 @@ export interface UserData {
   role: string;
   user_id: string;
 }
-
-export const UserLoginDefault = {
-  email: "",
-  password: "",
-};

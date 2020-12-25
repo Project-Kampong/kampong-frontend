@@ -1,33 +1,28 @@
 // Angular Imports
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { Location } from "@angular/common";
-import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 // Services
-import { ListingsService } from "@app/services/listings.service";
-
-// Util
-import { locationList } from "@app/util/locations";
-import { categoryList } from "@app/util/categories";
+import { ListingsService } from '@app/services/listings.service';
 
 // Interfaces
-import { Listing } from "@app/interfaces/listing";
+import { Listing } from '@app/interfaces/listing';
 import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
-import { ListingCardsComponent } from "@app/components/listing-cards/listing-cards.component";
+import { locationsStore } from '@app/store/locations-store';
+import { categoriesStore } from '@app/store/categories-store';
 
 declare var $: any;
 
 @Component({
-  selector: "app-search",
-  templateUrl: "./search.component.html",
-  styleUrls: ["./search.component.scss"],
+  selector: 'app-search',
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.scss'],
 })
-
 export class SearchComponent implements OnInit {
-
   searchParams: FormGroup;
-  locationList: Array<LocationFilter>;
-  categoryList: Array<CategoryFilter>;
+  locationsStore = locationsStore;
+  categoriesStore = categoriesStore;
   popularSearchList: string[];
   resultsArr: Array<Listing>;
   resultsCount: string;
@@ -38,39 +33,24 @@ export class SearchComponent implements OnInit {
   catInput: string[];
   locInput: string[];
 
-  constructor(
-    public listingsService: ListingsService,
-    private location: Location,
-    private fb: FormBuilder,
-  ) {
-
+  constructor(public listingsService: ListingsService, private location: Location, private fb: FormBuilder) {
     this.searchParams = this.fb.group({
-      nameParams: new FormControl(""),
+      nameParams: new FormControl(''),
       locationParams: new FormControl([]),
-      categoryParams: new FormControl([])
-    })
+      categoryParams: new FormControl([]),
+    });
 
-    this.popularSearchList = [
-      "Project Kampong",
-      "Rebuilding Homes",
-      "YOUTH Mentorship Programme",
-      "CommStart 2020",
-    ];
+    this.popularSearchList = ['Project Kampong', 'Rebuilding Homes', 'YOUTH Mentorship Programme', 'CommStart 2020'];
 
-    this.resultsInputString = "Everything";
-    this.resultsCatString = ["All interests"];
-    this.resultsLocString = ["All locations"];
-
+    this.resultsInputString = 'Everything';
+    this.resultsCatString = ['All interests'];
+    this.resultsLocString = ['All locations'];
   }
 
-
-
   ngOnInit() {
-    this.locationList = locationList;
-    this.categoryList = categoryList;
-    this.searchInput = this.location.getState()["name"] ? this.location.getState()["name"] : "";
-    this.catInput = this.location.getState()["category"] ? this.location.getState()["category"] : [];
-    this.locInput = this.location.getState()["location"] ? this.location.getState()["location"] : [];
+    this.searchInput = this.location.getState()['name'] ? this.location.getState()['name'] : '';
+    this.catInput = this.location.getState()['category'] ? this.location.getState()['category'] : [];
+    this.locInput = this.location.getState()['location'] ? this.location.getState()['location'] : [];
     this.searchInput.trim();
     this.search();
   }
@@ -93,31 +73,29 @@ export class SearchComponent implements OnInit {
   search(): void {
     if (this.searchInput.length > 0 || this.catInput.length > 0 || this.locInput.length > 0) {
       const keywords = this.concatKeywords();
-      this.listingsService.getSearchResult(keywords).subscribe(
-        (data) => {
-          this.resultsArr = data["data"];
-          this.resultsCount = data["data"].length;
-          this.resultsInputString = this.searchInput.length > 0 ? this.searchInput : "Everything";
-          this.resultsLocString = this.locInput.length > 0 ? this.locInput : ["All locations"];
-          this.resultsCatString = this.catInput.length > 0 ? this.catInput : ["All interests"];
-        }
-      );
+      this.listingsService.getSearchResult(keywords).subscribe((data) => {
+        this.resultsArr = data['data'];
+        this.resultsCount = data['data'].length;
+        this.resultsInputString = this.searchInput.length > 0 ? this.searchInput : 'Everything';
+        this.resultsLocString = this.locInput.length > 0 ? this.locInput : ['All locations'];
+        this.resultsCatString = this.catInput.length > 0 ? this.catInput : ['All interests'];
+      });
     } else {
-      this.listingsService.getListings(1).subscribe((data) => {
-        this.resultsArr = data["data"];
-        this.resultsInputString = "Everything";
-        this.resultsLocString = ["All locations"];
-        this.resultsCatString = ["All interests"];
-      })
+      this.listingsService.getListings().subscribe((data) => {
+        this.resultsArr = data['data'];
+        this.resultsInputString = 'Everything';
+        this.resultsLocString = ['All locations'];
+        this.resultsCatString = ['All interests'];
+      });
     }
   }
-  
+
   concatKeywords(): string {
-    const searchArray: string[] = this.searchInput.split(' ').filter(e => e.length > 0);;
+    const searchArray: string[] = this.searchInput.split(' ').filter((e) => e.length > 0);
     const resultArr: string[] = this.catInput.concat(this.locInput).concat(searchArray);
     let result: string = '';
     for (let i: number = 0; i < resultArr.length; i++) {
-      result += (resultArr[i] + '&');
+      result += resultArr[i] + '&';
     }
     return result;
   }
@@ -129,5 +107,4 @@ export class SearchComponent implements OnInit {
     this.catInput = [];
     this.search();
   }
-
 }

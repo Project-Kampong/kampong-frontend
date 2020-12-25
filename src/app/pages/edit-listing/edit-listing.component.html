@@ -8,32 +8,13 @@
       <div class="listing-form" [formGroup]="listingForm">
         <div class="form-item">
           <label>Name Of Initiative *</label>
-          <input
-            placeholder="Give your initiative a name"
-            formControlName="title"
-          />
+          <input placeholder="Give your initiative a name" formControlName="title" />
           <span class="hint"> {{ listingForm.value.title.length }} / 50 </span>
 
           <!-- Errors Validation -->
-          <span
-            class="error-hint"
-            *ngIf="listingForm.get('title').hasError('maxlength')"
-          >
-            Name must not be more than 50 characters long.
-          </span>
-          <span
-            class="error-hint"
-            *ngIf="listingForm.get('title').hasError('pattern')"
-          >
-            Special characters not allowed
-          </span>
-          <span
-            class="error-hint"
-            *ngIf="
-              listingForm.get('title').hasError('required') &&
-              listingForm.controls['title']?.touched
-            "
-          >
+          <span class="error-hint" *ngIf="listingForm.get('title').hasError('maxlength')"> Name must not be more than 50 characters long. </span>
+          <span class="error-hint" *ngIf="listingForm.get('title').hasError('pattern')"> Special characters not allowed </span>
+          <span class="error-hint" *ngIf="listingForm.get('title').hasError('required') && listingForm.controls['title']?.touched">
             Name is required
           </span>
           <!-- End of Errors Validation -->
@@ -43,32 +24,20 @@
           <mat-form-field appearance="fill">
             <mat-label>Category</mat-label>
             <mat-select required formControlName="category">
-              <mat-optgroup
-                *ngFor="let group of categoryGroup"
-                [label]="group.name"
-                [disabled]="group.disabled"
-              >
-                <mat-option
-                  *ngFor="let category of group.group"
-                  [value]="category"
-                >
-                  {{ category }}
+              <mat-optgroup *ngFor="let group of categoryGroup.categories" [label]="group.name" [disabled]="group.disabled">
+                <mat-option *ngFor="let category of group.group" [value]="category.category_id">
+                  {{ category.category_name }}
                 </mat-option>
               </mat-optgroup>
             </mat-select>
           </mat-form-field>
         </div>
       </div>
-      
+
       <div class="no-effect">
         <mat-form-field class="hashtags-container form-item">
           <mat-chip-list #chipList aria-label="Fruit selection">
-            <mat-chip
-              *ngFor="let hashtag of hashtags"
-              [selectable]="true"
-              [removable]="removable"
-              (removed)="removeHashtag(hashtag.tag)"
-            >
+            <mat-chip *ngFor="let hashtag of hashtags" [selectable]="true" [removable]="removable" (removed)="removeHashtag(hashtag.tag)">
               {{ hashtag.tag }}
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
             </mat-chip>
@@ -80,133 +49,62 @@
               (matChipInputTokenEnd)="addHashtag($event)"
             />
           </mat-chip-list>
-          <mat-hint>
-            Tag your listing to improve the visibility of your content!
-          </mat-hint>
-          <span *ngIf="hashtags.length >= 3" class="error"
-            >Maximum 3 Tags</span
-          >
+          <mat-hint> Tag your listing to improve the visibility of your content! </mat-hint>
+          <span *ngIf="hashtags.length >= 3" class="error">Maximum 3 Tags</span>
         </mat-form-field>
       </div>
-      
-      <div class="listing-form" [formGroup]="listingForm">
 
+      <div class="listing-form" [formGroup]="listingForm">
         <div class="form-item">
           <label>Tagline/Slogan *</label>
-          <textarea
-            cdkTextareaAutosize
-            cdkAutosizeMinRows="5"
-            placeholder="Give your initiative a nice tagline"
-            formControlName="tagline"
-          >
+          <textarea cdkTextareaAutosize cdkAutosizeMinRows="5" placeholder="Give your initiative a nice tagline" formControlName="tagline">
           </textarea>
-          <span class="hint">
-            {{ listingForm.value.tagline.length }} / 100
-          </span>
+          <span class="hint"> {{ listingForm.value.tagline.length }} / 100 </span>
           <!-- Errors Validation -->
-          <span
-            class="error-hint"
-            *ngIf="
-              listingForm.get('tagline').hasError('required') &&
-              listingForm.controls['tagline']?.touched
-            "
-          >
+          <span class="error-hint" *ngIf="listingForm.get('tagline').hasError('required') && listingForm.controls['tagline']?.touched">
             Tagline/Slogan is required
           </span>
-          <span
-            class="error-hint"
-            *ngIf="listingForm.get('tagline').hasError('maxlength')"
-          >
+          <span class="error-hint" *ngIf="listingForm.get('tagline').hasError('maxlength')">
             Tagline/Slogan must not be more than 100 characters long.
           </span>
-          <span
-            class="error-hint"
-            *ngIf="listingForm.get('tagline').hasError('pattern')"
-          >
-            Special characters not allowed
-          </span>
+          <span class="error-hint" *ngIf="listingForm.get('tagline').hasError('pattern')"> Special characters not allowed </span>
           <!-- End of Errors Validation -->
         </div>
 
         <div class="form-item">
           <label>Mission *</label>
-          <textarea
-            cdkTextareaAutosize
-            cdkAutosizeMinRows="5"
-            placeholder="What's the goal of your initiative?"
-            formControlName="mission"
-          >
+          <textarea cdkTextareaAutosize cdkAutosizeMinRows="5" placeholder="What's the goal of your initiative?" formControlName="mission">
           </textarea>
-          <span class="hint">
-            {{ listingForm.value.mission.length }} / 150
-          </span>
+          <span class="hint"> {{ listingForm.value.mission.length }} / 150 </span>
           <!-- Errors Validation -->
-          <span
-            class="error-hint"
-            *ngIf="
-              listingForm.get('mission').hasError('required') &&
-              listingForm.controls['mission']?.touched
-            "
-          >
+          <span class="error-hint" *ngIf="listingForm.get('mission').hasError('required') && listingForm.controls['mission']?.touched">
             Mission Statement is required
           </span>
-          <span
-            class="error-hint"
-            *ngIf="listingForm.get('mission').hasError('maxlength')"
-          >
+          <span class="error-hint" *ngIf="listingForm.get('mission').hasError('maxlength')">
             Mission Statement must not be more than 100 characters long.
           </span>
-          <span
-            class="error-hint"
-            *ngIf="listingForm.get('mission').hasError('pattern')"
-          >
-            Special characters not allowed
-          </span>
+          <span class="error-hint" *ngIf="listingForm.get('mission').hasError('pattern')"> Special characters not allowed </span>
           <!-- End of Errors Validation -->
         </div>
         <div class="form-item">
           <label>Contact Email *</label>
-          <input
-            placeholder="e.g. kampong@gmail.com"
-            formControlName="listing_email"
-          />
+          <input placeholder="e.g. kampong@gmail.com" formControlName="listing_email" />
 
           <!-- Errors Validation -->
-          <span
-            class="error-hint"
-            *ngIf="
-              listingForm.get('listing_email').hasError('required') &&
-              listingForm.controls['listing_email']?.touched
-            "
-          >
+          <span class="error-hint" *ngIf="listingForm.get('listing_email').hasError('required') && listingForm.controls['listing_email']?.touched">
             Email is required
           </span>
-          <span
-            class="error-hint"
-            *ngIf="listingForm.get('listing_email').hasError('email')"
-          >
-            Please Enter a Valid Email
-          </span>
+          <span class="error-hint" *ngIf="listingForm.get('listing_email').hasError('email')"> Please Enter a Valid Email </span>
 
           <!-- End of Errors Validation -->
         </div>
 
         <div class="form-item">
           <label>Listing URL</label>
-          <input
-            placeholder="e.g. www.kampong.app"
-            formControlName="listing_url"
-          />
+          <input placeholder="e.g. www.kampong.app" formControlName="listing_url" />
 
-          <span
-          class="error-hint"
-          *ngIf="listingForm.get('listing_url').hasError('pattern')"
-        >
-          Website URL must be valid
-        </span>
-
+          <span class="error-hint" *ngIf="listingForm.get('listing_url').hasError('pattern')"> Website URL must be valid </span>
         </div>
-
       </div>
       <div class="no-effect">
         <div class="listing-stepper">
@@ -218,21 +116,15 @@
             <mat-form-field appearance="fill">
               <mat-label>Project Location</mat-label>
               <mat-select formControlName="locations" multiple>
-                <mat-optgroup
-                  *ngFor="let group of locationGroup"
-                  [label]="group.name"
-                  [disabled]="group.disabled"
-                >
-                <mat-option *ngFor="let location of group.group" [value]="location">
-                  {{ location }}
-                </mat-option>
-              </mat-optgroup>
+                <mat-optgroup *ngFor="let group of locationGroup.locations" [label]="group.name" [disabled]="group.disabled">
+                  <mat-option *ngFor="let location of group.group" [value]="location.location_id">
+                    {{ location.location_name }}
+                  </mat-option>
+                </mat-optgroup>
               </mat-select>
             </mat-form-field>
-            
           </div>
         </div>
-        
       </div>
     </div>
 
@@ -247,31 +139,48 @@
           <div class="custom-input col-lg-12">
             <label>Images* (Maximum of 5)</label>
             <div class="d-flex flex-wrap align-items-start mt-2 image-output">
-              <div
-                *ngFor="let img of listingImagesDisplay; index as i"
-                class="image-container"
-                (click)="removeImage(i)"
-              >
+              <div *ngFor="let img of listingImagesDisplay; index as i" class="image-container" (click)="removeImage(i)">
                 <img src="{{ img }}" />
               </div>
 
-              <div
-                *ngIf="listingImagesDisplay.length < 5 && listingImages.length < 5"
-                class="custom-file-upload-container"
-              >
+              <div *ngIf="listingImagesDisplay.length < 5 && listingImages.length < 5" class="custom-file-upload-container">
                 <label for="img-upload" class="custom-file-upload"> </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="img-upload"
-                  (change)="uploadImage($event)"
-                />
+                <input type="file" accept="image/*" id="img-upload" (change)="uploadImage($event)" />
+                <!-- <input type="file" accept="image/*" id="img-upload" (change)="fileChangeEvent($event)" /> -->
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- <div class="container">
+      <div class="row" style="margin-top: 5%">
+        <div class="text-center col-md-12">
+          <input type="file" (change)="fileChangeEvent($event)" />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 5%">
+        <div class="text-center col-md-8">
+          <h5>Crop Image</h5>
+          <image-cropper
+            [imageChangedEvent]="imageChangedEvent"
+            [maintainAspectRatio]="true"
+            [aspectRatio]="4 / 4"
+            [resizeToWidth]="256"
+            format="png"
+            (imageCropped)="imageCropped($event)"
+            (imageLoaded)="imageLoaded()"
+            (cropperReady)="cropperReady()"
+            (loadImageFailed)="loadImageFailed()"
+          ></image-cropper>
+        </div>
+        <div class="text-center col-md-4">
+          <h5>Preview</h5>
+          <img [src]="croppedImage" />
+        </div>
+      </div>
+    </div> -->
 
     <!-- Section 3 -->
     <div class="listing-section">
@@ -281,38 +190,24 @@
       </div>
       <div class="listing-form" [formGroup]="listingForm">
         <div class="form-item">
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            Listing Overview
-          </mat-expansion-panel-header>
-          <mat-panel-description>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header> Listing Overview </mat-expansion-panel-header>
+            <mat-panel-description>
               <div class="CMS-editor editing-active">
                 <div class="action-container">
                   <ul>
                     <li>
-                      <button
-                        type="button"
-                        data-command="justifyLeft"
-                        class="action-btn"
-                      >
+                      <button type="button" data-command="justifyLeft" class="action-btn">
                         <i class="fas fa-align-left"></i>
                       </button>
                     </li>
                     <li>
-                      <button
-                        type="button"
-                        data-command="justifyCenter"
-                        class="action-btn"
-                      >
+                      <button type="button" data-command="justifyCenter" class="action-btn">
                         <i class="fas fa-align-center"></i>
                       </button>
                     </li>
                     <li>
-                      <button
-                        type="button"
-                        data-command="justifyRight"
-                        class="action-btn"
-                      >
+                      <button type="button" data-command="justifyRight" class="action-btn">
                         <i class="fas fa-align-right"></i>
                       </button>
                     </li>
@@ -323,83 +218,50 @@
                       </button>
                     </li>
                     <li>
-                      <button
-                        type="button"
-                        data-command="underline"
-                        class="action-btn"
-                      >
+                      <button type="button" data-command="underline" class="action-btn">
                         <i class="fas fa-underline"></i>
                       </button>
                     </li>
 
                     <li>
-                      <button
-                        type="button"
-                        data-command="insertOrderedList"
-                        class="action-btn"
-                      >
+                      <button type="button" data-command="insertOrderedList" class="action-btn">
                         <i class="fas fa-list-ol"></i>
                       </button>
                     </li>
 
                     <li>
-                      <button
-                        type="button"
-                        data-command="insertUnorderedList"
-                        class="action-btn"
-                      >
+                      <button type="button" data-command="insertUnorderedList" class="action-btn">
                         <i class="fas fa-list-ul"></i>
                       </button>
                     </li>
 
                     <li>
-                      <button
-                        type="button"
-                        data-command="createlink"
-                        class="action-btn"
-                      >
+                      <button type="button" data-command="createlink" class="action-btn">
                         <i class="fas fa-link"></i>
                       </button>
                     </li>
 
                     <li>
-                      <button
-                        type="button"
-                        data-command="formatBlock"
-                        data-size="H1"
-                        class="action-btn"
-                      >
+                      <button type="button" data-command="formatBlock" data-size="H1" class="action-btn">
                         <i>H1</i>
                       </button>
                     </li>
 
                     <li>
-                      <button
-                        type="button"
-                        data-command="formatBlock"
-                        data-size="H2"
-                        class="action-btn"
-                      >
+                      <button type="button" data-command="formatBlock" data-size="H2" class="action-btn">
                         <i>H2</i>
                       </button>
                     </li>
 
                     <li>
-                      <button
-                        type="button"
-                        data-command="formatBlock"
-                        data-size="H3"
-                        class="action-btn"
-                      >
+                      <button type="button" data-command="formatBlock" data-size="H3" class="action-btn">
                         <i>H3</i>
                       </button>
                     </li>
                   </ul>
                 </div>
                 <div contenteditable="true" id="overview">
-                  <b
-                    >Write about your listing here!</b
-                  >
+                  <b>Write about your listing here!</b>
                   <div>
                     <b><br /></b>
                   </div>
@@ -418,431 +280,290 @@
                   </div>
                 </div>
               </div>
-          </mat-panel-description>
-        </mat-expansion-panel>
-      </div>
-      <div class="form-item">
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            Problem Statement
-          </mat-expansion-panel-header>
-          <mat-panel-description>
-            <div class="CMS-editor editing-active">
-              <div class="action-container">
-                <ul>
-                  <li>
-                    <button
-                      type="button"
-                      data-command="justifyLeft"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-align-left"></i>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      data-command="justifyCenter"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-align-center"></i>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      data-command="justifyRight"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-align-right"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button type="button" data-command="bold" class="action-btn">
-                      <i class="fas fa-bold"></i>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      data-command="underline"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-underline"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="insertOrderedList"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-list-ol"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="insertUnorderedList"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-list-ul"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="createlink"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-link"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="formatBlock"
-                      data-size="H1"
-                      class="action-btn"
-                    >
-                      <i>H1</i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="formatBlock"
-                      data-size="H2"
-                      class="action-btn"
-                    >
-                      <i>H2</i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="formatBlock"
-                      data-size="H3"
-                      class="action-btn"
-                    >
-                      <i>H3</i>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-              <div contenteditable="true" id="problem">
-                <b
-                  >What problem are you trying to solve?</b
-                >
-                <div>
-                  <b><br /></b>
-                </div>
-                <div>
-                  <ol>
-                    <li>item 1</li>
-                    <li>item 2</li>
-                  </ol>
-                  <div><br /></div>
-                </div>
-                <div>
+            </mat-panel-description>
+          </mat-expansion-panel>
+        </div>
+        <div class="form-item">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header> Problem Statement </mat-expansion-panel-header>
+            <mat-panel-description>
+              <div class="CMS-editor editing-active">
+                <div class="action-container">
                   <ul>
-                    <li>bullet 1</li>
-                    <li>bullet 2</li>
+                    <li>
+                      <button type="button" data-command="justifyLeft" class="action-btn">
+                        <i class="fas fa-align-left"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" data-command="justifyCenter" class="action-btn">
+                        <i class="fas fa-align-center"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" data-command="justifyRight" class="action-btn">
+                        <i class="fas fa-align-right"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="bold" class="action-btn">
+                        <i class="fas fa-bold"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" data-command="underline" class="action-btn">
+                        <i class="fas fa-underline"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="insertOrderedList" class="action-btn">
+                        <i class="fas fa-list-ol"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="insertUnorderedList" class="action-btn">
+                        <i class="fas fa-list-ul"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="createlink" class="action-btn">
+                        <i class="fas fa-link"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="formatBlock" data-size="H1" class="action-btn">
+                        <i>H1</i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="formatBlock" data-size="H2" class="action-btn">
+                        <i>H2</i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="formatBlock" data-size="H3" class="action-btn">
+                        <i>H3</i>
+                      </button>
+                    </li>
                   </ul>
                 </div>
-              </div>
-            </div>
-          </mat-panel-description>
-        </mat-expansion-panel>
-      </div>
-      <div class="form-item">
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            Solution
-          </mat-expansion-panel-header>
-          <mat-panel-description>
-            <div class="CMS-editor editing-active">
-              <div class="action-container">
-                <ul>
-                  <li>
-                    <button
-                      type="button"
-                      data-command="justifyLeft"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-align-left"></i>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      data-command="justifyCenter"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-align-center"></i>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      data-command="justifyRight"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-align-right"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button type="button" data-command="bold" class="action-btn">
-                      <i class="fas fa-bold"></i>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      data-command="underline"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-underline"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="insertOrderedList"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-list-ol"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="insertUnorderedList"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-list-ul"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="createlink"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-link"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="formatBlock"
-                      data-size="H1"
-                      class="action-btn"
-                    >
-                      <i>H1</i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="formatBlock"
-                      data-size="H2"
-                      class="action-btn"
-                    >
-                      <i>H2</i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="formatBlock"
-                      data-size="H3"
-                      class="action-btn"
-                    >
-                      <i>H3</i>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-              <div contenteditable="true" id="solution">
-                <b
-                  >What is your proposed solution?
-                </b>
-                <div>
-                  <b><br /></b>
+                <div contenteditable="true" id="problem">
+                  <b>What problem are you trying to solve?</b>
+                  <div>
+                    <b><br /></b>
+                  </div>
+                  <div>
+                    <ol>
+                      <li>item 1</li>
+                      <li>item 2</li>
+                    </ol>
+                    <div><br /></div>
+                  </div>
+                  <div>
+                    <ul>
+                      <li>bullet 1</li>
+                      <li>bullet 2</li>
+                    </ul>
+                  </div>
                 </div>
-                <div>
-                  <ol>
-                    <li>item 1</li>
-                    <li>item 2</li>
-                  </ol>
-                  <div><br /></div>
-                </div>
-                <div>
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel>
+        </div>
+        <div class="form-item">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header> Solution </mat-expansion-panel-header>
+            <mat-panel-description>
+              <div class="CMS-editor editing-active">
+                <div class="action-container">
                   <ul>
-                    <li>bullet 1</li>
-                    <li>bullet 2</li>
+                    <li>
+                      <button type="button" data-command="justifyLeft" class="action-btn">
+                        <i class="fas fa-align-left"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" data-command="justifyCenter" class="action-btn">
+                        <i class="fas fa-align-center"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" data-command="justifyRight" class="action-btn">
+                        <i class="fas fa-align-right"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="bold" class="action-btn">
+                        <i class="fas fa-bold"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" data-command="underline" class="action-btn">
+                        <i class="fas fa-underline"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="insertOrderedList" class="action-btn">
+                        <i class="fas fa-list-ol"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="insertUnorderedList" class="action-btn">
+                        <i class="fas fa-list-ul"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="createlink" class="action-btn">
+                        <i class="fas fa-link"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="formatBlock" data-size="H1" class="action-btn">
+                        <i>H1</i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="formatBlock" data-size="H2" class="action-btn">
+                        <i>H2</i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="formatBlock" data-size="H3" class="action-btn">
+                        <i>H3</i>
+                      </button>
+                    </li>
                   </ul>
                 </div>
-              </div>
-            </div>
-          </mat-panel-description>
-        </mat-expansion-panel>
-      </div>
-      <div class="form-item">
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            Outcome
-          </mat-expansion-panel-header>
-          <mat-panel-description>
-            <div class="CMS-editor editing-active">
-              <div class="action-container">
-                <ul>
-                  <li>
-                    <button
-                      type="button"
-                      data-command="justifyLeft"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-align-left"></i>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      data-command="justifyCenter"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-align-center"></i>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      data-command="justifyRight"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-align-right"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button type="button" data-command="bold" class="action-btn">
-                      <i class="fas fa-bold"></i>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      data-command="underline"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-underline"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="insertOrderedList"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-list-ol"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="insertUnorderedList"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-list-ul"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="createlink"
-                      class="action-btn"
-                    >
-                      <i class="fas fa-link"></i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="formatBlock"
-                      data-size="H1"
-                      class="action-btn"
-                    >
-                      <i>H1</i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="formatBlock"
-                      data-size="H2"
-                      class="action-btn"
-                    >
-                      <i>H2</i>
-                    </button>
-                  </li>
-
-                  <li>
-                    <button
-                      type="button"
-                      data-command="formatBlock"
-                      data-size="H3"
-                      class="action-btn"
-                    >
-                      <i>H3</i>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-              <div contenteditable="true" id="outcome">
-                <b
-                  >What do you hope to achieve?
-                </b>
-                <div>
-                  <b><br /></b>
+                <div contenteditable="true" id="solution">
+                  <b>What is your proposed solution? </b>
+                  <div>
+                    <b><br /></b>
+                  </div>
+                  <div>
+                    <ol>
+                      <li>item 1</li>
+                      <li>item 2</li>
+                    </ol>
+                    <div><br /></div>
+                  </div>
+                  <div>
+                    <ul>
+                      <li>bullet 1</li>
+                      <li>bullet 2</li>
+                    </ul>
+                  </div>
                 </div>
-                <div>
-                  <ol>
-                    <li>item 1</li>
-                    <li>item 2</li>
-                  </ol>
-                  <div><br /></div>
-                </div>
-                <div>
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel>
+        </div>
+        <div class="form-item">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header> Outcome </mat-expansion-panel-header>
+            <mat-panel-description>
+              <div class="CMS-editor editing-active">
+                <div class="action-container">
                   <ul>
-                    <li>bullet 1</li>
-                    <li>bullet 2</li>
+                    <li>
+                      <button type="button" data-command="justifyLeft" class="action-btn">
+                        <i class="fas fa-align-left"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" data-command="justifyCenter" class="action-btn">
+                        <i class="fas fa-align-center"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" data-command="justifyRight" class="action-btn">
+                        <i class="fas fa-align-right"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="bold" class="action-btn">
+                        <i class="fas fa-bold"></i>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" data-command="underline" class="action-btn">
+                        <i class="fas fa-underline"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="insertOrderedList" class="action-btn">
+                        <i class="fas fa-list-ol"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="insertUnorderedList" class="action-btn">
+                        <i class="fas fa-list-ul"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="createlink" class="action-btn">
+                        <i class="fas fa-link"></i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="formatBlock" data-size="H1" class="action-btn">
+                        <i>H1</i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="formatBlock" data-size="H2" class="action-btn">
+                        <i>H2</i>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button" data-command="formatBlock" data-size="H3" class="action-btn">
+                        <i>H3</i>
+                      </button>
+                    </li>
                   </ul>
                 </div>
+                <div contenteditable="true" id="outcome">
+                  <b>What do you hope to achieve? </b>
+                  <div>
+                    <b><br /></b>
+                  </div>
+                  <div>
+                    <ol>
+                      <li>item 1</li>
+                      <li>item 2</li>
+                    </ol>
+                    <div><br /></div>
+                  </div>
+                  <div>
+                    <ul>
+                      <li>bullet 1</li>
+                      <li>bullet 2</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
-            </div>
-          </mat-panel-description>
-        </mat-expansion-panel>
+            </mat-panel-description>
+          </mat-expansion-panel>
         </div>
       </div>
     </div>
@@ -857,44 +578,24 @@
         <app-milestones [(MilestoneArr)]="milestoneArr"></app-milestones>
         <div class="form-item">
           <div class="milestones-container">
-            <div
-              *ngFor="let milestone of milestoneArr; index as i"
-              class="milestones"
-            >
+            <div *ngFor="let milestone of milestoneArr; index as i" class="milestones">
               <div class="input-field-container">
                 <mat-form-field class="milestone-input">
                   <mat-label>Milestone</mat-label>
-                  <input
-                    maxlength="50"
-                    matInput
-                    [(ngModel)]="milestone.milestone_description"
-                  />
+                  <input maxlength="50" matInput [(ngModel)]="milestone.milestone_description" />
                   <mat-hint> {{ milestone.milestone_description.length }}/50 </mat-hint>
                 </mat-form-field>
                 <mat-form-field class="deadline-input">
                   <mat-label>Deadline</mat-label>
-                  <input
-                    [(ngModel)]="milestone.date"
-                    matInput
-                    [matDatepicker]="DateOfBirthPicker"
-                    (ngModelChange)="sortMilestone()"
-                  />
-                  <mat-datepicker-toggle
-                    matSuffix
-                    [for]="DateOfBirthPicker"
-                  ></mat-datepicker-toggle>
+                  <input [(ngModel)]="milestone.date" matInput [matDatepicker]="DateOfBirthPicker" (ngModelChange)="sortMilestone()" />
+                  <mat-datepicker-toggle matSuffix [for]="DateOfBirthPicker"></mat-datepicker-toggle>
                   <mat-datepicker #DateOfBirthPicker></mat-datepicker>
                 </mat-form-field>
               </div>
-              <button
-                class="remove-milestone"
-                (click)="removeMilestone(i)"
-              ></button>
+              <button class="remove-milestone" (click)="removeMilestone(i)"></button>
             </div>
 
-            <button class="add-milestones" (click)="addMilestone()">
-              Add Milestone
-            </button>
+            <button class="add-milestones" (click)="addMilestone()">Add Milestone</button>
           </div>
         </div>
       </div>
@@ -957,13 +658,13 @@
               <div class="input-field-container">
                 <div class="form-item skill-input">
                   <textarea
-                  matInput
-                  placeholder="Job Title"
-                  cdkTextareaAutosize
-                  cdkAutosizeMinRows="2"
-                  [(ngModel)]="job.job_title"
-                  maxlength="200"
-                ></textarea>
+                    matInput
+                    placeholder="Job Title"
+                    cdkTextareaAutosize
+                    cdkAutosizeMinRows="2"
+                    [(ngModel)]="job.job_title"
+                    maxlength="200"
+                  ></textarea>
                 </div>
                 <div>
                   <textarea
@@ -977,15 +678,10 @@
                 </div>
                 <span class="hint"> {{ job.job_description.length }} / 500 </span>
               </div>
-              <button
-                class="remove-skills"
-                (click)="removeDescription(i)"
-              ></button>
+              <button class="remove-skills" (click)="removeDescription(i)"></button>
             </div>
 
-            <button class="add-skills" (click)="addDescription()">
-              Add Job/Volunteer Opportunity
-            </button>
+            <button class="add-skills" (click)="addDescription()">Add Job/Volunteer Opportunity</button>
           </div>
         </div>
       </div>
@@ -998,12 +694,8 @@
     <div class="floating-actions">
       <div class="container">
         <div class="submit-btn">
-          <button class="btn red-btn" (click)="removeListing()">
-            Delete Initiative
-          </button>
-          <button class="btn yellow-btn ml-3" (click)="updateListing()">
-            Save Initiative
-          </button>
+          <button class="btn red-btn" (click)="removeListing()">Delete Initiative</button>
+          <button class="btn yellow-btn ml-3" (click)="updateListing()">Save Initiative</button>
         </div>
       </div>
     </div>

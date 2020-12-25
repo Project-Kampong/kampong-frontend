@@ -11,8 +11,8 @@ export class EditOrganisationCardsComponent{
   constructor(private router: Router) {
   }
 
-  @Input() OrganisationData;
-  @Input() ColNum;
+  @Input() organisationData;
+  @Input() colNum;
 
   selectedCard(data) {
       console.log(data);

@@ -17,7 +17,7 @@
                 <mat-form-field appearance="fill">
                   <mat-label>Location</mat-label>
                   <mat-select formControlName="locationParams" multiple disableOptionCentering>
-                    <mat-optgroup *ngFor="let group of locationList" [label]="group.name">
+                    <mat-optgroup *ngFor="let group of locationsStore.locations" [label]="group.name">
                       <mat-option *ngFor="let location of group.group" [value]="location">
                         {{ location }}
                       </mat-option>
@@ -29,7 +29,7 @@
                 <mat-form-field appearance="fill">
                   <mat-label>Category</mat-label>
                   <mat-select formControlName="categoryParams" multiple disableOptionCentering>
-                    <mat-optgroup *ngFor="let group of categoryList" [label]="group.name">
+                    <mat-optgroup *ngFor="let group of categoriesStore.categories" [label]="group.name">
                       <mat-option *ngFor="let category of group.group" [value]="category">
                         {{ category }}
                       </mat-option>
@@ -64,7 +64,7 @@
       </div>
     </div>
     <div class="container" style="min-height: 100vh">
-      <app-listing-cards [ListingData]="resultsArr" [isPaginationRequired]="true"></app-listing-cards>
+      <app-listing-cards [listingData]="resultsArr"></app-listing-cards>
     </div>
   </div>
 </div>

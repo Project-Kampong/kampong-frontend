@@ -1,4 +1,4 @@
-<section *ngIf="profileDetails != null" class="profile-display">
+<section *ngIf="profileData != null" class="profile-display">
   <div class="container d-flex flex-wrap bg-colored-mobile">
     <div class="col-lg-4 pl-lg-0 pr-lg-5">
       <div class="bg-colored profile-item-container">
@@ -6,52 +6,50 @@
           <div class="sticky-profile pt-lg-3">
             <div class="d-flex" *ngIf="isEditingProfile == false">
               <div class="profile-image">
-                <img src="{{ profileDetails.profile_picture }}" />
+                <img src="{{ profileData.profile_picture }}" />
               </div>
               <div class="user-details">
-                <p class="name">{{ profileDetails.nickname }}</p>
-                <p *ngIf="profileDetails.occupation != null" class="position">
-                  {{ profileDetails.occupation }}
+                <p class="name">{{ profileData.nickname }}</p>
+                <p *ngIf="profileData.occupation != null" class="position">
+                  {{ profileData.occupation }}
                 </p>
-                <p *ngIf="profileDetails.occupation == null" class="position">Newbie</p>
-                <!-- <p class="editProfileLink"><a [ngStyle]="{ color: 'blue' }" [routerLink]="'/edit-profile'">Alternative Edit Profile</a></p> -->
-                <div class="editProfileLink"><a (click)="editProfile()">Edit Profile</a></div>
+                <p *ngIf="profileData.occupation == null" class="position">Newbie</p>
               </div>
             </div>
             <div class="d-flex" *ngIf="isEditingProfile == true">
-              <form [formGroup]="EditProfileForm" class="form-group">
+              <form [formGroup]="editProfileForm" class="form-group">
                 <div class="custom-input">
                   <div class="profile-image">
                     <label for="file-upload">
-                      <img src="{{ profileDetails.profile_picture }}" />
+                      <img src="{{ profileData.profile_picture }}" />
                     </label>
                   </div>
                   <input type="file" accept="image/*" id="file-upload" (change)="uploadFile($event)" />
                 </div>
               </form>
-              <form [formGroup]="EditProfileForm" class="form-group">
+              <form [formGroup]="editProfileForm" class="form-group">
                 <div class="user-details">
                   <p *ngIf="isEditingProfile == true" class="light-s">
                     <mat-form-field class="matInput">
                       <mat-label>Username</mat-label>
                       <input matInput formControlName="nickname" />
                       <!-- Errors Validation -->
-                      <mat-error *ngIf="EditProfileForm.get('nickname').hasError('required')"> Username is required </mat-error>
-                      <mat-error *ngIf="EditProfileForm.get('nickname').hasError('maxlength')">
+                      <mat-error *ngIf="editProfileForm.get('nickname').hasError('required')"> Username is required </mat-error>
+                      <mat-error *ngIf="editProfileForm.get('nickname').hasError('maxlength')">
                         Username must not be more than 15 characters long.
                       </mat-error>
-                      <mat-error *ngIf="EditProfileForm.get('nickname').hasError('pattern')"> Special characters not allowed </mat-error>
+                      <mat-error *ngIf="editProfileForm.get('nickname').hasError('pattern')"> Special characters not allowed </mat-error>
                       <!-- End of Errors Validation -->
                     </mat-form-field>
                     <mat-form-field class="matInput">
                       <mat-label>Occupation</mat-label>
                       <input matInput formControlName="occupation" />
                       <!-- Errors Validation -->
-                      <mat-error *ngIf="EditProfileForm.get('occupation').hasError('required')"> Occupation is required </mat-error>
-                      <mat-error *ngIf="EditProfileForm.get('occupation').hasError('maxlength')">
+                      <mat-error *ngIf="editProfileForm.get('occupation').hasError('required')"> Occupation is required </mat-error>
+                      <mat-error *ngIf="editProfileForm.get('occupation').hasError('maxlength')">
                         Occupation must not be more than 30 characters long.
                       </mat-error>
-                      <mat-error *ngIf="EditProfileForm.get('occupation').hasError('pattern')"> Special characters not allowed </mat-error>
+                      <mat-error *ngIf="editProfileForm.get('occupation').hasError('pattern')"> Special characters not allowed </mat-error>
                       <!-- End of Errors Validation -->
                     </mat-form-field>
                   </p>
@@ -69,26 +67,26 @@
     </div>
     <div class="col-12 col-lg-8">
       <div class="profile-item-container">
-        <div class="profile-item pt-lg-4" id="profile" *ngIf="isEditingProfile == false">
-          <div *ngIf="profileDetails.about !== null" id="about">
+        <div class="profile-item pt-lg-4" id="profile">
+          <div *ngIf="profileData.about !== null">
             <h2>About</h2>
             <p class="light-s">
-              {{ profileDetails.about }}
+              {{ profileData.about }}
             </p>
           </div>
         </div>
         <div class="profile-item pt-lg-4" id="profile" *ngIf="isEditingProfile == true">
-          <form [formGroup]="EditProfileForm" class="form-group">
+          <form [formGroup]="editProfileForm" class="form-group">
             <p *ngIf="isEditingProfile == true" class="light-s">
               <mat-form-field class="aboutFormField">
                 <mat-label>About</mat-label>
                 <textarea matInput cdkAutosizeMinRows="3" cdkTextareaAutosize formControlName="about"></textarea>
                 <!-- Errors Validation -->
-                <mat-error *ngIf="EditProfileForm.get('about').hasError('required')"> About Me is required </mat-error>
-                <mat-error *ngIf="EditProfileForm.get('about').hasError('maxlength')">
+                <mat-error *ngIf="editProfileForm.get('about').hasError('required')"> About Me is required </mat-error>
+                <mat-error *ngIf="editProfileForm.get('about').hasError('maxlength')">
                   About Me must not be more than 1000 characters long.
                 </mat-error>
-                <mat-error *ngIf="EditProfileForm.get('about').hasError('pattern')"> Special characters not allowed </mat-error>
+                <mat-error *ngIf="editProfileForm.get('about').hasError('pattern')"> Special characters not allowed </mat-error>
                 <!-- End of Errors Validation -->
               </mat-form-field>
             </p>
@@ -123,23 +121,23 @@
         </div>
 
         <div class="profile-item" id="started">
-          <div *ngIf="startedArr.length != 0">
+          <div *ngIf="startedArr.length > 0">
             <h2>Initiatives I've Started</h2>
-            <app-edit-listing-cards [ListingData]="startedArr" [ColNum]="6"></app-edit-listing-cards>
+            <app-edit-listing-cards [listingData]="startedArr" [colNum]="6"></app-edit-listing-cards>
           </div>
         </div>
 
         <div class="profile-item" id="liked">
-          <div *ngIf="likedArr.length != 0">
+          <div *ngIf="likedArr.length > 0">
             <h2>Initiatives I've Liked</h2>
-            <app-listing-cards [ListingData]="likedArr" [ColNum]="6"></app-listing-cards>
+            <app-listing-cards [listingData]="likedArr" [colNum]="6"></app-listing-cards>
           </div>
         </div>
 
         <div class="profile-item" id="org">
-          <div *ngIf="orgArr.length != 0">
+          <div *ngIf="orgArr.length > 0">
             <h2>My Organisations</h2>
-            <app-edit-organisation-cards [OrganisationData]="orgArr" [ColNum]="6"></app-edit-organisation-cards>
+            <app-edit-organisation-cards [organisationData]="orgArr" [colNum]="6"></app-edit-organisation-cards>
           </div>
         </div>
       </div>
