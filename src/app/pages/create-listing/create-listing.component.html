@@ -7,8 +7,8 @@
       </div>
       <div class="listing-form" [formGroup]="listingForm">
         <div class="form-item">
-          <label>Name Of Initiative *</label>
-          <input placeholder="Give your initiative a name" formControlName="title" />
+          <label>Name Of Project *</label>
+          <input placeholder="Give your project a name" formControlName="title" />
           <span class="hint"> {{ listingForm.value.title.length }} / 50 </span>
 
           <!-- Errors Validation -->
@@ -79,8 +79,7 @@
       <div class="listing-form" [formGroup]="listingForm">
         <div class="form-item">
           <label>Tagline/Slogan *</label>
-          <textarea cdkTextareaAutosize cdkAutosizeMinRows="5" placeholder="Give your initiative a nice tagline" formControlName="tagline">
-          </textarea>
+          <textarea cdkTextareaAutosize cdkAutosizeMinRows="5" placeholder="Give your project a nice tagline" formControlName="tagline"> </textarea>
           <span class="hint"> {{ listingForm.value.tagline.length }} / 100 </span>
           <!-- Errors Validation -->
           <span class="error-hint" *ngIf="listingForm.get('tagline').hasError('required') && listingForm.controls['tagline']?.touched">
@@ -95,8 +94,7 @@
 
         <div class="form-item">
           <label>Mission *</label>
-          <textarea cdkTextareaAutosize cdkAutosizeMinRows="5" placeholder="What's the goal of your initiative?" formControlName="mission">
-          </textarea>
+          <textarea cdkTextareaAutosize cdkAutosizeMinRows="5" placeholder="What's the goal of your project?" formControlName="mission"> </textarea>
           <span class="hint"> {{ listingForm.value.mission.length }} / 150 </span>
           <!-- Errors Validation -->
           <span class="error-hint" *ngIf="listingForm.get('mission').hasError('required') && listingForm.controls['mission']?.touched">
@@ -179,7 +177,7 @@
     <div class="listing-section">
       <div class="listing-stepper">
         <span> 3 </span>
-        <p>tell us more about your initiative</p>
+        <p>tell us more about your project</p>
       </div>
       <div class="listing-form" [formGroup]="listingForm">
         <div class="form-item">
@@ -647,7 +645,7 @@
     <div class="floating-actions">
       <div class="container">
         <div class="submit-btn">
-          <button class="btn yellow-btn" (click)="createListing()">Create Initiative</button>
+          <button class="btn yellow-btn" (click)="createListing()">Create project</button>
         </div>
       </div>
     </div>
