@@ -1,24 +1,21 @@
 <div class="banner">
-    <div class="banner-photo">
-        <h2 class="placeholder-banner-text">Add a banner photo!</h2>
+  <div class="banner-photo">
+    <h2 class="placeholder-banner-text">Add a banner photo!</h2>
+  </div>
+  <div class="parent-flexbox-inline">
+    <div class="profile-photo-box">
+      <div class="profile-photo default-photo"></div>
     </div>
-    <div class="parent-flexbox-inline">
-        <div class="profile-photo-box">
-            <div class="profile-photo default-photo">
-            </div>
+    <div class="parent-inline">
+      <div class="parent-inline">
+        <div class="regular-l">
+          {{ bannerData['name'] }}
         </div>
-        <div class="parent-inline">
-            <div class="parent-inline">
-                <div class="regular-l">
-                    {{ bannerData["name"] }}
-                </div>
-                <div>
-                    {{ bannerData["about"] }}
-                </div>
-            </div>
-            <div>
-                Location: {{ bannerData["address"] }}
-            </div>
+        <div>
+          {{ bannerData['about'] }}
         </div>
+      </div>
+      <div>Location: {{ bannerData['address'] }}</div>
     </div>
+  </div>
 </div>

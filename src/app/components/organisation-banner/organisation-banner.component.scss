@@ -1,66 +1,66 @@
 .banner-photo {
-    position: relative;
-    top: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 20vh;
-    overflow: hidden;
+  position: relative;
+  top: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 20vh;
+  overflow: hidden;
 }
 
 .banner {
-    position: relative;
-    width: 100vw;
-    height: 35vh;
+  position: relative;
+  width: 100vw;
+  height: 35vh;
 }
 
 .placeholder-banner-text {
-    text-align: center;
-    vertical-align: middle;
-    height: inherit;
-    width: inherit;
-    line-height: 20vh;
+  text-align: center;
+  vertical-align: middle;
+  height: inherit;
+  width: inherit;
+  line-height: 20vh;
 }
 
 .parent-flexbox-inline {
-    display: inline-flex;
-    width: inherit;
-    height: 15vh;
-    background-color: #FFCB74;
-    z-index: 1;
+  display: inline-flex;
+  width: inherit;
+  height: 15vh;
+  background-color: #ffcb74;
+  z-index: 1;
 }
 
 .parent-inline {
-    display: inline;
+  display: inline;
 }
 
 .profile-photo-box {
-    width: 25vw;
-    height: inherit;
+  width: 25vw;
+  height: inherit;
 }
 
 .profile-photo {
-    display: inline-flex;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    transform: translate(10vw, -7vh);
-    z-index: 1000;
-    background-color: white;
+  display: inline-flex;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  transform: translate(10vw, -7vh);
+  z-index: 1000;
+  background-color: white;
 }
 
 .default-photo {
-    background-image: url("https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png");
+  background-image: url('https://www.nicepng.com/png/full/128-1280406_view-user-icon-png-user-circle-icon-png.png');
 }
 
 @media (max-width: 812px) {
-    .parent-flexbox-inline {
-        flex-direction: column;
-        height: auto;
-    }
-    .profile-photo {
-        transform: translate(30vw, -6vh);
-    }
+  .parent-flexbox-inline {
+    flex-direction: column;
+    height: auto;
+  }
+  .profile-photo {
+    transform: translate(30vw, -6vh);
+  }
 }

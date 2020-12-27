@@ -2,69 +2,15 @@
   <main-search></main-search>
 </section>
 <section class="container block-content">
-  <h2>featured initiatives</h2>
+  <h2>Featured Projects</h2>
   <app-banner></app-banner>
 </section>
-
 <section class="container block-content">
-  <div class="category-section">
-    <p class="section-title light-xl">Current listings</p>
-    <!--
-    <p class="section-title light-xl">Which categories interest you?</p>
-    <p class="section-description light-s">
-      Discover projects just for you and get great recommendations when you
-      select your interests.
-    </p>
-    <div class="category-selection">
-      <select class="outline-select" placeholder="category">
-        <optgroup *ngFor="let data of categoryList" label="{{ data.name }}">
-          <option *ngFor="let cat of data.group" value="cat">{{ cat }}</option>
-        </optgroup>
-      </select>
-    </div>
-    <p class="section-description light-s">Or explore our top categories</p>
-    <div class="category-filter">
-      <ul>
-        <li class="col-lg-3">
-          <div class="outline">
-            <span class="social-icon"></span>
-            <p class="medium-xs">Social</p>
-          </div>
-        </li>
-        <li class="col-lg-3">
-          <div class="outline">
-            <span class="tree-icon"></span>
-            <p class="medium-xs">Environment</p>
-          </div>
-        </li>
-        <li class="col-lg-3">
-          <div class="outline">
-            <span class="coin-icon"></span>
-            <p class="medium-xs">economical</p>
-          </div>
-        </li>
-        <li class="col-lg-3">
-          <div class="outline">
-            <span class="tools-icon"></span>
-            <p class="medium-xs">others</p>
-          </div>
-        </li>
-      </ul>
-    </div>
-  -->
-  </div>
-  <app-listing-cards
-    [listingData]="listingList"
-    [colNum]="4"
-  ></app-listing-cards>
+  <h2>More Projects</h2>
+  <app-listing-grid [listings]="listingList" [colNum]="4"></app-listing-grid>
   <div class="category-section">
     <p class="section-title light-xl">Organisations</p>
-    <p class="section-description light-s">
-      Discover organisations and their programmes and listings!
-    </p>
+    <p class="section-description light-s">Discover organisations and their programmes and listings!</p>
   </div>
-  <app-organisation-cards
-    [organisationData]="organisationList"
-    [colNum]="4"
-  ></app-organisation-cards>
+  <app-organisation-cards [organisationData]="organisationList" [colNum]="4"></app-organisation-cards>
 </section>

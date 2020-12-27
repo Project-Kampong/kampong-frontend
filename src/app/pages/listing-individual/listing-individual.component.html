@@ -7,10 +7,7 @@
     </div>
     <div class="d-flex flex-wrap">
       <div class="col-lg-8">
-        <app-image-carousel
-          *ngIf="pics && pics.length > 0"
-          [sliderImages]="pics"
-        ></app-image-carousel>
+        <app-image-carousel *ngIf="pics && pics.length > 0" [sliderImages]="pics"></app-image-carousel>
       </div>
       <div class="col-lg-4">
         <div class="project-sidebar-container">
@@ -36,13 +33,8 @@
             </div>
 
             <div class="button-container">
-              <div *ngIf="
-                isLoggedIn &&
-                createdBy === userData['user_id'];
-                else isNotOwner">
-                  <button class="primary-button" (click)="editListing(this.listingId)">
-                    Edit this listing
-                  </button>
+              <div *ngIf="isLoggedIn && createdBy === userData['user_id']; else isNotOwner">
+                <button class="primary-button" (click)="editListing(this.listingId)">Edit this listing</button>
               </div>
               <ng-template #isNotOwner>
                 <button class="primary-button" (click)="togglePopup()">Enquire this project</button>
@@ -172,13 +164,7 @@
     </div>
     <!-- Updates -->
     <div class="tabs-content" id="updates">
-      <div
-        *ngIf="
-          isLoggedIn &&
-          createdBy === userData['user_id']
-        "
-        class="updates-input"
-      >
+      <div *ngIf="isLoggedIn && createdBy === userData['user_id']" class="updates-input">
         <div class="d-flex justify-content-end">
           <button class="outline-btn btn" (click)="updatesFormOpen = !updatesFormOpen">Post Update</button>
         </div>
@@ -228,25 +214,15 @@
             </div>
           </div>
           <div class="card-content">
-            <app-update-carousel
-              [sliderImages]="update.pics"
-            ></app-update-carousel>
+            <app-update-carousel [sliderImages]="update.pics"></app-update-carousel>
             <div class="text-content">
               <p class="light-s">
                 {{ update.description }}
               </p>
             </div>
           </div>
-          <div
-            *ngIf="
-              isLoggedIn&&
-              createdBy === userData['user_id']
-            "
-            class="d-flex justify-content-end p-1"
-          >
-            <button (click)="deleteUpdate(update)" class="red-btn btn">
-              Delete Update
-            </button>
+          <div *ngIf="isLoggedIn && createdBy === userData['user_id']" class="d-flex justify-content-end p-1">
+            <button (click)="deleteUpdate(update)" class="red-btn btn">Delete Update</button>
           </div>
         </div>
       </div>
@@ -289,25 +265,9 @@
                   {{ comment.comment }}
                 </p>
               </div>
-              <button
-                class="reply-btn btn"
-                (click)="comment.openbox = !comment.openbox"
-              >
-                Reply
-              </button>
-              <button
-                *ngIf="comment.user_id == userData['user_id']"
-                class="delete-btn btn"
-                (click)="deleteComment(comment)"
-              >
-                Delete
-              </button>
-              <div
-                *ngIf="
-                  isLoggedIn && comment.openbox == true
-                "
-                class="comments-input reply-input mt-2"
-              >
+              <button class="reply-btn btn" (click)="comment.openbox = !comment.openbox">Reply</button>
+              <button *ngIf="comment.user_id == userData['user_id']" class="delete-btn btn" (click)="deleteComment(comment)">Delete</button>
+              <div *ngIf="isLoggedIn && comment.openbox == true" class="comments-input reply-input mt-2">
                 <mat-form-field class="full-width">
                   <mat-label>Reply to</mat-label>
                   <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="3" [(ngModel)]="replyInput"></textarea>
@@ -346,13 +306,7 @@
                       {{ reply.comment }}
                     </p>
                   </div>
-                  <button
-                    *ngIf="reply.user_id === userData['user_id']"
-                    class="delete-btn btn"
-                    (click)="deleteComment(reply)"
-                  >
-                    Delete
-                  </button>
+                  <button *ngIf="reply.user_id === userData['user_id']" class="delete-btn btn" (click)="deleteComment(reply)">Delete</button>
                 </div>
               </div>
             </div>

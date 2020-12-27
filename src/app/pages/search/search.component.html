@@ -18,8 +18,8 @@
                   <mat-label>Location</mat-label>
                   <mat-select formControlName="locationParams" multiple disableOptionCentering>
                     <mat-optgroup *ngFor="let group of locationsStore.locations" [label]="group.name">
-                      <mat-option *ngFor="let location of group.group" [value]="location">
-                        {{ location }}
+                      <mat-option *ngFor="let location of group.group" [value]="location.location_name">
+                        {{ location.location_name }}
                       </mat-option>
                     </mat-optgroup>
                   </mat-select>
@@ -30,8 +30,8 @@
                   <mat-label>Category</mat-label>
                   <mat-select formControlName="categoryParams" multiple disableOptionCentering>
                     <mat-optgroup *ngFor="let group of categoriesStore.categories" [label]="group.name">
-                      <mat-option *ngFor="let category of group.group" [value]="category">
-                        {{ category }}
+                      <mat-option *ngFor="let category of group.group" [value]="category.category_name">
+                        {{ category.category_name }}
                       </mat-option>
                     </mat-optgroup>
                   </mat-select>
@@ -63,74 +63,8 @@
         </div>
       </div>
     </div>
-    <div class="container" style="min-height: 100vh">
-      <app-listing-cards [listingData]="resultsArr"></app-listing-cards>
+    <div class="container" style="min-height: 100vh; margin-top: 20px">
+      <app-listing-grid [listings]="resultsArr" [colNum]="4"></app-listing-grid>
     </div>
   </div>
 </div>
-
-<!--
-    <div class="sticky-filter-bar">
-    <div >
-      <form
-        [ngClass]="{'cb-vertival': !tmp }"
-        [formGroup]="searchParams"
-      >
-        <mat-form-field appearance="fill">
-          <mat-label>Location</mat-label>
-          <mat-select
-            formControlName="locationParams"
-            multiple
-            disableOptionCentering
-            >
-            <mat-optgroup
-              *ngFor="let group of locationList"
-              [label]="group.name"
-            >
-              <mat-option
-                *ngFor="let location of group.group"
-                [value]="location"
-              >
-                {{ location }}
-              </mat-option>
-            </mat-optgroup>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Category</mat-label>
-          <mat-select
-            formControlName="categoryParams"
-            multiple
-            disableOptionCentering
-          >
-            <mat-optgroup
-              *ngFor="let group of categoryList"
-              [label]="group.name"
-            >
-              <mat-option
-                *ngFor="let category of group.group"
-                [value]="category"
-              >
-               {{ category }}
-              </mat-option>
-            </mat-optgroup>
-          </mat-select>
-        </mat-form-field>
-      </form>
-    </div>
-  </div>
-
-        <div class="container">
-        <div class="suggested-search">
-          <p class="label">Popular Searches</p>
-          <ul>
-            <li
-              *ngFor="let popular of popularSearchList"
-              (click)="popularSearchClicked(popular)"
-            >
-              {{ popular }}
-            </li>
-          </ul>
-        </div>
-      </div>
--->

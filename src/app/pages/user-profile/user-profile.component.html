@@ -130,7 +130,7 @@
         <div class="profile-item" id="liked">
           <div *ngIf="likedArr.length > 0">
             <h2>Initiatives I've Liked</h2>
-            <app-listing-cards [listingData]="likedArr" [colNum]="6"></app-listing-cards>
+            <app-listing-grid [listings]="likedArr" [colNum]="6"></app-listing-grid>
           </div>
         </div>
 

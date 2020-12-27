@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpEvent, HttpHeaders } from "@angular/common/http";
-import { CreateOrganisation, UpdateOrganisation } from "@app/interfaces/organisation";
-import { API } from "@app/interfaces/api";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { CreateOrganisation, UpdateOrganisation } from '@app/interfaces/organisation';
+import { API } from '@app/interfaces/api';
 
 // Services Import
 import { Observable } from 'rxjs';
-import { environment } from "src/environments/environment";
-import { AuthService } from "./auth.service";
+import { environment } from 'src/environments/environment';
+import { AuthService } from './auth.service';
 
 interface OptionObject {
   headers: HttpHeaders;
@@ -14,14 +14,13 @@ interface OptionObject {
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class OrganisationsService {
-
   private url: string = environment.apiUrl;
   private options: OptionObject = {
     headers: new HttpHeaders({
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     }),
   };
 
@@ -32,10 +31,7 @@ export class OrganisationsService {
    * @event GET
    */
   getOrganisations(): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/organisations",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/organisations', this.options);
   }
 
   /**
@@ -44,10 +40,7 @@ export class OrganisationsService {
    * @event GET
    */
   getSelectedOrganisation(organisationId: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/organisations/" + organisationId,
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/organisations/' + organisationId, this.options);
   }
 
   /**
@@ -56,11 +49,7 @@ export class OrganisationsService {
    * @event POST
    */
   createOrganisation(data: CreateOrganisation, headers: OptionObject): Observable<API> {
-    return this.httpClient.post<API>(
-      this.url + "api/organisations",
-      data,
-      this.authService.getAuthOptionsWithoutContentType()
-    );
+    return this.httpClient.post<API>(this.url + 'api/organisations', data, this.authService.getAuthOptionsWithoutContentType());
   }
 
   /**
@@ -70,11 +59,7 @@ export class OrganisationsService {
    * @event PUT
    */
   updateOrganisation(organisationId: string, data: UpdateOrganisation, headers: OptionObject): Observable<API> {
-    return this.httpClient.put<API>(
-      this.url + "api/organisations/" + organisationId,
-      data,
-      this.authService.getAuthOptionsWithoutContentType()
-    );
+    return this.httpClient.put<API>(this.url + 'api/organisations/' + organisationId, data, this.authService.getAuthOptionsWithoutContentType());
   }
 
   /**
@@ -83,10 +68,7 @@ export class OrganisationsService {
    * @event DELETE
    */
   removeOrganisation(organisationId: string, headers: OptionObject): Observable<API> {
-    return this.httpClient.delete<API>(
-      this.url + "api/organisations/" + organisationId,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.delete<API>(this.url + 'api/organisations/' + organisationId, this.authService.getAuthOptions());
   }
 
   /*
@@ -119,5 +101,4 @@ export class OrganisationsService {
     );
   }
   */
-
 }

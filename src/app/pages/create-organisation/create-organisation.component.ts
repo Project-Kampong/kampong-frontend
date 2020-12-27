@@ -1,18 +1,17 @@
 // Angular Imports
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
-import { Router } from "@angular/router";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, ValidationErrors } from '@angular/forms';
+import { Router } from '@angular/router';
 
 // Services
-import { OrganisationsService } from "@app/services/organisations.service";
-import { SnackbarService } from "@app/services/snackbar.service"
+import { OrganisationsService } from '@app/services/organisations.service';
+import { SnackbarService } from '@app/services/snackbar.service';
 
 // Interfaces
-import { CreateOrganisation } from "@app/interfaces/organisation";
-import { createOrganisationForm } from "@app/util/forms/organisation";
-import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
+import { CreateOrganisation } from '@app/interfaces/organisation';
+import { createOrganisationForm } from '@app/util/forms/organisation';
 import { Subscription } from 'rxjs';
-import { AuthService } from "@app/services/auth.service";
+import { AuthService } from '@app/services/auth.service';
 
 import { categoriesStore } from '@app/store/categories-store';
 import { locationsStore } from '@app/store/locations-store';
@@ -25,10 +24,9 @@ declare var $: any;
   styleUrls: ['./create-organisation.component.scss'],
 })
 export class CreateOrganisationComponent implements OnInit, OnDestroy {
-  
   organisationForm: FormGroup;
   organisationData: CreateOrganisation = null;
-  organisationId: string = "";
+  organisationId: string = '';
   categoryGroup = categoriesStore;
   locationGroup = locationsStore;
   subscriptions: Subscription[] = [];
@@ -38,7 +36,7 @@ export class CreateOrganisationComponent implements OnInit, OnDestroy {
     private organisationsService: OrganisationsService,
     private router: Router,
     private snackbarService: SnackbarService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   ngOnInit() {
@@ -72,29 +70,38 @@ export class CreateOrganisationComponent implements OnInit, OnDestroy {
     const twitter_link: string = this.organisationForm.value.twitter_link;
     const instagram_link: string = this.organisationForm.value.instagram_link;
 
-    this.organisationData = { name, organisation_type, about, website_url, phone,
-      email, locations, address, facebook_link, twitter_link, instagram_link,
+    this.organisationData = {
+      name,
+      organisation_type,
+      about,
+      website_url,
+      phone,
+      email,
+      locations,
+      address,
+      facebook_link,
+      twitter_link,
+      instagram_link,
     };
 
-    this.subscriptions.push(this.organisationsService.createOrganisation(this.organisationData, this.authService.getAuthOptionsWithoutContentType()).subscribe(
-      (res) => {
-        this.organisationId = res["data"]["organisation_id"];
-      },
-      (err) => {
-        console.log(err);
-        this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_organisation.error, false);
-      },
-      () => {
-        this.snackbarService.openSnackBar(
-          this.snackbarService.DialogList.create_organisation.success,
-          true
-        );
-        this.router.navigate(["/organisation/" + this.organisationId])
-      } 
-    ))
+    this.subscriptions.push(
+      this.organisationsService.createOrganisation(this.organisationData, this.authService.getAuthOptionsWithoutContentType()).subscribe(
+        (res) => {
+          this.organisationId = res['data']['organisation_id'];
+        },
+        (err) => {
+          console.log(err);
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_organisation.error, false);
+        },
+        () => {
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_organisation.success, true);
+          this.router.navigate(['/organisation/' + this.organisationId]);
+        },
+      ),
+    );
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

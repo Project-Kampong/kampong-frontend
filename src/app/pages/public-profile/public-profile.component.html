@@ -13,26 +13,14 @@
                 <p *ngIf="profileData.occupation != null" class="position">
                   {{ profileData.occupation }}
                 </p>
-                <p *ngIf="profileData.occupation == null" class="position">
-                  Newbie
-                </p>
+                <p *ngIf="profileData.occupation == null" class="position">Newbie</p>
               </div>
             </div>
 
             <ul class="profile-nav">
-              <li
-                class="active"
-                id="profile-nav"
-                (click)="scrollToSection('profile')"
-              >
-                My Profile
-              </li>
-              <li (click)="scrollToSection('started')" id="started-nav">
-                Initiatives I've Started
-              </li>
-              <li (click)="scrollToSection('liked')" id="liked-nav">
-                Initiatives I've Liked
-              </li>
+              <li class="active" id="profile-nav" (click)="scrollToSection('profile')">My Profile</li>
+              <li (click)="scrollToSection('started')" id="started-nav">Initiatives I've Started</li>
+              <li (click)="scrollToSection('liked')" id="liked-nav">Initiatives I've Liked</li>
             </ul>
           </div>
         </div>
@@ -75,20 +63,14 @@
         <div class="profile-item" id="started">
           <div *ngIf="startedArr.length != 0">
             <h2>Initiatives I've Started</h2>
-            <app-listing-cards
-              [listingData]="startedArr"
-              [colNum]="6"
-            ></app-listing-cards>
+            <app-listing-grid [listings]="startedArr" [colNum]="6"></app-listing-grid>
           </div>
         </div>
 
         <div class="profile-item" id="liked">
           <div *ngIf="likedArr.length != 0">
             <h2>Initiatives I've Liked</h2>
-            <app-listing-cards
-              [listingData]="likedArr"
-              [colNum]="6"
-            ></app-listing-cards>
+            <app-listing-grid [listings]="likedArr" [colNum]="6"></app-listing-grid>
           </div>
         </div>
       </div>

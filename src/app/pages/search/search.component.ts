@@ -8,7 +8,6 @@ import { ListingsService } from '@app/services/listings.service';
 
 // Interfaces
 import { Listing } from '@app/interfaces/listing';
-import { CategoryFilter, LocationFilter } from '@app/interfaces/filters';
 import { locationsStore } from '@app/store/locations-store';
 import { categoriesStore } from '@app/store/categories-store';
 

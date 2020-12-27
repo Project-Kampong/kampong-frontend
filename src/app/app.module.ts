@@ -11,7 +11,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Material Components
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatButtonModule, MatDialogModule, MatNativeDateModule, MatProgressSpinnerModule, MAT_DATE_LOCALE } from '@angular/material';
+import {
+  MatButtonModule,
+  MatDialogModule,
+  MatGridListModule,
+  MatNativeDateModule,
+  MatProgressSpinnerModule,
+  MAT_DATE_LOCALE,
+} from '@angular/material';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -24,7 +31,6 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { AppComponent } from './app.component';
 import { BannerComponent } from './components/banner/banner.component';
 import { MainSearchComponent } from './components/main-search/main-search.component';
-import { ListingCardsComponent } from './components/listing-cards/listing-cards.component';
 import { ImageCarouselComponent } from './components/image-carousel/image-carousel.component';
 import { UpdateCarouselComponent } from './components/update-carousel/update-carousel.component';
 import { MilestonesComponent } from './components/milestones/milestones.component';
@@ -54,13 +60,14 @@ import { MobxAngularModule } from 'mobx-angular';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { CropImageDialogComponent } from './components/crop-image-dialog/crop-image-dialog.component';
 import { DialogComponent } from './components/dialog/dialog.component';
+import { ListingCardComponent } from './components/listing-card/listing-card.component';
+import { ListingGridComponent } from './components/listing-grid/listing-grid.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListingHomeComponent,
     BannerComponent,
-    ListingCardsComponent,
     ListingIndividualComponent,
     OrganisationIndividualComponent,
     ImageCarouselComponent,
@@ -86,6 +93,8 @@ import { DialogComponent } from './components/dialog/dialog.component';
     OrgBannerComponent,
     CropImageDialogComponent,
     DialogComponent,
+    ListingCardComponent,
+    ListingGridComponent,
   ],
   imports: [
     BrowserModule,
@@ -110,6 +119,7 @@ import { DialogComponent } from './components/dialog/dialog.component';
     ImageCropperModule,
     MatDialogModule,
     MatButtonModule,
+    MatGridListModule,
   ],
   exports: [],
   entryComponents: [SnackbarSuccessComponent, SnackbarErrorComponent, CropImageDialogComponent, DialogComponent],
