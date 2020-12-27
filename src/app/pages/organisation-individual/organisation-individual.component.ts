@@ -4,7 +4,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { OrganisationsService } from '@app/services/organisations.service';
 import { SnackbarService } from '@app/services/snackbar.service';
 
-// Interface
 import { Organisation, OrganisationBanner } from '@app/interfaces/organisation';
 import { Subscription } from 'rxjs';
 import { ListingIndividual } from '@app/interfaces/listing';
@@ -28,7 +27,7 @@ export class OrganisationIndividualComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private organisationsService: OrganisationsService,
-    public snackbarService: SnackbarService,
+    private snackbarService: SnackbarService,
   ) {}
 
   // Updates
@@ -160,8 +159,7 @@ export class OrganisationIndividualComponent implements OnInit, OnDestroy {
     this.router.navigate(['/profile/' + user_id]);
   }
 
-  togglePopup() {
-    // Toggle popup
+  togglePopup(): void {
     $('.popup-bg').toggleClass('active');
     $('.popup-box').toggleClass('active');
   }
