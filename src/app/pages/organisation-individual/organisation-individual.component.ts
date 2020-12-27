@@ -20,7 +20,7 @@ export class OrganisationIndividualComponent implements OnInit, OnDestroy {
   organisationId: string = '';
   subscriptions: Subscription[] = [];
   organisationData: Organisation = <Organisation>{};
-  listings: ListingIndividual = <ListingIndividual>{};
+  listings: ListingIndividual[] = [];
   currentDate = new Date();
   organisationBanner: OrganisationBanner = <OrganisationBanner>{};
 
