@@ -1,0 +1,28 @@
+<div class="organisation-card" (click)="routeToOrg()">
+  <div *ngIf="organisationData.profile_photo">
+    <img src="{{ organisationData.profile_photo }}" />
+  </div>
+  <div class="organisation-card-body">
+    <div>
+      <p class="small-badge" *ngIf="organisationData.organisation_type">
+        {{ organisationData.organisation_type }}
+      </p>
+      <p class="title medium-s">
+        {{ organisationData.name }}
+      </p>
+      <p class="tagline light xs">
+        {{ organisationData.about }}
+      </p>
+    </div>
+    <div class="locationtags-list" *ngIf="organisationData.locations && organisationData.locations.length > 0">
+      <div class="location-icon"></div>
+      <div>
+        <ul>
+          <li class="light-xs" *ngFor="let location of organisationData.locations">
+            {{ location }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
