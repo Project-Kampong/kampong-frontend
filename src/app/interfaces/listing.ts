@@ -58,8 +58,8 @@ export interface ListingFAQ {
 }
 
 export interface ListingJobs {
-  job_title: string,
-  job_description: string,
+  job_title: string;
+  job_description: string;
 }
 
 export interface ListingUpdates {
@@ -84,7 +84,7 @@ export interface ListingComments {
   reply_to_id: number;
   created_on: string;
   updated_on: string;
-  deleted_on: string,
+  deleted_on: string;
   nickname: string;
   profile_picture: string;
   replies?: ListingComments[];
@@ -137,7 +137,7 @@ export interface CreateListingFAQ {
 export interface CreateListingUpdates {
   listing_id: string;
   description: string;
-  pics ?: string[];
+  pics?: string[];
 }
 
 export interface CreateListing {
@@ -198,7 +198,7 @@ export interface EditListingHashtags {
 }
 
 export interface EditListingMilestones {
-  milestone_id: number,
+  milestone_id: number;
   milestone_description: string;
   date: Date;
 }

@@ -1,0 +1,29 @@
+<div class="listing-card" (click)="routeToListing()">
+  <div>
+    <div></div>
+    <img src="{{ listingData.pics[0] }}" />
+  </div>
+  <div class="listing-card-body">
+    <div>
+      <p class="small-badge">
+        {{ listingData.category }}
+      </p>
+      <p class="title medium-s">
+        {{ listingData.listing_title }}
+      </p>
+      <p class="tagline light xs">
+        {{ listingData.tagline }}
+      </p>
+    </div>
+    <div class="locationtags-list" *ngIf="listingData.locations && listingData.locations.length > 0">
+      <div class="location-icon"></div>
+      <div>
+        <ul>
+          <li class="light-xs" *ngFor="let location of listingData.locations">
+            {{ location }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

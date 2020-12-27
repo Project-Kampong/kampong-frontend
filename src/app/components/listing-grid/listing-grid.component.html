@@ -1,0 +1,5 @@
+<div class="d-flex flex-wrap listing-card-wrapper">
+  <div [className]="'px-2 col-lg-' + colNum" *ngFor="let listing of listings">
+    <app-listing-card [listingData]="listing"></app-listing-card>
+  </div>
+</div>
