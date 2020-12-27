@@ -38,8 +38,13 @@ import { ContentWrapperComponent } from './layout/content-wrapper/content-wrappe
 import { EditListingCardsComponent } from './components/edit-listing-cards/edit-listing-cards.component';
 import { SnackbarErrorComponent } from './components/snackbar-error/snackbar-error.component';
 import { SnackbarSuccessComponent } from './components/snackbar-success/snackbar-success.component';
-import { OrganisationCardsComponent } from './components/organisation-cards/organisation-cards.component';
 import { OrgBannerComponent } from './components/organisation-banner/organisation-banner.component';
+import { CropImageDialogComponent } from './components/crop-image-dialog/crop-image-dialog.component';
+import { DialogComponent } from './components/dialog/dialog.component';
+import { ListingCardComponent } from './components/listing-card/listing-card.component';
+import { ListingGridComponent } from './components/listing-grid/listing-grid.component';
+import { OrganisationCardComponent } from './components/organisation-card/organisation-card.component';
+import { OrganisationGridComponent } from './components/organisation-grid/organisation-grid.component';
 
 // Pages
 import { ListingHomeComponent } from '@app/pages/listing-home/listing-home.component';
@@ -58,10 +63,6 @@ import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { EditOrganisationCardsComponent } from './components/edit-organisation-cards/edit-organisation-cards.component';
 import { MobxAngularModule } from 'mobx-angular';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { CropImageDialogComponent } from './components/crop-image-dialog/crop-image-dialog.component';
-import { DialogComponent } from './components/dialog/dialog.component';
-import { ListingCardComponent } from './components/listing-card/listing-card.component';
-import { ListingGridComponent } from './components/listing-grid/listing-grid.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import { ListingGridComponent } from './components/listing-grid/listing-grid.com
     SnackbarSuccessComponent,
     OnboardingComponent,
     MainSearchComponent,
-    OrganisationCardsComponent,
+    OrganisationCardComponent,
+    OrganisationGridComponent,
     OrgBannerComponent,
     CropImageDialogComponent,
     DialogComponent,
