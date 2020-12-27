@@ -1,16 +1,21 @@
 // Angular Imports
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { COMMA, ENTER, SPACE } from "@angular/cdk/keycodes";
-import { FormGroup, FormBuilder, ValidationErrors } from "@angular/forms";
-import { MatChipInputEvent } from "@angular/material/chips";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
+import { FormGroup, FormBuilder, ValidationErrors } from '@angular/forms';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { Router, ActivatedRoute } from '@angular/router';
 
 // Services
 import { ListingsService } from '@app/services/listings.service';
 import { SnackbarService } from '@app/services/snackbar.service';
 
 // Interfaces
-import { EditListingFAQ, EditListingJobs, EditListingMilestones, EditListing, originalImagesCheck,
+import {
+  EditListingFAQ,
+  EditListingJobs,
+  EditListingMilestones,
+  EditListing,
+  originalImagesCheck,
   EditListingHashtags,
 } from '@app/interfaces/listing';
 import { editListingForm } from '@app/util/forms/listing';
@@ -225,18 +230,26 @@ export class EditListingComponent implements OnInit, OnDestroy {
     const checkMilestones: number[] = [];
     const milestoneEditObservables: Observable<any>[] = [];
     this.milestoneArr.forEach((val) => {
-      if (val.milestone_id === null && val.milestone_description !== "" && val.date !== null) {
-        milestoneEditObservables.push(this.listingsService.createListingMilestones({
-          listing_id: this.listingId,
-          milestone_description: val.milestone_description,
-          date: val.date
-        }).pipe(catchError(error => of(error))));
-      } else if (val.milestone_id && val.date !== null && val.milestone_description !== "") {
+      if (val.milestone_id === null && val.milestone_description !== '' && val.date !== null) {
+        milestoneEditObservables.push(
+          this.listingsService
+            .createListingMilestones({
+              listing_id: this.listingId,
+              milestone_description: val.milestone_description,
+              date: val.date,
+            })
+            .pipe(catchError((error) => of(error))),
+        );
+      } else if (val.milestone_id && val.date !== null && val.milestone_description !== '') {
         checkMilestones.push(val.milestone_id);
-        milestoneEditObservables.push(this.listingsService.updateMilestone(val.milestone_id, {
-          milestone_description: val.milestone_description,
-          date: val.date,
-        }).pipe(catchError(error => of(error))));
+        milestoneEditObservables.push(
+          this.listingsService
+            .updateMilestone(val.milestone_id, {
+              milestone_description: val.milestone_description,
+              date: val.date,
+            })
+            .pipe(catchError((error) => of(error))),
+        );
       }
     });
     this.originalMilestoneIds.forEach((val) => {
@@ -377,32 +390,32 @@ export class EditListingComponent implements OnInit, OnDestroy {
       locations,
     };
 
-    this.subscriptions.push((await this.listingsService.updateListing(this.listingId, this.listingData).subscribe(
-      (res) => {},
-      (err) => {
-        console.log(err);
-        this.snackbarService.openSnackBar(this.snackbarService.DialogList.update_listing.error, false);
-        return;
-      },
-      () => {
-        const combinedObservables = forkJoin([this.updateHashtags(), this.updateJobs(), this.updateMilestones(), this.updateFaqs()]);
-        this.subscriptions.push(combinedObservables.subscribe({
-          next: res => console.log(res),
-          error: err => {
-            console.log(err);
-            this.snackbarService.openSnackBar(this.snackbarService.DialogList.update_listing.error, false);
-          },
-          complete: () => {
-            this.snackbarService.openSnackBar(
-              this.snackbarService.DialogList.update_listing.success,
-              true
-            );
-            this.router.navigate(["/listing/" + this.listingId])
-          }
-        }));
-
-      }
-    )))
+    this.subscriptions.push(
+      await this.listingsService.updateListing(this.listingId, this.listingData).subscribe(
+        (res) => {},
+        (err) => {
+          console.log(err);
+          this.snackbarService.openSnackBar(this.snackbarService.DialogList.update_listing.error, false);
+          return;
+        },
+        () => {
+          const combinedObservables = forkJoin([this.updateHashtags(), this.updateJobs(), this.updateMilestones(), this.updateFaqs()]);
+          this.subscriptions.push(
+            combinedObservables.subscribe({
+              next: (res) => console.log(res),
+              error: (err) => {
+                console.log(err);
+                this.snackbarService.openSnackBar(this.snackbarService.DialogList.update_listing.error, false);
+              },
+              complete: () => {
+                this.snackbarService.openSnackBar(this.snackbarService.DialogList.update_listing.success, true);
+                this.router.navigate(['/listing/' + this.listingId]);
+              },
+            }),
+          );
+        },
+      ),
+    );
   }
 
   removeListing(): void {
@@ -414,6 +427,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
           this.router.navigate(['/profile']);
         },
         (err) => {
+          console.log(err);
           this.snackbarService.openSnackBar(this.snackbarService.DialogList.delete_listing.error, false);
           this.router.navigate(['/profile']);
         },
@@ -422,6 +436,6 @@ export class EditListingComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }

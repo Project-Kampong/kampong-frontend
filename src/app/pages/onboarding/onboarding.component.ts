@@ -70,23 +70,22 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     this.profileService.updateUserProfile(this.profileData['user_id'], this.editProfileForm.value).subscribe(
       (res) => {
         if (true) {
-          var ImageFd = new FormData();
+          let ImageFd = new FormData();
           this.profileService.updateUserProfilePic(this.profileData['user_id'], ImageFd).subscribe(
             (res) => {
               this.router.navigate(['/profile']);
             },
             (err) => {
-              console.log('error');
+              console.log(err);
             },
           );
-        } else {
-          //this.authService.LoginResponse.emit();
-          this.snackbarService.openSnackBar(this.snackbarService.DialogList.setup_profile.success, true);
-          this.router.navigate(['/profile']);
         }
+        //this.authService.LoginResponse.emit();
+        this.snackbarService.openSnackBar(this.snackbarService.DialogList.setup_profile.success, true);
+        this.router.navigate(['/profile']);
       },
       (err) => {
-        console.log('error');
+        console.log(err);
         this.snackbarService.openSnackBar(this.snackbarService.DialogList.setup_profile.error, false);
         this.router.navigate(['/profile']);
       },

@@ -21,7 +21,6 @@ import { Subscription } from 'rxjs';
 import { UserData } from '@app/interfaces/user';
 import { EmailService } from '@app/services/email.service';
 
-import { groupBy } from 'lodash';
 import { uiStore } from '@app/store/ui-store';
 import { MatDialog } from '@angular/material';
 import { DialogComponent } from '@app/components/dialog/dialog.component';
@@ -183,6 +182,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
     );
   }
 
+  /*
   //To think through the fastest way
   groupComments(commentsArr: ListingComments[]): any {
     const result = commentsArr.filter((comment) => comment.reply_to_id === null);
@@ -193,6 +193,7 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
       }
     });
   }
+  */
 
   checkIsLiked(): void {
     this.likesArr.forEach((val) => {
@@ -497,10 +498,12 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
           (data) => {
             this.snackbarService.openSnackBar(this.snackbarService.DialogList.send_message.success, true),
               (err) => {
+                console.log(err);
                 this.snackbarService.openSnackBar(this.snackbarService.DialogList.send_message.error, false);
               };
           },
-          (error) => {
+          (err) => {
+            console.log(err);
             uiStore.toggleLoading();
           },
           () => {
