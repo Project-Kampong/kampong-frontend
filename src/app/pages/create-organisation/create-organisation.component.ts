@@ -85,7 +85,7 @@ export class CreateOrganisationComponent implements OnInit, OnDestroy {
     };
 
     this.subscriptions.push(
-      this.organisationsService.createOrganisation(this.organisationData, this.authService.getAuthOptionsWithoutContentType()).subscribe(
+      this.organisationsService.createOrganisation(this.organisationData).subscribe(
         (res) => {
           this.organisationId = res['data']['organisation_id'];
         },
