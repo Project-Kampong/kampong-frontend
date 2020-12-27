@@ -48,7 +48,7 @@ export class OrganisationsService {
    * @param data Organisation Data
    * @event POST
    */
-  createOrganisation(data: CreateOrganisation, headers: OptionObject): Observable<API> {
+  createOrganisation(data: CreateOrganisation): Observable<API> {
     return this.httpClient.post<API>(this.url + 'api/organisations', data, this.authService.getAuthOptionsWithoutContentType());
   }
 
@@ -58,7 +58,7 @@ export class OrganisationsService {
    * @param data Updated Organisation Data
    * @event PUT
    */
-  updateOrganisation(organisationId: string, data: UpdateOrganisation, headers: OptionObject): Observable<API> {
+  updateOrganisation(organisationId: string, data: UpdateOrganisation): Observable<API> {
     return this.httpClient.put<API>(this.url + 'api/organisations/' + organisationId, data, this.authService.getAuthOptionsWithoutContentType());
   }
 
@@ -67,8 +67,17 @@ export class OrganisationsService {
    * @param organisationId Organisation ID
    * @event DELETE
    */
-  removeOrganisation(organisationId: string, headers: OptionObject): Observable<API> {
+  removeOrganisation(organisationId: string): Observable<API> {
     return this.httpClient.delete<API>(this.url + 'api/organisations/' + organisationId, this.authService.getAuthOptions());
+  }
+
+  /**
+   * Get all listings for this organisation
+   * @param organisationId Organisation ID
+   * @event GET
+   */
+  getAllListingsForAnOrganisation(organisationId: string): Observable<API> {
+    return this.httpClient.get<API>(this.url + 'api/organisations/' + organisationId + '/listings', this.options);
   }
 
   /*
