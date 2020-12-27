@@ -496,14 +496,11 @@ export class ListingIndividualComponent implements OnInit, OnDestroy {
         })
         .subscribe(
           (data) => {
-            this.snackbarService.openSnackBar(this.snackbarService.DialogList.send_message.success, true),
-              (err) => {
-                console.log(err);
-                this.snackbarService.openSnackBar(this.snackbarService.DialogList.send_message.error, false);
-              };
+            this.snackbarService.openSnackBar(this.snackbarService.DialogList.send_message.success, true);
           },
           (err) => {
             console.log(err);
+            this.snackbarService.openSnackBar(this.snackbarService.DialogList.send_message.error, false);
             uiStore.toggleLoading();
           },
           () => {
