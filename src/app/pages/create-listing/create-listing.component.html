@@ -20,7 +20,7 @@
           <!-- End of Errors Validation -->
         </div>
 
-        <div class="form-item d-flex">
+        <!-- <div class="form-item d-flex">
           <mat-form-field appearance="fill">
             <mat-label>Category</mat-label>
             <mat-select required formControlName="category">
@@ -31,7 +31,31 @@
               </mat-optgroup>
             </mat-select>
           </mat-form-field>
-        </div>
+        </div> -->
+        <mat-form-field class="chip" hintLabel="You may select more than one category" appearance="fill">
+          <mat-label>Select Category</mat-label>
+          <mat-chip-list #chipList>
+            <mat-chip *ngFor="let category of selectedCategories" [removable]="true" (removed)="removeCategory(category)">
+              {{ category }}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+              #categoryInput
+              [matAutocomplete]="categoryAuto"
+              [matChipInputFor]="chipList"
+              (matChipInputTokenEnd)="addCategory($event)"
+              formControlName="categories"
+            />
+          </mat-chip-list>
+          <mat-autocomplete #categoryAuto="matAutocomplete" (optionSelected)="selectedCategory($event)">
+            <mat-optgroup *ngFor="let group of categoryGroup.categories" [label]="group.name">
+              <mat-option *ngFor="let category of group.group" [value]="category.category_id">
+                {{ category.category_name }}
+              </mat-option>
+            </mat-optgroup>
+          </mat-autocomplete>
+        </mat-form-field>
+        <span class="error-hint" *ngIf="listingForm.controls['categories']?.touched && selectedCategories.length == 0">Category is required</span>
       </div>
 
       <!-- Old Create a Category
@@ -133,7 +157,7 @@
 
         <div class="form-item">
           <div [formGroup]="listingForm">
-            <mat-form-field appearance="fill">
+            <!-- <mat-form-field appearance="fill">
               <mat-label>Project Location</mat-label>
               <mat-select formControlName="locations" multiple>
                 <mat-optgroup *ngFor="let group of locationGroup.locations" [label]="group.name" [disabled]="group.disabled">
@@ -142,10 +166,57 @@
                   </mat-option>
                 </mat-optgroup>
               </mat-select>
+            </mat-form-field> -->
+
+            <mat-form-field class="chip" hintLabel="You may select more than one location" appearance="fill">
+              <mat-label>Select Location</mat-label>
+              <mat-chip-list #chipList>
+                <mat-chip *ngFor="let location of selectedLocations" [removable]="true" (removed)="removeLocation(location)">
+                  {{ location }}
+                  <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input
+                  #locationInput
+                  [matAutocomplete]="locationAuto"
+                  [matChipInputFor]="chipList"
+                  (matChipInputTokenEnd)="addLocation($event)"
+                  formControlName="locations"
+                />
+              </mat-chip-list>
+              <mat-autocomplete #locationAuto="matAutocomplete" (optionSelected)="selectedLocation($event)">
+                <mat-optgroup *ngFor="let group of locationGroup.locations" [label]="group.name" [disabled]="group.disabled">
+                  <mat-option *ngFor="let location of group.group" [value]="location.location_id">
+                    {{ location.location_name }}
+                  </mat-option>
+                </mat-optgroup>
+              </mat-autocomplete>
             </mat-form-field>
+            <span class="error-hint" *ngIf="listingForm.controls['locations']?.touched && selectedLocations.length == 0">Location is required</span>
           </div>
         </div>
       </div>
+
+      <!-- <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-select nzMode="multiple" nzPlaceHolder="Please select categories" formControlName="categories">
+            <nz-option-group *ngFor="let group of categoryGroup.categories" [nzLabel]="group.name">
+              <nz-option *ngFor="let category of group.group" [nzValue]="category.category_id" [nzLabel]="category.category_name"></nz-option>
+            </nz-option-group>
+          </nz-select>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-select nzMode="multiple" nzPlaceHolder="Please select location(s)" formControlName="locations">
+            <nz-option-group *ngFor="let group of locationGroup.locations" [nzLabel]="group.name">
+              <nz-option *ngFor="let location of group.group" [nzValue]="location.location_id" [nzLabel]="location.location_name"></nz-option>
+            </nz-option-group>
+          </nz-select>
+        </nz-form-item>
+        <nz-form-item nz-row class="register-area">
+          <nz-form-control [nzSpan]="14" [nzOffset]="6">
+            <button nz-button nzType="primary">Register</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form> -->
     </div>
 
     <!-- Section 2 -->

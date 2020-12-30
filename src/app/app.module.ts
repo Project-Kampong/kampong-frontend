@@ -11,8 +11,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Material Components
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatButtonModule, MatDialogModule, MatNativeDateModule, MatProgressSpinnerModule, MAT_DATE_LOCALE } from '@angular/material';
-import { MatChipsModule } from '@angular/material/chips';
+import {
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatDialogModule,
+  MatNativeDateModule,
+  MatProgressSpinnerModule,
+  MAT_DATE_LOCALE,
+} from '@angular/material';
+import { MatChipInput, MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -110,6 +117,8 @@ import { DialogComponent } from './components/dialog/dialog.component';
     ImageCropperModule,
     MatDialogModule,
     MatButtonModule,
+    MatChipsModule,
+    MatAutocompleteModule,
   ],
   exports: [],
   entryComponents: [SnackbarSuccessComponent, SnackbarErrorComponent, CropImageDialogComponent, DialogComponent],
