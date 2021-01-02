@@ -63,6 +63,7 @@ import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { EditOrganisationCardsComponent } from './components/edit-organisation-cards/edit-organisation-cards.component';
 import { MobxAngularModule } from 'mobx-angular';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { TermsAndConditionsComponent } from './components/terms-and-conditions/terms-and-conditions.component';
 
 @NgModule({
   declarations: [
@@ -97,6 +98,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     DialogComponent,
     ListingCardComponent,
     ListingGridComponent,
+    TermsAndConditionsComponent,
   ],
   imports: [
     BrowserModule,

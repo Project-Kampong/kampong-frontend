@@ -19,7 +19,7 @@ header {
       }
       a {
         color: white;
-        font-family: "Open Sans", sans-serif;
+        font-family: 'Open Sans', sans-serif;
         font-weight: bold;
         font-size: 1rem;
         text-decoration: none;
@@ -43,7 +43,7 @@ header {
 }
 
 .image-bg {
-  background-image: url("https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+  background-image: url('https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
   min-height: 100vh;
   background-position: top;
   background-size: cover;
@@ -77,7 +77,7 @@ header {
       position: relative;
       padding: 1rem 0;
       &:after {
-        content: "";
+        content: '';
         width: 400px;
         height: 15px;
         position: absolute;
@@ -96,7 +96,7 @@ header {
     .design-container {
       position: relative;
       &:after {
-        content: "";
+        content: '';
         width: 400px;
         height: 15px;
         position: absolute;
@@ -105,7 +105,7 @@ header {
         background-color: white;
       }
       &:before {
-        content: "";
+        content: '';
         width: 15px;
         height: 100px;
         position: absolute;
