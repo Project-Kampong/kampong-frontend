@@ -1,5 +1,5 @@
 // Angular Imports
-import { FormGroup, ValidationErrors } from '@angular/forms';
+import { FormGroup, ValidationErrors, FormBuilder } from '@angular/forms';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 // Services
@@ -14,6 +14,7 @@ import { Organisation } from '@app/interfaces/organisation';
 import { UserData } from '@app/interfaces/user';
 import { Subscription } from 'rxjs';
 import { UsersService } from '@app/services/users.service';
+import { profileForm } from '@app/util/forms/profile';
 
 declare var $: any;
 
@@ -35,6 +36,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   isEditingProfile: boolean = false;
 
   constructor(
+    private fb: FormBuilder,
     private authService: AuthService,
     private profileService: ProfileService,
     private userService: UsersService,
@@ -42,6 +44,9 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.editProfileForm = this.fb.group({
+      ...profileForm,
+    });
     if (this.authService.checkCookie()) {
       this.subscriptions.push(
         this.authService.getUserDataByToken().subscribe(
@@ -51,6 +56,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
               this.profileService.getUserProfile(this.userData['user_id']).subscribe(
                 (res) => {
                   this.profileData = res['data'];
+                  this.editProfileForm.patchValue(this.profileData);
                   this.isLoggedIn = true;
                 },
                 (err) => {
@@ -95,12 +101,16 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   editProfile() {
+    console.log(this.profileData);
+    console.log(this.editProfileForm);
     this.isEditingProfile = !this.isEditingProfile;
   }
 
   discardChanges() {
     this.isEditingProfile = !this.isEditingProfile;
-    // this.getInitDataWithoutListings();
+    this.editProfileForm.controls['about'].setValue(this.profileData.about);
+    this.editProfileForm.controls['nickname'].setValue(this.profileData.nickname);
+    this.editProfileForm.controls['occupation'].setValue(this.profileData.occupation);
   }
 
   selectedFile;
@@ -132,10 +142,12 @@ export class UserProfileComponent implements OnInit, OnDestroy {
           ImageFd.append('pic', this.selectedFile);
           this.profileService.updateUserProfilePic(this.profileData['user_id'], ImageFd).subscribe(
             (res) => {
-              window.location.reload(); //because there is some additional listing bug
+              window.location.reload(); //because there is some additional listing bug and image upload not working
             },
             (err) => {
               console.log('error');
+              this.snackbarService.openSnackBar(this.snackbarService.DialogList.update_profile.error, false);
+              window.location.reload(); //because there is some additional listing bug and image upload not working
             },
           );
         } else {

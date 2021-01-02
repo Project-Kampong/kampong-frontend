@@ -14,6 +14,7 @@
                   {{ profileData.occupation }}
                 </p>
                 <p *ngIf="profileData.occupation == null" class="position">Newbie</p>
+                <p class="editProfileLink"><a (click)="editProfile()">Edit Profile</a></p>
               </div>
             </div>
             <div class="d-flex" *ngIf="isEditingProfile == true">
@@ -67,7 +68,7 @@
     </div>
     <div class="col-12 col-lg-8">
       <div class="profile-item-container">
-        <div class="profile-item pt-lg-4" id="profile">
+        <div class="profile-item pt-lg-4" id="profile" *ngIf="isEditingProfile == false">
           <div *ngIf="profileData.about !== null">
             <h2>About</h2>
             <p class="light-s">
