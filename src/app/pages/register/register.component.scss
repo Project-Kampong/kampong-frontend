@@ -193,3 +193,14 @@ header {
     max-height: 2rem;
   }
 }
+
+.tooltip-btn {
+  float: right;
+  background: none !important;
+  font-size: 14px;
+  border: none;
+  padding: 0 !important;
+  font-family: arial, sans-serif;
+  color: #069;
+  cursor: pointer;
+}

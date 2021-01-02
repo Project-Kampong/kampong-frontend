@@ -33,7 +33,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   registerUser(): void {
-    //check input
     this.showLoading = true;
     this.subscriptions.push(
       this.authService.registerUser(this.registerForm.value).subscribe(
@@ -43,7 +42,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
         },
         (err) => {
           console.log(err);
-          this.snackbarService.openSnackBar(this.snackbarService.DialogList.register.error, false);
+          this.snackbarService.openSnackBar(err.error.error, false);
+          // this.snackbarService.openSnackBar(this.snackbarService.DialogList.register.error, false);
+          this.showLoading = false;
         },
         () => {
           this.showLoading = false;
@@ -54,20 +55,29 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   getFormValidationErrors(): boolean {
-    Object.keys(this.registerForm.controls).forEach((key) => {
-      const controlErrors: ValidationErrors = this.registerForm.get(key).errors;
-      if (controlErrors !== null) {
-        return true;
-      }
-    });
-    if (!this.checkPassword()) {
+    if (this.registerForm.controls.first_name.errors !== null) {
+      return true;
+    }
+    if (this.registerForm.controls.last_name.errors !== null) {
+      return true;
+    }
+    if (this.registerForm.controls.nick_name.errors !== null) {
+      return true;
+    }
+    if (this.registerForm.controls.email.errors !== null) {
+      return true;
+    }
+    if (this.checkPassword()) {
+      return true;
+    }
+    if (this.registerForm.controls.termsAndCondition.errors !== null) {
       return true;
     }
     return false;
   }
 
   checkPassword(): boolean {
-    return this.registerForm.value.password === this.registerForm.value.confirmPassword;
+    return !(this.registerForm.value.password === this.registerForm.value.confirmPassword);
   }
 
   ngOnDestroy() {

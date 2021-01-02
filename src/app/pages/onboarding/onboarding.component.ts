@@ -1,4 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { DialogComponent } from '@app/components/dialog/dialog.component';
 import { FormGroup, FormBuilder, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -27,12 +29,14 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private dialog: MatDialog,
     private profileService: ProfileService,
     private router: Router,
     private snackbarService: SnackbarService,
   ) {}
 
   ngOnInit() {
+    this.openEmailVerification();
     this.editProfileForm = this.fb.group({ ...profileForm });
     if (this.authService.checkCookie()) {
       this.subscriptions.push(
@@ -111,5 +115,34 @@ export class OnboardingComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
+
+  openEmailVerification(): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        title: 'Verify Email',
+        content: `An Email containing a verification link has been sent to your email. Please click on the link to activate your account.
+        <p></p><p>You will <b>NOT</b> be able to use the functionalities of this application without verifying your account. </p>
+        *this modal will not be closable till the verification link is clicked*
+        <br /><p></p><a target="_blank" href="https://github.com/Project-Kampong/kampong-frontend">Resend activation email</a>`,
+      },
+    });
+  }
+
+  checkPageOneErrors(): boolean {
+    if (this.editProfileForm.controls.nickname.errors != null) {
+      return true;
+    }
+    if (this.editProfileForm.controls.dob.errors != null) {
+      return true;
+    }
+    return false;
+  }
+
+  checkPageTwoErrors(): boolean {
+    if (this.editProfileForm.controls.occupation.errors != null) {
+      return true;
+    }
+    return false;
   }
 }

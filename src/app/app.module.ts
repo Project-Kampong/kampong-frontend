@@ -17,6 +17,7 @@ import {
   MatGridListModule,
   MatNativeDateModule,
   MatProgressSpinnerModule,
+  MatTooltipModule,
   MAT_DATE_LOCALE,
 } from '@angular/material';
 import { MatChipsModule } from '@angular/material/chips';
@@ -122,6 +123,7 @@ import { TermsAndConditionsComponent } from './components/terms-and-conditions/t
     MatProgressSpinnerModule,
     ImageCropperModule,
     MatDialogModule,
+    MatTooltipModule,
     MatButtonModule,
     MatGridListModule,
   ],

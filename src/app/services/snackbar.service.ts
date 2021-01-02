@@ -1,15 +1,14 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
-import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from "@angular/material/snack-bar";
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
-import { SnackbarSuccessComponent } from "@app/components/snackbar-success/snackbar-success.component";
-import { SnackbarErrorComponent } from "@app/components/snackbar-error/snackbar-error.component";
+import { SnackbarSuccessComponent } from '@app/components/snackbar-success/snackbar-success.component';
+import { SnackbarErrorComponent } from '@app/components/snackbar-error/snackbar-error.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SnackbarService {
-
   constructor(private _snackBar: MatSnackBar) {}
 
   DialogList = {
@@ -21,9 +20,9 @@ export class SnackbarService {
       success: 'Please verify your email',
       error: 'Register failed, please try again',
     },
-    email_verified: { 
-      success: "Your account has been activated",
-      error: "Email verification failed, please try again",
+    email_verified: {
+      success: 'Your account has been activated',
+      error: 'Email verification failed, please try again',
     },
     upload_comments: {
       success: 'Comment posted successfully',

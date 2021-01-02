@@ -99,6 +99,22 @@
             <!-- End of Errors Validation -->
           </mat-form-field>
           <mat-form-field class="col-lg-12">
+            <mat-label>Nick name</mat-label>
+
+            <input
+              matTooltip="Your nickname is what kampongers see you as"
+              matTooltipPosition="above"
+              matInput
+              required
+              formControlName="nick_name"
+            />
+            <!-- Errors Validation -->
+            <mat-error *ngIf="registerForm.get('nick_name').hasError('required')"> Nick name is required </mat-error>
+            <mat-error *ngIf="registerForm.get('nick_name').hasError('maxlength')"> Nick name must not be more than 15 characters long. </mat-error>
+            <!-- should have another error to check if username exists -->
+            <!-- End of Errors Validation -->
+          </mat-form-field>
+          <mat-form-field class="col-lg-12">
             <mat-label>Email</mat-label>
             <input matInput required type="email" formControlName="email" />
             <!-- Errors Validation -->
@@ -112,15 +128,9 @@
             <input matInput required type="password" formControlName="password" />
             <!-- Errors Validation -->
             <mat-error *ngIf="registerForm.get('password').hasError('required')"> Password is required </mat-error>
-            <mat-error *ngIf="registerForm.get('password').hasError('minlength')"> Password must be more than 6 characters long </mat-error>
-            <mat-error
-              *ngIf="
-                registerForm.get('password').hasError('passwordChecker') &&
-                !registerForm.get('password').hasError('minlength') &&
-                !registerForm.get('password').hasError('required')
-              "
-            >
-              Password must contain an alphanumeric, uppercase and special characters
+            <mat-error *ngIf="registerForm.get('password').hasError('minlength')"> Password must at least 8 characters long </mat-error>
+            <mat-error *ngIf="registerForm.get('password').hasError('pattern')">
+              Password must contain alphanumeric, uppercase and special characters
             </mat-error>
             <!-- End of Errors Validation -->
           </mat-form-field>
@@ -151,14 +161,3 @@
     </div>
   </div>
 </body>
-
-<!--
-            <div class="col-12">
-            <span class="error-msg" *ngIf="registerError">
-              Something went wrong, please try again
-            </span>
-            <span class="res-msg" *ngIf="showCheckMail">
-              Please verify your email to continue
-            </span>
-          </div>
--->
