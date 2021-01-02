@@ -1,5 +1,11 @@
 <div class="d-flex flex-wrap listing-card-wrapper">
-  <div [className]="'px-2 col-lg-' + colNum" *ngFor="let listing of listings">
+  <div class="col-md-12">
+    <pagination-controls previousLabel="Previous" nextLabel="Next" responsive="true" (pageChange)="handlePageChange($event)"></pagination-controls>
+  </div>
+  <div
+    [className]="'px-2 col-lg-' + colNum"
+    *ngFor="let listing of listings | paginate: { itemsPerPage: 3, currentPage: page, totalItems: listings.length }"
+  >
     <app-listing-card [listingData]="listing"></app-listing-card>
   </div>
 </div>

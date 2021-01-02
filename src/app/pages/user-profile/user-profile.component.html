@@ -10,10 +10,7 @@
               </div>
               <div class="user-details">
                 <p class="name">{{ profileData.nickname }}</p>
-                <p *ngIf="profileData.occupation != null" class="position">
-                  {{ profileData.occupation }}
-                </p>
-                <p *ngIf="profileData.occupation == null" class="position">Newbie</p>
+                <p class="position">{{ profileData.occupation }}</p>
                 <p class="editProfileLink"><a (click)="editProfile()">Edit Profile</a></p>
               </div>
             </div>
