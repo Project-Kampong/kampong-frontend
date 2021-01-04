@@ -7,9 +7,9 @@ const URL_VALIDATION_PATTERN = Validators.pattern(
 );
 
 export const createListingForm = {
-  title: new FormControl('', [Validators.required, Validators.maxLength(50), LISTING_VALIDATION_PATTERN]),
+  listing_title: new FormControl('', [Validators.required, Validators.maxLength(50), LISTING_VALIDATION_PATTERN]),
 
-  categories: new FormControl('', [Validators.required]),
+  category: new FormControl('', [Validators.required]),
 
   about: new FormControl(''),
 

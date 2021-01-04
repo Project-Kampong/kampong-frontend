@@ -14,10 +14,11 @@ import { AuthService } from '@app/services/auth.service';
 import { CreateListing, CreateListingLocation } from '@app/interfaces/listing';
 import { createListingForm } from '@app/util/forms/listing';
 import { catchError } from 'rxjs/operators';
-import { forkJoin, Observable, of, Subscription } from 'rxjs';
+import { forkJoin, Observable, of, Subscription, concat } from 'rxjs';
 import { categoriesStore } from '@app/store/categories-store';
 import { locationsStore } from '@app/store/locations-store';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 declare var $: any;
 
@@ -54,7 +55,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   milestoneArr: AddListingMilestones[] = [{ milestone_description: '', date: new Date() }];
   jobArr: AddListingJobs[] = [];
   faqArr: AddListingFAQ[] = [];
-  locationArr: CreateListingLocation[] = [];
+  // locationArr: CreateListingLocation[] = [];
   subscriptions: Subscription[] = [];
   // @ViewChild('auto', { static: true }) categoryMatAutocomplete: MatAutocomplete;
   // @ViewChild('auto', { static: true }) locationMatAutocomplete: MatAutocomplete;
@@ -220,25 +221,26 @@ export class CreateListingComponent implements OnInit, OnDestroy {
 
     if (index >= 0) {
       this.selectedLocations.splice(index, 1);
+      this.listingForm.controls.locations.value.splice(index, 1);
     }
   }
 
   selectedLocation(event: MatAutocompleteSelectedEvent): void {
     this.selectedLocations.push(event.option.viewValue);
-    this.locationInput.nativeElement.value = '';
+    this.listingForm.controls.locations.value.push(event.option.value);
   }
 
-  getFormValidationErrors(): boolean {
-    Object.keys(this.listingForm.controls).forEach((key) => {
-      const controlErrors: ValidationErrors = this.listingForm.get(key).errors;
-      if (controlErrors != null) {
-        return true;
-      }
-    });
-    return false;
-  }
+  // getFormValidationErrors(): boolean {
+  //   Object.keys(this.listingForm.controls).forEach((key) => {
+  //     const controlErrors: ValidationErrors = this.listingForm.get(key).errors;
+  //     if (controlErrors != null) {
+  //       return true;
+  //     }
+  //   });
+  //   return false;
+  // }
 
-  createMilestones(): Observable<any[]> {
+  createMilestones(): Observable<any[]>[] {
     const milestoneCreateObservables: Observable<any>[] = [];
     this.milestoneArr.forEach((val) => {
       if (val.milestone_description !== '' && val.date !== null) {
@@ -253,10 +255,10 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         );
       }
     });
-    return forkJoin(milestoneCreateObservables);
+    return milestoneCreateObservables;
   }
 
-  createHashtags(): Observable<any[]> {
+  createHashtags(): Observable<any[]>[] {
     const hashtagsCreateObservables: Observable<any>[] = [];
     this.hashtags.forEach((val) => {
       hashtagsCreateObservables.push(
@@ -268,10 +270,11 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           .pipe(catchError((error) => of(error))),
       );
     });
-    return forkJoin(hashtagsCreateObservables);
+    // return forkJoin(hashtagsCreateObservables);
+    return hashtagsCreateObservables;
   }
 
-  createJobs(): Observable<any[]> {
+  createJobs(): Observable<any[]>[] {
     const jobsCreateObservables: Observable<any>[] = [];
     this.jobArr.forEach((val) => {
       if (val.job_title !== '' && val.job_description !== '') {
@@ -286,10 +289,10 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         );
       }
     });
-    return forkJoin(jobsCreateObservables);
+    return jobsCreateObservables;
   }
 
-  createFaqs(): Observable<any[]> {
+  createFaqs(): Observable<any[]>[] {
     const faqCreateObservables: Observable<any>[] = [];
     this.faqArr.forEach((val) => {
       if (val.question !== '' && val.answer !== '') {
@@ -304,101 +307,125 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         );
       }
     });
-    return forkJoin(faqCreateObservables);
+    return faqCreateObservables;
   }
 
-  createLocations(): Observable<any[]> {
+  createLocations(): Observable<any[]>[] {
     const locationCreateObservables: Observable<any>[] = [];
-    // this.locationArr.forEach((val) => {
-    //   if (val.question !== '' && val.answer !== '') {
-    //     locationCreateObservables.push(
-    //       this.listingsService
-    //         .createListingFAQ({
-    //           listing_id: this.listingId,
-    //           question: val.question,
-    //           answer: val.answer,
-    //         })
-    //         .pipe(catchError((error) => of(error))),
-    //     );
-    //   }
-    // });
-    return forkJoin(locationCreateObservables);
+    this.listingForm.value.locations.forEach((val) => {
+      if (val !== '') {
+        console.log(val);
+        locationCreateObservables.push(
+          this.listingsService
+            .createListingLocation({
+              listing_id: this.listingId,
+              location_id: parseInt(val),
+            })
+            .pipe(catchError((error) => of(error))),
+        );
+      }
+    });
+    return locationCreateObservables;
   }
-
-  // submitForm() {
-  //   console.log(this.validateForm);
-  // }
 
   async createListing(): Promise<void> {
-    console.log(this.listingForm.get('category').hasError('required'));
-    console.log(this.listingForm.controls['category']);
-    console.log(this.selectedCategories.length == 0);
-
     // if (this.getFormValidationErrors() === true) {
     //   this.snackbarService.openSnackBar('Please complete the form', false);
     //   return;
     // }
 
-    // const title: string = this.listingForm.value.title;
-    // const category: string = this.listingForm.value.category;
-    // const tagline: string = this.listingForm.value.tagline;
-    // const mission: string = this.listingForm.value.mission;
-    // const listing_url: string = this.listingForm.value.listing_url;
-    // const listing_email: string = this.listingForm.value.listing_email;
-    // const listing_status: string = 'ongoing';
-    // const locations: string[] = this.listingForm.value.locations;
-    // const pics: string[] = [null, null, null, null, null];
+    console.log(this.listingForm);
+    if (this.listingForm.status === 'VALID') {
+      const listing_title: string = this.listingForm.value.listing_title;
+      const category: string[] = this.listingForm.value.category;
+      const tagline: string = this.listingForm.value.tagline;
+      const mission: string = this.listingForm.value.mission;
+      const listing_url: string = this.listingForm.value.listing_url;
+      const listing_email: string = this.listingForm.value.listing_email;
+      const listing_status: string = 'ongoing';
+      const locations: string[] = this.listingForm.value.locations;
+      const pics: string[] = [null, null, null, null, null];
 
-    // //CMS
-    // const overview: string = $('#overview').html();
-    // const problem: string = $('#problem').html();
-    // const outcome: string = $('#outcome').html();
-    // const solution: string = $('#solution').html();
+      //CMS
+      const overview: string = $('#overview').html();
+      const problem: string = $('#problem').html();
+      const outcome: string = $('#outcome').html();
+      const solution: string = $('#solution').html();
 
-    // this.listingData = {
-    //   title,
-    //   category,
-    //   tagline,
-    //   mission,
-    //   overview,
-    //   problem,
-    //   outcome,
-    //   solution,
-    //   listing_url,
-    //   listing_email,
-    //   listing_status,
-    //   pics,
-    //   locations,
-    // };
+      this.listingData = {
+        listing_title,
+        category,
+        tagline,
+        mission,
+        overview,
+        problem,
+        outcome,
+        solution,
+        listing_url,
+        listing_email,
+        listing_status,
+        pics,
+        locations,
+      };
+      console.log(this.listingData);
+      this.subscriptions.push(
+        this.listingsService.createListing(this.listingData).subscribe(
+          (res) => {
+            console.log(res);
+            this.listingId = res['data']['listing_id'];
+          },
+          (err) => {
+            console.log(err);
+            this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);
+          },
+          () => {
+            const combinedObservables: Observable<any>[] = [
+              ...this.createFaqs(),
+              ...this.createHashtags(),
+              ...this.createJobs(),
+              ...this.createMilestones(),
+              ...this.createLocations(),
+            ];
+            this.subscriptions.push(
+              concat(...combinedObservables).subscribe(
+                (next) => console.log(next),
+                (error) => {
+                  console.log(error);
+                  this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);
+                },
+                () => {
+                  this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.success, true);
+                  this.router.navigate(['/listing/' + this.listingId]);
+                },
+              ),
+            );
 
-    // this.subscriptions.push(
-    //   await this.listingsService.createListing(this.listingData).subscribe(
-    //     (res) => {
-    //       console.log(res);
-    //       this.listingId = res['data']['listing_id'];
-    //     },
-    //     (err) => {
-    //       console.log(err);
-    //       this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);
-    //     },
-    //     () => {
-    //       const combinedObservables = forkJoin([this.createFaqs(), this.createHashtags(), this.createJobs(), this.createMilestones()]);
-    //       this.subscriptions.push(
-    //         combinedObservables.subscribe({
-    //           next: (res) => console.log(res),
-    //           error: (err) => {
-    //             console.log(err);
-    //             this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);
-    //           },
-    //           complete: () => {
-    //             this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.success, true);
-    //             this.router.navigate(['/listing/' + this.listingId]);
-    //           },
-    //         }),
-    //       );
-    //     },
-    //   ),
-    // );
+            // const combinedObservables = forkJoin([
+            //   this.createFaqs(),
+            //   this.createHashtags(),
+            //   this.createJobs(),
+            //   this.createMilestones(),
+            //   this.createLocations(),
+            // ]);
+            // this.subscriptions.push(
+            //   combinedObservables.subscribe({
+            //     next: (res) => console.log(res),
+            //     error: (err) => {
+            //       console.log(err);
+            //       this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);
+            //     },
+            //     complete: () => {
+            //       this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.success, true);
+            //       this.router.navigate(['/listing/' + this.listingId]);
+            //     },
+            //   }),
+            // );
+          },
+        ),
+      );
+    } else {
+      this.snackbarService.openSnackBar('Please complete the form', false);
+    }
   }
 
   ngOnDestroy() {

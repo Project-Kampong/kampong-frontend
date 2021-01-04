@@ -1,12 +1,23 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { CreateListing, CreateListingUpdates, CreateListingMilestones, CreateListingHashtags,
-  CreateListingFAQ, CreateListingLocation, CreateListingJobs, CreateListingComments, UpdateListingMilestones, 
-  UpdateListingJobs, UpdateListing, UpdateListingFAQ } from "@app/interfaces/listing";
-import { API } from "@app/interfaces/api";
-import { Observable } from "rxjs";
-import { environment } from "src/environments/environment";
-import { AuthService } from "./auth.service";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  CreateListing,
+  CreateListingUpdates,
+  CreateListingMilestones,
+  CreateListingHashtags,
+  CreateListingFAQ,
+  CreateListingLocation,
+  CreateListingJobs,
+  CreateListingComments,
+  UpdateListingMilestones,
+  UpdateListingJobs,
+  UpdateListing,
+  UpdateListingFAQ,
+} from '@app/interfaces/listing';
+import { API } from '@app/interfaces/api';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { AuthService } from './auth.service';
 
 interface OptionObject {
   headers: HttpHeaders;
@@ -17,11 +28,10 @@ interface OptionObject {
   providedIn: 'root',
 })
 export class ListingsService {
-  
   private url: string = environment.apiUrl;
   private options: OptionObject = {
     headers: new HttpHeaders({
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     }),
   };
 
@@ -32,10 +42,7 @@ export class ListingsService {
    * @event GET
    */
   getFeaturedListings(): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/listings/featured",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/listings/featured', this.options);
   }
 
   /**
@@ -43,22 +50,16 @@ export class ListingsService {
    * @event GET
    */
   getListings(): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/listings",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/listings', this.options);
   }
 
   /**
-   * Get listing associated with the input ID 
+   * Get listing associated with the input ID
    * @param listingId Listing ID
    * @event GET
    */
   getSelectedListing(listingId: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/listings/" + listingId,
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId, this.options);
   }
 
   /**
@@ -67,10 +68,7 @@ export class ListingsService {
    * @event GET
    */
   getSearchResult(input: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/listings/search?keyword=" + input,
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/listings/search?keyword=' + input, this.options);
   }
 
   /**
@@ -79,10 +77,7 @@ export class ListingsService {
    * @event GET
    */
   getSelectedListingLikes(listingId: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/listings/" + listingId + "/likes",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/likes', this.options);
   }
 
   /**
@@ -91,10 +86,7 @@ export class ListingsService {
    * @event GET
    */
   getSelectedListingFAQ(listingId: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/listings/" + listingId + "/faqs",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/faqs', this.options);
   }
 
   /**
@@ -103,10 +95,7 @@ export class ListingsService {
    * @event GET
    */
   getSelectedListingComments(listingId: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/listings/" + listingId + "/listing-comments",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/listing-comments', this.options);
   }
 
   /**
@@ -115,10 +104,7 @@ export class ListingsService {
    * @event GET
    */
   getSelectedCommentChildren(commentId: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/listing-comments/" + commentId + "/children",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/listing-comments/' + commentId + '/children', this.options);
   }
 
   /**
@@ -127,10 +113,7 @@ export class ListingsService {
    * @event GET
    */
   getSelectedListingUpdates(listingId: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/listings/" + listingId + "/listing-updates",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/listing-updates', this.options);
   }
 
   /**
@@ -139,10 +122,7 @@ export class ListingsService {
    * @event GET
    */
   getSelectedListingMilestones(listingId: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/listings/" + listingId + "/milestones",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/milestones', this.options);
   }
 
   /**
@@ -151,10 +131,7 @@ export class ListingsService {
    * @event GET
    */
   getSelectedListingHashtags(listingId: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/listings/" + listingId + "/hashtags",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/hashtags', this.options);
   }
 
   /**
@@ -163,10 +140,7 @@ export class ListingsService {
    * @event GET
    */
   getSelectedListingLocations(listingId: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/listings/" + listingId + "/listing-locations",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/listing-locations', this.options);
   }
 
   /**
@@ -175,10 +149,7 @@ export class ListingsService {
    * @event GET
    */
   getSelectedListingJobs(listingId: string): Observable<API> {
-    return this.httpClient.get<API>(
-      this.url + "api/listings/" + listingId + "/jobs",
-      this.options
-    );
+    return this.httpClient.get<API>(this.url + 'api/listings/' + listingId + '/jobs', this.options);
   }
 
   /**
@@ -187,11 +158,7 @@ export class ListingsService {
    * @event POST
    */
   createListing(data: CreateListing): Observable<API> {
-    return this.httpClient.post<API>(
-      this.url + "api/listings",
-      data,
-      this.authService.getAuthOptionsWithoutContentType()
-    )
+    return this.httpClient.post<API>(this.url + 'api/listings', data, this.authService.getAuthOptionsWithoutContentType());
   }
 
   /**
@@ -200,11 +167,7 @@ export class ListingsService {
    * @event POST
    */
   createListingUpdates(data: CreateListingUpdates): Observable<API> {
-    return this.httpClient.post<API>(
-      this.url + "api/listing-updates",
-      data,
-      this.authService.getAuthOptionsWithoutContentType()
-    )
+    return this.httpClient.post<API>(this.url + 'api/listing-updates', data, this.authService.getAuthOptionsWithoutContentType());
   }
 
   /**
@@ -213,11 +176,7 @@ export class ListingsService {
    * @event POST
    */
   createListingMilestones(data: CreateListingMilestones): Observable<API> {
-    return this.httpClient.post<API>(
-      this.url + "api/milestones",
-      data,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.post<API>(this.url + 'api/milestones', data, this.authService.getAuthOptions());
   }
 
   /**
@@ -226,11 +185,8 @@ export class ListingsService {
    * @event POST
    */
   createListingHashtags(data: CreateListingHashtags): Observable<API> {
-    return this.httpClient.post<API>(
-      this.url + "api/hashtags",
-      data,
-      this.authService.getAuthOptions()
-    );
+    console.log(this.authService.getAuthOptions());
+    return this.httpClient.post<API>(this.url + 'api/hashtags', data, this.authService.getAuthOptions());
   }
 
   /**
@@ -239,11 +195,7 @@ export class ListingsService {
    * @event POST
    */
   createListingFAQ(data: CreateListingFAQ): Observable<API> {
-    return this.httpClient.post<API>(
-      this.url + "api/faqs",
-      data,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.post<API>(this.url + 'api/faqs', data, this.authService.getAuthOptions());
   }
 
   /**
@@ -252,11 +204,7 @@ export class ListingsService {
    * @event POST
    */
   createListingLocation(data: CreateListingLocation): Observable<API> {
-    return this.httpClient.post<API>(
-      this.url + "api/listing-locations",
-      data,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.post<API>(this.url + 'api/listing-locations', data, this.authService.getAuthOptions());
   }
 
   /**
@@ -265,11 +213,7 @@ export class ListingsService {
    * @event POST
    */
   createListingJobs(data: CreateListingJobs): Observable<API> {
-    return this.httpClient.post<API>(
-      this.url + "api/jobs",
-      data,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.post<API>(this.url + 'api/jobs', data, this.authService.getAuthOptions());
   }
 
   /**
@@ -278,11 +222,7 @@ export class ListingsService {
    * @event POST
    */
   createListingComments(data: CreateListingComments): Observable<API> {
-    return this.httpClient.post<API>(
-      this.url + "api/listing-comments",
-      data,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.post<API>(this.url + 'api/listing-comments', data, this.authService.getAuthOptions());
   }
 
   /**
@@ -291,11 +231,7 @@ export class ListingsService {
    * @event POST
    */
   likeListing(listing_id: string): Observable<API> {
-    return this.httpClient.post<API>(
-      this.url + "api/likes",
-      { listing_id: listing_id },
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.post<API>(this.url + 'api/likes', { listing_id: listing_id }, this.authService.getAuthOptions());
   }
 
   /**
@@ -304,12 +240,8 @@ export class ListingsService {
    * @event DELETE
    */
   unlikeListing(like_id: number): Observable<API> {
-    return this.httpClient.delete<API>(
-      this.url + "api/likes/" + like_id,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.delete<API>(this.url + 'api/likes/' + like_id, this.authService.getAuthOptions());
   }
-
 
   /**
    * Update a particular listing
@@ -318,11 +250,7 @@ export class ListingsService {
    * @event PUT
    */
   updateListing(listing_id: string, data: UpdateListing): Observable<API> {
-    return this.httpClient.put<API>(
-      this.url + "api/listings/" + listing_id,
-      data,
-      this.authService.getAuthOptionsWithoutContentType()
-    )
+    return this.httpClient.put<API>(this.url + 'api/listings/' + listing_id, data, this.authService.getAuthOptionsWithoutContentType());
   }
 
   /**
@@ -332,11 +260,7 @@ export class ListingsService {
    * @event PUT
    */
   updateMilestone(milestone_id: number, data: UpdateListingMilestones): Observable<API> {
-    return this.httpClient.put<API>(
-      this.url + "api/milestones/" + milestone_id,
-      data,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.put<API>(this.url + 'api/milestones/' + milestone_id, data, this.authService.getAuthOptions());
   }
 
   /**
@@ -346,11 +270,7 @@ export class ListingsService {
    * @event PUT
    */
   updateFAQ(faq_id: number, data: UpdateListingFAQ): Observable<API> {
-    return this.httpClient.put<API>(
-      this.url + "api/faqs/" + faq_id,
-      data,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.put<API>(this.url + 'api/faqs/' + faq_id, data, this.authService.getAuthOptions());
   }
 
   /**
@@ -360,11 +280,7 @@ export class ListingsService {
    * @event PUT
    */
   updateJobs(job_id: number, data: UpdateListingJobs): Observable<API> {
-    return this.httpClient.put<API>(
-      this.url + "api/jobs/" + job_id,
-      data,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.put<API>(this.url + 'api/jobs/' + job_id, data, this.authService.getAuthOptions());
   }
 
   /**
@@ -373,11 +289,7 @@ export class ListingsService {
    * @event DELETE
    */
   removeListing(listingId: string): Observable<API> {
-    return this.httpClient.put<API>(
-      this.url + "api/listings/" + listingId + "/deactivate",
-      {},
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.put<API>(this.url + 'api/listings/' + listingId + '/deactivate', {}, this.authService.getAuthOptions());
   }
 
   /**
@@ -386,10 +298,7 @@ export class ListingsService {
    * @event DELETE
    */
   removeMilestone(milestone_id: number): Observable<API> {
-    return this.httpClient.delete<API>(
-      this.url + "api/milestones/" + milestone_id,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.delete<API>(this.url + 'api/milestones/' + milestone_id, this.authService.getAuthOptions());
   }
 
   /**
@@ -398,22 +307,16 @@ export class ListingsService {
    * @event DELETE
    */
   removeFAQ(faq_id: number): Observable<API> {
-    return this.httpClient.delete<API>(
-      this.url + "api/faqs/" + faq_id,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.delete<API>(this.url + 'api/faqs/' + faq_id, this.authService.getAuthOptions());
   }
 
   /**
    * Deletes a particular hashtag
    * @param hashtag_id Hashtag ID
-   * @event DELETE 
+   * @event DELETE
    */
   removeHashtags(hashtag_id: number): Observable<API> {
-    return this.httpClient.delete<API>(
-      this.url + "api/hashtags/" + hashtag_id,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.delete<API>(this.url + 'api/hashtags/' + hashtag_id, this.authService.getAuthOptions());
   }
 
   /**
@@ -422,10 +325,7 @@ export class ListingsService {
    * @event DELETE
    */
   removeListingLocation(listing_location_id: number): Observable<API> {
-    return this.httpClient.delete<API>(
-      this.url + "api/listing-locations/" + listing_location_id,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.delete<API>(this.url + 'api/listing-locations/' + listing_location_id, this.authService.getAuthOptions());
   }
 
   /**
@@ -434,11 +334,7 @@ export class ListingsService {
    * @event DELETE
    */
   removeListingJobs(listing_job_id: number): Observable<API> {
-    return this.httpClient.delete<API>(
-      this.url + "api/jobs/" + listing_job_id,
-      this.authService.getAuthOptions()
-
-    );
+    return this.httpClient.delete<API>(this.url + 'api/jobs/' + listing_job_id, this.authService.getAuthOptions());
   }
 
   /**
@@ -447,11 +343,7 @@ export class ListingsService {
    * @event DELETE
    */
   removeListingComments(comment_id: number): Observable<API> {
-    return this.httpClient.delete<API>(
-      this.url + "api/listing-comments/" + comment_id,
-      this.authService.getAuthOptions()
-
-    );
+    return this.httpClient.delete<API>(this.url + 'api/listing-comments/' + comment_id, this.authService.getAuthOptions());
   }
 
   /**
@@ -460,10 +352,6 @@ export class ListingsService {
    * @event DELETE
    */
   removeListingUpdates(update_id: number): Observable<API> {
-    return this.httpClient.delete<API>(
-      this.url + "api/listing-updates/" + update_id,
-      this.authService.getAuthOptions()
-    );
+    return this.httpClient.delete<API>(this.url + 'api/listing-updates/' + update_id, this.authService.getAuthOptions());
   }
-
 }
