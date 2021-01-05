@@ -36,7 +36,7 @@
         </div> -->
         <mat-form-field class="chip" hintLabel="You may select more than one category" appearance="fill">
           <mat-label>Select Category</mat-label>
-          <mat-chip-list #chipList>
+          <mat-chip-list #categoryChipList formControlName="category">
             <mat-chip *ngFor="let category of selectedCategories" [removable]="true" (removed)="removeCategory(category)">
               {{ category }}
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
@@ -44,9 +44,8 @@
             <input
               #categoryInput
               [matAutocomplete]="categoryAuto"
-              [matChipInputFor]="chipList"
+              [matChipInputFor]="categoryChipList"
               (matChipInputTokenEnd)="addCategory($event)"
-              formControlName="category"
             />
           </mat-chip-list>
           <mat-autocomplete #categoryAuto="matAutocomplete" (optionSelected)="selectedCategory($event)">
@@ -57,7 +56,7 @@
             </mat-optgroup>
           </mat-autocomplete>
         </mat-form-field>
-        <span class="error-hint" *ngIf="listingForm.controls['categories']?.touched && selectedCategories.length == 0">Category is required</span>
+        <span class="error-hint" *ngIf="listingForm.controls['category']?.touched && selectedCategories.length === 0">Category is required</span>
       </div>
 
       <!-- Old Create a Category
@@ -172,12 +171,17 @@
 
             <mat-form-field class="chip" hintLabel="You may select more than one location" appearance="fill">
               <mat-label>Select Location</mat-label>
-              <mat-chip-list #chipList formControlName="locations">
+              <mat-chip-list #locationChipList formControlName="locations">
                 <mat-chip *ngFor="let location of selectedLocations" [removable]="true" (removed)="removeLocation(location)">
                   {{ location }}
                   <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                 </mat-chip>
-                <input #locationInput [matAutocomplete]="locationAuto" [matChipInputFor]="chipList" (matChipInputTokenEnd)="addLocation($event)" />
+                <input
+                  #locationInput
+                  [matAutocomplete]="locationAuto"
+                  [matChipInputFor]="locationChipList"
+                  (matChipInputTokenEnd)="addLocation($event)"
+                />
               </mat-chip-list>
               <mat-autocomplete #locationAuto="matAutocomplete" (optionSelected)="selectedLocation($event)">
                 <mat-optgroup *ngFor="let group of locationGroup.locations" [label]="group.name" [disabled]="group.disabled">
@@ -187,7 +191,7 @@
                 </mat-optgroup>
               </mat-autocomplete>
             </mat-form-field>
-            <span class="error-hint" *ngIf="listingForm.controls['locations']?.touched && selectedLocations.length == 0">Location is required</span>
+            <span class="error-hint" *ngIf="listingForm.controls['locations']?.touched && selectedLocations.length === 0">Location is required</span>
           </div>
         </div>
       </div>
@@ -232,7 +236,8 @@
 
               <div *ngIf="listingImagesDisplay.length < 5 && listingImages.length < 5" class="custom-file-upload-container">
                 <label for="img-upload" class="custom-file-upload"> </label>
-                <input type="file" accept="image/*" id="img-upload" (change)="uploadImage($event)" />
+                <!-- <input type="file" accept="image/*" id="img-upload" (change)="uploadImage($event)" /> -->
+                <input type="file" accept="image/*" id="img-upload" (change)="fileChangeEvent($event)" />
               </div>
             </div>
           </div>

@@ -19,6 +19,10 @@ import { categoriesStore } from '@app/store/categories-store';
 import { locationsStore } from '@app/store/locations-store';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import { MatDialog } from '@angular/material';
+import { CropImageDialogComponent } from '@app/components/crop-image-dialog/crop-image-dialog.component';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { dataURItoFile } from '@app/util/images/convertBase64ToFile';
 
 declare var $: any;
 
@@ -57,31 +61,26 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   faqArr: AddListingFAQ[] = [];
   // locationArr: CreateListingLocation[] = [];
   subscriptions: Subscription[] = [];
-  // @ViewChild('auto', { static: true }) categoryMatAutocomplete: MatAutocomplete;
-  // @ViewChild('auto', { static: true }) locationMatAutocomplete: MatAutocomplete;
   @ViewChild('categoryInput', { static: true }) categoryInput: ElementRef<HTMLInputElement>;
   @ViewChild('locationInput', { static: true }) locationInput: ElementRef<HTMLInputElement>;
 
   selectedCategories: string[] = [];
   selectedLocations: string[] = [];
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
 
   constructor(
     private fb: FormBuilder,
     private listingsService: ListingsService,
     private router: Router,
     private snackbarService: SnackbarService,
-    private authService: AuthService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit() {
     this.listingForm = this.fb.group({
       ...createListingForm,
     });
-
-    // this.validateForm = this.fb.group({
-    //   locations: null,
-    //   categories: null,
-    // });
 
     // CMS
     $('.action-container .action-btn').on('click', function () {
@@ -120,6 +119,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     }
     const reader: FileReader = new FileReader();
     reader.onload = (e) => {
+      console.log(reader.result);
       this.listingImagesDisplay.push(reader.result.toString());
     };
     try {
@@ -135,6 +135,28 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     this.listingImagesDisplay.splice(i, 1);
     this.listingImages.splice(i, 1);
   }
+
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+    const dialogRef = this.dialog.open(CropImageDialogComponent, {
+      data: {
+        title: 'Crop Image',
+        imageChangedEvent: event,
+        croppedImage: '',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.croppedImage = result.imageCropped;
+      const file = dataURItoFile(result.imageCropped);
+      this.listingImagesDisplay.push(result.imageCropped);
+      this.listingImages.push(file);
+    });
+  }
+
+  // imageCropped(event: ImageCroppedEvent) {
+  //   this.croppedImage = event.base64;
+  // }
 
   addMilestone(): void {
     this.milestoneArr.push({ milestone_description: '', date: new Date() });
@@ -198,7 +220,8 @@ export class CreateListingComponent implements OnInit, OnDestroy {
 
   selectedCategory(event: MatAutocompleteSelectedEvent): void {
     this.selectedCategories.push(event.option.viewValue);
-    this.categoryInput.nativeElement.value = '';
+    console.log(this.listingForm);
+    this.listingForm.controls.category.value.push(event.option.value);
   }
 
   addLocation(event: MatChipInputEvent): void {
@@ -270,7 +293,6 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           .pipe(catchError((error) => of(error))),
       );
     });
-    // return forkJoin(hashtagsCreateObservables);
     return hashtagsCreateObservables;
   }
 
@@ -314,7 +336,6 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     const locationCreateObservables: Observable<any>[] = [];
     this.listingForm.value.locations.forEach((val) => {
       if (val !== '') {
-        console.log(val);
         locationCreateObservables.push(
           this.listingsService
             .createListingLocation({
@@ -343,7 +364,6 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       const listing_url: string = this.listingForm.value.listing_url;
       const listing_email: string = this.listingForm.value.listing_email;
       const listing_status: string = 'ongoing';
-      const locations: string[] = this.listingForm.value.locations;
       const pics: string[] = [null, null, null, null, null];
 
       //CMS
@@ -365,7 +385,6 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         listing_email,
         listing_status,
         pics,
-        locations,
       };
       console.log(this.listingData);
       this.subscriptions.push(
@@ -388,7 +407,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
             ];
             this.subscriptions.push(
               concat(...combinedObservables).subscribe(
-                (next) => console.log(next),
+                (next) => {},
                 (error) => {
                   console.log(error);
                   this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);

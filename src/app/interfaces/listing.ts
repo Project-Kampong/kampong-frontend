@@ -153,7 +153,6 @@ export interface CreateListing {
   listing_email: string;
   listing_status: string;
   pics?: string[];
-  locations: string[];
 }
 
 export interface UpdateListingHashtags {

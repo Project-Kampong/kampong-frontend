@@ -9,7 +9,7 @@ const URL_VALIDATION_PATTERN = Validators.pattern(
 export const createListingForm = {
   listing_title: new FormControl('', [Validators.required, Validators.maxLength(50), LISTING_VALIDATION_PATTERN]),
 
-  category: new FormControl('', [Validators.required]),
+  category: new FormControl([]), //Validators.required seem to have a problem with arrays
 
   about: new FormControl(''),
 

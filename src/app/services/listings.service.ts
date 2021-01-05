@@ -185,7 +185,6 @@ export class ListingsService {
    * @event POST
    */
   createListingHashtags(data: CreateListingHashtags): Observable<API> {
-    console.log(this.authService.getAuthOptions());
     return this.httpClient.post<API>(this.url + 'api/hashtags', data, this.authService.getAuthOptions());
   }
 
