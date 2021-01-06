@@ -43,7 +43,7 @@ export interface ListingIndividual {
   solution: string;
   start_date: string;
   tagline: string;
-  title: string;
+  listing_title: string;
   updated_on: string;
 }
 

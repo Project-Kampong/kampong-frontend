@@ -6,26 +6,22 @@
     <div class="container">
       <div class="col-12 text-center project-info-container">
         <p class="primary-badge" *ngIf="organisationData['organisation_type']">
-          <!-- Type of organisation: {{ OrganisationData["organisation_type"] }} -->
-          Type of organisation: {{ organisationData["organisation_type"] }}
-        </p>
-        <p class="regular-l">
-          Name of organisation: {{ organisationData["name"] }}
-        </p>
-        <p class="regular-m">
-          About organisation: {{ organisationData["about"] }}
-        </p>
-        <p class="regular-m">
-          Email of organisation: {{ organisationData["email"] }}
-        </p>
-        <p class="regular-s">
-          Website URL of organisation: {{ organisationData["website_url"] }}
+          {{ organisationData['organisation_type'] }}
         </p>
       </div>
+      <h2>Listings supported by {{ organisationData.name }}</h2>
+      <div *ngIf="listings.length > 0; else noListings">
+        <app-listing-grid [listings]="listings" [colNum]="4"></app-listing-grid>
+      </div>
+      <ng-template #noListings>
+        <h3>{{ organisationData.name }} does not have any listings at the moment.</h3>
+      </ng-template>
     </div>
   </section>
+</div>
 
-  <section class="navigation-container">
+<!--
+    <section class="navigation-container">
     <div class="sticky-navigation">
       <div class="container">
         <ul class="navigation-tabs">
@@ -38,4 +34,4 @@
       </div>
     </div>
   </section>
-</div>
+-->

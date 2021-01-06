@@ -1,14 +1,13 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 declare var $: any;
-import { ListingsService } from "@app/services/listings.service";
+import { ListingsService } from '@app/services/listings.service';
 
 @Component({
-  selector: "app-banner",
-  templateUrl: "./banner.component.html",
-  styleUrls: ["./banner.component.scss"],
+  selector: 'app-banner',
+  templateUrl: './banner.component.html',
+  styleUrls: ['./banner.component.scss'],
 })
 export class BannerComponent implements OnInit {
-
   featuredData = [];
   slickInitiated = false;
   numtoget: number;
@@ -19,7 +18,7 @@ export class BannerComponent implements OnInit {
 
   ngOnInit() {
     this.listingsService.getFeaturedListings().subscribe((data) => {
-      this.featuredData = data["data"];
+      this.featuredData = data['data'];
       this.numtoget = this.featuredData.length;
     });
   }
@@ -29,7 +28,7 @@ export class BannerComponent implements OnInit {
       return;
     } else if (this.featuredData.length === this.numtoget) {
       // Jquery
-      $(".slick-belt").slick({
+      $('.slick-belt').slick({
         slidesToShow: 1,
         adaptiveHeight: true,
         arrows: true,

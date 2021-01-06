@@ -1,7 +1,4 @@
-.listing-card-wrapper {
-  padding-top: 2rem;
-}
-.listing-card {
+.organisation-card {
   margin-bottom: 2rem;
   border-radius: 10px;
   overflow: hidden;
@@ -18,7 +15,7 @@
       height: 180px;
     }
   }
-  .listing-card-body {
+  .organisation-card-body {
     padding: 1rem;
     border: 0.5px solid rgba(0, 0, 0, 0.1);
     border-bottom-left-radius: 10px;
@@ -58,31 +55,4 @@
       white-space: pre-wrap;
     }
   }
-}
-
-.project-status-overlay {
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  .project-status {
-    transform: translateY(-100%);
-    display: block;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.9rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    color: white;
-  }
-  .project-open {
-    background: #00c09da9;
-  }
-  .project-close {
-    background: #2e4057a9;
-  }
-}
-
-.paginationControls {
-  margin: left;
-  margin-top: 0;
-  width: 100%;
 }

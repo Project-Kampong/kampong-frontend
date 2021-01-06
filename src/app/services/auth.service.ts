@@ -108,7 +108,7 @@ export class AuthService {
    */
   checkCookieAndSetHeaders(): void {
     const token = this.cookieService.get('token');
-    if (token && token !== null && token !== '') {
+    if (token && token !== '') {
       this.setTokenInAuthOptions(token);
     }
   }
@@ -118,7 +118,7 @@ export class AuthService {
    */
   checkCookie(): boolean {
     const token = this.cookieService.get('token');
-    return token && token !== null && token !== '';
+    return token && token !== '';
   }
 
   /**

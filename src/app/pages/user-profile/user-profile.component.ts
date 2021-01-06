@@ -1,17 +1,14 @@
 // Angular Imports
-import { FormGroup, FormBuilder, Validators, ValidationErrors } from '@angular/forms';
+import { FormGroup, ValidationErrors } from '@angular/forms';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 // Services
-import { ListingsService } from '@app/services/listings.service';
 import { AuthService } from '@app/services/auth.service';
 import { ProfileService } from '@app/services/profile.service';
-import { OrganisationsService } from '@app/services/organisations.service';
 import { SnackbarService } from '@app/services/snackbar.service';
 
 // Interfaces
 import { Profile } from '@app/interfaces/profile';
-import { profileForm } from '@app/util/forms/profile';
 import { Listing } from '@app/interfaces/listing';
 import { Organisation } from '@app/interfaces/organisation';
 import { UserData } from '@app/interfaces/user';

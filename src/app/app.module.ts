@@ -15,6 +15,7 @@ import {
   MatAutocompleteModule,
   MatButtonModule,
   MatDialogModule,
+  MatGridListModule,
   MatNativeDateModule,
   MatProgressSpinnerModule,
   MAT_DATE_LOCALE,
@@ -31,7 +32,6 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { AppComponent } from './app.component';
 import { BannerComponent } from './components/banner/banner.component';
 import { MainSearchComponent } from './components/main-search/main-search.component';
-import { ListingCardsComponent } from './components/listing-cards/listing-cards.component';
 import { ImageCarouselComponent } from './components/image-carousel/image-carousel.component';
 import { UpdateCarouselComponent } from './components/update-carousel/update-carousel.component';
 import { MilestonesComponent } from './components/milestones/milestones.component';
@@ -39,8 +39,13 @@ import { ContentWrapperComponent } from './layout/content-wrapper/content-wrappe
 import { EditListingCardsComponent } from './components/edit-listing-cards/edit-listing-cards.component';
 import { SnackbarErrorComponent } from './components/snackbar-error/snackbar-error.component';
 import { SnackbarSuccessComponent } from './components/snackbar-success/snackbar-success.component';
-import { OrganisationCardsComponent } from './components/organisation-cards/organisation-cards.component';
 import { OrgBannerComponent } from './components/organisation-banner/organisation-banner.component';
+import { CropImageDialogComponent } from './components/crop-image-dialog/crop-image-dialog.component';
+import { DialogComponent } from './components/dialog/dialog.component';
+import { ListingCardComponent } from './components/listing-card/listing-card.component';
+import { ListingGridComponent } from './components/listing-grid/listing-grid.component';
+import { OrganisationCardComponent } from './components/organisation-card/organisation-card.component';
+import { OrganisationGridComponent } from './components/organisation-grid/organisation-grid.component';
 
 // Pages
 import { ListingHomeComponent } from '@app/pages/listing-home/listing-home.component';
@@ -59,15 +64,12 @@ import { OnboardingComponent } from './pages/onboarding/onboarding.component';
 import { EditOrganisationCardsComponent } from './components/edit-organisation-cards/edit-organisation-cards.component';
 import { MobxAngularModule } from 'mobx-angular';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { CropImageDialogComponent } from './components/crop-image-dialog/crop-image-dialog.component';
-import { DialogComponent } from './components/dialog/dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListingHomeComponent,
     BannerComponent,
-    ListingCardsComponent,
     ListingIndividualComponent,
     OrganisationIndividualComponent,
     ImageCarouselComponent,
@@ -89,10 +91,13 @@ import { DialogComponent } from './components/dialog/dialog.component';
     SnackbarSuccessComponent,
     OnboardingComponent,
     MainSearchComponent,
-    OrganisationCardsComponent,
+    OrganisationCardComponent,
+    OrganisationGridComponent,
     OrgBannerComponent,
     CropImageDialogComponent,
     DialogComponent,
+    ListingCardComponent,
+    ListingGridComponent,
   ],
   imports: [
     BrowserModule,

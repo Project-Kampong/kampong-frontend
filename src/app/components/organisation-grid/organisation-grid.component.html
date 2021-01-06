@@ -1,0 +1,5 @@
+<div class="d-flex flex-wrap org-card-wrapper">
+  <div [className]="'px-2 col-lg-' + colNum" *ngFor="let organisation of organisations">
+    <app-organisation-card [organisationData]="organisation"></app-organisation-card>
+  </div>
+</div>
