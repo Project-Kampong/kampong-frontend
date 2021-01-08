@@ -4,7 +4,7 @@ on:
     branches:
       - master
 jobs:
-  build:
+  tag-and-deploy:
     runs-on: ubuntu-20.04
     steps:
       - name: Check out repository
