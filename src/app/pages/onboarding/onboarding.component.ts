@@ -112,4 +112,18 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
+
+  checkPageOneErrors(): boolean {
+    if (this.editProfileForm.controls.dob.errors != null) {
+      return true;
+    }
+    return false;
+  }
+
+  checkPageTwoErrors(): boolean {
+    if (this.editProfileForm.controls.occupation.errors != null) {
+      return true;
+    }
+    return false;
+  }
 }

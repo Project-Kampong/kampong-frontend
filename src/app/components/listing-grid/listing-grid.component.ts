@@ -6,8 +6,15 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./listing-grid.component.scss'],
 })
 export class ListingGridComponent {
-  constructor() {}
+  page: Number;
+  constructor() {
+    this.page = 1;
+  }
 
   @Input() listings;
   @Input() colNum;
+
+  handlePageChange(event) {
+    this.page = event;
+  }
 }

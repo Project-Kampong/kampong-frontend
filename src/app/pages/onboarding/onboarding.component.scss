@@ -27,8 +27,8 @@
     &:hover {
       position: relative;
       &:after {
-        content: "\f067";
-        font-family: "Font Awesome\ 5 Free";
+        content: '\f067';
+        font-family: 'Font Awesome\ 5 Free';
         font-weight: 900;
         font-size: 2rem;
         color: white;
@@ -52,8 +52,8 @@
     position: relative;
     cursor: pointer;
     &:after {
-      content: "\f067";
-      font-family: "Font Awesome\ 5 Free";
+      content: '\f067';
+      font-family: 'Font Awesome\ 5 Free';
       font-size: 2rem;
       position: absolute;
       left: 50%;
@@ -89,6 +89,11 @@
       color: white;
       padding: 0.25rem 0;
     }
+    button:disabled {
+      border: 1px solid #999999;
+      background-color: #cccccc;
+      color: #666666;
+    }
   }
   .stepperPrev {
     justify-content: space-between;
@@ -99,4 +104,8 @@
       background: rgba(0, 0, 0, 0.6);
     }
   }
+}
+
+::ng-deep .mat-horizontal-stepper-header {
+  pointer-events: none !important;
 }
