@@ -64,7 +64,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   @ViewChild('categoryInput', { static: true }) categoryInput: ElementRef<HTMLInputElement>;
   @ViewChild('locationInput', { static: true }) locationInput: ElementRef<HTMLInputElement>;
 
-  selectedCategories: string[] = [];
+  // selectedCategories: string[] = [];
   selectedLocations: string[] = [];
   imageChangedEvent: any = '';
   croppedImage: any = '';
@@ -205,18 +205,19 @@ export class CreateListingComponent implements OnInit, OnDestroy {
 
   removeCategory(category: string): void {
     console.log('remove');
-    const index = this.selectedCategories.indexOf(category);
+    const index = this.listingForm.controls.category.value.indexOf(category);
 
     if (index >= 0) {
-      this.selectedCategories.splice(index, 1);
+      // this.selectedCategories.splice(index, 1);
       this.listingForm.controls.category.value.splice(index, 1);
     }
   }
 
   selectedCategory(event: MatAutocompleteSelectedEvent): void {
-    this.selectedCategories.push(event.option.viewValue);
-    console.log(this.listingForm);
-    this.listingForm.controls.category.value.push(event.option.value);
+    if (!this.listingForm.controls.category.value.includes(event.option.value)) {
+      // this.selectedCategories.push(event.option.viewValue);
+      this.listingForm.controls.category.value.push(event.option.value);
+    }
   }
 
   addLocation(event: MatChipInputEvent): void {
@@ -243,8 +244,10 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   }
 
   selectedLocation(event: MatAutocompleteSelectedEvent): void {
-    this.selectedLocations.push(event.option.viewValue);
-    this.listingForm.controls.locations.value.push(event.option.value);
+    if (!this.listingForm.controls.locations.value.includes(event.option.value)) {
+      this.selectedLocations.push(event.option.viewValue);
+      this.listingForm.controls.locations.value.push(event.option.value);
+    }
   }
 
   // getFormValidationErrors(): boolean {

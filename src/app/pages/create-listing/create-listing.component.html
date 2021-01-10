@@ -37,7 +37,7 @@
         <mat-form-field class="chip" hintLabel="You may select more than one category" appearance="fill">
           <mat-label>Select Category</mat-label>
           <mat-chip-list #categoryChipList formControlName="category">
-            <mat-chip *ngFor="let category of selectedCategories" [removable]="true" (removed)="removeCategory(category)">
+            <mat-chip *ngFor="let category of listingForm.controls.category.value" [removable]="true" (removed)="removeCategory(category)">
               {{ category }}
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
             </mat-chip>
