@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://staging.kampong.app/',
+  apiUrl: 'http://localhost:5000/',
 };

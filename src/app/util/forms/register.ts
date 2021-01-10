@@ -2,11 +2,12 @@ import { FormControl, Validators } from '@angular/forms';
 
 var regularExpression = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,25}$/;
 const PASSWORD_REGEX = Validators.pattern(regularExpression);
+const patternValidation = Validators.pattern('^[_A-z0-9]*((-|s)*[_A-z0-9])*$');
 
 export const registerForm = {
-  first_name: new FormControl('', [Validators.maxLength(25), Validators.required]),
+  first_name: new FormControl('', [Validators.maxLength(25), Validators.required, patternValidation]),
 
-  last_name: new FormControl('', [Validators.maxLength(25), Validators.required]),
+  last_name: new FormControl('', [Validators.maxLength(25), Validators.required, patternValidation]),
 
   nick_name: new FormControl('', [Validators.maxLength(15), Validators.required]),
 

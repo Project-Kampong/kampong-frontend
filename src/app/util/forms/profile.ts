@@ -1,6 +1,6 @@
 import { FormControl, Validators } from '@angular/forms';
 
-const patternvalidation = Validators.pattern('^[_A-z0-9]*((-|s)*[_A-z0-9])*$');
+const patternvalidation = Validators.pattern('.*\\S.*[a-zA-z0-9_-]');
 export const profileForm = {
   nickname: new FormControl('', [Validators.required, Validators.maxLength(15), patternvalidation]),
 

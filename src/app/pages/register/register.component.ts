@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { registerForm } from '@app/util/forms/register';
+import { MustMatch } from '@app/util/forms/mustMatch';
 
 @Component({
   selector: 'app-register',
@@ -29,7 +30,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
   showLoading: boolean = false;
 
   ngOnInit() {
-    this.registerForm = this.fb.group({ ...registerForm });
+    this.registerForm = this.fb.group(
+      { ...registerForm },
+      {
+        validator: MustMatch('password', 'confirmPassword'),
+      },
+    );
   }
 
   registerUser(): void {
@@ -55,6 +61,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   getFormValidationErrors(): boolean {
+    console.log(this.registerForm);
     if (this.registerForm.controls.first_name.errors !== null) {
       return true;
     }
@@ -67,7 +74,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     if (this.registerForm.controls.email.errors !== null) {
       return true;
     }
-    if (this.checkPassword()) {
+    if (this.isPasswordNotMatching()) {
       return true;
     }
     if (this.registerForm.controls.termsAndCondition.errors !== null) {
@@ -76,7 +83,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  checkPassword(): boolean {
+  isPasswordNotMatching(): boolean {
     return !(this.registerForm.value.password === this.registerForm.value.confirmPassword);
   }
 
