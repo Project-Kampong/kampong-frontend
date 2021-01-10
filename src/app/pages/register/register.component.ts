@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, ValidationErrors } from '@angular/forms';
+import { MatDialog } from '@angular/material';
 
 import { SnackbarService } from '@app/services/snackbar.service';
 
@@ -9,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { registerForm } from '@app/util/forms/register';
 import { MustMatch } from '@app/util/forms/mustMatch';
+import { DialogComponent } from '@app/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-register',
@@ -21,6 +23,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private fb: FormBuilder,
+    private dialog: MatDialog,
     private authService: AuthService,
     private snackbarService: SnackbarService,
     private cookieService: CookieService,
@@ -54,21 +57,34 @@ export class RegisterComponent implements OnInit, OnDestroy {
         },
         () => {
           this.showLoading = false;
-          this.router.navigate(['/onboarding']);
+          this.router.navigate(['/homepage']);
+          this.openEmailVerification();
         },
       ),
     );
   }
 
+  openEmailVerification(): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        title: 'Verify Email',
+        content: `An Email containing a verification link has been sent to your email. Please click on the link to activate your account.
+        <p></p><p>You will <b>NOT</b> be able to use the functionalities of this application without verifying your account. </p>
+        *this modal will not be closable till the verification link is clicked*
+        <br /><p></p><a target="_blank" href="https://github.com/Project-Kampong/kampong-frontend">Resend activation email</a>`,
+      },
+    });
+  }
+
   getFormValidationErrors(): boolean {
     console.log(this.registerForm);
-    if (this.registerForm.controls.first_name.errors !== null) {
-      return true;
-    }
-    if (this.registerForm.controls.last_name.errors !== null) {
-      return true;
-    }
-    if (this.registerForm.controls.nick_name.errors !== null) {
+    // if (this.registerForm.controls.first_name.errors !== null) {
+    //   return true;
+    // }
+    // if (this.registerForm.controls.last_name.errors !== null) {
+    //   return true;
+    // }
+    if (this.registerForm.controls.username.errors !== null) {
       return true;
     }
     if (this.registerForm.controls.email.errors !== null) {

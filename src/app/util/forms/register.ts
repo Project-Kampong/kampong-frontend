@@ -5,11 +5,11 @@ const PASSWORD_REGEX = Validators.pattern(regularExpression);
 const patternValidation = Validators.pattern('^[_A-z0-9]*((-|s)*[_A-z0-9])*$');
 
 export const registerForm = {
-  first_name: new FormControl('', [Validators.maxLength(25), Validators.required, patternValidation]),
+  // first_name: new FormControl('', [Validators.maxLength(25), Validators.required, patternValidation]),
 
-  last_name: new FormControl('', [Validators.maxLength(25), Validators.required, patternValidation]),
+  // last_name: new FormControl('', [Validators.maxLength(25), Validators.required, patternValidation]),
 
-  nick_name: new FormControl('', [Validators.maxLength(15), Validators.required]),
+  username: new FormControl('', [Validators.maxLength(15), Validators.required]),
 
   email: new FormControl('', [Validators.email, Validators.required]),
 

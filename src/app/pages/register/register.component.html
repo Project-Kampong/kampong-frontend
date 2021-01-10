@@ -82,37 +82,13 @@
           </svg>
         </div>
         <form id="login-details" [formGroup]="registerForm">
-          <mat-form-field class="col-lg-6">
-            <mat-label>First Name</mat-label>
-            <input matInput required formControlName="first_name" />
-            <!-- Errors Validation -->
-            <mat-error *ngIf="registerForm.get('first_name').hasError('required')"> First name is required </mat-error>
-            <mat-error *ngIf="registerForm.get('first_name').hasError('maxlength')"> First name must not be more than 25 characters long. </mat-error>
-            <mat-error *ngIf="registerForm.get('first_name').hasError('pattern')"> First name must not contain any special characters. </mat-error>
-            <!-- End of Errors Validation -->
-          </mat-form-field>
-          <mat-form-field class="col-lg-6">
-            <mat-label>Last Name</mat-label>
-            <input matInput required formControlName="last_name" />
-            <!-- Errors Validation -->
-            <mat-error *ngIf="registerForm.get('last_name').hasError('required')"> Last name is required </mat-error>
-            <mat-error *ngIf="registerForm.get('last_name').hasError('maxlength')"> Last name must not be more than 25 characters long. </mat-error>
-            <mat-error *ngIf="registerForm.get('last_name').hasError('pattern')"> Last name must not contain any special characters. </mat-error>
-            <!-- End of Errors Validation -->
-          </mat-form-field>
           <mat-form-field class="col-lg-12">
-            <mat-label>Nick name</mat-label>
+            <mat-label>Username</mat-label>
 
-            <input
-              matTooltip="Your nickname is what kampongers see you as"
-              matTooltipPosition="above"
-              matInput
-              required
-              formControlName="nick_name"
-            />
+            <input matTooltip="Your username is what kampongers see you as" matTooltipPosition="above" matInput required formControlName="username" />
             <!-- Errors Validation -->
-            <mat-error *ngIf="registerForm.get('nick_name').hasError('required')"> Nick name is required </mat-error>
-            <mat-error *ngIf="registerForm.get('nick_name').hasError('maxlength')"> Nick name must not be more than 15 characters long. </mat-error>
+            <mat-error *ngIf="registerForm.get('username').hasError('required')"> Username is required </mat-error>
+            <mat-error *ngIf="registerForm.get('username').hasError('maxlength')"> Username must not be more than 15 characters long. </mat-error>
             <!-- should have another error to check if username exists -->
             <!-- End of Errors Validation -->
           </mat-form-field>
