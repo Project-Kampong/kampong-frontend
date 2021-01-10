@@ -141,8 +141,8 @@ export interface CreateListingUpdates {
 }
 
 export interface CreateListing {
-  title: string;
-  category: string;
+  listing_title: string;
+  category: string[];
   tagline: string;
   mission: string;
   outcome: string;
@@ -153,7 +153,6 @@ export interface CreateListing {
   listing_email: string;
   listing_status: string;
   pics?: string[];
-  locations: string[];
 }
 
 export interface UpdateListingHashtags {

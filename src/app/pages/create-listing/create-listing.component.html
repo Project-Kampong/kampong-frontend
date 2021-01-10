@@ -7,20 +7,22 @@
       </div>
       <div class="listing-form" [formGroup]="listingForm">
         <div class="form-item">
-          <label>Name Of Initiative *</label>
-          <input placeholder="Give your initiative a name" formControlName="title" />
-          <span class="hint"> {{ listingForm.value.title.length }} / 50 </span>
+          <label>Name Of Project *</label>
+          <input placeholder="Give your project a name" formControlName="listing_title" />
+          <span class="hint"> {{ listingForm.value.listing_title.length }} / 50 </span>
 
           <!-- Errors Validation -->
-          <span class="error-hint" *ngIf="listingForm.get('title').hasError('maxlength')"> Name must not be more than 50 characters long. </span>
-          <span class="error-hint" *ngIf="listingForm.get('title').hasError('pattern')"> Special characters not allowed </span>
-          <span class="error-hint" *ngIf="listingForm.get('title').hasError('required') && listingForm.controls['title']?.touched">
+          <span class="error-hint" *ngIf="listingForm.get('listing_title').hasError('maxlength')">
+            Name must not be more than 50 characters long.
+          </span>
+          <span class="error-hint" *ngIf="listingForm.get('listing_title').hasError('pattern')"> Special characters not allowed </span>
+          <span class="error-hint" *ngIf="listingForm.get('listing_title').hasError('required') && listingForm.controls['listing_title']?.touched">
             Name is required
           </span>
           <!-- End of Errors Validation -->
         </div>
 
-        <div class="form-item d-flex">
+        <!-- <div class="form-item d-flex">
           <mat-form-field appearance="fill">
             <mat-label>Category</mat-label>
             <mat-select required formControlName="category">
@@ -31,7 +33,33 @@
               </mat-optgroup>
             </mat-select>
           </mat-form-field>
-        </div>
+        </div> -->
+        <mat-form-field class="chip" hintLabel="You may select more than one category" appearance="fill">
+          <mat-label>Select Category</mat-label>
+          <mat-chip-list #categoryChipList formControlName="category">
+            <mat-chip *ngFor="let category of listingForm.controls.category.value" [removable]="true" (removed)="removeCategory(category)">
+              {{ category }}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+              #categoryInput
+              [matAutocomplete]="categoryAuto"
+              [matChipInputFor]="categoryChipList"
+              (matChipInputTokenEnd)="addCategory($event)"
+            />
+          </mat-chip-list>
+          <mat-autocomplete #categoryAuto="matAutocomplete" (optionSelected)="selectedCategory($event)">
+            <mat-optgroup *ngFor="let group of categoryGroup.categories" [label]="group.name">
+              <mat-option *ngFor="let category of group.group" [value]="category.category_name">
+                {{ category.category_name }}
+              </mat-option>
+            </mat-optgroup>
+          </mat-autocomplete>
+          <mat-error>Atleast 1 name need to be added</mat-error>
+        </mat-form-field>
+        <span class="error-hint" *ngIf="listingForm.controls['category']?.touched && listingForm.controls['category']?.status === 'INVALID'"
+          >Category is required</span
+        >
       </div>
 
       <!-- Old Create a Category
@@ -78,9 +106,8 @@
 
       <div class="listing-form" [formGroup]="listingForm">
         <div class="form-item">
-          <label>Tagline/Slogan *</label>
-          <textarea cdkTextareaAutosize cdkAutosizeMinRows="5" placeholder="Give your initiative a nice tagline" formControlName="tagline">
-          </textarea>
+          <label>Tagline/Slogan</label>
+          <textarea cdkTextareaAutosize cdkAutosizeMinRows="5" placeholder="Give your project a nice tagline" formControlName="tagline"> </textarea>
           <span class="hint"> {{ listingForm.value.tagline.length }} / 100 </span>
           <!-- Errors Validation -->
           <span class="error-hint" *ngIf="listingForm.get('tagline').hasError('required') && listingForm.controls['tagline']?.touched">
@@ -95,8 +122,7 @@
 
         <div class="form-item">
           <label>Mission *</label>
-          <textarea cdkTextareaAutosize cdkAutosizeMinRows="5" placeholder="What's the goal of your initiative?" formControlName="mission">
-          </textarea>
+          <textarea cdkTextareaAutosize cdkAutosizeMinRows="5" placeholder="What's the goal of your project?" formControlName="mission"> </textarea>
           <span class="hint"> {{ listingForm.value.mission.length }} / 150 </span>
           <!-- Errors Validation -->
           <span class="error-hint" *ngIf="listingForm.get('mission').hasError('required') && listingForm.controls['mission']?.touched">
@@ -135,7 +161,7 @@
 
         <div class="form-item">
           <div [formGroup]="listingForm">
-            <mat-form-field appearance="fill">
+            <!-- <mat-form-field appearance="fill">
               <mat-label>Project Location</mat-label>
               <mat-select formControlName="locations" multiple>
                 <mat-optgroup *ngFor="let group of locationGroup.locations" [label]="group.name" [disabled]="group.disabled">
@@ -144,10 +170,56 @@
                   </mat-option>
                 </mat-optgroup>
               </mat-select>
+            </mat-form-field> -->
+
+            <mat-form-field class="chip" hintLabel="You may select more than one location" appearance="fill">
+              <mat-label>Select Location</mat-label>
+              <mat-chip-list #locationChipList formControlName="locations">
+                <mat-chip *ngFor="let location of selectedLocations" [removable]="true" (removed)="removeLocation(location)">
+                  {{ location }}
+                  <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input
+                  #locationInput
+                  [matAutocomplete]="locationAuto"
+                  [matChipInputFor]="locationChipList"
+                  (matChipInputTokenEnd)="addLocation($event)"
+                />
+              </mat-chip-list>
+              <mat-autocomplete #locationAuto="matAutocomplete" (optionSelected)="selectedLocation($event)">
+                <mat-optgroup *ngFor="let group of locationGroup.locations" [label]="group.name" [disabled]="group.disabled">
+                  <mat-option *ngFor="let location of group.group" [value]="location.location_id">
+                    {{ location.location_name }}
+                  </mat-option>
+                </mat-optgroup>
+              </mat-autocomplete>
             </mat-form-field>
+            <span class="error-hint" *ngIf="listingForm.controls['locations']?.touched && selectedLocations.length === 0">Location is required</span>
           </div>
         </div>
       </div>
+
+      <!-- <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-select nzMode="multiple" nzPlaceHolder="Please select categories" formControlName="categories">
+            <nz-option-group *ngFor="let group of categoryGroup.categories" [nzLabel]="group.name">
+              <nz-option *ngFor="let category of group.group" [nzValue]="category.category_id" [nzLabel]="category.category_name"></nz-option>
+            </nz-option-group>
+          </nz-select>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-select nzMode="multiple" nzPlaceHolder="Please select location(s)" formControlName="locations">
+            <nz-option-group *ngFor="let group of locationGroup.locations" [nzLabel]="group.name">
+              <nz-option *ngFor="let location of group.group" [nzValue]="location.location_id" [nzLabel]="location.location_name"></nz-option>
+            </nz-option-group>
+          </nz-select>
+        </nz-form-item>
+        <nz-form-item nz-row class="register-area">
+          <nz-form-control [nzSpan]="14" [nzOffset]="6">
+            <button nz-button nzType="primary">Register</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form> -->
     </div>
 
     <!-- Section 2 -->
@@ -167,7 +239,8 @@
 
               <div *ngIf="listingImagesDisplay.length < 5 && listingImages.length < 5" class="custom-file-upload-container">
                 <label for="img-upload" class="custom-file-upload"> </label>
-                <input type="file" accept="image/*" id="img-upload" (change)="uploadImage($event)" />
+                <!-- <input type="file" accept="image/*" id="img-upload" (change)="uploadImage($event)" /> -->
+                <input type="file" accept="image/*" id="img-upload" (change)="fileChangeEvent($event)" />
               </div>
             </div>
           </div>
@@ -179,7 +252,7 @@
     <div class="listing-section">
       <div class="listing-stepper">
         <span> 3 </span>
-        <p>tell us more about your initiative</p>
+        <p>tell us more about your project</p>
       </div>
       <div class="listing-form" [formGroup]="listingForm">
         <div class="form-item">
@@ -647,7 +720,7 @@
     <div class="floating-actions">
       <div class="container">
         <div class="submit-btn">
-          <button class="btn yellow-btn" (click)="createListing()">Create Initiative</button>
+          <button class="btn yellow-btn" (click)="createListing()">Create project</button>
         </div>
       </div>
     </div>

@@ -121,7 +121,7 @@
                   "maximumError": "100kb"
                 }
               ]
-            },
+            }
           }
         },
         "serve": {

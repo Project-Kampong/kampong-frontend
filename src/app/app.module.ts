@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {
+  MatAutocompleteModule,
   MatButtonModule,
   MatDialogModule,
   MatGridListModule,
@@ -19,7 +20,7 @@ import {
   MatProgressSpinnerModule,
   MAT_DATE_LOCALE,
 } from '@angular/material';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatChipInput, MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -121,7 +122,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     ImageCropperModule,
     MatDialogModule,
     MatButtonModule,
-    MatGridListModule,
+    MatChipsModule,
+    MatAutocompleteModule,
   ],
   exports: [],
   entryComponents: [SnackbarSuccessComponent, SnackbarErrorComponent, CropImageDialogComponent, DialogComponent],

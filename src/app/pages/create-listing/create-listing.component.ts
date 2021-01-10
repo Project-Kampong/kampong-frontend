@@ -1,8 +1,8 @@
 // Angular Imports
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
 import { FormGroup, FormBuilder, ValidationErrors } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipList } from '@angular/material/chips';
 import { Router } from '@angular/router';
 
 // Services
@@ -11,12 +11,18 @@ import { SnackbarService } from '@app/services/snackbar.service';
 import { AuthService } from '@app/services/auth.service';
 
 // Interfaces
-import { CreateListing } from '@app/interfaces/listing';
+import { CreateListing, CreateListingLocation } from '@app/interfaces/listing';
 import { createListingForm } from '@app/util/forms/listing';
 import { catchError } from 'rxjs/operators';
-import { forkJoin, Observable, of, Subscription } from 'rxjs';
+import { forkJoin, Observable, of, Subscription, concat } from 'rxjs';
 import { categoriesStore } from '@app/store/categories-store';
 import { locationsStore } from '@app/store/locations-store';
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import { MatDialog } from '@angular/material';
+import { CropImageDialogComponent } from '@app/components/crop-image-dialog/crop-image-dialog.component';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { dataURItoFile } from '@app/util/images/convertBase64ToFile';
 
 declare var $: any;
 
@@ -41,6 +47,7 @@ interface AddListingFAQ {
 export class CreateListingComponent implements OnInit, OnDestroy {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
   listingForm: FormGroup;
+  validateForm!: FormGroup;
   listingData: CreateListing;
   listingId: string = '';
   removable: boolean = true;
@@ -52,14 +59,22 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   milestoneArr: AddListingMilestones[] = [{ milestone_description: '', date: new Date() }];
   jobArr: AddListingJobs[] = [];
   faqArr: AddListingFAQ[] = [];
+  // locationArr: CreateListingLocation[] = [];
   subscriptions: Subscription[] = [];
+  @ViewChild('categoryInput', { static: true }) categoryInput: ElementRef<HTMLInputElement>;
+  @ViewChild('locationInput', { static: true }) locationInput: ElementRef<HTMLInputElement>;
+
+  // selectedCategories: string[] = [];
+  selectedLocations: string[] = [];
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
 
   constructor(
     private fb: FormBuilder,
     private listingsService: ListingsService,
     private router: Router,
     private snackbarService: SnackbarService,
-    private authService: AuthService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -104,6 +119,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     }
     const reader: FileReader = new FileReader();
     reader.onload = (e) => {
+      console.log(reader.result);
       this.listingImagesDisplay.push(reader.result.toString());
     };
     try {
@@ -119,6 +135,28 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     this.listingImagesDisplay.splice(i, 1);
     this.listingImages.splice(i, 1);
   }
+
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+    const dialogRef = this.dialog.open(CropImageDialogComponent, {
+      data: {
+        title: 'Crop Image',
+        imageChangedEvent: event,
+        croppedImage: '',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.croppedImage = result.imageCropped;
+      const file = dataURItoFile(result.imageCropped);
+      this.listingImagesDisplay.push(result.imageCropped);
+      this.listingImages.push(file);
+    });
+  }
+
+  // imageCropped(event: ImageCroppedEvent) {
+  //   this.croppedImage = event.base64;
+  // }
 
   addMilestone(): void {
     this.milestoneArr.push({ milestone_description: '', date: new Date() });
@@ -157,17 +195,72 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     this.jobArr.splice(i, 1);
   }
 
-  getFormValidationErrors(): boolean {
-    Object.keys(this.listingForm.controls).forEach((key) => {
-      const controlErrors: ValidationErrors = this.listingForm.get(key).errors;
-      if (controlErrors != null) {
-        return true;
-      }
-    });
-    return false;
+  //Set the input to be empty
+  addCategory(event: MatChipInputEvent): void {
+    const input = event.input;
+    if (input) {
+      input.value = '';
+    }
   }
 
-  createMilestones(): Observable<any[]> {
+  removeCategory(category: string): void {
+    console.log('remove');
+    const index = this.listingForm.controls.category.value.indexOf(category);
+
+    if (index >= 0) {
+      // this.selectedCategories.splice(index, 1);
+      this.listingForm.controls.category.value.splice(index, 1);
+    }
+  }
+
+  selectedCategory(event: MatAutocompleteSelectedEvent): void {
+    if (!this.listingForm.controls.category.value.includes(event.option.value)) {
+      // this.selectedCategories.push(event.option.viewValue);
+      this.listingForm.controls.category.value.push(event.option.value);
+    }
+  }
+
+  addLocation(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if ((value || '').trim()) {
+      this.selectedLocations.push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  removeLocation(location: string): void {
+    const index = this.selectedLocations.indexOf(location);
+
+    if (index >= 0) {
+      this.selectedLocations.splice(index, 1);
+      this.listingForm.controls.locations.value.splice(index, 1);
+    }
+  }
+
+  selectedLocation(event: MatAutocompleteSelectedEvent): void {
+    if (!this.listingForm.controls.locations.value.includes(event.option.value)) {
+      this.selectedLocations.push(event.option.viewValue);
+      this.listingForm.controls.locations.value.push(event.option.value);
+    }
+  }
+
+  // getFormValidationErrors(): boolean {
+  //   Object.keys(this.listingForm.controls).forEach((key) => {
+  //     const controlErrors: ValidationErrors = this.listingForm.get(key).errors;
+  //     if (controlErrors != null) {
+  //       return true;
+  //     }
+  //   });
+  //   return false;
+  // }
+
+  createMilestones(): Observable<any[]>[] {
     const milestoneCreateObservables: Observable<any>[] = [];
     this.milestoneArr.forEach((val) => {
       if (val.milestone_description !== '' && val.date !== null) {
@@ -182,10 +275,10 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         );
       }
     });
-    return forkJoin(milestoneCreateObservables);
+    return milestoneCreateObservables;
   }
 
-  createHashtags(): Observable<any[]> {
+  createHashtags(): Observable<any[]>[] {
     const hashtagsCreateObservables: Observable<any>[] = [];
     this.hashtags.forEach((val) => {
       hashtagsCreateObservables.push(
@@ -197,10 +290,10 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           .pipe(catchError((error) => of(error))),
       );
     });
-    return forkJoin(hashtagsCreateObservables);
+    return hashtagsCreateObservables;
   }
 
-  createJobs(): Observable<any[]> {
+  createJobs(): Observable<any[]>[] {
     const jobsCreateObservables: Observable<any>[] = [];
     this.jobArr.forEach((val) => {
       if (val.job_title !== '' && val.job_description !== '') {
@@ -215,10 +308,10 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         );
       }
     });
-    return forkJoin(jobsCreateObservables);
+    return jobsCreateObservables;
   }
 
-  createFaqs(): Observable<any[]> {
+  createFaqs(): Observable<any[]>[] {
     const faqCreateObservables: Observable<any>[] = [];
     this.faqArr.forEach((val) => {
       if (val.question !== '' && val.answer !== '') {
@@ -233,75 +326,122 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         );
       }
     });
-    return forkJoin(faqCreateObservables);
+    return faqCreateObservables;
+  }
+
+  createLocations(): Observable<any[]>[] {
+    const locationCreateObservables: Observable<any>[] = [];
+    this.listingForm.value.locations.forEach((val) => {
+      if (val !== '') {
+        locationCreateObservables.push(
+          this.listingsService
+            .createListingLocation({
+              listing_id: this.listingId,
+              location_id: parseInt(val),
+            })
+            .pipe(catchError((error) => of(error))),
+        );
+      }
+    });
+    return locationCreateObservables;
   }
 
   async createListing(): Promise<void> {
-    if (this.getFormValidationErrors() === true) {
+    // if (this.getFormValidationErrors() === true) {
+    //   this.snackbarService.openSnackBar('Please complete the form', false);
+    //   return;
+    // }
+
+    console.log(this.listingForm);
+    if (this.listingForm.status === 'VALID') {
+      const listing_title: string = this.listingForm.value.listing_title;
+      const category: string[] = this.listingForm.value.category;
+      const tagline: string = this.listingForm.value.tagline;
+      const mission: string = this.listingForm.value.mission;
+      const listing_url: string = this.listingForm.value.listing_url;
+      const listing_email: string = this.listingForm.value.listing_email;
+      const listing_status: string = 'ongoing';
+      const pics: string[] = [null, null, null, null, null];
+
+      //CMS
+      const overview: string = $('#overview').html();
+      const problem: string = $('#problem').html();
+      const outcome: string = $('#outcome').html();
+      const solution: string = $('#solution').html();
+
+      this.listingData = {
+        listing_title,
+        category,
+        tagline,
+        mission,
+        overview,
+        problem,
+        outcome,
+        solution,
+        listing_url,
+        listing_email,
+        listing_status,
+        pics,
+      };
+      console.log(this.listingData);
+      this.subscriptions.push(
+        this.listingsService.createListing(this.listingData).subscribe(
+          (res) => {
+            console.log(res);
+            this.listingId = res['data']['listing_id'];
+          },
+          (err) => {
+            console.log(err);
+            this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);
+          },
+          () => {
+            const combinedObservables: Observable<any>[] = [
+              ...this.createFaqs(),
+              ...this.createHashtags(),
+              ...this.createJobs(),
+              ...this.createMilestones(),
+              ...this.createLocations(),
+            ];
+            this.subscriptions.push(
+              concat(...combinedObservables).subscribe(
+                (next) => {},
+                (error) => {
+                  console.log(error);
+                  this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);
+                },
+                () => {
+                  this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.success, true);
+                  this.router.navigate(['/listing/' + this.listingId]);
+                },
+              ),
+            );
+
+            // const combinedObservables = forkJoin([
+            //   this.createFaqs(),
+            //   this.createHashtags(),
+            //   this.createJobs(),
+            //   this.createMilestones(),
+            //   this.createLocations(),
+            // ]);
+            // this.subscriptions.push(
+            //   combinedObservables.subscribe({
+            //     next: (res) => console.log(res),
+            //     error: (err) => {
+            //       console.log(err);
+            //       this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);
+            //     },
+            //     complete: () => {
+            //       this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.success, true);
+            //       this.router.navigate(['/listing/' + this.listingId]);
+            //     },
+            //   }),
+            // );
+          },
+        ),
+      );
+    } else {
       this.snackbarService.openSnackBar('Please complete the form', false);
-      return;
     }
-
-    const title: string = this.listingForm.value.title;
-    const category: string = this.listingForm.value.category;
-    const tagline: string = this.listingForm.value.tagline;
-    const mission: string = this.listingForm.value.mission;
-    const listing_url: string = this.listingForm.value.listing_url;
-    const listing_email: string = this.listingForm.value.listing_email;
-    const listing_status: string = 'ongoing';
-    const locations: string[] = this.listingForm.value.locations;
-    const pics: string[] = [null, null, null, null, null];
-
-    //CMS
-    const overview: string = $('#overview').html();
-    const problem: string = $('#problem').html();
-    const outcome: string = $('#outcome').html();
-    const solution: string = $('#solution').html();
-
-    this.listingData = {
-      title,
-      category,
-      tagline,
-      mission,
-      overview,
-      problem,
-      outcome,
-      solution,
-      listing_url,
-      listing_email,
-      listing_status,
-      pics,
-      locations,
-    };
-
-    this.subscriptions.push(
-      await this.listingsService.createListing(this.listingData).subscribe(
-        (res) => {
-          console.log(res);
-          this.listingId = res['data']['listing_id'];
-        },
-        (err) => {
-          console.log(err);
-          this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);
-        },
-        () => {
-          const combinedObservables = forkJoin([this.createFaqs(), this.createHashtags(), this.createJobs(), this.createMilestones()]);
-          this.subscriptions.push(
-            combinedObservables.subscribe({
-              next: (res) => console.log(res),
-              error: (err) => {
-                console.log(err);
-                this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.error, false);
-              },
-              complete: () => {
-                this.snackbarService.openSnackBar(this.snackbarService.DialogList.create_listing.success, true);
-                this.router.navigate(['/listing/' + this.listingId]);
-              },
-            }),
-          );
-        },
-      ),
-    );
   }
 
   ngOnDestroy() {
