@@ -55,8 +55,11 @@
               </mat-option>
             </mat-optgroup>
           </mat-autocomplete>
+          <mat-error>Atleast 1 name need to be added</mat-error>
         </mat-form-field>
-        <span class="error-hint" *ngIf="listingForm.controls['category']?.touched && selectedCategories.length === 0">Category is required</span>
+        <span class="error-hint" *ngIf="listingForm.controls['category']?.touched && listingForm.controls['category']?.status === 'INVALID'"
+          >Category is required</span
+        >
       </div>
 
       <!-- Old Create a Category

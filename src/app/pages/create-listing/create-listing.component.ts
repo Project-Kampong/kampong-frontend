@@ -2,7 +2,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
 import { FormGroup, FormBuilder, ValidationErrors } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipList } from '@angular/material/chips';
 import { Router } from '@angular/router';
 
 // Services
@@ -195,26 +195,21 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     this.jobArr.splice(i, 1);
   }
 
+  //Set the input to be empty
   addCategory(event: MatChipInputEvent): void {
     const input = event.input;
-    const value = event.value;
-
-    // Add our fruit
-    if ((value || '').trim()) {
-      this.selectedCategories.push(value.trim());
-    }
-
-    // Reset the input value
     if (input) {
       input.value = '';
     }
   }
 
-  removeCategory(fruit: string): void {
-    const index = this.selectedCategories.indexOf(fruit);
+  removeCategory(category: string): void {
+    console.log('remove');
+    const index = this.selectedCategories.indexOf(category);
 
     if (index >= 0) {
       this.selectedCategories.splice(index, 1);
+      this.listingForm.controls.category.value.splice(index, 1);
     }
   }
 
@@ -228,7 +223,6 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     const input = event.input;
     const value = event.value;
 
-    // Add our fruit
     if ((value || '').trim()) {
       this.selectedLocations.push(value.trim());
     }
@@ -239,8 +233,8 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeLocation(fruit: string): void {
-    const index = this.selectedLocations.indexOf(fruit);
+  removeLocation(location: string): void {
+    const index = this.selectedLocations.indexOf(location);
 
     if (index >= 0) {
       this.selectedLocations.splice(index, 1);
